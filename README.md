@@ -1,0 +1,2 @@
+# animated-potato
+Mulakat yazılımı
