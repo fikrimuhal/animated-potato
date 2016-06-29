@@ -1,10 +1,8 @@
 import React from "react";
 import Header from "../Header";
 import Deneme2 from "./Deneme2";
-import HelloMessage from "./example";
+import Example from "./Example";
 
-
-console.log(Deneme2)
 /**
  * Import locally scoped styles using css-loader
  * See style.sass in this directory.
@@ -13,7 +11,7 @@ console.log(Deneme2)
  */
  var styles = {
    kirmizi: {
-     backgroundColor: "red"
+     backgroundColor: "#FAEBD7"
    }
  }
 var degisken = "ebru"
@@ -22,9 +20,9 @@ var degisken = "ebru"
 const Application = () => {
     return <div style= {styles.kirmizi}>
 
-dsgfsd----
-    <HelloMessage/>
-    sdsf
+    <Example/>
+    <Deneme2/>
+
     </div>
 };
 
