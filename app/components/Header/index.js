@@ -21,8 +21,8 @@ const Header = () => {
     <img className={styles.logo} src={logoURL} height="125"/>
 
     <div className={styles.wrap}>
-      <h1 className={styles.title}>YARSK .11.</h1>
-      <SubHeader>Yet Another React Starter Kit Merhaba</SubHeader>
+      <h1 className={styles.title}>FİKRİMUHAL TEKNOLOJİ</h1>
+      <SubHeader>Animated Potato</SubHeader>
     </div>
   </header>;
 };

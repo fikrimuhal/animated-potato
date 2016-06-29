@@ -1,7 +1,7 @@
 {
-  "name": "yarsk",
+  "name": "MulakatYazilimi",
   "version": "1.0.0",
-  "description": "My React starter kit. Webpack, Babel, Sass, React 0.14 and more.",
+  "description": "Fikrimuhal Teknoloji",
   "main": "app/index.js",
   "scripts": {
     "lint:js": "eslint ./app ./conf ./build-gh-pages.js",
@@ -14,8 +14,8 @@
     "build": "cross-env NODE_ENV=production webpack --config conf/webpack.production.js",
     "build:gh": "npm run build && node ./build-gh-pages.js && rm -r ./dist"
   },
-  "author": "Brad Daily <brad@bradleyboy.com>",
-  "license": "MIT",
+  "author": "Brad Daily <glcebru94@gmail.com>",
+  "license": "GPL",
   "dependencies": {
     "react": "^15.0.1",
     "react-dom": "^15.0.1"

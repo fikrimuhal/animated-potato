@@ -9,6 +9,6 @@ describe('Header', function() {
 
     const title = header.find(`.${styles.title}`);
 
-    expect(title.text()).to.equal('YARSK');
+    expect(title.text()).to.equal('FİKRİMUHAL');
   });
 });
