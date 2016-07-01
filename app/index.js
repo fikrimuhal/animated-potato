@@ -1,6 +1,9 @@
 // IMPORTANT: This needs to be first (before any other components)
 // to get around CSS order randomness in webpack.
 import './css/base';
+import DivDeneme from './deneme/DivDeneme'
+import Deneme from './Components/Application/Deneme'
+
 
 // Some ES6+ features require the babel polyfill
 // More info here: https://babeljs.io/docs/usage/polyfill/
@@ -18,3 +21,4 @@ if (module.hot) {
 }
 
 ReactDOM.render(<Application />, document.getElementById('app'));
+//ReactDOM.render(<DivDeneme/>, document.getElementById('app'));

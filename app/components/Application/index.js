@@ -8,50 +8,61 @@ import MyAwesomeReactComponent from './MyAwesomeReactComponent';
 import AppBarExampleIcon from './AppBarExampleIcon';
 import AutoCompleteExampleSimple from './AutoCompleteExampleSimple';
 import BadgeExampleSimple from './BadgeExampleSimple';
+import MenuExampleSimple from './MenuExampleSimple';
+import CardExampleWithAvatar from './CardExampleWithAvatar';
+import DividerExampleForm from './DividerExampleForm';
+import RaisedButtonExampleSimple from './RaisedButtonExampleSimple';
 
-/**
- * Import locally scoped styles using css-loader
- * See style.sass in this directory.
- *
- * More info: https://github.com/webpack/css-loader#local-scope
- */
 
 var style={
   boyut:{
     width:'500px'
   },
-  appBar:{
-    width:'600px'
+  hiza:{
+    display: 'flex',
+    flexWrap: 'wrap'
   },
-  
-
-
+  hiza2:{
+    display: 'flex',
+    flexDirection: 'row'
+  },
 }
 
  const App = () => (
    <div>
-      <div>
-        <MuiThemeProvider>
-          <BadgeExampleSimple/>
-        </MuiThemeProvider>
-        </div>
+   <div>
+   <div>
+    <MuiThemeProvider>
+      <AppBarExampleIcon />
+    </MuiThemeProvider>
+  </div>
+  </div>
+  <div style = {style.hiza}>
+   <div>
+     <MuiThemeProvider>
+       <MenuExampleSimple/>
+     </MuiThemeProvider>
+     </div>
 
-     <div style={style.appBar}>
-      <MuiThemeProvider>
-        <AppBarExampleIcon />
-      </MuiThemeProvider>
-    </div>
-      <div style={style.boyut}>
-        <MuiThemeProvider>
-          <AutoCompleteExampleSimple/>
-          </MuiThemeProvider>
-      </div>
+    <div>
+     <h3>Kayıt Ol!</h3>
 
-      <div>
-        <MuiThemeProvider>
-          <MyAwesomeReactComponent />
-        </MuiThemeProvider>
-      </div>
+
+   <div style = {style.hiza}>
+     <MuiThemeProvider>
+       <DividerExampleForm/>
+     </MuiThemeProvider>
+     </div>
+     <div>
+       <MuiThemeProvider>
+         <RaisedButtonExampleSimple/>
+       </MuiThemeProvider>
+       </div>
+
+     </div>
+
+   </div>
+
 
     </div>
 

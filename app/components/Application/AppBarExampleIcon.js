@@ -3,7 +3,7 @@ import AppBar from 'material-ui/AppBar';
 
 const AppBarExampleIcon = () => (
   <AppBar
-    title="Fikrimuhal Teknoloji"
+    title="Animated Potato"
     iconClassNameRight="muidocs-icon-navigation-expand-more"
   />
 );

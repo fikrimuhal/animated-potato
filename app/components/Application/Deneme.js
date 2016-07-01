@@ -5,7 +5,7 @@ const Deneme = () => {
   return <div>
 
       dasdsafas
-      
+
   </div>
 };
 
