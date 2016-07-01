@@ -14,11 +14,12 @@
     "build": "cross-env NODE_ENV=production webpack --config conf/webpack.production.js",
     "build:gh": "npm run build && node ./build-gh-pages.js && rm -r ./dist"
   },
-  "author": "Brad Daily <glcebru94@gmail.com>",
+  "author": "Ebru Gulec <glcebru94@gmail.com>",
   "license": "GPL",
   "dependencies": {
     "react": "^15.0.1",
-    "react-dom": "^15.0.1"
+    "react-dom": "^15.0.1",
+    "react-tap-event-plugin": "^1.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.1",
