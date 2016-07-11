@@ -1,8 +1,10 @@
 // IMPORTANT: This needs to be first (before any other components)
 // to get around CSS order randomness in webpack.
 import './css/base';
-import DivDeneme from './deneme/DivDeneme'
-import Deneme from './Components/Application/Deneme'
+import { Router, Route, hashHistory } from 'react-router'
+import About from './components/Application/About'
+import Repos from './components/Application/Repos'
+import Deneme from './components/Application/Deneme'
 
 
 // Some ES6+ features require the babel polyfill
@@ -15,10 +17,15 @@ import ReactDOM from 'react-dom';
 import Application from './components/Application';
 
 
-
 if (module.hot) {
     module.hot.accept();
 }
 
-ReactDOM.render(<Application />, document.getElementById('app'));
-//ReactDOM.render(<DivDeneme/>, document.getElementById('app'));
+ReactDOM.render((
+  <Router history={hashHistory}>
+    <Route path="/" component={Application}>
+        <Route path="repos" component={Repos}/>
+        <Route path="about" component={About}/>
+    </Route>
+  </Router>
+), document.getElementById('app'))
