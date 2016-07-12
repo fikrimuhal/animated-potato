@@ -1,33 +1,29 @@
 import React from "react";
 import Header from "../Header";
-import Example from "./Example";
 import ReactDOM from 'react-dom';
+import { Link } from 'react-router'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import MyAwesomeReactComponent from './MaterialUiComponents/MyAwesomeReactComponent';
+import MenuExampleDisable from './MaterialUiComponents/MenuExampleDisable';
+import MenuExampleSimple from './MaterialUiComponents/MenuExampleSimple';
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import RaisedButton from 'material-ui/RaisedButton';
+injectTapEventPlugin();
 
 
+function App() {
+   return (
+     <MuiThemeProvider>
+     <div>
 
-var style={
-  boyut:{
-    width:'500px'
-  },
-  hiza:{
-    display: 'flex',
-    flexWrap: 'wrap'
-  },
-  hiza2:{
-    display: 'flex',
-    flexDirection: 'row'
-  },
-}
+         <h2>Home Page</h2>
+         Mülakat sayfasına gitmek için lütfen tıklayınız!
+         <br/>
 
-
-function App(props) {
-   return (<div>
-   <h1>Application</h1>
-
-   {props.children}
+     <Link to="/interview"><RaisedButton label="Mülakat Sayfası" ></RaisedButton></Link>
 
     </div>
-
+</MuiThemeProvider>
 )};
 
 App.displayName = 'App';
