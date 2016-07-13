@@ -3,7 +3,6 @@ import Header from "../Header";
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import MyAwesomeReactComponent from './MaterialUiComponents/MyAwesomeReactComponent';
 import MenuExampleDisable from './MaterialUiComponents/MenuExampleDisable';
 import MenuExampleSimple from './MaterialUiComponents/MenuExampleSimple';
 import injectTapEventPlugin from 'react-tap-event-plugin'

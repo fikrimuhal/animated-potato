@@ -1,8 +1,8 @@
 
 import './css/base';
 import { Router, Route, browserHistory } from 'react-router'
-import Interview from './components/Application/Interview'
-import Uyeol from './components/Application/Uyeol'
+import Interview from './components/Application/Pages/Interview'
+import Uyeol from './components/Application/Pages/Uyeol'
 
 
 import React from 'react';
@@ -18,7 +18,7 @@ ReactDOM.render((
     <Route path="/" component={Application}/>
         <Route path="interview" component={Interview}>
           <Route path="uyeol" component={Uyeol}/>
-        </Route>
+          </Route>
 
   </Router>
 ), document.getElementById('app'))

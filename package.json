@@ -17,6 +17,7 @@
   "author": "Ebru Gulec <glcebru94@gmail.com>",
   "license": "GPL",
   "dependencies": {
+    "material-ui": "^0.15.2",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
     "react-router": "^2.5.2",

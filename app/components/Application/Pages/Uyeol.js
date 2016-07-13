@@ -1,14 +1,18 @@
 import React from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import MyAwesomeReactComponent from './MaterialUiComponents/MyAwesomeReactComponent';
 import { Link } from 'react-router'
-import TextFieldExampleSimple from './MaterialUiComponents/TextFieldExampleSimple';
+import TextField from 'material-ui/TextField';
+import TextFieldExampleSimple from '../MaterialUiComponents/TextFieldExampleSimple';
 
+const style = {
+  height: 400,
+  width: 150,
 
+};
 export default React.createClass({
   render() {
     return (<MuiThemeProvider>
-      <div>
+      <div style={style}>
 
 
         <span>
