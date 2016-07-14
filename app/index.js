@@ -31,7 +31,7 @@ ReactDOM.render((
         </Route>
         <Route path="competenceform" component={CompetenceForm}/>
         <Route path="questions" component={Questions}/>
-        
+
 
 
     </Route>

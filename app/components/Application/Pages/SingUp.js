@@ -29,7 +29,7 @@ export default React.createClass({
             <TextField
               hintText="Soyad"
               floatingLabelText="Soyad"
-            />
+            /> <br/>
           <TextField
             hintText="E mail"
             floatingLabelText="E mail"
@@ -37,7 +37,7 @@ export default React.createClass({
           <TextField
             hintText="Telefon"
             floatingLabelText="Telefon"
-          />
+          /><br/>
           <TextField
             hintText="Şifre"
             floatingLabelText="Şifre"
