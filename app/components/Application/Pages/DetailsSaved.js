@@ -26,9 +26,15 @@ export default React.createClass({
   render() {
     return (<MuiThemeProvider>
       <div style={styles}>
-      <h2>Test Tamamlandı.</h2>
-        <h3>Teşekkürler</h3>
-
+          <h3>Bilgileriniz kaydedilmiştir.</h3>
+          <p>
+            <b>Not: </b>
+            Başvurunuzun kabul edilmesi için yeterlilik formunu doldurmanız gerekmektedir.
+          </p>
+          <p>Forma ulaşmak için lütfen tıklayınız.</p>
+          <div style={styles.button}>
+              <Link to="/interview/questions"><RaisedButton label="Yeterlilik Formu" primary={true}/></Link>
+          </div>
       </div>
       </MuiThemeProvider>
     )}

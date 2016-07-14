@@ -11,14 +11,14 @@ import IconMenu from 'material-ui/IconMenu';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
-const style = {
+const styles = {
   height: '100%'
 };
 export default React.createClass({
   render() {
     return (
       <MuiThemeProvider>
-        <div style={style}>
+        <div style={styles}>
         <div>
         <AppBar
              title="Title"
@@ -34,6 +34,14 @@ export default React.createClass({
                  <Link to='/interview'> <MenuItem primaryText="Interview" /></Link>
                  <Link to='/interview/singin'><MenuItem primaryText="Sing In" /></Link>
                  <Link to='/interview/singup'><MenuItem primaryText="Sign Up" /></Link>
+                 <Link to='/interview/applicationform'><MenuItem primaryText="applicationform" /></Link>
+                 <Link to='/interview/detailssaved'><MenuItem primaryText="detailssaved" /></Link>
+                 <Link to='/interview/competenceform'><MenuItem primaryText="competenceform" /></Link>
+                 <Link to='/interview/questions'><MenuItem primaryText="questions" /></Link>
+                 <Link to='/interview/questions2'><MenuItem primaryText="questions2" /></Link>
+                 <Link to='/interview/questions3'><MenuItem primaryText="questions3" /></Link>
+                 <Link to='/interview/testover'><MenuItem primaryText="testover" /></Link>
+
                </IconMenu>
              }
             />

@@ -19,27 +19,24 @@ const styles = {
   container:{
       display: 'flex',
       height: '100%',
-  }
+  },
+  space:{
+      marginLeft: 255,
+  },
 };
 export default React.createClass({
   render() {
     return (
       <MuiThemeProvider>
-        <div style={styles.container}>
-        
-            <div style={styles.menu}>
-              <Paper >
-                <Menu>
-                  <MenuItem primaryText="Anasayfa" />
-                  <MenuItem primaryText="İşlemler" />
-                  <MenuItem primaryText="İletişim" />
-                  <MenuItem primaryText="Hakkımızda" />
-                </Menu>
-                </Paper>
-            </div>
 
-            <div style={styles.contente}>{this.props.children}</div>
-        </div>
+
+            <div style={styles.space}>
+
+
+
+                  {this.props.children}
+
+    </div>
       </MuiThemeProvider>
     )}
 })

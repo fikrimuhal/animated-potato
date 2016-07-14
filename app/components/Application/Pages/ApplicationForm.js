@@ -30,6 +30,8 @@ export default React.createClass({
           <div>
         <h2>Başvuru Formu</h2>
 
+        <p>Lütfen aşağıdaki bilgileri eksiksiz bir şekilde doldurunuz. </p>
+
           <Paper zDepth={2}>
               <TextField hintText="Ad Soyad" style={styles} underlineShow={false} />
               <Divider />
@@ -71,16 +73,18 @@ export default React.createClass({
           </div>
 
           <div style={styles.button}>
-            <RaisedButton label="Kaydet" primary={true}/>
-            <RaisedButton label="Temizle" secondary={true}/>
+            <RaisedButton label="Yükle" primary={true}/>
+            <RaisedButton label="İptal" secondary={true}/>
           </div>
           <div>
-            <h5>Not:</h5>Başvurunuzun kabul edilmesi için yeterlilik formunu doldurmanız gerekmektedir.
+          <br/>
+          <div style={styles.button}>
+              <Link to="/interview/detailssaved"><RaisedButton label="Kaydet" primary={true}/></Link>
           </div>
 
-          <div style={styles.button}>
-            <RaisedButton label="Başvuru Formu" primary={true}/>
           </div>
+
+
 
       </div>
       </MuiThemeProvider>
