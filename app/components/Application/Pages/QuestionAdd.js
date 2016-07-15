@@ -34,6 +34,9 @@ export default class UserProfiles extends React.Component {
   render() {
     return (
         <div>
+          <div>
+              <h2>Soru Ekle</h2>
+          </div>
         <div>
           <TextField
             hintText="Soru Kalıbı"/><br />

@@ -32,17 +32,15 @@ export default React.createClass({
                  anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                >
                  <Link to='/interview'> <MenuItem primaryText="Interview" /></Link>
-                 <Link to='/interview/singin'><MenuItem primaryText="Sing In" /></Link>
-                 <Link to='/interview/singup'><MenuItem primaryText="Sign Up" /></Link>
                  <Link to='/interview/applicationform'><MenuItem primaryText="applicationform" /></Link>
                  <Link to='/interview/detailssaved'><MenuItem primaryText="detailssaved" /></Link>
-                 <Link to='/interview/competenceform'><MenuItem primaryText="competenceform" /></Link>
-                 <Link to='/interview/questions'><MenuItem primaryText="questions" /></Link>
-                 <Link to='/interview/questions2'><MenuItem primaryText="questions2" /></Link>
-                 <Link to='/interview/questions3'><MenuItem primaryText="questions3" /></Link>
-                 <Link to='/interview/testover'><MenuItem primaryText="testover" /></Link>
+                 <Link to='questions'><MenuItem primaryText="questions" /></Link>
+                 <Link to='/questions2'><MenuItem primaryText="questions2" /></Link>
+                 <Link to='/questions3'><MenuItem primaryText="questions3" /></Link>
+                 <Link to='/testover'><MenuItem primaryText="testover" /></Link>
                  <Link to='/adminpanel'><MenuItem primaryText="adminpanel" /></Link>
-
+                 <Link to='/adminsingin'><MenuItem primaryText="admin giriş" /></Link>
+                 <Link to='/adminsingup'><MenuItem primaryText="admin kaydol" /></Link>
                </IconMenu>
              }
             />

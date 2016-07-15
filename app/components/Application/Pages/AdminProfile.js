@@ -34,14 +34,12 @@ export default class UserProfiles extends React.Component {
           <TableHeader>
            <TableRow>
              <TableHeaderColumn>Ad Soyad</TableHeaderColumn>
-             <TableHeaderColumn>Yanıtlanan Soru Seti</TableHeaderColumn>
              <TableHeaderColumn>İşlemler</TableHeaderColumn>
            </TableRow>
           </TableHeader>
           <TableBody>
            <TableRow>
              <TableRowColumn>Ayşe Ak</TableRowColumn>
-             <TableRowColumn>Set 1</TableRowColumn>
              <TableRowColumn><div style={styles.button}>
                <RaisedButton label="Sil" secondary={true}/>
                <RaisedButton label="Düzenle" primary={true}/>
@@ -50,7 +48,6 @@ export default class UserProfiles extends React.Component {
            <TableRow>
 
              <TableRowColumn>Ali Yılmaz</TableRowColumn>
-             <TableRowColumn>Set 2</TableRowColumn>
              <TableRowColumn><div style={styles.button}>
                <RaisedButton label="Sil" secondary={true}/>
                <RaisedButton label="Düzenle" primary={true}/>
@@ -58,7 +55,6 @@ export default class UserProfiles extends React.Component {
            </TableRow>
            <TableRow>
              <TableRowColumn>Zehra Kıgız</TableRowColumn>
-             <TableRowColumn>Set 2</TableRowColumn>
              <TableRowColumn><div style={styles.button}>
                <RaisedButton label="Sil" secondary={true}/>
                <RaisedButton label="Düzenle" primary={true}/>

@@ -10,7 +10,6 @@ import DetailsSaved from './components/Application/Pages/DetailsSaved';
 import Questions2 from './components/Application/Pages/Questions2';
 import Questions3 from './components/Application/Pages/Questions3';
 import AdminPanel from './components/Application/Pages/AdminPanel';
-import AdminLayout from './components/Application/Pages/AdminLayout';
 import AdminSingIn from './components/Application/Pages/AdminSingIn';
 import AdminSingUp from './components/Application/Pages/AdminSingUp';
 import UsersProfile from './components/Application/Pages/UsersProfile';
@@ -37,16 +36,14 @@ ReactDOM.render((
             <Route path="applicationform" component={ApplicationForm}/>
             <Route path="detailssaved" component={DetailsSaved}/>
         </Route>
-        
+
         <Route path="questions" component={Questions}/>
         <Route path="questions2" component={Questions2}/>
         <Route path="questions3" component={Questions3}/>
         <Route path="testover" component={TestOver}/>
 
-        <Route path="adminlayout" component={AdminLayout}>
             <Route path="adminsingin" component={AdminSingIn}/>
             <Route path="adminsingup" component={AdminSingUp}/>
-        </Route>
             <Route path="adminpanel" component={AdminPanel}>
             <Route path="listofparticipants" component={ListOfParticipants}/>
             <Route path="usersprofile" component={UsersProfile}/>

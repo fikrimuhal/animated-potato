@@ -68,7 +68,16 @@ export default class UserProfiles extends React.Component {
           </Table>
       </div>
       <br/>
-    
+      <div>
+      <h2>Soru Seti Ekle</h2>
+      <div>
+        <TextField
+          hintText="Soru Seti Adı"/><br />
+      </div>
+        <RaisedButton label="Ekle" secondary={true}/>
+
+    </div>
+
       </div>
     );
   }

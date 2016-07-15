@@ -10,7 +10,7 @@ import MenuItem from 'material-ui/MenuItem';
 const styles = {
   menu:{
     height: 400,
-    width: 150,
+    width: 250,
   },
   contente:{
     width: '100%',
@@ -26,16 +26,9 @@ export default React.createClass({
     return (
       <MuiThemeProvider>
         <div style={styles.container}>
-        
+
             <div style={styles.menu}>
-              <Paper >
-                <Menu>
-                  <MenuItem primaryText="Anasayfa" />
-                  <MenuItem primaryText="İşlemler" />
-                  <MenuItem primaryText="İletişim" />
-                  <MenuItem primaryText="Hakkımızda" />
-                </Menu>
-                </Paper>
+
             </div>
 
             <div style={styles.contente}>{this.props.children}</div>

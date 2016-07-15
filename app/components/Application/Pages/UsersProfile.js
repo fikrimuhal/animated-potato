@@ -14,7 +14,6 @@ const styles = {
   customWidth: {
    width: 150,
  },
-
 };
 export default class UserProfiles extends React.Component {
 

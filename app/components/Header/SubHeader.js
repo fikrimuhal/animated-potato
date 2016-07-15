@@ -1,5 +1,4 @@
 import React from 'react';
-
 import styles from './style';
 
 const SubHeader = ({children}) => {
@@ -12,5 +11,4 @@ const SubHeader = ({children}) => {
 };
 
 SubHeader.displayName = 'SubHeader';
-
 export default SubHeader;

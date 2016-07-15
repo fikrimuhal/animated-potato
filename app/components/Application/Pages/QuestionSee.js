@@ -26,6 +26,9 @@ export default class UserProfiles extends React.Component {
   render() {
     return (
         <div>
+        <div>
+            <h2>Soruları Gör</h2>
+        </div>
       <div>
         <SelectField value={this.state.value} onChange={this.handleChange}>
           <MenuItem value={1} primaryText="Soru Türü" />
@@ -63,7 +66,7 @@ export default class UserProfiles extends React.Component {
           </RadioButtonGroup>
           <div style={styles.button}>
             <RaisedButton label="Sil" secondary={true}/>
-            <RaisedButton label="Soru Setine Ekle" primary={true}/>
+            <RaisedButton label="Düzenle" primary={true}/>
           </div>
       </div>
       <div>
@@ -84,7 +87,7 @@ export default class UserProfiles extends React.Component {
           </RadioButtonGroup>
           <div style={styles.button}>
             <RaisedButton label="Sil" secondary={true}/>
-            <RaisedButton label="Soru Setine Ekle" primary={true}/>
+            <RaisedButton label="Düzenle" primary={true}/>
           </div>
       </div>
       <div>
@@ -110,7 +113,7 @@ export default class UserProfiles extends React.Component {
           </RadioButtonGroup>
           <div style={styles.button}>
             <RaisedButton label="Sil" secondary={true}/>
-            <RaisedButton label="Soru Setine Ekle" primary={true}/>
+            <RaisedButton label="Düzenle" primary={true}/>
           </div>
       </div>
       <div>

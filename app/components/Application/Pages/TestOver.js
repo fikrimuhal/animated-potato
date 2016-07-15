@@ -11,26 +11,30 @@ import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 import DropDownMenuLongMenuExample from '../MaterialUiComponents/DropDownMenuLongMenuExample'
 
 const styles = {
-  button:{
-  marginRight: 12,
-},
-   marginLeft: 20,
-   block: {
-     maxWidth: 250,
+
+
+   contente:{
+     width: '100%',
+     marginLeft: 200
    },
-   radioButton: {
-     marginBottom: 16,
+   container:{
+       display: 'flex',
+       height: '100%',
    },
 };
 export default React.createClass({
   render() {
-    return (<MuiThemeProvider>
-      <div style={styles}>
-      <h2>Test Tamamlandı.</h2>
-      <span><b>25</b> dakika içerisinde <b>50</b> soruya yanıt verdiniz.</span>
-        <h3>Teşekkür Ederiz</h3>
+    return (
+      <div>
+          <div style={styles.menu}>
 
-      </div>
-      </MuiThemeProvider>
+          </div>
+          <div style={styles.contente}>
+            <h2>Test Tamamlandı.</h2>
+            <span><b>25</b> dakika içerisinde <b>50</b> soruya yanıt verdiniz.</span>
+            <h3>Başvurunuz için teşekkür ederiz</h3>
+            <span>Tarafınıza en kısa zamanda dönüş yapılacaktır.</span>
+          </div>
+    </div>
     )}
 })

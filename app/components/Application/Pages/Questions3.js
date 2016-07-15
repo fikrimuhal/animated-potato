@@ -7,7 +7,22 @@ import Slider from 'material-ui/Slider';
 import Checkbox from 'material-ui/Checkbox';
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+import QuestionCheckbox from '../../components/QuestionCheckbox'
 
+const questions = {
+  1: {
+    title: "Aşağıdaki programlama dillerinden hangisi/hangilerinde bilgi sahibisiniz?",
+    answers: [
+      { title: "Python", value: 1},
+      { title: "JavaScript", value: 2},
+      { title: "C", value: 3},
+      { title: "C++", value: 4}
+    ],
+    id: 1,
+    type: "checkbox"
+  },
+
+}
 
 const styles = {
   button:{
@@ -23,61 +38,12 @@ export default React.createClass({
   render() {
     return (<MuiThemeProvider>
         <div>
-          <div>
-              <Slider defaultValue={0.10} />
 
-          </div>
         <div style={styles}>
-
           <h3>Sorular</h3>
-            <div>
-                <p><b>5)</b> Aşağıdaki programlama dillerinden hangisi/hangilerinde bilgi sahibisiniz?</p>
+            
+                <QuestionCheckbox questionId={questions[1].id} question={questions[1].title} answers={questions[1].answers}/>
 
-                <div style={styles.block}>
-                    <Checkbox
-                      label="Python"
-                      defaultChecked={true}
-                      style={styles.checkbox}
-                    />
-                      <Checkbox
-                        label="JavaScript"
-                        style={styles.checkbox}
-                      />
-                      <Checkbox
-                        label="C"
-                        style={styles.checkbox}
-                      />
-                      <Checkbox
-                        label="C++"
-                        style={styles.checkbox}
-                      />
-
-                  </div>
-            </div>
-            <div>
-                <p><b>6)</b> Aşağıdaki etkinliklerden hangilerine katıldınız?</p>
-
-                <div style={styles.block}>
-                    <Checkbox
-                      label="Veri Bilimi İstanbul"
-                      defaultChecked={true}
-                      style={styles.checkbox}
-                    />
-                      <Checkbox
-                        label="Linux Yaz Kampı"
-                        style={styles.checkbox}
-                      />
-                      <Checkbox
-                        label="Akademik Bilişim"
-                        style={styles.checkbox}
-                      />
-                      <Checkbox
-                        label="Programlama Günleri"
-                        style={styles.checkbox}
-                      />
-
-                  </div>
-            </div>
               <br/><br/><br/>
             <div style={styles.button}>
             <Link to="/testover"><RaisedButton label="İleri" primary={true}/></Link>

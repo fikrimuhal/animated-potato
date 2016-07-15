@@ -10,16 +10,24 @@ const styles = {
   button:{
   marginRight: 12,
 },
+  contente:{
+    width: '100%',
+    marginLeft: 200
+  },
+  container:{
+      display: 'flex',
+      height: '100%',
+  },
 };
 export default React.createClass({
   render() {
     return (<MuiThemeProvider>
-      <div style={styles}>
-
+      <div style={styles.contente}>
+          <br/><br/>
           ?Lütfen aşağıdaki bilgileri eksiksiz bir şekilde doldurunuz.
 
           <div>
-        <h2>Üye Ol</h2>
+        <h2>Kayıt Ol</h2>
 
         <div>
           <TextField
@@ -42,7 +50,7 @@ export default React.createClass({
         </div>
           </div>
           <div style={styles.button}>
-            <Link to="/interview/singin"><RaisedButton label="Üye Ol" primary={true}/></Link>
+            <Link to="/adminpanel"><RaisedButton label="Kayıt Ol" primary={true}/></Link>
             <RaisedButton label="Temizle" secondary={true}/>
           </div>
 

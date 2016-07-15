@@ -36,7 +36,7 @@ export default React.createClass({
             primaryText="Katılımcı Bilgileri"
              rightIcon={<ArrowDropRight />}
             menuItems={[
-              <Link to='/adminpanel/listofparticipants'><MenuItem primaryText="Bilgileri Gör" /></Link>
+              <Link to='/adminpanel/listofparticipants'><MenuItem primaryText="Katılımcı Listesi" /></Link>
             ]}
                 />
                 <MenuItem
@@ -46,7 +46,6 @@ export default React.createClass({
                   <Link to='/adminpanel/questionsee'><MenuItem primaryText="Soruları Gör" /></Link>,
                   <Link to='/adminpanel/questionadd'><MenuItem primaryText="Soru Ekle" /></Link>,
                   <Link to='/adminpanel/questionsetdetails'><MenuItem primaryText="Soru Set Bilgileri" /></Link>,
-                  <Link to='/adminpanel/questionsetadd'><MenuItem primaryText="Soru Seti Ekle" /></Link>,
                   ]}
             />
                   <MenuItem
@@ -55,8 +54,8 @@ export default React.createClass({
                     menuItems={[
                         <Link to='/adminpanel/usersprofile'><MenuItem primaryText="Kullanıcıları Gör" /></Link>,
                         <Link to='/adminpanel/adminprofile'><MenuItem primaryText="Admin Bilgileri" /></Link>,
-                        <Link to='/adminlayout/adminsingin'><MenuItem primaryText="Admin Giriş" /></Link>,
-                        <Link to='/adminlayout/adminsingup'><MenuItem primaryText="Admin Kaydol" /></Link>,
+                        <Link to='/adminsingin'><MenuItem primaryText="Admin Giriş" /></Link>,
+                        <Link to='/adminsingup'><MenuItem primaryText="Admin Kaydol" /></Link>,
 
                         ]}
               />

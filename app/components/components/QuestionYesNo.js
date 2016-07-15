@@ -9,24 +9,6 @@ import ActionFlightTakeoff from 'material-ui/svg-icons/action/flight-takeoff';
 import FileCloudDownload from 'material-ui/svg-icons/file/cloud-download';
 import HardwareVideogameAsset from 'material-ui/svg-icons/hardware/videogame-asset';
 import {red500, yellow500, blue500} from 'material-ui/styles/colors';
-import QuestionYesNo from '../../components/QuestionYesNo'
-
-const questions = {
-  1: {
-    title: "Aşağıdakilerden hangisinde daha iyisiniz?",
-    id: 1,
-    type: "radioButtonTwoUp",
-  },
-  2: {
-    title: "Aşağıdakilerden hangisinde daha kötüsünüz?",
-    id: 2,
-    type: "radioButtonTwoUp",
-  },
-  answers: [
-    {title: "yes", value: 1},
-    {title: "no", value: 2}
-  ]
-}
 
 const styles = {
   button:{
@@ -39,18 +21,23 @@ const styles = {
   };
 export default React.createClass({
   render() {
+    console.log(this.props.answers)
     return (<MuiThemeProvider>
         <div>
-          <div style={styles}>
-            <h3>Sorular</h3>
-          </div>
-          <QuestionYesNo questionId={questions[1].id} question={questions[1].title} answers={questions.answers}/>
-            <QuestionYesNo questionId={questions[2].id} question={questions[2].title} answers={questions.answers}/>
-          <br/><br/><br/><br/>
-            <div>
-              <span>Klavyeden evet için <b>"e"</b> hayır için <b>"h"</b> tuşlarını kullanabilirsiniz.</span>
+          <p><b>{this.props.questionId})</b> {this.props.question}</p>
+          <RadioButtonGroup name="shipSpeed" onChange={(event, value) => (console.log("Kullanıcı bnun seçti:",value))}>
+            {
+                this.props.answers.map((a,b) => (
+
+                    <RadioButton key={a.value}
+                      value = {a.value}
+                      label= {a.title}
+                     style={styles.radioButton}
+                      />
+                ))
+            }
+          </RadioButtonGroup>
             </div>
-        </div>
       </MuiThemeProvider>
     )}
 })

@@ -27,6 +27,7 @@ export default class UserProfiles extends React.Component {
   render() {
     return (
         <div>
+        <h2>Soru Seti Ekle</h2>
         <div>
           <TextField
             hintText="Soru Seti Adı"/><br />

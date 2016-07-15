@@ -33,7 +33,7 @@ export default React.createClass({
           </p>
           <p>Forma ulaşmak için lütfen tıklayınız.</p>
           <div style={styles.button}>
-              <Link to="/interview/questions"><RaisedButton label="Yeterlilik Formu" primary={true}/></Link>
+              <Link to="/questions"><RaisedButton label="Yeterlilik Formu" primary={true}/></Link>
           </div>
       </div>
       </MuiThemeProvider>

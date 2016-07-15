@@ -29,7 +29,6 @@ export default React.createClass({
     return (
       <MuiThemeProvider>
         <div style={styles.container}>
-
             <div style={styles.space}>
               <h3>Fikrimuhal Teknoloji Çalışan Arıyor.</h3>
               Hangi alanlarda çalışabilirim?
@@ -50,7 +49,6 @@ export default React.createClass({
                     <li>-----------</li>
                     <li>--------------</li>
                     </ul>
-
                     <br/>
                   <p><b>Dipnot: </b> Başvuru yapabilmek için lütfen tıklayınız.</p>
                   <div style={styles.button}>
