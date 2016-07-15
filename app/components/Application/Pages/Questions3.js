@@ -21,7 +21,6 @@ const questions = {
     id: 1,
     type: "checkbox"
   },
-
 }
 
 const styles = {
@@ -41,7 +40,7 @@ export default React.createClass({
 
         <div style={styles}>
           <h3>Sorular</h3>
-            
+
                 <QuestionCheckbox questionId={questions[1].id} question={questions[1].title} answers={questions[1].answers}/>
 
               <br/><br/><br/>
