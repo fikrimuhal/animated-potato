@@ -27,21 +27,21 @@ export default class UserProfiles extends React.Component {
   render() {
     return (
         <div>
-        <h2>Admin Profili</h2>
+        <h2>Soru Seti Bilgileri</h2>
       <br/>
       <div>
         <Table>
           <TableHeader>
            <TableRow>
-             <TableHeaderColumn>Ad Soyad</TableHeaderColumn>
-             <TableHeaderColumn>Yanıtlanan Soru Seti</TableHeaderColumn>
+             <TableHeaderColumn>Soru Seti Adı</TableHeaderColumn>
+             <TableHeaderColumn>Soru Sayısı</TableHeaderColumn>
              <TableHeaderColumn>İşlemler</TableHeaderColumn>
            </TableRow>
           </TableHeader>
           <TableBody>
            <TableRow>
-             <TableRowColumn>Ayşe Ak</TableRowColumn>
              <TableRowColumn>Set 1</TableRowColumn>
+             <TableRowColumn>65</TableRowColumn>
              <TableRowColumn><div style={styles.button}>
                <RaisedButton label="Sil" secondary={true}/>
                <RaisedButton label="Düzenle" primary={true}/>
@@ -49,16 +49,16 @@ export default class UserProfiles extends React.Component {
            </TableRow>
            <TableRow>
 
-             <TableRowColumn>Ali Yılmaz</TableRowColumn>
              <TableRowColumn>Set 2</TableRowColumn>
+             <TableRowColumn>90</TableRowColumn>
              <TableRowColumn><div style={styles.button}>
                <RaisedButton label="Sil" secondary={true}/>
                <RaisedButton label="Düzenle" primary={true}/>
              </div></TableRowColumn>
            </TableRow>
            <TableRow>
-             <TableRowColumn>Zehra Kıgız</TableRowColumn>
-             <TableRowColumn>Set 2</TableRowColumn>
+             <TableRowColumn>Set 3</TableRowColumn>
+             <TableRowColumn>78</TableRowColumn>
              <TableRowColumn><div style={styles.button}>
                <RaisedButton label="Sil" secondary={true}/>
                <RaisedButton label="Düzenle" primary={true}/>
@@ -68,9 +68,7 @@ export default class UserProfiles extends React.Component {
           </Table>
       </div>
       <br/>
-      <div>  <TextField
-            hintText="Admin Ara"
-          /><br /></div>
+    
       </div>
     );
   }

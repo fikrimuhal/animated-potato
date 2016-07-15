@@ -38,16 +38,7 @@ export default React.createClass({
             hintText="Telefon"
             floatingLabelText="Telefon"
           /><br/>
-          <TextField
-            hintText="Şifre"
-            floatingLabelText="Şifre"
-            type="password"
-          />
-          <TextField
-            hintText="Şifre Tekrar"
-            floatingLabelText="Şifre Tekrar"
-            type="password"
-          /><br />
+
         </div>
           </div>
           <div style={styles.button}>

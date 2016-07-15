@@ -41,6 +41,7 @@ export default React.createClass({
                  <Link to='/interview/questions2'><MenuItem primaryText="questions2" /></Link>
                  <Link to='/interview/questions3'><MenuItem primaryText="questions3" /></Link>
                  <Link to='/interview/testover'><MenuItem primaryText="testover" /></Link>
+                 <Link to='/adminpanel'><MenuItem primaryText="adminpanel" /></Link>
 
                </IconMenu>
              }

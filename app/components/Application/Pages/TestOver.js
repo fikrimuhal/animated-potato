@@ -27,7 +27,8 @@ export default React.createClass({
     return (<MuiThemeProvider>
       <div style={styles}>
       <h2>Test Tamamlandı.</h2>
-        <h3>Teşekkürler</h3>
+      <span><b>25</b> dakika içerisinde <b>50</b> soruya yanıt verdiniz.</span>
+        <h3>Teşekkür Ederiz</h3>
 
       </div>
       </MuiThemeProvider>

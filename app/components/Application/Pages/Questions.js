@@ -61,9 +61,14 @@ export default React.createClass({
                   />
                 </RadioButtonGroup>
             </div>
+
               <br/><br/><br/>
             <div style={styles.button}>
-              <Link to="/interview/questions2"><RaisedButton label="İleri" primary={true}/></Link>
+              <Link to="/questions2"><RaisedButton label="İleri" primary={true}/></Link>
+            </div>
+              <br/><br/><br/><br/>
+            <div>
+                <span>Klavyeden evet için <b>"e"</b> hayır için <b>"h"</b> tuşlarını kullanabilirsiniz.</span>
             </div>
 
         </div>

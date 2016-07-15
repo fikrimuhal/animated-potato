@@ -21,7 +21,7 @@ const styles = {
       height: '100%',
   },
   space:{
-      marginLeft: 55,
+      marginLeft: 185,
   },
 };
 export default React.createClass({
@@ -29,18 +29,7 @@ export default React.createClass({
     return (
       <MuiThemeProvider>
         <div style={styles.container}>
-          <div>
-            <div style={styles.menu}>
-              <Paper >
-                <Menu>
-                  <MenuItem primaryText="Anasayfa" />
-                  <MenuItem primaryText="İşlemler" />
-                  <MenuItem primaryText="İletişim" />
-                  <MenuItem primaryText="Hakkımızda" />
-                </Menu>
-                </Paper>
-            </div>
-            </div>
+
             <div style={styles.space}>
               <h3>Fikrimuhal Teknoloji Çalışan Arıyor.</h3>
               Hangi alanlarda çalışabilirim?
@@ -63,10 +52,9 @@ export default React.createClass({
                     </ul>
 
                     <br/>
-                  <p><b>Dipnot: </b> Başvuru yapabilmek için sisteme üye olmanız gerekmekte. Eğer üye iseniz lütfen giriş yapınız.</p>
+                  <p><b>Dipnot: </b> Başvuru yapabilmek için lütfen tıklayınız.</p>
                   <div style={styles.button}>
-                    <Link to="/interview/singin"><RaisedButton label="Giriş Yap" primary={true}/></Link>
-                    <Link to="/interview/singup"><RaisedButton label="Üye Ol" secondary={true}/></Link>
+                    <Link to="/interview/applicationform"><RaisedButton label="Başvuru Yap" primary={true}/></Link>
                   </div>
             </div>
         </div>

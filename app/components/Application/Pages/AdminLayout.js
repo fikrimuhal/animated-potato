@@ -28,13 +28,8 @@ export default React.createClass({
   render() {
     return (
       <MuiThemeProvider>
-
-
             <div style={styles.space}>
-
-
-
-                  {this.props.children}
+            {this.props.children}
 
     </div>
       </MuiThemeProvider>

@@ -73,7 +73,7 @@ export default React.createClass({
             </div>
               <br/><br/><br/>
             <div style={styles.button}>
-            <Link to="/interview/questions3"><RaisedButton label="İleri" primary={true}/></Link>
+            <Link to="/questions3"><RaisedButton label="İleri" primary={true}/></Link>
 
             </div>
 

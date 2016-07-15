@@ -36,38 +36,30 @@ export default React.createClass({
             primaryText="Katılımcı Bilgileri"
              rightIcon={<ArrowDropRight />}
             menuItems={[
-              <MenuItem primaryText="Bilgileri Gör" />,
+              <Link to='/adminpanel/listofparticipants'><MenuItem primaryText="Bilgileri Gör" /></Link>
             ]}
                 />
-
                 <MenuItem
             primaryText="Soru Bilgileri"
              rightIcon={<ArrowDropRight />}
               menuItems={[
-              <MenuItem primaryText="Soruları Gör" />,
-
-                  <MenuItem primaryText="Soru Ekle" />,
-
-                  <MenuItem primaryText="Soru Set Bilgileri" />,
-                  <MenuItem primaryText="Soru Seti Ekle" />,
+                  <Link to='/adminpanel/questionsee'><MenuItem primaryText="Soruları Gör" /></Link>,
+                  <Link to='/adminpanel/questionadd'><MenuItem primaryText="Soru Ekle" /></Link>,
+                  <Link to='/adminpanel/questionsetdetails'><MenuItem primaryText="Soru Set Bilgileri" /></Link>,
+                  <Link to='/adminpanel/questionsetadd'><MenuItem primaryText="Soru Seti Ekle" /></Link>,
                   ]}
             />
                   <MenuItem
                   primaryText="İşlemler"
                    rightIcon={<ArrowDropRight />}
                     menuItems={[
-                    <MenuItem primaryText="Kullanıcıları Gör" />,
-
-                        <MenuItem primaryText="Admin Bilgileri" />,
-
-                        <MenuItem primaryText="Admin Ekle" />,
-                        <MenuItem primaryText="Katılımcıları Gör" />,
-                        <MenuItem primaryText="Kullanıcı Ekle" />,
-
+                        <Link to='/adminpanel/usersprofile'><MenuItem primaryText="Kullanıcıları Gör" /></Link>,
+                        <Link to='/adminpanel/adminprofile'><MenuItem primaryText="Admin Bilgileri" /></Link>,
+                        <Link to='/adminlayout/adminsingin'><MenuItem primaryText="Admin Giriş" /></Link>,
+                        <Link to='/adminlayout/adminsingup'><MenuItem primaryText="Admin Kaydol" /></Link>,
 
                         ]}
               />
-
                 </Menu>
                 </Paper>
             </div>
