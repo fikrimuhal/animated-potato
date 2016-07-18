@@ -21,7 +21,7 @@ export default React.createClass({
   render() {
     return (
       <div style={styles.contente}>
-        <h2>Giriş Yap</h2>
+        <h3>Giriş Yap</h3>
         <TextField
           hintText="Ad Soyad"
           floatingLabelText="Ad Soyad"

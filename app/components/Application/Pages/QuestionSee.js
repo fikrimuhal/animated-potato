@@ -30,9 +30,9 @@ export default class QuestionSee extends React.Component {
         <div>
           <SelectField value={this.state.value} onChange={this.handleChange}>
             <MenuItem value={1} primaryText="Set Türü" />
-            <MenuItem value={2} primaryText="Set 1" />
-            <MenuItem value={3} primaryText="Set 2" />
-            <MenuItem value={3} primaryText="Set 3" />
+            <MenuItem value={2} primaryText="Back-End Set" />
+            <MenuItem value={3} primaryText="Front-End Set" />
+            <MenuItem value={3} primaryText="Sistem Yönetimi Set" />
           </SelectField>
           <br/>
 
@@ -44,90 +44,6 @@ export default class QuestionSee extends React.Component {
           </SelectField>
           </div>
         <br/>
-
-        <div>
-            <p><b>1)</b> İş tecrübeniz var mı?</p>
-            <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
-              <RadioButton
-                value="experience"
-                 label="Evet"
-                 style={styles.radioButton}
-               />
-               <RadioButton
-
-                  label="Hayır"
-                  style={styles.radioButton}
-                />
-            </RadioButtonGroup>
-            <div style={styles.button}>
-              <RaisedButton label="Sil" secondary={true}/>
-              <RaisedButton label="Düzenle" primary={true}/>
-            </div>
-        </div>
-        <div>
-            <p><b>2)</b> Scala biliyor musunuz?</p>
-            <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
-              <RadioButton
-                value="experience"
-                 label="Evet"
-                 style={styles.radioButton}
-               />
-               <RadioButton
-
-                  label="Hayır"
-                  style={styles.radioButton}
-                />
-            </RadioButtonGroup>
-
-            <div style={styles.button}>
-              <RaisedButton label="Sil" secondary={true}/>
-              <RaisedButton label="Düzenle" primary={true}/>
-            </div>
-          </div>
-
-        <div>
-            <p><b>3)</b> Kişisel bilgisayarınızda hangi işletim sistemini kullanıyorsunuz?</p>
-            <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
-              <RadioButton
-                 label="Windows"
-                 style={styles.radioButton}
-               />
-               <RadioButton
-                  value="experience"
-                  label="Linux"
-                  style={styles.radioButton}
-                />
-                <RadioButton
-                   label="Mac Os"
-                   style={styles.radioButton}
-                 />
-            </RadioButtonGroup>
-
-            <div style={styles.button}>
-              <RaisedButton label="Sil" secondary={true}/>
-              <RaisedButton label="Düzenle" primary={true}/>
-            </div>
-        </div>
-
-        <div>
-            <p><b>4)</b> Aşağıdakilerin hangisinde daha iyisiniz?</p>
-            <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
-              <RadioButton
-                 label="Back end"
-                 style={styles.radioButton}
-               />
-               <RadioButton
-                  value="experience"
-                  label="Front end"
-                  style={styles.radioButton}
-                />
-                <RadioButton
-
-                   label="Sistem Yönetimi"
-                   style={styles.radioButton}
-                 />
-            </RadioButtonGroup>
-        </div>
       </div>
     );
   }

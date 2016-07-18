@@ -14,7 +14,7 @@ export default class UserProfiles extends React.Component {
   render() {
     return (
       <div>
-          <h2>Kullanıcı Profili</h2>
+          <h3>Kullanıcı Profili</h3>
         <div>
           <SelectField value={this.state.value} onChange={this.handleChange}>
             <MenuItem value={1} primaryText="Sıralama Türü" />

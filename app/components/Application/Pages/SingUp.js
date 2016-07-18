@@ -4,14 +4,27 @@ import TextField from 'material-ui/TextField';
 import TextFieldExampleSimple from '../MaterialUiComponents/TextFieldExampleSimple';
 import RaisedButton from 'material-ui/RaisedButton';
 
+const styles = {
+  button:{
+    marginRight: 12,
+  }, contente:{
+     width: '100%',
+     marginLeft: 200
+   },
+   container:{
+       display: 'flex',
+       height: '100%',
+   },
+};
+
 export default React.createClass({
   render() {
     return(
-      <div>
+      <div style={styles.contente}>
         <br/><br/>
         ?Lütfen aşağıdaki bilgileri eksiksiz bir şekilde doldurunuz.
         <div>
-          <h2>Kayıt Ol</h2>
+          <h3>Kayıt Ol</h3>
         <div>
           <TextField
             hintText="Ad"
@@ -32,7 +45,7 @@ export default React.createClass({
         </div>
 
         </div>
-          <div>
+          <div style={styles.button}>
             <Link to="/adminpanel"><RaisedButton label="Kayıt Ol" primary={true}/></Link>
             <RaisedButton label="Temizle" secondary={true}/>
       </div>

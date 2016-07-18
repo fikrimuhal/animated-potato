@@ -13,18 +13,16 @@ const styles = {
   },
 };
 export default class QuestionAdd extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {value: 1};
   }
   handleChange = (event, index, value) => this.setState({value});
-
   render() {
     return (
         <div>
           <div>
-              <h2>Soru Ekle</h2>
+              <h3>Soru Ekle</h3>
           </div>
         <div>
           <TextField
@@ -44,9 +42,10 @@ export default class QuestionAdd extends React.Component {
         <TextField
           hintText="Ağırlık"/><br />
         </div>
-
+        <br/>
+        <br/>
         <div>
-          Cevap Türü: <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
+          <b>Cevap Türü:</b> <br/><br/><RadioButtonGroup name="shipSpeed" defaultSelected="experience">
 
           <RadioButton
             value="experience"
@@ -82,7 +81,7 @@ export default class QuestionAdd extends React.Component {
             hintText="Seçenekler"/><br />
             <RaisedButton label="Ekle" secondary={true}/>
             <RaisedButton label="Sil" primary={true}/>
-            <br/>
+            <br/><br/><br/>
             <TextField
               hintText="Ağırlık"/><br />
         </div>
@@ -95,7 +94,7 @@ export default class QuestionAdd extends React.Component {
               <MenuItem value={3} primaryText="Set 3" />
             </SelectField>
           </div>
-
+          <br/><br/>
           <RaisedButton label="Soru Ekle" secondary={true}/>
       </div>
     );

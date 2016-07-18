@@ -25,8 +25,6 @@ import Questions6 from './components/Application/Pages/Questions6';
 import AdminLayout from './components/Application/Pages/AdminLayout';
 
 
-
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Application from './components/Application';
@@ -64,7 +62,6 @@ ReactDOM.render((
             <Route path="questionsetdetails" component={QuestionSetDetails}/>
             <Route path="questionsetadd" component={QuestionSetAdd}/>
       </Route>
-
     </Route>
   </Router>
 ), document.getElementById('app'))

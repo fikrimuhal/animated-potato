@@ -12,7 +12,7 @@ export default class QuestionSetDetails extends React.Component {
   render() {
     return (
         <div>
-          <h2>Soru Seti Bilgileri</h2>
+          <h3>Soru Seti Bilgileri</h3>
           <br/>
           <div>
             <Table>
@@ -56,7 +56,7 @@ export default class QuestionSetDetails extends React.Component {
             </div>
             <br/>
           <div>
-          <h2>Soru Seti Ekle</h2>
+          <h3>Soru Seti Ekle</h3>
           <div>
             <TextField
               hintText="Soru Seti Adı"/><br />

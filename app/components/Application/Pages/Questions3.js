@@ -22,7 +22,6 @@ const questions = {
     type: "checkbox"
   },
 }
-
 const styles = {
   button:{
     marginRight: 12,
@@ -30,8 +29,6 @@ const styles = {
   position: 'absolute',
   display: 'inline-block',
   alignItems: 'center',
-  marginLeft: 250
-
   };
 export default React.createClass({
   render() {

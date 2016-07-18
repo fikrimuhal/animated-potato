@@ -38,17 +38,12 @@ const styles = {
   position: 'absolute',
   display: 'inline-block',
   alignItems: 'center',
-  marginLeft: 250
-
   };
 export default React.createClass({
   render() {
 
     return (<MuiThemeProvider>
         <div>
-        <br/>
-               <LinearProgress mode="determinate" value={20} />
-
         <div style={styles}>
 
           <h3>Sorular</h3>

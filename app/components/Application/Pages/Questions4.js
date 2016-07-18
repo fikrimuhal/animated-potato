@@ -36,8 +36,8 @@ export default React.createClass({
   render() {
     return (
             <div>
-            <QuestionCheckbox questionid={questions[1].id} question={questions[1].title} answers={questions[1].answers} />
-              <QuestionCheckbox questionid={questions[2].id} question={questions[2].title} answers={questions[2].answers} />
+            <QuestionCheckbox questionId={questions[1].id} question={questions[1].title} answers={questions[1].answers} />
+              <QuestionCheckbox questionId={questions[2].id} question={questions[2].title} answers={questions[2].answers} />
             </div>
         )}
     })
