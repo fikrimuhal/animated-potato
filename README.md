@@ -1,3 +1,2 @@
 # animated-potato
 Mulakat yazılımı
-......
