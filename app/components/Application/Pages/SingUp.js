@@ -1,34 +1,17 @@
 import React from 'react'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Link } from 'react-router'
 import TextField from 'material-ui/TextField';
 import TextFieldExampleSimple from '../MaterialUiComponents/TextFieldExampleSimple';
 import RaisedButton from 'material-ui/RaisedButton';
 
-
-const styles = {
-  button:{
-  marginRight: 12,
-},
-  contente:{
-    width: '100%',
-    marginLeft: 200
-  },
-  container:{
-      display: 'flex',
-      height: '100%',
-  },
-};
 export default React.createClass({
   render() {
-    return (<MuiThemeProvider>
-      <div style={styles.contente}>
-          <br/><br/>
-          ?Lütfen aşağıdaki bilgileri eksiksiz bir şekilde doldurunuz.
-
-          <div>
-        <h2>Kayıt Ol</h2>
-
+    return(
+      <div>
+        <br/><br/>
+        ?Lütfen aşağıdaki bilgileri eksiksiz bir şekilde doldurunuz.
+        <div>
+          <h2>Kayıt Ol</h2>
         <div>
           <TextField
             hintText="Ad"
@@ -46,15 +29,13 @@ export default React.createClass({
             hintText="Telefon"
             floatingLabelText="Telefon"
           /><br/>
+        </div>
 
         </div>
-          </div>
-          <div style={styles.button}>
+          <div>
             <Link to="/adminpanel"><RaisedButton label="Kayıt Ol" primary={true}/></Link>
             <RaisedButton label="Temizle" secondary={true}/>
-          </div>
-
       </div>
-      </MuiThemeProvider>
+    </div>
     )}
 })

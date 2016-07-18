@@ -1,7 +1,7 @@
 import React from 'react'
 import QuestionRadioButton from './QuestionRadioButton';
 
-const  answers =
+const answers =
     [
       { title: "Evet", value: true},
       { title: "Hayır", value: false},

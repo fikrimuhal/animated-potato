@@ -19,7 +19,9 @@
   "dependencies": {
     "material-ui": "^0.15.2",
     "react": "^15.0.1",
+    "react-checkbox-group": "^1.0.4",
     "react-dom": "^15.0.1",
+    "react-dropdown": "^1.0.4",
     "react-router": "^2.5.2",
     "react-tap-event-plugin": "^1.0.0"
   },

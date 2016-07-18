@@ -1,86 +1,38 @@
-<div style={styles}>
+<div style={styles.container}>
+  <div>
+    <div style={styles.menu}>
+      <Paper >
+        <Menu>
+        <MenuItem
+    primaryText="Katılımcı Bilgileri"
+     rightIcon={<ArrowDropRight />}
+    menuItems={[
+      <Link to='/adminpanel/listofparticipants'><MenuItem primaryText="Katılımcı Listesi" /></Link>
+    ]}
+        />
+        <MenuItem
+    primaryText="Soru Bilgileri"
+     rightIcon={<ArrowDropRight />}
+      menuItems={[
+          <Link to='/adminpanel/questionsee'><MenuItem primaryText="Soruları Gör" /></Link>,
+          <Link to='/adminpanel/questionadd'><MenuItem primaryText="Soru Ekle" /></Link>,
+          <Link to='/adminpanel/questionsetdetails'><MenuItem primaryText="Soru Set Bilgileri" /></Link>,
+          ]}
+    />
+          <MenuItem
+          primaryText="İşlemler"
+           rightIcon={<ArrowDropRight />}
+            menuItems={[
+                <Link to='/adminpanel/usersprofile'><MenuItem primaryText="Kullanıcıları Gör" /></Link>,
+                <Link to='/adminpanel/adminprofile'><MenuItem primaryText="Admin Bilgileri" /></Link>,
+                <Link to='/adminsingin'><MenuItem primaryText="Admin Giriş" /></Link>,
+                <Link to='/adminsingup'><MenuItem primaryText="Admin Kaydol" /></Link>,
 
-    <ActionHome style={styles} />
-
-  <h3>Sorular</h3>
-
-    <div>
-
-        <p><b>1)</b> İş tecrübeniz var mı?</p>
-
-        <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
-
-        <RadioButton
-          value="experience"
-           label="Evet"
-           style={styles.radioButton}
-         />
-         <RadioButton
-
-            label="Hayır"
-            style={styles.radioButton}
-          />
-        </RadioButtonGroup>
+                ]}
+      />
+        </Menu>
+        </Paper>
     </div>
-    <div>
-        <p><b>2)</b> Aşağıdaki koddaki hatayı düzeltebilir misiniz?</p>
-        <p>functionn carpim()"{" "}"
-        </p>
-
-        <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
-
-        <RadioButton
-          value="experience"
-           label="Evet"
-           style={styles.radioButton}
-         />
-         <RadioButton
-
-            label="Hayır"
-            style={styles.radioButton}
-          />
-        </RadioButtonGroup>
     </div>
-    <div>
-        <p><b>3)</b>Scala biliyor musunuz?</p>
-
-        <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
-
-        <RadioButton
-          value="experience"
-           label="Evet"
-           style={styles.radioButton}
-         />
-         <RadioButton
-
-            label="Hayır"
-            style={styles.radioButton}
-          />
-        </RadioButtonGroup>
-    </div>
-    <div>
-        <p><b>4)</b>React biliyor musunuz?</p>
-
-        <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
-
-        <RadioButton
-          value="experience"
-           label="Evet"
-           style={styles.radioButton}
-         />
-         <RadioButton
-
-            label="Hayır"
-            style={styles.radioButton}
-          />
-        </RadioButtonGroup>
-    </div>  <br/><br/><br/>
-    <div style={styles.button}>
-      <Link to="/questions2"><RaisedButton label="İleri" primary={true}/></Link>
-    </div>
-      <br/><br/><br/><br/>
-    <div>
-        <span>Klavyeden evet için <b>"e"</b> hayır için <b>"h"</b> tuşlarını kullanabilirsiniz.</span>
-    </div>
-
+    <div style={styles.contente}>{this.props.children}</div>
 </div>

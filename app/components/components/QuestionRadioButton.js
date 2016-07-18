@@ -27,10 +27,10 @@ export default React.createClass({
           <p><b>{this.props.questionId})</b> {this.props.question}</p>
           <RadioButtonGroup name="shipSpeed" onChange={(event, value) => (console.log("Kullanıcı bnun seçti:",value))}>
             {
-                this.props.answers.map((x,idx) => (
-                  <RadioButton key={x.value}
-                    value = {x.value}
-                    label= {x.title}
+                this.props.answers.map((option, i) => (
+                  <RadioButton key={option.value}
+                    value = {option.value}
+                    label= {option.title}
                    style={styles.radioButton}
                  />))
             }

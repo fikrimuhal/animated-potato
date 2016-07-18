@@ -5,20 +5,18 @@ import TextField from 'material-ui/TextField';
 import TextFieldExampleSimple from '../MaterialUiComponents/TextFieldExampleSimple';
 import RaisedButton from 'material-ui/RaisedButton';
 
-
 const styles = {
   button:{
   marginRight: 12,
-},
+  },
 };
 export default React.createClass({
   render() {
-    return (<MuiThemeProvider>
+    return (
       <div style={styles}>
-
-          ?Lütfen aşağıdaki bilgileri eksiksiz bir şekilde doldurunuz.
-
+          <p>*Lütfen aşağıdaki bilgileri eksiksiz bir şekilde doldurunuz.</p>
           <div>
+
         <h2>Başvuru Formu</h2>
 
         <div>
@@ -39,17 +37,17 @@ export default React.createClass({
             floatingLabelText="Telefon"
           /><br/>
 
-
         <div>
-        <div>
-          <h4>Fotoğraf</h4>
-        </div>
+          <div>
+            <h4>Fotoğraf</h4>
+          </div>
 
         <div style={styles.button}>
           <RaisedButton label="Yükle" primary={true}/>
           <RaisedButton label="İptal" secondary={true}/>
         </div>
         <br/>
+
         <TextField
           hintText="Kişisel Web Sayfanız"
           floatingLabelText="Kişisel Web Sayfanız"
@@ -61,15 +59,14 @@ export default React.createClass({
         />
         </div>
         <br/>
+
         <div style={styles.button}>
             <Link to="/interview/detailssaved"><RaisedButton label="Kaydet" primary={true}/></Link>
         </div>
 
         </div>
-          </div>
-
+        </div>
 
       </div>
-      </MuiThemeProvider>
     )}
 })

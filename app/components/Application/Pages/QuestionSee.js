@@ -12,11 +12,9 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 const styles = {
   customWidth: {
    width: 150,
- },
-
+ }
 };
-export default class UserProfiles extends React.Component {
-
+export default class QuestionSee extends React.Component {
   constructor(props) {
     super(props);
     this.state = {value: 1};
@@ -25,120 +23,111 @@ export default class UserProfiles extends React.Component {
 
   render() {
     return (
+      <div>
+          <div>
+              <h2>Soruları Gör</h2>
+          </div>
         <div>
+          <SelectField value={this.state.value} onChange={this.handleChange}>
+            <MenuItem value={1} primaryText="Set Türü" />
+            <MenuItem value={2} primaryText="Set 1" />
+            <MenuItem value={3} primaryText="Set 2" />
+            <MenuItem value={3} primaryText="Set 3" />
+          </SelectField>
+          <br/>
+
+          <SelectField value={this.state.value} onChange={this.handleChange}>
+            <MenuItem value={1} primaryText="Soru Türü" />
+            <MenuItem value={2} primaryText="Back-End" />
+            <MenuItem value={3} primaryText="Front-End" />
+            <MenuItem value={3} primaryText="Sistem Yönetimi" />
+          </SelectField>
+          </div>
+        <br/>
+
         <div>
-            <h2>Soruları Gör</h2>
+            <p><b>1)</b> İş tecrübeniz var mı?</p>
+            <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
+              <RadioButton
+                value="experience"
+                 label="Evet"
+                 style={styles.radioButton}
+               />
+               <RadioButton
+
+                  label="Hayır"
+                  style={styles.radioButton}
+                />
+            </RadioButtonGroup>
+            <div style={styles.button}>
+              <RaisedButton label="Sil" secondary={true}/>
+              <RaisedButton label="Düzenle" primary={true}/>
+            </div>
         </div>
-      <div>
-        <SelectField value={this.state.value} onChange={this.handleChange}>
-          <MenuItem value={1} primaryText="Soru Türü" />
-          <MenuItem value={2} primaryText="Back-End" />
-          <MenuItem value={3} primaryText="Front-End" />
-          <MenuItem value={3} primaryText="Sistem Yönetimi" />
+        <div>
+            <p><b>2)</b> Scala biliyor musunuz?</p>
+            <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
+              <RadioButton
+                value="experience"
+                 label="Evet"
+                 style={styles.radioButton}
+               />
+               <RadioButton
 
-        </SelectField>
+                  label="Hayır"
+                  style={styles.radioButton}
+                />
+            </RadioButtonGroup>
 
+            <div style={styles.button}>
+              <RaisedButton label="Sil" secondary={true}/>
+              <RaisedButton label="Düzenle" primary={true}/>
+            </div>
+          </div>
 
-        <SelectField value={this.state.value} onChange={this.handleChange}>
-          <MenuItem value={1} primaryText="Set Türü" />
-          <MenuItem value={2} primaryText="Set 1" />
-          <MenuItem value={3} primaryText="Set 2" />
-          <MenuItem value={3} primaryText="Set 3" />
+        <div>
+            <p><b>3)</b> Kişisel bilgisayarınızda hangi işletim sistemini kullanıyorsunuz?</p>
+            <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
+              <RadioButton
+                 label="Windows"
+                 style={styles.radioButton}
+               />
+               <RadioButton
+                  value="experience"
+                  label="Linux"
+                  style={styles.radioButton}
+                />
+                <RadioButton
+                   label="Mac Os"
+                   style={styles.radioButton}
+                 />
+            </RadioButtonGroup>
 
-        </SelectField>
+            <div style={styles.button}>
+              <RaisedButton label="Sil" secondary={true}/>
+              <RaisedButton label="Düzenle" primary={true}/>
+            </div>
         </div>
-      <br/>
-      <div>
-          <p><b>1)</b> İş tecrübeniz var mı?</p>
 
-          <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
+        <div>
+            <p><b>4)</b> Aşağıdakilerin hangisinde daha iyisiniz?</p>
+            <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
+              <RadioButton
+                 label="Back end"
+                 style={styles.radioButton}
+               />
+               <RadioButton
+                  value="experience"
+                  label="Front end"
+                  style={styles.radioButton}
+                />
+                <RadioButton
 
-          <RadioButton
-            value="experience"
-             label="Evet"
-             style={styles.radioButton}
-           />
-           <RadioButton
-
-              label="Hayır"
-              style={styles.radioButton}
-            />
-          </RadioButtonGroup>
-          <div style={styles.button}>
-            <RaisedButton label="Sil" secondary={true}/>
-            <RaisedButton label="Düzenle" primary={true}/>
-          </div>
-      </div>
-      <div>
-          <p><b>2)</b> Scala biliyor musunuz?</p>
-
-          <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
-
-          <RadioButton
-            value="experience"
-             label="Evet"
-             style={styles.radioButton}
-           />
-           <RadioButton
-
-              label="Hayır"
-              style={styles.radioButton}
-            />
-          </RadioButtonGroup>
-          <div style={styles.button}>
-            <RaisedButton label="Sil" secondary={true}/>
-            <RaisedButton label="Düzenle" primary={true}/>
-          </div>
-      </div>
-      <div>
-          <p><b>3)</b> Kişisel bilgisayarınızda hangi işletim sistemini kullanıyorsunuz?</p>
-
-          <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
-
-          <RadioButton
-
-             label="Windows"
-             style={styles.radioButton}
-           />
-           <RadioButton
-              value="experience"
-              label="Linux"
-              style={styles.radioButton}
-            />
-            <RadioButton
-
-               label="Mac Os"
-               style={styles.radioButton}
-             />
-          </RadioButtonGroup>
-          <div style={styles.button}>
-            <RaisedButton label="Sil" secondary={true}/>
-            <RaisedButton label="Düzenle" primary={true}/>
-          </div>
-      </div>
-      <div>
-          <p><b>4)</b> Aşağıdakilerin hangisinde daha iyisiniz?</p>
-
-          <RadioButtonGroup name="shipSpeed" defaultSelected="experience">
-
-          <RadioButton
-
-             label="Back end"
-             style={styles.radioButton}
-           />
-           <RadioButton
-              value="experience"
-              label="Front end"
-              style={styles.radioButton}
-            />
-            <RadioButton
-
-               label="Sistem Yönetimi"
-               style={styles.radioButton}
-             />
-          </RadioButtonGroup>
-      </div>
-
+                   label="Sistem Yönetimi"
+                   style={styles.radioButton}
+                 />
+            </RadioButtonGroup>
+        </div>
       </div>
     );
   }

@@ -1,10 +1,8 @@
 import React from 'react'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Link } from 'react-router'
 import TextField from 'material-ui/TextField';
 import TextFieldExampleSimple from '../MaterialUiComponents/TextFieldExampleSimple';
 import RaisedButton from 'material-ui/RaisedButton';
-
 
 const styles = {
   button:{
@@ -21,10 +19,9 @@ const styles = {
 };
 export default React.createClass({
   render() {
-    return (<MuiThemeProvider>
-
+    return (
       <div style={styles.contente}>
-        <h1>Giriş Yap</h1>
+        <h2>Giriş Yap</h2>
         <TextField
           hintText="Ad Soyad"
           floatingLabelText="Ad Soyad"
@@ -40,6 +37,5 @@ export default React.createClass({
         </div>
 
       </div>
-      </MuiThemeProvider>
     )}
 })
