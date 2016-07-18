@@ -24,11 +24,8 @@ const styles = {
 export default React.createClass({
   render() {
       return (
-
       <div>
       <p>{this.props.questionId}) {this.props.question} </p>
-
-
             {(this.props.answers).map((option, i) => (
             <Checkbox
                 key={option.value}

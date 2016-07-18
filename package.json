@@ -17,6 +17,7 @@
   "author": "Ebru Gulec <glcebru94@gmail.com>",
   "license": "GPL",
   "dependencies": {
+    "lodash": "^4.13.1",
     "material-ui": "^0.15.2",
     "react": "^15.0.1",
     "react-checkbox-group": "^1.0.4",

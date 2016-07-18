@@ -5,7 +5,7 @@ export default React.createClass({
   render() {
       return (
           <div>
-            <p><b>{this.props.questionid})</b>
+            <p><b>{this.props.questionId})</b>
                   {this.props.question}</p>
               <TextField
                 hintText="Cevabınız"

@@ -1,19 +1,91 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import QuestionYesNo from '../../components/QuestionYesNo'
-import { Link } from 'react-router'
+import QuestionYesNo from '../../components/QuestionYesNo';
+import Question from '../../components/Question';
+import _ from 'lodash'
 
 const questions = {
   1: {
-    title: "Aşağıdakilerden hangisinde daha iyisiniz?",
+    title: "JavaScript biliyor musunuz?",
     id: 1,
-    type: "radioButtonTwoUp",
+    type: "radioButtonYesNo",
   },
   2: {
-    title: "Aşağıdakilerden hangisinde daha kötüsünüz?",
+    title: "Daha önce iş tecrübeniz oldu mu?",
     id: 2,
-    type: "radioButtonTwoUp",
+    type: "radioButtonYesNo",
+  },
+  3: {
+    title: "Bizi sosyal medya aracılığı ile mi buldunuz?",
+    id: 3,
+    type: "radioButtonYesNo",
+  },
+  4: {
+    title: "Aşağıdakilerden hangisinde daha iyisiniz?",
+    answers: [
+      { title: "front end", value: 1},
+      { title: "back end", value: 2},
+      { title: "sistem yönetimi", value: 3}
+    ],
+    id: 4,
+    type: "radioButton"
+  },
+  5: {
+    title: "Aşağıdakilerden hangisinde daha kötüsünüz?",
+    answers: [
+      {title:"JavaScript", value: 1},
+      {title:"Scala", value: 2},
+      {title:"Haskell", value: 3},
+      {title: "Java", value: 4}
+    ],
+    id: 5,
+    type: "radioButton",
+  },
+  6: {
+    title: "Aşağıdaki programlama dillerinden hangisi/hangilerinde bilgi sahibisiniz?",
+    answers: [
+      { title: "Python", value: 1},
+      { title: "JavaScript", value: 2},
+      { title: "C", value: 3},
+      { title: "C++", value: 4}
+    ],
+    id: 6,
+    type: "checkbox",
+  },
+  7: {
+    title: "Aşağıdailerden hangisini bilmiyorsunuz?",
+    id: 7,
+    answers: [
+      {title: "C", value: 1},
+      {title: "Scala", value: 2},
+      {title: "React", value: 3},
+      {title: ".Net", value: 4},
+    ],
+    type: "checkbox",
+  },
+  8: {
+    title: "Kaç yıldır aktif olarak çalışıyorsun?",
+    id: 8,
+    type: "FreeText",
+  },
+  9: {
+    title: "Kaç yaşındasın?",
+    id: 9,
+    type: "FreeText",
+  },
+  10: {
+    title: "Naber",
+    id: 10,
+    type: "FreeTextMultiLine",
+    multiLine:true
+  },
+  11: {
+    title: "Kaç yaşındasın?",
+    id: 11,
+    type: "FreeTextMultiLine",
+    multiLine:true
   },
 }
 const styles = {
@@ -28,15 +100,13 @@ export default React.createClass({
           <div style={styles}>
             <h3>Sorular</h3>
           </div>
-          <QuestionYesNo questionId={questions[1].id} question={questions[1].title}/>
-            <QuestionYesNo questionId={questions[2].id} question={questions[2].title}/>
-          <br/><br/><br/>
-            <Link to="/questions3"><RaisedButton label="İleri" primary={true}/></Link>
             <div>
-
-              <span>Klavyeden evet için <b>"e"</b> hayır için <b>"h"</b> tuşlarını kullanabilirsiniz.</span>
+          {_.keys(questions).map((k,idx) => (
+              <Question key={k} questionId={questions[k].id} question={questions[k].title}
+              questionType={questions[k].type} answers={questions[k].answers} multiLine={questions[k].multiLine} />
+            ))
+          }
             </div>
-
         </div>
     )}
 })
