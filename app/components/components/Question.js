@@ -8,8 +8,6 @@ import QuestionRadioButton from './QuestionRadioButton'
 import QuestionCheckbox from './QuestionCheckbox'
 import QuestionFreeText from './QuestionFreeText';
 
-
-
 const styles = {
   button:{
     marginRight: 12,

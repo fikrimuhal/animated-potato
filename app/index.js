@@ -7,8 +7,6 @@ import Questions from './components/Application/Pages/Questions';
 import TestOver from './components/Application/Pages/TestOver';
 import InterviewLayout from './components/Application/Pages/InterviewLayout';
 import DetailsSaved from './components/Application/Pages/DetailsSaved';
-import Questions2 from './components/Application/Pages/Questions2';
-import Questions3 from './components/Application/Pages/Questions3';
 import AdminPanel from './components/Application/Pages/AdminPanel';
 import SingIn from './components/Application/Pages/SingIn';
 import SingUp from './components/Application/Pages/SingUp';
@@ -19,9 +17,6 @@ import ListOfParticipants from './components/Application/Pages/ListOfParticipant
 import QuestionAdd from './components/Application/Pages/QuestionAdd';
 import QuestionSetDetails from './components/Application/Pages/QuestionSetDetails'
 import QuestionSetAdd from './components/Application/Pages/QuestionSetAdd'
-import Questions4 from './components/Application/Pages/Questions4';
-import Questions5 from './components/Application/Pages/Questions5';
-import Questions6 from './components/Application/Pages/Questions6';
 import AdminLayout from './components/Application/Pages/AdminLayout';
 
 import React from 'react';
@@ -39,11 +34,6 @@ ReactDOM.render((
           <Route path="applicationform" component={ApplicationForm}/>
           <Route path="detailssaved" component={DetailsSaved}/>
           <Route path="questions" component={Questions}/>
-          <Route path="questions2" component={Questions2}/>
-          <Route path="questions3" component={Questions3}/>
-          <Route path="questions4" component={Questions4}/>
-          <Route path="questions5" component={Questions5}/>
-          <Route path="questions6" component={Questions6}/>
           <Route path="testover" component={TestOver}/>
         </Route>
 

@@ -54,7 +54,6 @@ export default React.createClass({
             <br/><br/><br/>
             <div style={styles.button}>
             <Link to="/questions3"><RaisedButton label="İleri" primary={true}/></Link>
-
             </div>
 
         </div>

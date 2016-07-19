@@ -94,6 +94,14 @@ const styles = {
   }
 };
 export default React.createClass({
+  getInitialState: function(){
+    return { sayac: 1}
+  },
+
+  artir: function(){
+    var suAnkiSoru = this.state.sayac
+    this.setState({sayac: suAnkiSoru +1})
+  },
   render(){
     return (
         <div>
@@ -101,11 +109,14 @@ export default React.createClass({
             <h3>Sorular</h3>
           </div>
             <div>
-          {_.keys(questions).map((k,idx) => (
-              <Question key={k} questionId={questions[k].id} question={questions[k].title}
-              questionType={questions[k].type} answers={questions[k].answers} multiLine={questions[k].multiLine} />
-            ))
-          }
+
+            <Question key={this.state.sayac} questionId={questions[this.state.sayac].id} question={questions[this.state.sayac].title}
+            questionType={questions[this.state.sayac].type} answers={questions[this.state.sayac].answers} multiLine={questions[this.state.sayac].multiLine} />
+            <br/>
+            <br/>
+            <button onClick={this.artir}>İleri</button>
+
+
             </div>
         </div>
     )}
