@@ -10,7 +10,6 @@ import FileCloudDownload from 'material-ui/svg-icons/file/cloud-download';
 import HardwareVideogameAsset from 'material-ui/svg-icons/hardware/videogame-asset';
 import {red500, yellow500, blue500} from 'material-ui/styles/colors';
 
-
 const styles = {
   button:{
     marginRight: 12,
@@ -21,18 +20,24 @@ const styles = {
   marginLeft: 250,
   };
 export default React.createClass({
+  questions(){
+    var answers = this.props.answers
+      if(answers){
+        return answers.map((option, i) => (
+          <RadioButton key={option.value}
+            value = {option.value}
+            label= {option.title}
+           style={styles.radioButton}
+         />))
+    }
+  },
   render() {
     return (<MuiThemeProvider>
         <div>
           <p><b>{this.props.questionId})</b> {this.props.question}</p>
           <RadioButtonGroup name="shipSpeed" onChange={(event, value) => (console.log("Kullanıcı bnun seçti:",value))}>
             {
-                this.props.answers.map((option, i) => (
-                  <RadioButton key={option.value}
-                    value = {option.value}
-                    label= {option.title}
-                   style={styles.radioButton}
-                 />))
+                this.questions()
             }
           </RadioButtonGroup>
             </div>
