@@ -10,7 +10,7 @@
     "test:watch": "npm run karma conf/karma.conf.js",
     "test:coverage": "npm run karma conf/karma.coverage.conf.js -- --single-run",
     "test:ci": "npm run karma conf/karma.ci.conf.js -- --single-run",
-    "start": "webpack-dev-server --history-api-fallback --config conf/webpack.config.js --hot --progress --colors --content-base ./build",
+    "start": "webpack-dev-server --history-api-fallback --config conf/webpack.config.js --port 8081 --hot --progress --colors --content-base ./build",
     "build": "cross-env NODE_ENV=production webpack --config conf/webpack.production.js",
     "build:gh": "npm run build && node ./build-gh-pages.js && rm -r ./dist"
   },

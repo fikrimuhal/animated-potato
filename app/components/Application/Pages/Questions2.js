@@ -7,8 +7,8 @@ import Slider from 'material-ui/Slider';
 import LinearProgress from 'material-ui/LinearProgress';
 import QuestionRadioButton from '../../components/QuestionRadioButton'
 
-const questions = {
-  1: {
+export const questions = [
+   {
     title: "Aşağıdakilerden hangisinde daha iyisiniz?",
     answers: [
       { title: "front end", value: 1},
@@ -18,7 +18,7 @@ const questions = {
     id: 1,
     type: "radioButton"
   },
-  2: {
+    {
     title: "Aşağıdakilerden hangisinde daha kötüsünüz?",
     answers: [
       {title:"JavaScript", value: 1},
@@ -28,8 +28,8 @@ const questions = {
     ],
     id: 2,
     type: "radioButton"
-  },
-}
+  }]
+
 
 const styles = {
   button:{
@@ -41,15 +41,19 @@ const styles = {
   };
 export default React.createClass({
   render() {
-
+  console.dir(questions);
     return (<MuiThemeProvider>
         <div>
         <div style={styles}>
 
           <h3>Sorular</h3>
             <div>
-            <QuestionRadioButton questionId={questions[1].id} question={questions[1].title} answers={questions[1].answers}/>
-              <QuestionRadioButton questionId={questions[2].id} question={questions[2].title} answers={questions[2].answers}/>
+              {
+                questions.map(function(x) {
+                      return  <QuestionRadioButton questionId={x.id} question={x.title} answers={x.answers} key={x.id}/>
+                        })
+              }
+
             </div>
             <br/><br/><br/>
             <div style={styles.button}>

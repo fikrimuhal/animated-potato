@@ -21,12 +21,13 @@ const styles = {
 
 };
 export default React.createClass({
+  
   render() {
     return (
         <div style={styles.container}>
           <div>
             <div style={styles.menu}>
-            <Paper style={styles}>
+              <Paper style={styles}>
                  <Menu desktop={true}>
                    <Link to='/adminpanel/listofparticipants'><MenuItem primaryText="Katılımcı Listesi" /></Link>
                    <Link to='/adminpanel/questionsee'><MenuItem primaryText="Soruları Gör" /></Link>

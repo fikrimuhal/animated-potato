@@ -3,7 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import QuestionYesNo from '../../components/QuestionYesNo'
 import { Link } from 'react-router'
-
+export const allQuestions = [];
 const questions = {
   1: {
     title: "Aşağıdakilerden hangisinde daha iyisiniz?",
@@ -23,6 +23,7 @@ const styles = {
 };
 export default React.createClass({
   render(){
+    console.dir(allQuestions);
     return (
         <div>
           <div style={styles}>

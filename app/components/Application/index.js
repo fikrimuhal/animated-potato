@@ -7,8 +7,10 @@ import MenuExampleDisable from './MaterialUiComponents/MenuExampleDisable';
 import MenuExampleSimple from './MaterialUiComponents/MenuExampleSimple';
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import RaisedButton from 'material-ui/RaisedButton';
+// import {print,print2} from './utils'
+// import deneme from './utils'
+// import _ from 'lodash'
 injectTapEventPlugin();
-
 
 function App() {
    return (
