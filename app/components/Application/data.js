@@ -32,4 +32,5 @@ export const setQuestionToStorage = function(question,key){
     var storage = localStorage.getItem('questions');
     var list = JSON.parse(storage);
     list[key] = question;
+    localStorage.setItem('questions',JSON.stringify(list));
 }

@@ -22,9 +22,13 @@ import AdminLayout from './components/Application/Pages/AdminLayout';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Application from './components/Application';
+import log2 from './components/Application/log2'
+const log = log2("app")
 
 if (module.hot) {
     module.hot.accept();
+    log(
+      {date:new Date,dasdas:23123,date2:{dsadas:12321321,adssad:23232,ytr:'sadsa'}});
 }
 ReactDOM.render((
   <Router history={browserHistory}>
