@@ -13,6 +13,9 @@ import {allQuestions} from './Questions'
 import * as Utils from '../utils'
 import log2 from '../log2'
 import _ from 'lodash'
+import * as bs from 'react-bootstrap'
+//import $ from "jquery";
+import  Multiselect from 'react-bootstrap-multiselect';
 const log = log2("questionAdd")
 
 const styles = {
@@ -24,9 +27,12 @@ const styles = {
     float:'left',
     width:'30%'
   },
+  w100:{
+      width:'auto'
+  },
   fullWidth: {
     width:'100%',
-      float:'left'
+    float:'left'
   },
   secenekBox:{
     border:'1px solid teal',
@@ -37,11 +43,25 @@ const styles = {
     float:'left'
   }
 };
+
 const questionModel = {
   title: "Aşağıdakilerden hangisinde daha iyisiniz?",
   id: 1,
   type: "radio",
-  category:"Back-End",
+  categoryWeight:[
+    {
+      category:"Back-End",
+      weight:0.1
+    },
+    {
+      category:"Front-End",
+      weight:0.3
+    },
+    {
+      category:"Sistem-Yöneticisi",
+      weight:0
+    }
+  ],
   options:[],
   weight:2,
   set:"Set 1"
@@ -119,10 +139,36 @@ export default class QuestionAdd extends React.Component {
           <div>
               <h3>Soru Ekle</h3>
           </div>
-          <TextField style={styles.fieldDiv}
-            hintText="Soru Metni" onChange={this.handleQuestionTextChange.bind(this)}/><br />
-          <KategoriAgirliklari parent={this} style={styles.fieldDiv} />
-              <SoruSetleri parent={this}   style={styles.fieldDiv}/>
+          <bs.Grid>
+            <bs.Row className="show-grid">
+              <bs.Col xs={4} md={4} lg={6}>
+                <bs.Label>Soru Metni:</bs.Label><br></br>
+                  <TextField
+                    hintText="Soru Metni" onChange={this.handleQuestionTextChange.bind(this)}/>
+              </bs.Col>
+              <bs.Col xs={4} md={4} lg={6}>
+                  <bs.Label>Sorunun Ağırlığı:</bs.Label><br/>
+                  <TextField
+                    hintText="Ağırlık" onChange={this.handleQuestionTextChange.bind(this)}/>
+              </bs.Col>
+            </bs.Row>
+            <bs.Row className="show-grid">
+              <bs.Col xs={4} md={4} lg={6}>
+                <bs.Label>Kategori Ağırlıkları:</bs.Label><br/>
+                <KategoriAgirliklari parent={this} style={styles.w100}  />
+              </bs.Col>
+              <bs.Col xs={4} md={4} lg={6}>
+                <bs.Label>Soru Seti</bs.Label><br/>
+                  <SoruSetleri parent={this}  style={styles.w100} />
+              </bs.Col>
+
+            </bs.Row>
+          </bs.Grid>
+
+
+
+
+
           <div style={styles.fullWidth}>
             <RaisedButton label="+Seçenek Ekle" secondary={true} onClick={this.addOption.bind(this)} disabled={this.state.addOptionDisplay}/>
           </div>
@@ -130,7 +176,8 @@ export default class QuestionAdd extends React.Component {
           <Secenek secenekler={this.state.data.options}  parent={this} />
 
           <RaisedButton style={styles.fullWidth} label="Soruyu Kaydet" secondary={true}  onClick={this.handleSaveQuestion.bind(this)}/>
-          <Toast settings={this.state.toastSettings} />
+
+        <Toast settings={this.state.toastSettings} />
     </div>
     );
   }
@@ -165,12 +212,13 @@ class CevapTurleri  extends React.Component {
   render () {
     return (
       <div style={styles.fullWidth}>
+
         <b>Cevap Türü:</b> <br/><br/>
         <RadioButtonGroup name="shipSpeed" defaultSelected="radio"  onChange={this.handleFieldTypeChange.bind(this)}>
             <RadioButton value="radio" label="Radio" style={styles.radioButton}/>
             <RadioButton value="checkbox" label="Checkbox" style={styles.radioButton}/>
-            <RadioButton value="freetext" label="FreeText(Tek Satır)" style={styles.radioButton} />
-            <RadioButton value="number" label="Rakam" style={styles.radioButton}/>
+            <RadioButton value="freetext" label="FreeText" style={styles.radioButton} />
+            <RadioButton value="number" label="Number" style={styles.radioButton}/>
         </RadioButtonGroup>
       </div>
     )
@@ -193,7 +241,7 @@ class SoruSetleri extends React.Component {
   }
   render= ()=> {
     return (
-      <div style={styles.fieldDiv} >
+      <div >
         <SelectField value={this.props.parent.state.data.set} onChange={this.handleQuestionSetChange.bind(this)}>
           <MenuItem value="" primaryText="Soru Seti Seç" />
           <MenuItem value="Set 1" primaryText="Set 1" />
@@ -221,6 +269,16 @@ class Secenek extends React.Component{
     });
        console.dir(this.props.parent.state.data);
   }
+
+  deleteOption = function (item,event) {
+    var model = this.props.parent.state.data;
+    model.options=_.dropWhile(model.options, function(o) { return o.id==item.id; });
+
+      this.props.parent.setState({
+        data : model
+     });
+      console.dir(this.props.parent.state.data);
+  }
   render= ()=> {
     //console.dir(this.handleSliderValueChange);7
     var _this = this;
@@ -233,12 +291,25 @@ class Secenek extends React.Component{
 
                   <div key={item.id} style={styles.secenekBox}>
                     <p>Seçenek Detayları</p>
-                    <hr></hr>
+                    <hr/>
                     <TextField
                       hintText="Seçenek" defaultValue={item.text}/><br />
-                    <RaisedButton label="Sil" primary={true}/>
-                      <Slider  onChange={_this.handleSliderValueChange.bind(_this,item)}  defaultValue={item.weight} /><b>Ağırlık: {item.weight}</b>
-                        <hr></hr>
+
+                    <bs.Row>
+                      <bs.Col lg={9}>
+                          <Slider  onChange={_this.handleSliderValueChange.bind(_this,item)}  defaultValue={item.weight} />
+                      </bs.Col>
+                      <bs.Col lg={3}>
+                          <b>Ağırlık: {item.weight}</b>
+                      </bs.Col>
+                    </bs.Row>
+                    <bs.Row>
+                      <bs.Col lgOffset={8} lg={3}>
+                           <bs.Button onClick={_this.deleteOption.bind(_this,item )}><bs.Glyphicon glyph="trash" /> Sil</bs.Button>
+                      </bs.Col>
+                    </bs.Row>
+
+
                   </div>
 
                  )
@@ -264,16 +335,17 @@ class KategoriAgirliklari extends React.Component{
      });
     }
   }
+
+handleChange = function (item,event,values) {
+  console.dir(this);
+
+}
   render= ()=>{
     return (
-      <div style={styles.fieldDiv}>
-        <SelectField value={this.props.parent.state.data.category} onChange={this.handleQuestionCategoryChange.bind(this)}>
-          <MenuItem value="" primaryText="Soru Kategorisi" />
-          <MenuItem value="Back-End" primaryText="Back-End" />
-          <MenuItem value="Front-End"  primaryText="Front-End" />
-          <MenuItem value="Sistem Yönetimi"  primaryText="Sistem Yönetimi" />
-        </SelectField>
-      </div>
+      <div  style={styles.w100}>
+          <Multiselect id="deneme" ref="multiselect" onChange={this.handleChange.bind(this)} data={[{value:'Back-End'},{value:'Front-End'},{value:'Sistem Yönetimi'}]} multiple/>
+        </div>
+
     )
 
   }

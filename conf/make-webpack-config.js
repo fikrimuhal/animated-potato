@@ -4,7 +4,6 @@ var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-
 function extractForProduction(loaders) {
   return ExtractTextPlugin.extract('style', loaders.substr(loaders.indexOf('!')));
 }
@@ -82,6 +81,10 @@ module.exports = function(options) {
         },
         {
           test: /\.jpg$/,
+          loader: 'file',
+        },
+        {
+          test: /\.woff$/,
           loader: 'file',
         },
       ],
