@@ -1,76 +1,69 @@
-import React from 'react'
 import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import TextField from 'material-ui/TextField'
 import MenuItem from 'material-ui/MenuItem';
+import React, {Component, PropTypes} from 'react';
+import $ from "jquery";
+import { DataTable } from 'react-jquery-datatables';
 
+const users = {
+  a: [1,2,3]
+}
 export default class UserProfiles extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: 1};
+    this.state = {data: this.loadData()}
   }
-  handleChange = (event, index, value) => this.setState({value});
-  render() {
+  componentWillMount= function(){
+ 		this.loadData();
+ 	}
+  loadData= function(){
+ 		 return [
+       {g:1,
+        b:'Ebru Güleç',
+        c:[<RaisedButton label="Düzenle" primary={true}/>,
+           <RaisedButton label="Sil" secondary={true}/>]
+        },
+     ]
+ 	}
+ 	componentDidMount= function(){
+ 		var self = this;
+ 		$('#mytable').dataTable({
+		  "sPaginationType": "full_numbers",
+		  "bAutoWidth": false,
+		  "bDestroy": true,
+		  "fnDrawCallback": function() {
+            	self.forceUpdate();
+          },
+		});
+ 	}
+ 	componentDidUpdate= function(){
+ 		$('#mytable').dataTable({
+		  "sPaginationType": "full_numbers",
+		  "bAutoWidth": false,
+		  "bDestroy": true,
+		});
+ 	}
+  render= function() {
+    var x = this.state.data.map(function(d, index){
+ 			return <tr><td>{d.g}</td><td>{d.b}</td><td>{d.c}</td></tr>
+ 		});
     return (
-      <div>
-          <h3>Kullanıcı Profili</h3>
-        <div>
-          <SelectField value={this.state.value} onChange={this.handleChange}>
-            <MenuItem value={1} primaryText="Sıralama Türü" />
-            <MenuItem value={2} primaryText="Büyükden Küçüğe" />
-            <MenuItem value={3} primaryText="Küçükden Büyüğe" />
-          </SelectField>
-        </div>
-        <br/>
-
-        <div>
-          <Table>
-            <TableHeader>
-             <TableRow>
-               <TableHeaderColumn>Ad Soyad</TableHeaderColumn>
-               <TableHeaderColumn>Yanıtlanan Soru Seti</TableHeaderColumn>
-               <TableHeaderColumn>İşlemler</TableHeaderColumn>
-             </TableRow>
-            </TableHeader>
-
-            <TableBody>
-             <TableRow>
-               <TableRowColumn>Ayşe Ak</TableRowColumn>
-               <TableRowColumn>Set 1</TableRowColumn>
-               <TableRowColumn><div>
-                 <RaisedButton label="Sil" secondary={true}/>
-                 <RaisedButton label="Düzenle" primary={true}/>
-               </div></TableRowColumn>
-             </TableRow>
-
-             <TableRow>
-               <TableRowColumn>Ali Yılmaz</TableRowColumn>
-               <TableRowColumn>Set 2</TableRowColumn>
-               <TableRowColumn><div>
-                 <RaisedButton label="Sil" secondary={true}/>
-                 <RaisedButton label="Düzenle" primary={true}/>
-               </div></TableRowColumn>
-             </TableRow>
-
-             <TableRow>
-               <TableRowColumn>Zehra Kıgız</TableRowColumn>
-               <TableRowColumn>Set 2</TableRowColumn>
-               <TableRowColumn><div>
-                 <RaisedButton label="Sil" secondary={true}/>
-                 <RaisedButton label="Düzenle" primary={true}/>
-               </div></TableRowColumn>
-             </TableRow>
-            </TableBody>
-            </Table>
-        </div>
-        <br/>
-        <div>
-          <TextField
-            hintText="Kullanıcı Ara"
-            />
-            <br/>
-        </div>
+      <div className="table-responsive">
+        <h4>Users Profiles</h4>
+        <table key={this.state.data.a} className="table table-bordered" id="mytable">
+          <thead>
+            <tr className="success">
+              <td>Id</td>
+              <td>Adı Soyadı</td>
+              <td>İşemler</td>
+            </tr>
+          </thead>
+          <tbody>
+            {x}
+          </tbody>
+        </table>
       </div>
     );
   }
