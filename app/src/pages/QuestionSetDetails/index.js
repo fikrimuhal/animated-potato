@@ -20,7 +20,7 @@ const setModels = [
 export default class QuestionSetDetails extends React.Component{
   constructor(props){
     super(props)
-    this.setState = {
+    this.state = {
       data: setModels
     }
   }
@@ -36,7 +36,6 @@ export default class QuestionSetDetails extends React.Component{
   }
 
   render(){
-    log("questionModel: " , this.setState.data)
     return(
       <div>
         <QuestionSets sets={setModels} />
