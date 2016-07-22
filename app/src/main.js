@@ -5,7 +5,24 @@ import ReactDOM from 'react-dom';
 import {log2} from './utils/'
 import * as pages from './pages/'
 import {AdminLayout,MainLayout,InterviewLayout}   from './layouts/'
-const log = log2("app")
+import perf from "react-addons-perf";
+const log = log2("app");
+const perflog = log2("performance");
+perflog(perf);
+setTimeout(function () {
+  perflog("started");
+  perf.start();
+},2000)
+setTimeout(function () {
+    perf.stop();
+    const measurements = perf.getLastMeasurements();
+    perflog("inclusive");
+    perf.printInclusive(measurements);
+    perflog("exclusive");
+    perf.printExclusive(measurements);
+    perflog("wasted");
+    perf.printWasted(measurements)
+}, 10000)
 
 if (module.hot) {
     module.hot.accept();
@@ -38,7 +55,9 @@ ReactDOM.render((
             <Route path="questionsetdetails" component={pages.QuestionSetDetails}/>
             <Route path="questionsetadd" component={pages.NewQuestionSet}/>
         </Route>
+        <Route path="deneme" component={pages.Deneme}>
 
+        </Route>
     </Route>
   </Router>
 ), document.getElementById('app'))

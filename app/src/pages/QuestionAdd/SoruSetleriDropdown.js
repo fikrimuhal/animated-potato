@@ -4,6 +4,7 @@ import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
 import Checkbox from 'material-ui/Checkbox';
 import {log2} from '../../utils/'
+import _ from 'lodash'
 const log = log2("SoruSetleriDropdown: ")
 const styles = {
   container: {
@@ -12,12 +13,13 @@ const styles = {
     padding:"5px 5px 5px 5px",
     marginTop:"5px",
     flexDirection:"row",
-    justifyContent: "space-around",
+    justifyContent: "flexStart",
     flexFlow:"row wrap"
   },
   child:{
     width:"100px",
-    margin:"auto"
+
+    marginLeft:'5px'
   }
 }
 
@@ -36,20 +38,40 @@ export default class SoruSetleriDropdown extends React.Component {
     }
   }
   shouldComponentUpdate= function(nextProps, nextState) {
-    return false;
+    log("scu: ",this.props.setsOfQuestion,nextProps.setsOfQuestion);
+    return true;
+  }
+  handleChekboxSetClick= (setName,event)=>{
+    log(setName,event);
+
+    var index = _.findIndex(this.props.setsOfQuestion, (k)=>{return k==setName});
+    if (index != -1) {
+        this.props.setsOfQuestion.splice(index,1);
+    }
+    else {
+        this.props.setsOfQuestion.push(setName);
+    }
+    //console.dir(this.props.setsOfQuestion)
+    //console.dir(this.props.parent.state.data.setList)
+    this.forceUpdate();
+
   }
   render= ()=> {
-    log("soruseti",this.props.setler)
+    log("rendered")
+    const _this = this;
     return (
       <div>
      <label>Dahil Olacağı Setler</label><br/>
       <div style = {styles.container}>
 
         {
-          this.props.setler.map((setName)=>{
+          this.props.allSet.map((setName)=>{
+            let setsOfQuestion = _this.props.setsOfQuestion;
+            let isHaveThisSet = _.findIndex(setsOfQuestion,(k)=> {return k==setName;}) != -1;
+
             return (
               <div style={styles.child}>
-                <Checkbox key={setName} value={setName} label={setName}/>
+                <Checkbox key={setName} value={setName} label={setName} checked={isHaveThisSet}  onClick={_this.handleChekboxSetClick.bind(_this,setName)}/>
               </div>
 
             )

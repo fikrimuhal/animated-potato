@@ -4,6 +4,7 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Slider from 'material-ui/Slider';
 import TextField from 'material-ui/TextField'
 import {log2} from '../../utils/'
+import Immutable from  'Immutable'
 const log = log2("Secenekler: ")
 const styles = {
   radioButton: {

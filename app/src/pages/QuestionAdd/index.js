@@ -9,11 +9,16 @@ import SoruSetleriDropdown from './SoruSetleriDropdown'
 import KategoriAgirliklari from './KategoriAgirliklari'
 import Secenekler from './Secenekler'
 import {Toast} from '../../components/MyComponents'
+
+
 const log = log2("QuestionAdd: ")
 log("db",db,"Utils",util)
 const kategoriler = [
-  "Back-End","Front-End","Sistem-Yöneticisi"
+  "Back-End","Front-End","Sistem-Yöneticisi","Sistem-Yöneticisi","Sistem-Yöneticisi","Sistem-Yöneticisi","Sistem-Yöneticisi","Sistem-Yöneticisi","Sistem-Yöneticisi",
 ];
+const setler = [
+  "Set 1","Set 2","Set 3"
+]
 const styles = {
   radioButton: {
     marginBottom: 16,
@@ -56,7 +61,7 @@ const questionModel = {
   ],
   options:[],
   weight:2,
-  set:"Set 1"
+  setList:["Set 1"]
 };
 
 export default class QuestionAdd extends React.Component {
@@ -128,20 +133,20 @@ shouldComponentUpdate= function(nextProps, nextState) {
   }
 
   handleSaveQuestion = function () {
-    db.setQuestionToStorage(this.state.data,utils.guid());
+    this.state.data.id = utils.guid();
+    db.setQuestionToStorage(this.state.data);
     this.showToast("Başarılı, Soru kaydedilmiştir.",5000);
   }
   render() {
-      //log("main")
+      log("questionModel: " , this.state.data)
       return (
               <div>
                   <div>
                       <h3>Soru Ekle</h3>
                   </div>
                   <TextField hintText="Soru Metni" onChange={this.handleQuestionTextChange.bind(this)}/>
-                  <TextField hintText="Ağırlık" onChange={this.handleQuestionTextChange.bind(this)}/>
                   <KategoriAgirliklari parent={this} style={styles.w100}  kategoriler={this.kategoriListesiniGetir()} />
-                  <SoruSetleriDropdown parent={this}  style={styles.w100}  setler={["Set 1","Set 2","Set 3"]}/>
+                  <SoruSetleriDropdown parent={this}  style={styles.w100}  allSet={setler} setsOfQuestion={this.state.data.setList} />
                   <CevapTurleri parent={this} /><br/>
                   <RaisedButton label="+Seçenek Ekle" secondary={true} onClick={this.addOption.bind(this)} style={{float:"right"} }  disabled={this.state.addOptionDisplay}/> <br/>
                   <Secenekler secenekler={this.state.data.options}  parent={this} /><br/>

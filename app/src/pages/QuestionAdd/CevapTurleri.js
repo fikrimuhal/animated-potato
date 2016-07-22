@@ -20,8 +20,7 @@ const styles = {
   },
   flexContainer:{
     display:"flex",
-    flexDirection:"row",
-    justifyContent: "space-around",
+    justifyContent: "flexStart",
     flexFlow:"row wrap"
   },
   container: {
@@ -30,10 +29,11 @@ const styles = {
     padding:"5px 5px 5px 5px",
     marginTop:"5px",
 
+
   },
   child:{
     width:"100px",
-    margin:"auto"
+    marginLeft:"5px"
   }
 };
 export default class CevapTurleri  extends React.Component {
@@ -69,10 +69,10 @@ export default class CevapTurleri  extends React.Component {
       <label>Cevap Türü:</label> <br/>
       <div style={styles.container}>
         <RadioButtonGroup name="shipSpeed" defaultSelected="radio"  onChange={this.handleFieldTypeChange.bind(this)} style={styles.flexContainer} >
-            <RadioButton value="radio" label="Radio" style={styles.radioButton,styles.child}/>
-            <RadioButton value="checkbox" label="Checkbox" style={styles.radioButton,styles.child}/>
-            <RadioButton value="freetext" label="FreeText" style={styles.radioButton,styles.child} />
-            <RadioButton value="number" label="Number" style={styles.radioButton,styles.child}/>
+            <RadioButton value="radio" label="Radio" style={styles.child}/>
+            <RadioButton value="checkbox" label="Checkbox" style={styles.child}/>
+            <RadioButton value="freetext" label="FreeText" style={styles.child} />
+            <RadioButton value="number" label="Number" style={styles.child}/>
         </RadioButtonGroup>
       </div>
     </div>

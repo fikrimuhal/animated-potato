@@ -10,7 +10,7 @@ const styles = {
   flexContainer:{
     display:"flex",
     flexDirection:"row",
-    justifyContent: "space-around",
+    justifyContent: "flexStart",
     flexFlow:"row wrap"
   },
   container: {
@@ -24,7 +24,9 @@ const styles = {
     width:"200px",
     height:"100px",
     backgroundColor:"lightYellow",
-    padding:"5px 5px 5px 5px"
+    padding:"5px 5px 5px 5px",
+    marginLeft:"5px",
+    marginTop:"5px"
   }
 };
 export default class KategoriAgirliklari extends React.Component{
@@ -91,8 +93,7 @@ shouldComponentUpdate= function(nextProps, nextState) {
       <div style = {styles.container}>
 
       <label>Kategorileri seçip ağırlıklarını belirleyiniz.</label>
-        <div style = {styles.flexContainer}>
-
+      <div style = {styles.flexContainer}>
           {
             //let _this = this; /*aşağıda yeni blok açılıyor this kavramı kaybolduğu için bu değişkene attım aşağıda kullanabilmek için*/
 
@@ -106,7 +107,8 @@ shouldComponentUpdate= function(nextProps, nextState) {
               return(
                 <div style={styles.child}>
                   <Checkbox ref="cbKategori" checked={checked}  key={kategori} value={kategori} label={kategori} onClick={this.categorySelected.bind(this,kategori)}/>
-                  <span>Ağırlık: {weight}</span><Slider   value={weight} disabled={!checked} onChange={this.sliderChange.bind(this,kategori)} />
+                  <span>Ağırlık: {weight}</span>
+                  <Slider   value={weight} disabled={!checked} onChange={this.sliderChange.bind(this,kategori)} />
                 </div>
 
               )

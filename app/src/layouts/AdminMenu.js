@@ -10,7 +10,11 @@ const styles = {
     width: 200,
   }
 }
+
 export default class AdminMenu extends React.Component{
+shouldComponentUpdate= function(nextProps, nextState) {
+  return false;
+}
   render= function() {
     return (
 
