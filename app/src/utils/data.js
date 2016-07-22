@@ -28,9 +28,9 @@ export const getQuestionFromStorage = function () {
   return JSON.parse(storage);
 }
 
-export const setQuestionToStorage = function(question){
+export const setQuestionToStorage = function(question,key){
     var storage = localStorage.getItem('questions');
     var list = JSON.parse(storage);
-    list[question.id] = question;
+    list[key] = question;
     localStorage.setItem('questions',JSON.stringify(list));
 }

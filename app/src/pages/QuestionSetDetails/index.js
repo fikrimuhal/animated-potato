@@ -1,69 +1,49 @@
-import React from 'react'
+import React from 'react';
+import TextField from 'material-ui/TextField';
+import QuestionSets from './QuestionSets'
 import RaisedButton from 'material-ui/RaisedButton';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import TextField from 'material-ui/TextField'
+import {log2,db,util} from '../../utils/'
+const log = log2("QuestionSetDetails: ")
+log("db",db,"Utils",util)
 
-export default class QuestionSetDetails extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {value: 1};
+const setModels = [
+  {
+    title: "Set 1",
+    count: 23
+  },
+  {
+    title: "Set 4",
+    count: 65
+  },
+]
+
+export default class QuestionSetDetails extends React.Component{
+  constructor(props){
+    super(props)
+    this.setState = {
+      data: setModels
+    }
   }
-  handleChange = (event, index, value) => this.setState({value});
-  render() {
-    return (
-        <div>
-          <h3>Soru Seti Bilgileri</h3>
-          <br/>
-          <div>
-            <Table>
-              <TableHeader>
-               <TableRow>
-                 <TableHeaderColumn>Soru Seti Adı</TableHeaderColumn>
-                 <TableHeaderColumn>Soru Sayısı</TableHeaderColumn>
-                 <TableHeaderColumn>İşlemler</TableHeaderColumn>
-               </TableRow>
-              </TableHeader>
+  handleSetTextChange = function(event, value){
+    var model = data
+    if(value != null && value != "")
+    {
+      model.title = value
+    }
+  }
+  handleSaveSet = function(event, value){
+    db.setQuestionSetAddToStorage(this.state.data, utils.guid())
+  }
 
-              <TableBody>
-               <TableRow>
-                 <TableRowColumn>Set 1</TableRowColumn>
-                 <TableRowColumn>65</TableRowColumn>
-                 <TableRowColumn><div>
-                   <RaisedButton label="Sil" secondary={true}/>
-                   <RaisedButton label="Düzenle" primary={true}/>
-                 </div></TableRowColumn>
-               </TableRow>
-
-               <TableRow>
-                 <TableRowColumn>Set 2</TableRowColumn>
-                 <TableRowColumn>90</TableRowColumn>
-                 <TableRowColumn><div>
-                   <RaisedButton label="Sil" secondary={true}/>
-                   <RaisedButton label="Düzenle" primary={true}/>
-                 </div></TableRowColumn>
-               </TableRow>
-
-               <TableRow>
-                 <TableRowColumn>Set 3</TableRowColumn>
-                 <TableRowColumn>78</TableRowColumn>
-                 <TableRowColumn><div>
-                   <RaisedButton label="Sil" secondary={true}/>
-                   <RaisedButton label="Düzenle" primary={true}/>
-                 </div></TableRowColumn>
-               </TableRow>
-              </TableBody>
-              </Table>
-            </div>
-            <br/>
-          <div>
-          <h3>Soru Seti Ekle</h3>
-          <div>
-            <TextField
-              hintText="Soru Seti Adı"/><br />
-          </div>
-          <RaisedButton label="Ekle" secondary={true}/>
-        </div>
+  render(){
+    log("questionModel: " , this.setState.data)
+    return(
+      <div>
+        <QuestionSets sets={setModels} />
+        <TextField hintText="Soru Seti Adı" onChange={this.handleSetTextChange.bind(this)}/>
+        <br/>
+        <RaisedButton label="Ekle" primary={true} onChange={this.handleSaveSet.bind(this)}/>
       </div>
-    );
+    )
   }
 }
