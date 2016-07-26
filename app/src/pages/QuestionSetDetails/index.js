@@ -16,7 +16,6 @@ const style = {
 
   },
 }
-
 const setModels = [
   {
     title: "Set 1",
@@ -27,8 +26,6 @@ const setModels = [
     count: 65
    },
  ]
-
-
 const TextCell = ({rowIndex, data, col, ...props}) => (
   <Cell {...props}>
     {data.getObjectAt(rowIndex)[col]}
@@ -51,8 +48,7 @@ class DataListWrapper {
     );
   }
 }
-
-export default class FilterExample extends React.Component {
+export default class QuestionSetDetails extends React.Component {
   constructor(props) {
     super(props);
     this._dataList = new FakeObjectDataListStore(5);
