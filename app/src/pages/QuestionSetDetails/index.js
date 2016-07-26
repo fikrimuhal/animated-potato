@@ -51,7 +51,7 @@ class DataListWrapper {
 export default class QuestionSetDetails extends React.Component {
   constructor(props) {
     super(props);
-    this._dataList = new FakeObjectDataListStore(5);
+    this._dataList = new FakeObjectDataListStore(55);
 
     this.state = {
       filteredDataList: this._dataList,
@@ -110,27 +110,27 @@ export default class QuestionSetDetails extends React.Component {
               rowHeight={50}
               rowsCount={filteredDataList.getSize()}
               headerHeight={50}
-              width={1100}
-              height={640}
+              width={800}
+              height={340}
               {...this.props}>
             <Column
                 header={<Cell>Soru Seti Adı</Cell>}
                 cell={<TextCell data={filteredDataList} col="firstName" />}
                 fixed={true}
-                width={250}
+                width={200}
               />
               <Column
                 header={<Cell>Soru Sayısı</Cell>}
                 cell={<TextCell data={filteredDataList} col="lastName" />}
                 fixed={true}
-                width={250}
+                width={200}
               />
               <Column
                 header={<Cell>İşlemler</Cell>}
                 cell={<div><RaisedButton label="Sil" secondary={true}/>
                       <RaisedButton label="Düzenle" primary={true}/></div>
                   }
-                width={500}
+                width={400}
               />
             </Table>
             <br/>

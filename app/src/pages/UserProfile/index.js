@@ -39,10 +39,6 @@ class DataListWrapper {
   constructor(indexMap, data) {
     this._indexMap = indexMap;
     this._data = data;
-
-
-
-
   }
 
   getSize() {
@@ -112,7 +108,7 @@ export default class FilterExample extends React.Component {
           <h3>Question Set Details</h3>
           <br />
             <TextField onChange={this._onFilterChange}
-              hintText="Soru Seti Ara"
+              hintText="Kullanıcıları Gör"
             />
           <br />
             <Table

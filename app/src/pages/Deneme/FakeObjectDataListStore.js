@@ -9,7 +9,6 @@ class FakeObjectDataListStore {
   createFakeRowObjectData(/*number*/ index) /*object*/ {
     return {
       id: index,
-
       city: faker.address.city(),
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
