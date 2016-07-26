@@ -269,7 +269,7 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
 }
 
 .public_fixedDataTable_header .public_fixedDataTableCell_main {
-  font-weight: bold;
+  opacity: 0.4;
 }
 
 .public_fixedDataTable_header,
