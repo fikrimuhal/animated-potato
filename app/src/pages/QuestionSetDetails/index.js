@@ -9,12 +9,14 @@ import {log2,db,util} from '../../utils/'
 
 const {Table, Column, Cell} = FixedDataTable;
 
-const style = {
+const styles = {
   container: {
     backgroundColor:"#f1f1f1",
     margin: '134px'
-
   },
+  tableStyle: {
+    width: '100%',
+  }
 }
 const setModels = [
   {
@@ -106,11 +108,19 @@ export default class QuestionSetDetails extends React.Component {
               hintText="Soru Seti Ara"
             />
           <br />
-            <Table
+            <div>
+              <TextField ref="inputQuestionSet"
+                hintText="Soru Seti Ekle"
+              />
+              <br/>
+              <RaisedButton label="Ekle" secondary={true} onClick={this.handleSetSave.bind(this)}/>
+              <br/>
+            </div>
+            <Table style={styles.tableStyle}
               rowHeight={50}
               rowsCount={filteredDataList.getSize()}
-              headerHeight={50}
-              width={800}
+              headerHeight={200}
+
               height={340}
               {...this.props}>
             <Column
@@ -134,14 +144,7 @@ export default class QuestionSetDetails extends React.Component {
               />
             </Table>
             <br/>
-            <div>
-              <TextField ref="inputQuestionSet"
-                hintText="Soru Seti Ekle"
-              />
-              <br/>
-              <RaisedButton label="Ekle" secondary={true} onClick={this.handleSetSave.bind(this)}/>
-              <br/>
-            </div>
+
         </div>
 
     );
