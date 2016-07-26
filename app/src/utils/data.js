@@ -19,7 +19,6 @@ const questions = {
     set:"Set 2"
   }
 }
-
 const setModels = [
   {
     title: "Set 1",
@@ -32,7 +31,6 @@ const setModels = [
     id:67
   },
 ]
-
 export const getQuestionFromStorage = function () {
   var storage = localStorage.getItem('questions');
   if (storage == null) {

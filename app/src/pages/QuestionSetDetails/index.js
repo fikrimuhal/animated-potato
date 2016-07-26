@@ -66,7 +66,6 @@ export default class QuestionSetDetails extends React.Component {
         filteredDataList: this._dataList,
       });
     }
-
     var filterBy = e.target.value.toLowerCase();
     var size = this._dataList.getSize();
     var filteredIndexes = [];
