@@ -1,7 +1,7 @@
 import React from 'react'
 import {log2,db,util} from '../../utils/'
-import _ from 'lodash'
 import {Toast} from '../../components/MyComponents'
+import RaisedButton from 'material-ui/RaisedButton';
 import Immutable from 'Immutable'
 import QuestionAdd from './QuestionAdd'
 const log = log2("QuestionAdd Index: ")
@@ -51,6 +51,7 @@ modelChanged = function changed(newData,oldData) {
 }
 onSave = function () {
  var questionObj = this.state.data.toJS();
+ log("questionObj: ",questionObj);
  db.setQuestionToStorage(questionObj);
  this.showMessage("Question saved!!",2000);
 }
@@ -61,14 +62,20 @@ showMessage = function(message,duration) {
     duration: duration
   }
   this.setState({toastSettings:toastSettings});
-  setTimeout(function () {
+  var _this = this;
+  setTimeout( () =>  {
     toastSettings.open=false;
     this.setState({toastSettings:toastSettings});
   },duration);
 }
+
+backToList = function () {
+  window.location.href="/adminpanel/questionlist";
+}
   render() {
       return (
               <div>
+                  <RaisedButton label="<- Back to list" secondary={true} onClick={()=> this.backToList()} />
                   <QuestionAdd onChange={this.modelChanged} onSave={this.onSave} data={this.state.data} allSet={allSet} categoryList={categoryList} />
                   <Toast settings={this.state.toastSettings} />
               </div>

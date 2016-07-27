@@ -42,12 +42,10 @@ ReactDOM.render((
           <Route path="questions" component={pages.QuestionList}/>
           <Route path="testover" component={pages.TestCompleted}/>
         </Route>
-
         <Route path="adminlayout" component={AdminLayout}>
           <Route path="singin" component={pages.Login}/>
           <Route path="singup" component={pages.SignUp}/>
         </Route>
-
         <Route path="adminpanel" component={pages.AdminPanel}>
             <Route path="listofparticipants" component={pages.ListOfParticipants}/>
             <Route path="usersprofile" component={pages.UserProfile}/>
@@ -56,6 +54,7 @@ ReactDOM.render((
             <Route path="questionadd" component={pages.QuestionAdd}/>
             <Route path="questionsetdetails" component={pages.QuestionSetDetails}/>
             <Route path="questionsetadd" component={pages.NewQuestionSet}/>
+            <Route path="questionlist" component={pages.QuestionList}></Route>
         </Route>
         <Route path="deneme" component={pages.Deneme}>
 

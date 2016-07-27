@@ -30,8 +30,7 @@ const questions = [
     options:[],
     setList:["Set 2"]
   }
-
-}
+]
 const setModels = [
   {
     title: "Set 1",
@@ -45,7 +44,7 @@ const setModels = [
   },
 
 ]
-export const getQuestionFromStorage = function () {
+export const getQuestionsFromStorage = function getQuestionsFromStorage() {
   var storage = localStorage.getItem('questions');
   if (storage == null) {
     localStorage.setItem('questions',JSON.stringify(questions));
@@ -54,14 +53,14 @@ export const getQuestionFromStorage = function () {
   return JSON.parse(storage);
 }
 
-export const setQuestionToStorage = function(question){
+export const setQuestionToStorage = function setQuestionToStorage(question){
     //var storage = localStorage.getItem('questions');
-    var list = getQuestionFromStorage();
+    var list = getQuestionsFromStorage();
     list.push(question);
     localStorage.setItem('questions',JSON.stringify(list));
 }
 
-export const getQuestionSetAddToStorage = function(){
+export const getQuestionSetAddToStorage = function getQuestionSetAddToStorage(){
   var storage = localStorage.getItem('setModels');
   if(storage == null){
     localStorage.setItem('setModels', JSON.stringify(setModels));
@@ -70,7 +69,7 @@ export const getQuestionSetAddToStorage = function(){
   return JSON.parse(storage);
 }
 
-export const setQuestionSetAddToStorage = function(setModels, key){
+export const setQuestionSetAddToStorage = function setQuestionSetAddToStorage(setModels, key){
   var record = {title:setModels, count: 0, id: key}
   var list = getQuestionSetAddToStorage()
 
