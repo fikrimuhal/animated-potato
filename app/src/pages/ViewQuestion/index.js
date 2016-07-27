@@ -102,7 +102,11 @@ export default React.createClass({
     this.setState({sayac: suAnkiSoru +1})
   },
   render(){
+<<<<<<< HEAD
     //console.dir(allQuestions);
+=======
+  
+>>>>>>> 706716a862ecfe012c6a8d57320cf6322f5dcd98
     return (
         <div>
           <div style={styles}>
