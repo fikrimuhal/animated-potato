@@ -1,24 +1,36 @@
 import React from 'react'
-const questions = {
-  1: {
+const questions = [
+  {
     title: "Aşağıdakilerden hangisinde daha iyisiniz?",
     id: 1,
     type: "radio",
-    category:"Back-End",
+    categoryWeights:[
+      {
+        category:"Back-End",
+        weight:0.1
+      },
+      {
+        category:"Front-End",
+        weight:0.6
+      }
+    ],
     options:[],
-    weight:2,
-    set:"Set 1"
+    setList:["Set 1"]
   },
-  2: {
+  {
     title: "Aşağıdakilerden hangisinde daha kötüsünüz?",
-    id: 2,
+    id: 1,
     type: "radio",
-    category:"Front-End",
+    categoryWeights:[
+      {
+        category:"Front-End",
+        weight:0.5
+      }
+    ],
     options:[],
-    weight:1,
-    set:"Set 2"
+    setList:["Set 2"]
   }
-}
+]
 export const getQuestionFromStorage = function () {
   var storage = localStorage.getItem('questions');
   if (storage == null) {
@@ -28,9 +40,9 @@ export const getQuestionFromStorage = function () {
   return JSON.parse(storage);
 }
 
-export const setQuestionToStorage = function(question,key){
-    var storage = localStorage.getItem('questions');
-    var list = JSON.parse(storage);
-    list[key] = question;
+export const setQuestionToStorage = function(question){
+    //var storage = localStorage.getItem('questions');
+    var list = getQuestionFromStorage();
+    list.push(question);
     localStorage.setItem('questions',JSON.stringify(list));
 }

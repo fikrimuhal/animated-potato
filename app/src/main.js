@@ -6,22 +6,24 @@ import {log2} from './utils/'
 import * as pages from './pages/'
 import {AdminLayout,MainLayout,InterviewLayout}   from './layouts/'
 import perf from "react-addons-perf";
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 const log = log2("app");
 const perflog = log2("performance");
 perflog(perf);
 setTimeout(function () {
   perflog("started");
-  perf.start();
+  //perf.start();
 },2000)
 setTimeout(function () {
-    perf.stop();
-    const measurements = perf.getLastMeasurements();
-    perflog("inclusive");
-    perf.printInclusive(measurements);
-    perflog("exclusive");
-    perf.printExclusive(measurements);
-    perflog("wasted");
-    perf.printWasted(measurements)
+    // perf.stop();
+    // const measurements = perf.getLastMeasurements();
+    // perflog("inclusive");
+    // perf.printInclusive(measurements);
+    // perflog("exclusive");
+    // perf.printExclusive(measurements);
+    // perflog("wasted");
+    // perf.printWasted(measurements)
 }, 10000)
 
 if (module.hot) {

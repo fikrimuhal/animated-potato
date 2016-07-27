@@ -1,50 +1,18 @@
 import React from 'react'
-import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField'
 import {log2,db,util} from '../../utils/'
 import _ from 'lodash'
-import  CevapTurleri from './CevapTurleri';
-import SoruSetleriDropdown from './SoruSetleriDropdown'
-import KategoriAgirliklari from './KategoriAgirliklari'
-import Secenekler from './Secenekler'
 import {Toast} from '../../components/MyComponents'
+import Immutable from 'Immutable'
+import QuestionAdd from './QuestionAdd'
+const log = log2("QuestionAdd Index: ")
+var showToast=null;
 
-
-const log = log2("QuestionAdd: ")
-log("db",db,"Utils",util)
-const kategoriler = [
-  "Back-End","Front-End","Sistem-Yöneticisi","Sistem-Yöneticisi","Sistem-Yöneticisi","Sistem-Yöneticisi","Sistem-Yöneticisi","Sistem-Yöneticisi","Sistem-Yöneticisi",
+const categoryList = [
+  "Back-End","Front-End","Sistem-Yöneticisi","DBA","Java EE"
 ];
-const setler = [
+const allSet = [
   "Set 1","Set 2","Set 3"
 ]
-const styles = {
-  radioButton: {
-    marginBottom: 16,
-  },
-  fieldDiv : {
-    position:'relative',
-    float:'left',
-    width:'30%'
-  },
-  w100:{
-      width:'auto'
-  },
-  fullWidth: {
-    width:'100%',
-    float:'left'
-  },
-  secenekBox:{
-    border:'1px solid teal',
-    borderRadius:'5px',
-    padding:'5px 5px 5px 5px',
-    marginBottom:'5px',
-    marginLeft:'10px',
-    float:'left'
-  }
-};
-
 const questionModel = {
   title: "Aşağıdakilerden hangisinde daha iyisiniz?",
   id: 1,
@@ -60,97 +28,48 @@ const questionModel = {
     }
   ],
   options:[],
-  weight:2,
   setList:["Set 1"]
 };
 
-export default class QuestionAdd extends React.Component {
+export default class QuestionAddContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      data : questionModel,
-      addOptionDisplay:false,
+    var immutableData = Immutable.fromJS(questionModel,(key,value)=>{return  value.toOrderedMap();});
+    this.state=  {
+      data : immutableData,
       toastSettings : {
         open:false,
         message :"",
         duration: 2000
       }
-    }
+    };
+    showToast=util.myToast("toastSettings",this.setState,this.state);
+    util.bindFunctions.call(this,['modelChanged','showMessage','onSave']);
 }
-
-shouldComponentUpdate= function(nextProps, nextState) {
-  log(nextState);
-  return true;
+modelChanged = function changed(newData,oldData) {
+  this.setState({data:newData});
 }
-
- kategoriListesiniGetir = function () {
-   return kategoriler;
- }
- showToast=function (message,duration) {
-   var toastSettings  = this.state.toastSettings;
-   toastSettings.open=true;
-   toastSettings.message=message;
-   this.setState({
-     toastSettings : toastSettings
-  });
+onSave = function () {
+ var questionObj = this.state.data.toJS();
+ db.setQuestionToStorage(questionObj);
+ this.showMessage("Question saved!!",2000);
+}
+showMessage = function(message,duration) {
+  var toastSettings= {
+    open:true,
+    message :message,
+    duration: duration
+  }
+  this.setState({toastSettings:toastSettings});
   setTimeout(function () {
-    toastSettings.open=close;
-    this.setState({
-      toastSettings : toastSettings
-   });
-  },duration)
- }
- handleToastClose = function () {
-   var toastSettings  = this.state.toastSettings;
-   toastSettings.open=false;
-   this.setState({
-     toastSettings : toastSettings
-  });
- }
-
-  addOption=function () {
-    var model = this.state.data;
-    var key = util.guid();
-      model.options.push({
-        id:key,
-        text : "",
-        weight:0.5
-      }
-    );
-   this.setState({data: model});
- }
-
-  handleOptionTextChanged = function (event,index,value){
-
-  }
-
-  handleQuestionTextChange = function (event,value) {
-    var model = this.state.data;
-    if (value != null && value!="") {
-      model.title = value;
-    }
-
-  }
-
-  handleSaveQuestion = function () {
-    this.state.data.id = utils.guid();
-    db.setQuestionToStorage(this.state.data);
-    this.showToast("Başarılı, Soru kaydedilmiştir.",5000);
-  }
+    toastSettings.open=false;
+    this.setState({toastSettings:toastSettings});
+  },duration);
+}
   render() {
-      log("questionModel: " , this.state.data)
       return (
               <div>
-                  <div>
-                      <h3>Soru Ekle</h3>
-                  </div>
-                  <TextField hintText="Soru Metni" onChange={this.handleQuestionTextChange.bind(this)}/>
-                  <KategoriAgirliklari parent={this} style={styles.w100}  kategoriler={this.kategoriListesiniGetir()} />
-                  <SoruSetleriDropdown parent={this}  style={styles.w100}  allSet={setler} setsOfQuestion={this.state.data.setList} />
-                  <CevapTurleri parent={this} /><br/>
-                  <RaisedButton label="+Seçenek Ekle" secondary={true} onClick={this.addOption.bind(this)} style={{float:"right"} }  disabled={this.state.addOptionDisplay}/> <br/>
-                  <Secenekler secenekler={this.state.data.options}  parent={this} /><br/>
-                  <RaisedButton style={styles.fullWidth} label="Soruyu Kaydet" secondary={true}   onClick={this.handleSaveQuestion.bind(this)}/>
+                  <QuestionAdd onChange={this.modelChanged} onSave={this.onSave} data={this.state.data} allSet={allSet} categoryList={categoryList} />
                   <Toast settings={this.state.toastSettings} />
               </div>
             );

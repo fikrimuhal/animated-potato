@@ -1,5 +1,5 @@
 //pages
-export QuestionAdd from './QuestionAdd/'
+export QuestionAdd from './QuestionAdd/index.js'
 export AdminPanel from './AdminPanel/'
 export AdminProfile from './AdminProfile/'
 export ApplyCompleted from './ApplyCompleted/'

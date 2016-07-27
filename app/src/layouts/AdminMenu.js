@@ -20,7 +20,7 @@ shouldComponentUpdate= function(nextProps, nextState) {
 
         <div style={styles.menu}>
           <Paper>
-             <Menu desktop={true}>
+             <Menu>
                <Link to='/adminpanel/listofparticipants'><MenuItem primaryText="Katılımcı Listesi" /></Link>
                <Link to='/adminpanel/questionsee'><MenuItem primaryText="Soruları Gör" /></Link>
                <Link to='/adminpanel/questionadd'><MenuItem primaryText="Soru Ekle" /></Link>
