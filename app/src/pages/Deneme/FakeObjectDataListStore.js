@@ -12,6 +12,8 @@ class FakeObjectDataListStore {
       city: faker.address.city(),
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
+      zipCode: faker.address.zipCode(),
+
     };
   }
 
