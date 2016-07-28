@@ -1,4 +1,4 @@
-import React from 'react'
+import _ from 'lodash'
 const questions = [
   {
     title: "Aşağıdakilerden hangisinde daha iyisiniz?",
@@ -44,6 +44,9 @@ const setModels = [
   },
 
 ]
+const _users =[];
+const _applicants = []
+
 export const getQuestionsFromStorage = function getQuestionsFromStorage() {
   var storage = localStorage.getItem('questions');
   if (storage == null) {
@@ -75,4 +78,48 @@ export const setQuestionSetAddToStorage = function setQuestionSetAddToStorage(se
 
   list.push(record)
   localStorage.setItem('setModels', JSON.stringify(list))
+}
+
+export const getUsers= function getUsers() {
+  var storage = localStorage.getItem('users');
+  if(storage == null){
+    localStorage.setItem('users', JSON.stringify(_users));
+    storage = localStorage.getItem('users')
+  }
+  return JSON.parse(storage);
+}
+export const getUserByEmail = function getUserByEmail(email) {
+  var users = getUsers();
+  var findIndex = _.findIndex(users,(user)=>{return user.email==email});
+  return (findIndex == -1)? null:users[findIndex];
+}
+export const getUserById = function getUserById(id) {
+  var users = getUsers();
+  var findIndex = _.findIndex(users,(user)=>{return user.id==id});
+  return (findIndex == -1)? null:users[findIndex];
+}
+export const setUser = function setUser(userInfo) {
+  var users = getUsers();
+  users.push(userInfo);
+  localStorage.setItem('users', JSON.stringify(users));
+}
+
+export const getApplicants = function getApplicants() {
+  var storage = localStorage.getItem('applicants');
+  if(storage == null){
+    localStorage.setItem('applicants', JSON.stringify(_applicants));
+    storage = localStorage.getItem('applicants')
+  }
+  return JSON.parse(storage);
+}
+
+export const setApplicant = function setApplicant(userId) {
+  var applicants = getApplicants();
+  var newApplicant = {
+    userId : userId,
+    date: Date.now(),
+    answers: []
+  }
+  applicants.push(newApplicant);
+  localStorage.setItem('applicants', JSON.stringify(applicants));
 }

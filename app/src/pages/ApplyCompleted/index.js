@@ -14,8 +14,13 @@ const styles = {
   marginBottom: 16,
    },
 };
-export default React.createClass({
-  render() {
+
+export default class ApplyCompleted extends React.Component{
+  constructor(props) {
+    super(props)
+  }
+  render = function () {
+    var applyLink = "/interview/questions/"+this.props.userId;
     return (
       <div style={styles}>
         <h3>Bilgileriniz kaydedilmiştir.</h3>
@@ -26,9 +31,14 @@ export default React.createClass({
 
         <p>Forma ulaşmak için lütfen tıklayınız.</p>
         <div style={styles.button}>
-          <Link to="/questions"><RaisedButton label="Yeterlilik Formu" primary={true}/></Link>
+          <Link to={applyLink}><RaisedButton label="Yeterlilik Formu" primary={true}/></Link>
         </div>
 
       </div>
-    )}
-})
+    )
+
+  }
+}
+ApplyCompleted.propTypes = {
+  userId:React.PropTypes.string.isRequired
+}
