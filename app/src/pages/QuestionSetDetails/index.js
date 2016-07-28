@@ -16,12 +16,7 @@ import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui
 
 
 const {Table, Column, Cell} = FixedDataTable;
-const rows = [
-  ['a1', 'b1', 'c1'],
-  ['a2', 'b2', 'c2'],
-  ['a3', 'b3', 'c3'],
-  // .... and more
-];
+
 const styles = {
   container: {
     backgroundColor:"#f1f1f1",
@@ -29,43 +24,28 @@ const styles = {
   },
 
    buttonPadding: {
-     marginRight: '5px'
+     marginRight: '5'
    },
    toolbar:{
-     width: '1000'
+     width: '1000',
+   },
+   toolbarButton:{
+     marginLeft: '290'
    }
 }
-const setModels = db.getQuestionSetAddToStorage();
+
 const TextCell = ({rowIndex, data, col, ...props}) => (
   <Cell {...props}>
     {data.getObjectAt(rowIndex)[col]}
   </Cell>
 );
-
-class DataListWrapper {
-  constructor(indexMap, data) {
-    this._indexMap = indexMap;
-    this._data = data;
-  }
-
-  getSize() {
-    return this._indexMap.length;
-  }
-
-  getObjectAt(index) {
-    return this._data.getObjectAt(
-      this._indexMap[index],
-    );
-  }
-}
 export default class QuestionSetDetails extends React.Component {
   constructor(props) {
     super(props);
-    this._dataList = new FakeObjectDataListStore(55);
+    this._dataList = db.getQuestionSetAddToStorage();
 
     this.state = {
       filteredDataList: this._dataList,
-      data2: setModels,
       value: 3,
       addOptionDisplay: 'none'
     };
@@ -78,73 +58,60 @@ export default class QuestionSetDetails extends React.Component {
   _onFilterChange(e) {
     if (!e.target.value) {
       this.setState({
-        veri: setModels
+        filteredDataList: this._dataList,
       });
 
     }
-    var veri= [];
 
-    // var filterBy = e.target.value.toLowerCase();
-    // var size = this._dataList.getSize();
-    // var filteredIndexes = [];
-    // for (var index = 0; index < size; index++) {
-    //   var {firstName} = this._dataList.getObjectAt(index);
-    //   if (firstName.toLowerCase().indexOf(filterBy) !== -1) {
-    //     filteredIndexes.push(index);
-    //   }
-    // }
+     var filterBy = e.target.value.toLowerCase();
+     var size = this._dataList.length;
+     var arr = [];
+     for (var index = 0; index < size; index++) {
+       var setName = this._dataList[index].title;
+       if (setName.toLowerCase().indexOf(filterBy) !== -1) {
+         arr.push(this._dataList[index]);
+       }
+     }
     this.setState({
-      filteredDataList: new DataListWrapper(filteredIndexes, this._dataList),
+      filteredDataList: arr
     });
   }
   handleSearchSet = function(event, value){
     this.setState({addOptionDisplay: true});
   }
   handleSetSave = function(event, value){
-      var model = this.state.data2
       var input = this.refs.inputQuestionSet.input
-
       if(input.value != null && input.value != "")
       {
-        model.title = input.value
-        model.count = 0
+        db.setQuestionSetAddToStorage(input.value, util.guid())
         this.setState({
-          data2: model
+          filteredDataList: db.getQuestionSetAddToStorage()
         })
       }
-      console.log(this.state.data2);
-    db.setQuestionSetAddToStorage(input.value, util.guid())
+  }
+  handleQuestionSetDelete = function(id)
+  {
   }
   render() {
     var {filteredDataList} = this.state;
     //console.log(filteredDataList)
-    console.log(setModels);
+
     return (
         <div>
             <div>
-
               <br/>
-
-                <Toolbar style={{width: '1000'}}>
+                <Toolbar style={styles.toolbar}>
                   <ToolbarGroup>
                     <ToolbarTitle text="Question Set Details"/>
                     <FontIcon className="muidocs-icon-custom-sort" />
                     <ToolbarSeparator />
-                    <IconMenu
-                      iconButtonElement={
-                        <IconButton touch={true}>
-                          <NavigationExpandMoreIcon />
-                        </IconButton>
-                      }
-                    >
-                      <MenuItem primaryText="Soru Seti Ekle" onClick={this.handleSearchSet.bind(this)}/>
-                    </IconMenu>
 
                     <TextField onChange={this._onFilterChange}
                       hintText="Soru Seti Ara"
                     />
+                  <RaisedButton label="Soru Seti Ekle" primary={true} onClick={this.handleSearchSet.bind(this)} style={styles.toolbarButton}/>
+
                   </ToolbarGroup>
-                  <RaisedButton label="Create Broadcast" primary={true} />
                 </Toolbar>
 
             </div>
@@ -153,77 +120,60 @@ export default class QuestionSetDetails extends React.Component {
               hintText="Soru Seti Ekle"
             />
             <br/>
-            <RaisedButton label="Ekle" secondary={true} onChange={this.handleSetSave.bind(this)}/>
+            <RaisedButton label="Ekle" secondary={true} onClick={this.handleSetSave.bind(this)}/>
             </div>
-            <Table
-              rowHeight={50}
-              rowsCount={setModels.length}
-              width={5000}
-              height={5000}
-              headerHeight={50}>
-              <Column
-                header={
-                  <Cell>
-                    Set Adı
-                  </Cell>
-                }
-                cell={({rowIndex, ...props}) => (
-                  <Cell {...props}>
-                    {setModels[rowIndex].title}
-                  </Cell>
-                )}
-                width={200}
-                />
-                <Column
-                  header={
-                    <Cell>
-                      Soru Sayısı
-                    </Cell>
-                  }
-                  cell={({rowIndex, ...props}) => (
-                    <Cell {...props}>
-                      {setModels[rowIndex].count}
-                    </Cell>
-                  )}
-                  width={200}
-                  />
 
-            </Table>
-            {
-            //   <Table
-            //   rowHeight={50}
-            //   rowsCount={filteredDataList.getSize()}
-            //   headerHeight={50}
-            //   height={700}
-            //   width= {1200}
-            //   {...this.props}>
-            // <Column
-            //     header={<Cell>Soru Seti Adı</Cell>}
-            //     cell={<TextCell data={filteredDataList} col="firstName" />}
-            //     fixed={true}
-            //     width={400}
-            //   />
-            //   <Column
-            //     header={<Cell>Soru Sayısı</Cell>}
-            //     cell={<TextCell data={filteredDataList} col="zipCode" />}
-            //     fixed={true}
-            //     width={400}
-            //   />
-            //   <Column
-            //     header={<Cell>İşlemler</Cell>}
-            //     cell={<div><RaisedButton label="Sil" secondary={true} style={styles.buttonPadding}/>
-            //           <RaisedButton label="Düzenle" primary={true}/></div>
-            //       }
-            //     width={400}
-            //   />
-            // </Table>
-          }
+               <Table
+               rowHeight={50}
+               rowsCount={this.state.filteredDataList.length}
+               headerHeight={50}
+               height={700}
+               width= {1200}
+               >
+
+
+
+               <Column
+                 header={<Cell>Soru Seti Adı</Cell>}
+                 cell={({rowIndex, ...props}) => (
+              <Cell {...props}>
+                {this.state.filteredDataList[rowIndex].title}
+              </Cell>
+
+
+
+            )}
+                 fixed={true}
+                 width={400}
+               />
+               <Column
+                 header={<Cell>Soru Sayısı</Cell>}
+                 cell={({rowIndex, ...props}) => (
+              <Cell {...props}>
+                {this.state.filteredDataList[rowIndex].count}
+
+              </Cell>
+            )}
+                 fixed={true}
+                 width={400}
+               />
+               <Column
+                 header={<Cell>İşlemler</Cell>}
+                 cell={({rowIndex, ...props}) => (
+                   <Cell {...props}>
+                     {
+
+                       <div><RaisedButton label="Sil" secondary={true} style={styles.buttonPadding}  onClick={this.handleQuestionSetDelete.bind(this,this.state.filteredDataList[rowIndex].id)}/>
+                           <RaisedButton label="Düzenle" primary={true}/></div>
+                           }
+                   </Cell>
+                 )
+                   }
+                 width={400}
+               />
+             </Table>
             <br/>
-
         </div>
-
     );
   }
 }
-
-//module.exports = FilterExample;

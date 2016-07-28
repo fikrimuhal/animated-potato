@@ -33,6 +33,7 @@
     "react-jquery-datatables": "^0.7.1",
     "react-jsonschema-form": "^0.38.0",
     "react-router": "^2.5.2",
+    "react-schema-form": "^0.2.9",
     "react-select": "^1.0.0-beta14",
     "react-select-box": "^3.0.1",
     "react-tap-event-plugin": "^1.0.0"
