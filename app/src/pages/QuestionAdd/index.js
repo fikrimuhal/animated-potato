@@ -52,6 +52,7 @@ modelChanged = function changed(newData,oldData) {
 onSave = function () {
  var questionObj = this.state.data.toJS();
  log("questionObj: ",questionObj);
+ questionObj.id = util.guid();
  db.setQuestionToStorage(questionObj);
  this.showMessage("Question saved!!",2000);
 }

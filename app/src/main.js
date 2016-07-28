@@ -41,6 +41,7 @@ ReactDOM.render((
           <Route path="detailssaved/::userId" component={pages.ApplyCompleted}/>
           <Route path="questions/:userId" component={pages.QuestionList}/>
           <Route path="testover" component={pages.TestCompleted}/>
+          <Route path="skilltest/:userId" component={pages.SkillTest}/>
         </Route>
         <Route path="adminlayout" component={AdminLayout}>
           <Route path="singin" component={pages.Login}/>

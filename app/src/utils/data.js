@@ -55,7 +55,11 @@ export const getQuestionsFromStorage = function getQuestionsFromStorage() {
   }
   return JSON.parse(storage);
 }
-
+export const getQuestionsBySetName = function getQuestionsBySetName(setName) {
+  var allQuestion = getQuestionsFromStorage();
+  var _questions  = _.filter(allQuestion,(q)=> {return _.includes(q.setList,setName);});
+  return _questions;
+}
 export const setQuestionToStorage = function setQuestionToStorage(question){
     //var storage = localStorage.getItem('questions');
     var list = getQuestionsFromStorage();

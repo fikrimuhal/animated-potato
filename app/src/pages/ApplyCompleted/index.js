@@ -20,7 +20,7 @@ export default class ApplyCompleted extends React.Component{
     super(props)
   }
   render = function () {
-    var applyLink = "/interview/questions/"+this.props.userId;
+    var applyLink = "/interview/skilltest/"+this.props.userId;
     return (
       <div style={styles}>
         <h3>Bilgileriniz kaydedilmiştir.</h3>
