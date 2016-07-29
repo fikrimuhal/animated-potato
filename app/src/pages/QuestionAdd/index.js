@@ -4,6 +4,7 @@ import {Toast} from '../../components/MyComponents'
 import RaisedButton from 'material-ui/RaisedButton';
 import Immutable from 'Immutable'
 import QuestionAdd from './QuestionAdd'
+import _lodash from 'lodash'
 const log = log2("QuestionAdd Index: ")
 var showToast=null;
 
@@ -51,10 +52,47 @@ modelChanged = function changed(newData,oldData) {
 }
 onSave = function () {
  var questionObj = this.state.data.toJS();
+ log(questionObj)
+ if (questionObj.type == "radio" || questionObj.type=="checkbox") {
+   questionObj = this.normalizeOptionWeight(questionObj);
+ }
+  questionObj = this.normalizeCategoryWeight(questionObj);
+
  log("questionObj: ",questionObj);
  questionObj.id = util.guid();
  db.setQuestionToStorage(questionObj);
  this.showMessage("Question saved!!",2000);
+ log(questionObj)
+}
+normalizeOptionWeight = function (questionObj) {
+  var keys = Object.keys(questionObj.options);
+    if (keys.length>0) {
+
+      var optionArr = keys.map((key)=>{return questionObj.options[key]});
+      var sumWeight = _.sumBy(optionArr,(o)=> {return o.weight});
+      keys.forEach((key)=>{
+        var obj = questionObj.options[key];
+        var weight = obj.weight;
+        var normWeight = weight / sumWeight;
+        questionObj.options[key].weight = normWeight;
+      })
+    }
+    return questionObj;
+}
+normalizeCategoryWeight = function (questionObj) {
+    var keys = Object.keys(questionObj.categoryWeights);
+    if (keys.length>0) {
+
+      var arr = keys.map((key)=>{return questionObj.categoryWeights[key]});
+      var sumWeight = _.sumBy(arr,(o)=> {return o.weight});
+      keys.forEach((key)=>{
+        var obj = questionObj.categoryWeights[key];
+        var weight = obj.weight;
+        var normWeight = weight / sumWeight;
+        questionObj.categoryWeights[key].weight = normWeight;
+      })
+    }
+    return questionObj;
 }
 showMessage = function(message,duration) {
   var toastSettings= {

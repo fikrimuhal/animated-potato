@@ -33,10 +33,12 @@ export default class QuestionOptions extends React.Component{
     this.props.onQuestionOptionsChange(newOptions);
   }
   handleOptionTextChanged = function (key) {
-    var input = this.refs.txtOptionText.input;
+    log("key",this.refs)
+    var input = this.refs["txtOptionText-"+key].input;
     var oldOptions = this.props.optionList;
     var newOptions = oldOptions.updateIn([key,"text"], (v)=> {return input.value;});
     this.props.onQuestionOptionsChange(newOptions);
+
   }
   shouldComponentUpdate= function(nextProps, nextState) {
     var isEqual = nextProps.optionList.equals(this.props.optionList);
@@ -55,8 +57,8 @@ export default class QuestionOptions extends React.Component{
                   <div key={item.get('id')} style={styles.secenekBox}>
                       <p>Option Details</p>
                       <hr/>
-                      <TextField ref="txtOptionText" hintText="Seçenek" defaultValue={item.get('text')} onChange={()=>_this.handleOptionTextChanged(itemKey)}/><br />
-                      <Slider  onChange={(event,value)=> _this.handleSliderValueChange(itemKey,value)}  defaultValue={item.get('weight')} />
+                      <TextField ref={"txtOptionText-" + itemKey } hintText="Seçenek" value={item.get('text')} onChange={()=>_this.handleOptionTextChanged(itemKey)}/><br />
+                      <Slider  onChange={(event,value)=> _this.handleSliderValueChange(itemKey,value)}  defaultValue={item.get('weight')} value={item.get('weight')} />
                       <b>weight: {item.get('weight')}</b>
                       <RaisedButton primary={true} onClick={()=> _this.removeOptionFromModel(itemKey)} style={{float:"right"}}>Remove</RaisedButton>
                   </div>
