@@ -47,6 +47,7 @@ const setModels = [
   },
 
 ]
+
 const _users =[];
 const _applicants = []
 
@@ -73,7 +74,7 @@ export const getQuestionsByCategory = function getQuestionsByCategory(category) 
                                                               return c.category==category;
                                                             });
                                     return index != -1;
-                                  });  
+                                  });
   return _questions;
 }
 export const setQuestionToStorage = function setQuestionToStorage(question){
@@ -98,6 +99,12 @@ export const setQuestionSetAddToStorage = function setQuestionSetAddToStorage(se
 
   list.push(record)
   localStorage.setItem('setModels', JSON.stringify(list))
+}
+
+export const UserDelete = function UserDelete(key){
+  var users = getUsers();
+  var newUsers = _.filter(users, function(user){return user.id != key});
+  localStorage.setItem('users', JSON.stringify(newUsers))
 }
 
 export const getUsers= function getUsers() {
