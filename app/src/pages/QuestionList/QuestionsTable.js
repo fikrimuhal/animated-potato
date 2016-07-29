@@ -10,7 +10,7 @@ export default class QuestionsTable extends React.Component{
   render = function () {
     return(
       <Table
-          rowHeight={50}
+          rowHeight={150}
           rowsCount={this.props.data.length}
           width={1000}
           height={1000}
@@ -20,13 +20,13 @@ export default class QuestionsTable extends React.Component{
           cell={({rowIndex, ...props}) =>
                   (<Cell {...props}>{this.props.data[rowIndex].title}</Cell>
           )}
-          width={120} />
+          width={100} />
           <Column
             header={<Cell>Answer Type</Cell>}
             cell={({rowIndex, ...props}) =>
                     (<Cell {...props}>{this.props.data[rowIndex].type}</Cell>
             )}
-            width={120} />
+            width={200} />
             <Column
               header={<Cell>Question Sets</Cell>}
               cell={({rowIndex, ...props}) =>

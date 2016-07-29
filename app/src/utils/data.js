@@ -44,17 +44,7 @@ const setModels = [
   },
 
 ]
-const users = [
-  {
-    nameSurname: "Ayşe Yılmaz"
-  },
-  {
-    nameSurname: "Selda Seçkin"
-  },
-  {
-    nameSurname: "Serdar Yıldız"
-  }
-]
+
 const _users =[];
 const _applicants = []
 
@@ -95,6 +85,12 @@ export const QuestionSetDelete = function QuestionSetDelete(key){
   var sets = getQuestionSetAddToStorage();
   var newSet = _.filter(sets, function(set){return set.id != key});
   localStorage.setItem('setModels', JSON.stringify(newSet))
+}
+
+export const UserDelete = function UserDelete(key){
+  var users = getUsers();
+  var newUsers = _.filter(users, function(user){return user.id != key});
+  localStorage.setItem('users', JSON.stringify(newUsers))
 }
 
 export const getUsers= function getUsers() {

@@ -91,10 +91,13 @@ export default class QuestionSetDetails extends React.Component {
   }
   handleQuestionSetDelete = function(key)
   {
-    
-    db.QuestionSetDelete(key);
+    var n = key.toString();
+    var sets = db.getQuestionSetAddToStorage();
+    var newModels = _.dropWhile(sets, function(set) { return set.id === n});
+
+    console.log(newModels);
     this.setState({
-      filteredDataList: db.getQuestionSetAddToStorage()
+      filteredDataList: newModels
     });
 
   }
