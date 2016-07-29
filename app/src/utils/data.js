@@ -1,4 +1,7 @@
 import _ from 'lodash'
+import {util} from './'
+console.log("--------------")
+console.log(util)
 const questions = [
   {
     title: "Aşağıdakilerden hangisinde daha iyisiniz?",
@@ -44,17 +47,6 @@ const setModels = [
   },
 
 ]
-const users = [
-  {
-    nameSurname: "Ayşe Yılmaz"
-  },
-  {
-    nameSurname: "Selda Seçkin"
-  },
-  {
-    nameSurname: "Serdar Yıldız"
-  }
-]
 const _users =[];
 const _applicants = []
 
@@ -66,7 +58,24 @@ export const getQuestionsFromStorage = function getQuestionsFromStorage() {
   }
   return JSON.parse(storage);
 }
+export const getQuestionsBySetName = function getQuestionsBySetName(setName) {
+  var allQuestion = getQuestionsFromStorage();
+  var _questions  = _.filter(allQuestion,(q)=> {return _.includes(q.setList,setName);});
+  return _questions;
+}
+export const getQuestionsByCategory = function getQuestionsByCategory(category) {
+  var allQuestion = getQuestionsFromStorage();
 
+  var _questions  = _.filter(allQuestion,
+                            (q)=> {
+                                    let index= _.findIndex(util.obj2Array(q.categoryWeights),
+                                                      (c)=>{
+                                                              return c.category==category;
+                                                            });
+                                    return index != -1;
+                                  });  
+  return _questions;
+}
 export const setQuestionToStorage = function setQuestionToStorage(question){
     //var storage = localStorage.getItem('questions');
     var list = getQuestionsFromStorage();
@@ -89,12 +98,6 @@ export const setQuestionSetAddToStorage = function setQuestionSetAddToStorage(se
 
   list.push(record)
   localStorage.setItem('setModels', JSON.stringify(list))
-}
-export const QuestionSetDelete = function QuestionSetDelete(key){
-
-  var sets = getQuestionSetAddToStorage();
-  var newSet = _.filter(sets, function(set){return set.id != key});
-  localStorage.setItem('setModels', JSON.stringify(newSet))
 }
 
 export const getUsers= function getUsers() {
@@ -139,19 +142,4 @@ export const setApplicant = function setApplicant(userId) {
   }
   applicants.push(newApplicant);
   localStorage.setItem('applicants', JSON.stringify(applicants));
-}
-
-export const setUserToStorage = function setUserToStorage(user){
-    var list = getQuestionsFromStorage();
-    list.push(user);
-    localStorage.setItem('users',JSON.stringify(list));
-}
-
-export const getUserFromStorage = function getUserFromStorage() {
-  var storage = localStorage.getItem('users');
-  if (storage == null) {
-    localStorage.setItem('users', JSON.stringify(users));
-    storage = localStorage.getItem('users');
-  }
-  return JSON.parse(storage);
 }

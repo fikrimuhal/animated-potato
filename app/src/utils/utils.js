@@ -31,3 +31,10 @@ export const myToast = (stateKey,setState,state)=>(message,duration) => {
   });
   },duration);
 }
+
+export const obj2Array = function obj2Array(obj) {
+  var arr = Object.keys(obj).map((key) => {
+    return obj[key];
+  });
+  return arr;
+}

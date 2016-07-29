@@ -1,5 +1,5 @@
 import React from 'react'
-import {util,log2} from '../../utils/'
+import {util,log2,db} from '../../utils/'
 import Question from './Question'
 import _ from 'lodash'
 import RaisedButton from 'material-ui/RaisedButton';
@@ -60,6 +60,7 @@ previousQuestion = function () {
 
 render = function () {
 log("render",this.props.answers)
+
   return (
     <div>
       <Question question={this.props.questions[this.state.currentIndex]} onAnswer={this.onAnswer} answer={this.getCurrentAnswer()} />
