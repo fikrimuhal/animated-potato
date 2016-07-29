@@ -12,8 +12,7 @@ import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-mo
 import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-
-
+import _ from 'lodash'
 
 const {Table, Column, Cell} = FixedDataTable;
 
@@ -30,7 +29,7 @@ const styles = {
      width: '1000',
    },
    toolbarButton:{
-     marginLeft: '290'
+     marginLeft: '270'
    }
 }
 
@@ -50,6 +49,7 @@ export default class QuestionSetDetails extends React.Component {
       addOptionDisplay: 'none'
     };
     this._onFilterChange = this._onFilterChange.bind(this);
+    util.bindFunctions.call(this,['handleQuestionSetDelete'])
   }
 
   handleChange = function(event, index, value){
@@ -89,8 +89,14 @@ export default class QuestionSetDetails extends React.Component {
         })
       }
   }
-  handleQuestionSetDelete = function(id)
+  handleQuestionSetDelete = function(key)
   {
+    
+    db.QuestionSetDelete(key);
+    this.setState({
+      filteredDataList: db.getQuestionSetAddToStorage()
+    });
+
   }
   render() {
     var {filteredDataList} = this.state;
@@ -131,16 +137,12 @@ export default class QuestionSetDetails extends React.Component {
                width= {1200}
                >
 
-
-
                <Column
                  header={<Cell>Soru Seti Adı</Cell>}
                  cell={({rowIndex, ...props}) => (
               <Cell {...props}>
                 {this.state.filteredDataList[rowIndex].title}
               </Cell>
-
-
 
             )}
                  fixed={true}
@@ -163,7 +165,7 @@ export default class QuestionSetDetails extends React.Component {
                    <Cell {...props}>
                      {
 
-                       <div><RaisedButton label="Sil" secondary={true} style={styles.buttonPadding}  onClick={this.handleQuestionSetDelete.bind(this,this.state.filteredDataList[rowIndex].id)}/>
+                       <div><RaisedButton label="Sil" secondary={true} style={styles.buttonPadding}  onClick={()=>this.handleQuestionSetDelete(this.state.filteredDataList[rowIndex].id)}/>
                            <RaisedButton label="Düzenle" primary={true}/></div>
                            }
                    </Cell>
