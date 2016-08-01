@@ -20,7 +20,7 @@ export default class QuestionsTable extends React.Component{
           cell={({rowIndex, ...props}) =>
                   (<Cell {...props}>{this.props.data[rowIndex].title}</Cell>
           )}
-          width={100} />
+          width={300} />
           <Column
             header={<Cell>Answer Type</Cell>}
             cell={({rowIndex, ...props}) =>
