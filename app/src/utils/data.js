@@ -151,3 +151,7 @@ export const getApplicantList = function getApplicantList() {
   };
   return result;
 }
+
+export const getQuestionSets = function getQuestionSets() {
+  return ["Set 1","Set 2","Set 2"];
+}
