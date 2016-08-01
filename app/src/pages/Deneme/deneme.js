@@ -1,56 +1,40 @@
 import React from 'react'
 import Immutable from 'Immutable'
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
-const q1 = {
-  title: "Aşağıdakilerden hangisinde daha iyisiniz?",
-  id: 1,
-  type: "radio",
-  categoryWeights:[
-    {
-      category:"Back-End",
-      weight:0.1
-    },
-    {
-      category:"Front-End",
-      weight:0.3
-    }
-  ],
-  options:[],
-  weight:2,
-  setList:["Set 1"]
-};
-const q2 = {
-  title: "Aşağıdakilerden hangisinde daha iyisiniz?",
-  id: 1,
-  type: "radio",
-  categoryWeights:[
-    {
-      category:"Back-End",
-      weight:0.1
-    },
-    {
-      category:"Front-End",
-      weight:0.3
-    }
-  ],
-  options:[],
-  weight:2,
-  setList:["Set 1"]
-};;
-const m1 = Immutable.fromJS(q1,(key,value)=>{
-  var isIndexed = Immutable.Iterable.isIndexed(value);
-  return isIndexed ? value.toList() : value.toOrderedMap();
-})
-const m2 = Immutable.fromJS(q2,(key,value)=>{
-  var isIndexed = Immutable.Iterable.isIndexed(value);
-  return isIndexed ? value.toList() : value.toOrderedMap();
-})
 const Deneme = React.createClass({
+  radioChange: function (value) {
+    console.log(value,this.state.value);
+    this.setState({
+      value:2
+    })
+  },
+  getInitialState: function() {
+    return {
+    value  : 2
+    };
+  },
   render () {
-    console.dir(m1);
-console.dir(m2);
+
     return (
-     <div></div>
+     <div>
+       <RadioButtonGroup name={"deneme"} valueSelected={this.state.value} onChange={(event,value)=> this.radioChange(value)} disabled>
+
+
+               <RadioButton
+                 key = {1}
+                 value = {1}
+                 label= "opt 1"
+                />
+                <RadioButton
+                  key = {2}
+                  value = {2}
+                  label= "{opt 2}"
+                 />
+
+         </RadioButtonGroup>
+         <input type="text" value={"deneme"} ></input>
+     </div>
     )
   }
 })

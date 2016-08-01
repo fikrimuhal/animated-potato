@@ -114,7 +114,7 @@ backToList = function () {
   render() {
       return (
               <div>
-                  <RaisedButton label="<- Back to list" secondary={true} onClick={()=> this.backToList()} />
+                  <RaisedButton label="<- Back to list" secondary={true}  href="/adminpanel/questionlist" />
                   <QuestionAdd onChange={this.modelChanged} onSave={this.onSave} data={this.state.data} allSet={allSet} categoryList={categoryList} />
                   <Toast settings={this.state.toastSettings} />
               </div>

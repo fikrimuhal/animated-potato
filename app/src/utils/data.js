@@ -2,38 +2,7 @@ import _ from 'lodash'
 import {util} from './'
 console.log("--------------")
 console.log(util)
-const questions = [
-  {
-    title: "Aşağıdakilerden hangisinde daha iyisiniz?",
-    id: 1,
-    type: "radio",
-    categoryWeights:[
-      {
-        category:"Back-End",
-        weight:0.1
-      },
-      {
-        category:"Front-End",
-        weight:0.6
-      }
-    ],
-    options:[],
-    setList:["Set 1"]
-  },
-  {
-    title: "Aşağıdakilerden hangisinde daha kötüsünüz?",
-    id: 1,
-    type: "radio",
-    categoryWeights:[
-      {
-        category:"Front-End",
-        weight:0.5
-      }
-    ],
-    options:[],
-    setList:["Set 2"]
-  }
-]
+const questions = []
 const setModels = [
   {
     title: "Set 1",
@@ -44,7 +13,7 @@ const setModels = [
     title: "Set 4",
     count: 65,
     id:67
-  },
+  }
 
 ]
 
@@ -140,13 +109,45 @@ export const getApplicants = function getApplicants() {
   return JSON.parse(storage);
 }
 
-export const setApplicant = function setApplicant(userId) {
+export const setApplicant = function setApplicant(userId,answers) {
   var applicants = getApplicants();
-  var newApplicant = {
-    userId : userId,
-    date: Date.now(),
-    answers: []
+  var isNew  = getApplicantByUserId(userId) == null;
+  if (isNew) {
+    var newApplicant = {
+      "userId" : userId,
+      "date": Date.now(),
+      "answers": answers
+    }
+    applicants.push(newApplicant);
+    localStorage.setItem('applicants', JSON.stringify(applicants));
   }
-  applicants.push(newApplicant);
-  localStorage.setItem('applicants', JSON.stringify(applicants));
+  else {
+    console.log("User has applyed before.");
+  }
+
+
+}
+
+export const getApplicantByUserId=function getApplicantByUserId(userId){
+    var applicants = getApplicants();
+    var applicant = _.filter(applicants,(x)=>{return x.userId==userId});
+    var result = (applicant.length > 0)? applicant[0]:null;
+    return result;
+}
+export const getApplicantList = function getApplicantList() {
+  var result = [];
+  var seed = 1;
+  var names = ["Ahmet","Mehmet","Can","Veli","Öztürk","Türk","Ali","Ayşe","Gül","Levent"]
+  for (var i = 0; i <5; i++) {
+     var name = names[Math.floor(Math.random()*10)];
+     var lastName = names[Math.floor(Math.random()*10)];
+     var score = Math.floor(Math.random()*100);
+     var date = Date.now() - (Math.floor(Math.random()*10)*60*60*60);
+     result.push({
+       fullName: name +' ' + lastName,
+       score:score,
+       date:date
+     })
+  };
+  return result;
 }

@@ -18,12 +18,18 @@ constructor(props){
   util.bindFunctions.call(this,['radioChange']);
 }
 radioChange = function (value) {
-  this.props.onChange(value);
+  log(value);
+  this.props.onChange([value]);
+}
+shouldComponentUpdate= function(nextProps, nextState) {
+  return this.props.answer.value != nextProps.answer.value;
 }
 render = function () {
-  log("rendered",this.props.question,this.props.answer)
+  log("rendered",this.props.answer.value)
   var opts = this.props.question.options;
-    var options = Object.keys(opts).map(function(k) { return opts[k] });
+  var options = Object.keys(opts).map(function(k) { return opts[k] });
+  var ans = this.props.answer.value;
+  var value = (ans!=null && ans.length>0)?ans[0]:null;
   return (
     <div style={styles.container}>
     <Card>
@@ -32,7 +38,7 @@ render = function () {
       subtitle=""
     />
     <CardText>
-    <RadioButtonGroup name={this.props.question.id} value={this.props.answer.value} onChange={(event,value)=> this.radioChange(value)}>
+    <RadioButtonGroup name={this.props.question.id} valueSelected={value} onChange={(event,value)=> this.radioChange(value)}>
       {
         options.map((option) => {
           return (

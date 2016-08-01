@@ -2,6 +2,8 @@ import React from 'react'
 import {util,log2} from '../../utils/'
 import RadioQuestion from './RadioQuestion'
 import CheckboxQuestion from './CheckboxQuestion'
+import FreeTextQuestion from './FreeTextQuestion'
+import NumberQuestion from './NumberQuestion'
 const log = log2("Question")
 export default class Question extends React.Component{
 constructor(props){
@@ -21,15 +23,25 @@ getQuestionComponent = () => {
       component = <RadioQuestion question={this.props.question} answer={this.props.answer}  onChange={this.onChange}/>
       break;
       case "checkbox":
-      component = <CheckboxQuestion question={this.props.question} answer={this.props.answer}/>
+      component = <CheckboxQuestion question={this.props.question} answer={this.props.answer} onChange={this.onChange} />
+        break;
+      case "freetext":
+      component =<FreeTextQuestion question={this.props.question} answer={this.props.answer} onChange={this.onChange}/>
+        break;
+      case "number":
+      component =<NumberQuestion question={this.props.question} answer={this.props.answer} onChange={this.onChange}/>
         break;
     default: <div></div>
 
   }
   return component
 }
+shouldComponentUpdate= function(nextProps, nextState) {
+  // return !this.props.readMode;
+  return true;
+}
 render = function () {
-  log("render",this.props.answer)
+  log("render")
   return (
     this.getQuestionComponent()
   )

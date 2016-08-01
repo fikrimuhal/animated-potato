@@ -1,4 +1,5 @@
 import React from 'react'
+import Router from 'react-router'
 import {util,log2,db} from '../../utils/'
 import Question from './Question'
 import _ from 'lodash'
@@ -11,7 +12,8 @@ constructor(props){
     currentIndex:0
   }
   util.bindFunctions.call(this,['nextQuestion','previousQuestion',
-                                'onAnswer','getCurrentAnswer']);
+                                'onAnswer','getCurrentAnswer',
+                                'endTest']);
 }
 getCurrentAnswer = function () {
 
@@ -31,16 +33,20 @@ getCurrentAnswer = function () {
   //log("getCurrentAnswer",ans,answers,answerIndex);
   return ans;
 }
-onAnswer = function (value) {
+onAnswer = function (newAnswer) {
   //log("onAnswer");
   var answers = this.props.answers;
-  var answer  =this.getCurrentAnswer();
-  if (answer.value == null) {
-     answers.push(answer);
+  var currentAnswer  =this.getCurrentAnswer();
+  log("currentAnswer",currentAnswer)
+  if (currentAnswer.value == null) {
+     //answer.value = newAnswer.value;
+     answers.push(newAnswer);
   }
   else {
-    answers.value = value;
+    var updateIndex = _.findIndex(answers,(a)=>{return a.questionId==currentAnswer.questionId})
+    answers[updateIndex].value = newAnswer.value;
   }
+  log("degisti",answers)
   this.props.onChangeAnswer(answers);
 }
 nextQuestion = function () {
@@ -57,17 +63,25 @@ previousQuestion = function () {
     })
   }
 }
-
+endTest = function () {
+  log("endTest")
+  this.props.onSaveTest();
+}
 render = function () {
-log("render",this.props.answers)
-
+log("render",Router)
+  var question  = this.props.questions[this.state.currentIndex];
+  var firstQuestion = (this.state.currentIndex == 0);
+  var lastQuestion = (this.state.currentIndex == (this.props.questions.length -1))
+  var endTest = (this.props.answers.length == this.props.questions.length)
+ log(firstQuestion,lastQuestion)
   return (
     <div>
-      <Question question={this.props.questions[this.state.currentIndex]} onAnswer={this.onAnswer} answer={this.getCurrentAnswer()} />
+      <Question key={question.id} question={question} onAnswer={this.onAnswer} answer={this.getCurrentAnswer()} />
       <div style={{float:"right",marginRight:"100px",marginTop:"10px"}}>
-        <RaisedButton  label="< Previous" primary={true}   onClick={()=>this.previousQuestion()}  />
-        <RaisedButton  label="Next >" primary={true}   onClick={()=>this.nextQuestion()} style={{marginLeft:"3px"}}/>
-    </div>
+        <RaisedButton  label="< Previous" primary={true}   onClick={()=>this.previousQuestion()}  disabled={firstQuestion}/>
+        <RaisedButton  label="Next >" primary={true}   onClick={()=>this.nextQuestion()} style={{marginLeft:"3px"}} disabled={lastQuestion}/>
+        <RaisedButton  label="End Test" primary={true}   onClick={()=>this.endTest()} style={{marginLeft:"3px"}} disabled={!endTest}/>
+  </div>
     </div>
 
   )
@@ -76,6 +90,6 @@ log("render",this.props.answers)
 }
 
 SkillTest.propTypes = {
-  questions: React.PropTypes.array.isRequired,
-  answer: React.PropTypes.array.isRequired
+  questions: React.PropTypes.array.isRequired
+
 }

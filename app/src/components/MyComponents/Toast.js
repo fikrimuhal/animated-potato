@@ -18,3 +18,6 @@ export default class Toast extends React.Component {
     );
   }
 }
+Toast.propTypes = {
+  settings: React.PropTypes.object.isRequired
+}
