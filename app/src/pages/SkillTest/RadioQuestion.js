@@ -6,11 +6,9 @@ const log = log2("RadioQuestion")
 const styles = {
   container: {
     width:"60%",
-    backgroundColor : "yellow",
     margin:"0 auto",
     marginTop:"10px",
     padding:"5px,5px,5px,5px"
-    
   }
 }
 export default class RadioQuestion extends React.Component{
