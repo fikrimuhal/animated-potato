@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import {util} from './'
+import moment from 'moment'
 const questions = []
 const setModels = [
   {
@@ -144,7 +145,7 @@ export const getApplicantList = function getApplicantList() {
      result.push({
        fullName: name +' ' + lastName,
        score:score,
-       date:date,
+       date:moment(date).format('LLL'),
        id:i
      })
   };

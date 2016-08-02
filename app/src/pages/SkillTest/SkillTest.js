@@ -4,6 +4,7 @@ import {util,log2,db} from '../../utils/'
 import Question from './Question'
 import _ from 'lodash'
 import RaisedButton from 'material-ui/RaisedButton';
+
 const log = log2("SkillTest")
 export default class SkillTest extends React.Component{
 constructor(props){
@@ -75,14 +76,16 @@ log("render",Router)
   var endTest = (this.props.answers.length == this.props.questions.length)
  log(firstQuestion,lastQuestion)
   return (
-    <div>
-      <Question key={question.id} question={question} onAnswer={this.onAnswer} answer={this.getCurrentAnswer()} />
-      <div style={{float:"right",marginRight:"100px",marginTop:"10px"}}>
-        <RaisedButton  label="< Previous" primary={true}   onClick={()=>this.previousQuestion()}  disabled={firstQuestion}/>
-        <RaisedButton  label="Next >" primary={true}   onClick={()=>this.nextQuestion()} style={{marginLeft:"3px"}} disabled={lastQuestion}/>
-        <RaisedButton  label="End Test" primary={true}   onClick={()=>this.endTest()} style={{marginLeft:"3px"}} disabled={!endTest}/>
-  </div>
-    </div>
+
+      <div>
+        <Question key={question.id} question={question} onAnswer={this.onAnswer} answer={this.getCurrentAnswer()} />
+        <div style={{float:"right",marginRight:"20%",marginTop:"10px"}}>
+          <RaisedButton  label="< Previous" primary={true}   onClick={()=>this.previousQuestion()}  disabled={firstQuestion}/>
+          <RaisedButton  label="Next >" primary={true}   onClick={()=>this.nextQuestion()} style={{marginLeft:"3px"}} disabled={lastQuestion}/>
+          <RaisedButton  label="End Test" primary={true}   onClick={()=>this.endTest()} style={{marginLeft:"3px"}} disabled={!endTest}/>
+        </div>
+      </div>
+
 
   )
 }

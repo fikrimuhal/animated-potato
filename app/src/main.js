@@ -11,29 +11,28 @@ injectTapEventPlugin();
 const log = log2("app");
 const perflog = log2("performance");
 perflog(perf);
-setTimeout(function () {
-  perflog("started");
-  //perf.start();
-},2000)
-setTimeout(function () {
-    // perf.stop();
-    // const measurements = perf.getLastMeasurements();
-    // perflog("inclusive");
-    // perf.printInclusive(measurements);
-    // perflog("exclusive");
-    // perf.printExclusive(measurements);
-    // perflog("wasted");
-    // perf.printWasted(measurements)
-}, 10000)
+// setTimeout(function () {
+//   perflog("started");
+//   //perf.start();
+// },2000)
+// setTimeout(function () {
+//     // perf.stop();
+//     // const measurements = perf.getLastMeasurements();
+//     // perflog("inclusive");
+//     // perf.printInclusive(measurements);
+//     // perflog("exclusive");
+//     // perf.printExclusive(measurements);
+//     // perflog("wasted");
+//     // perf.printWasted(measurements)
+// }, 10000)
 
 if (module.hot) {
     module.hot.accept();
-    log("pages",pages);
+    //log("pages",pages);
 }
 ReactDOM.render((
 
   <Router history={browserHistory}>
-      {log("router",pages)}
     <Route path="/" component={MainLayout}>
         <IndexRoute component={InterviewLayout}/>
         <Route path="interview" component={pages.Interview}>

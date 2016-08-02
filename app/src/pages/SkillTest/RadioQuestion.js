@@ -5,11 +5,12 @@ import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 const log = log2("RadioQuestion")
 const styles = {
   container: {
-    width:"80%",
+    width:"60%",
     backgroundColor : "yellow",
     margin:"0 auto",
     marginTop:"10px",
     padding:"5px,5px,5px,5px"
+    
   }
 }
 export default class RadioQuestion extends React.Component{

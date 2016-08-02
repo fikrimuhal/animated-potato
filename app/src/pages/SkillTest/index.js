@@ -2,6 +2,13 @@ import React from 'react'
 import SkillTest from './SkillTest'
 import {util,log2,db} from '../../utils/'
 import {Toast} from '../../components/MyComponents'
+import Paper from 'material-ui/Paper';
+const style = {
+  height: 100,
+  width: 800,
+  margin: 20,
+  display: 'inline-block',
+};
 const log = log2("SkillTestContainer")
 const _questions = db.getQuestionsBySetName("Set 1");
 var answers = [];
@@ -72,10 +79,12 @@ handleOnSaveTest = function () {
 render = function () {
   log("rendered",this.state)
   return (
+
     <div>
       <SkillTest questions={_questions}  answers={this.state.answers} onChangeAnswer={this.handleOnChangeAnswer} onSaveTest={this.handleOnSaveTest} readMode={this.state.readMode} />
       <Toast settings={this.state.toastSettings} />
     </div>
+  
 
 )
 }

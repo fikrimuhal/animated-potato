@@ -21,78 +21,34 @@ const styles = {
  },
 };
 const data = db.getApplicantList();
-function randomDate(start, end) {
-  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toLocaleDateString();
-}
-
-//helper to create a fixed number of rows
-function createRows(numberOfRows){
-  var _rows = [];
-  for (var i = 1; i < numberOfRows; i++) {
-    _rows.push({
-      id: i,
-      task: 'Task ' + i,
-      complete: Math.min(100, Math.round(Math.random() * 110)),
-      priority : ['Critical', 'High', 'Medium', 'Low'][Math.floor((Math.random() * 3) + 1)],
-      issueType : ['Bug', 'Improvement', 'Epic', 'Story'][Math.floor((Math.random() * 3) + 1)],
-      startDate: randomDate(new Date(2015, 3, 1), new Date()),
-      completeDate: randomDate(new Date(), new Date(2016, 0, 1))
-    });
-  }
-  return _rows;
-}
-var rowGetter = function(i){
-  return _rows[i];
-};
-
-//Columns definition
 var columns = [
+  {
+    key: 'id',
+    name: 'NO'
+  },
 {
-  key: 'id',
-  name: 'ID',
-  width: 80,
-  filterable: true
-},
-{
-  key: 'task',
-  name: 'Title',
+  key: 'fullName',
+  name: 'Full Name',
   filterable: true,
   sortable : true
 },
 {
-  key: 'priority',
-  name: 'Priority',
+  key: 'date',
+  name: 'Apply Date',
   filterable: true,
   sortable : true
 },
 {
-  key: 'issueType',
-  name: 'Issue Type',
-  filterable: true
-},
-{
-  key: 'complete',
-  name: '% Complete',
-  filterable: true
-},
-{
-  key: 'startDate',
-  name: 'Start Date',
-  filterable: true,
+  key: 'score',
+  name: 'Score',
   sortable : true
 },
-{
-  key: 'completeDate',
-  name: 'Expected Complete',
-  filterable: true,
-  sortable : true
-}
 ]
 export default class ParticipantList extends React.Component {
 
   constructor(props) {
     super(props);
-      var rows = createRows(1000);
+      var rows = data
     this.state = {
       rows : rows, filters : {},
       originalRows:rows
@@ -138,8 +94,7 @@ export default class ParticipantList extends React.Component {
     log("rendered");
     return (
               <div>
-                <h2>Katılımcı Listesi</h2>
-                <OrderFilterPanel />
+                <h2>Participant List</h2>
                 <div>
                   <ReactDataGrid
                          columns={columns}
@@ -151,11 +106,6 @@ export default class ParticipantList extends React.Component {
                          onAddFilter={this.handleFilterChange}
                          onGridSort={this.handleGridSort}
                          />
-                  {
-                    // <MTableHead columns={['Fullname','Date','Score','Settings']} />
-                    // <MTableBody rows={this.state.data}/>
-                  }
-
                 </div>
               </div>
     );
