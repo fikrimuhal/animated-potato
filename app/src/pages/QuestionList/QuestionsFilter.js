@@ -55,7 +55,6 @@ categoryTypeChange = function(event, value){
 
           <div style={styles.flexContainer}>
             <SelectField value={this.props.setType} style={styles.child} onChange={this.setTypeChange}>
-
               {
                 allSet.map((set, idx) => {
                   return (
@@ -63,7 +62,6 @@ categoryTypeChange = function(event, value){
                   )
                 })
               }
-
             </SelectField>
 
             <SelectField value={this.props.categoryType} style={styles.child} onChange={this.categoryTypeChange}>

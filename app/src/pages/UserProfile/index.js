@@ -1,203 +1,223 @@
-var FakeObjectDataListStore = require('../Deneme/FakeObjectDataListStore');
-var FixedDataTable = require('fixed-data-table');
-var React = require('react');
-import TextField from 'material-ui/TextField';
+import React from 'react'
+require("!style!css!react-data-grid/themes/react-data-grid.css")
+import { Link } from 'react-router'
 import RaisedButton from 'material-ui/RaisedButton';
-import { TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import {log2,util,db} from '../../utils/'
+import {db,log2,util} from '../../utils/'
+import {Table} from 'material-ui/Table';
+import ReactDataGrid from 'react-data-grid';
+import { Toolbar, Data } from 'react-data-grid/addons';
 import IconMenu from 'material-ui/IconMenu';
-import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
 import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
 import MenuItem from 'material-ui/MenuItem';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import _ from 'lodash'
+var userProfileInstance;
+class ButtonsColFormatter extends React.Component{
+  constructor(props){
+    super(props)
+    util.bindFunctions.call(this,['onClick'])
+  }
+  onClick = function () {
+    console.dir(userProfileInstance);
+    var rows = db.getUsers();
+    var  news = _.filter(rows,(o)=>{return o.id != this.props.value});
+    userProfileInstance.state={
+      rows : news,
+      originalRows:news,
+      filters:{}
+    };
+    userProfileInstance.forceUpdate();
 
-const {Table, Column, Cell} = FixedDataTable;
-
-const styles = {
-  container: {
-    backgroundColor:"#f1f1f1",
-    margin: '134px'
-  },
-
-   buttonPadding: {
-     marginRight: '5'
-   },
-   toolbar:{
-     width: '100%',
-   },
-   toolbarButton:{
-     marginLeft: '270'
-   },
-   tableStyle:{
-     width: '100%',
-     height: '700'
-   }
+  }
+  render = function(){
+    console.log("ButtonsColFormatter");
+    return (<div style={{padding:"5px 5px 5px 5px"}}>
+      <RaisedButton primary={true} onClick={this.onClick}>Sil</RaisedButton>
+    </div>)
+  }
 }
 
-const TextCell = ({rowIndex, data, col, ...props}) => (
-  <Cell {...props}>
-    {data.getObjectAt(rowIndex)[col]}
-  </Cell>
-);
+class ImageDisplayer extends React.Component{
+  constructor(props){
+    super(props)
+  }
+  render = function(){
+    console.log("ButtonsColFormatter");
+    return (
+
+      <img src={this.props.value} width={50} height={30} />
+    )
+  }
+}
+const Selectors = Data.Selectors;
+const log = log2("User Profile")
+log("ReactDataGrid",Data)
+
+const styles = {
+  customWidth: {
+   width: 150,
+ },
+};
+const data = db.getApplicantList();
+function randomDate(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toLocaleDateString();
+}
+
+//helper to create a fixed number of rows
+function createRows(numberOfRows){
+  var _rows = [];
+  for (var i = 1; i < numberOfRows; i++) {
+    _rows.push({
+      id: i,
+      task: 'Task ' + i,
+      complete: Math.min(100, Math.round(Math.random() * 110)),
+      priority : ['Critical', 'High', 'Medium', 'Low'][Math.floor((Math.random() * 3) + 1)],
+      issueType : ['Bug', 'Improvement', 'Epic', 'Story'][Math.floor((Math.random() * 3) + 1)],
+      startDate: randomDate(new Date(2015, 3, 1), new Date()),
+      completeDate: randomDate(new Date(), new Date(2016, 0, 1))
+    });
+  }
+  return _rows;
+}
+var rowGetter = function(i){
+  return _rows[i];
+};
+
+//Columns definition
+var columns = [
+{
+  key: 'id',
+  name: 'ID',
+  width: 80,
+  filterable: true
+},
+{
+  key: 'name',
+  name: 'Name',
+  filterable: true,
+  sortable : true,
+  editable : true
+},
+{
+  key: 'lastname',
+  name: 'Lastname',
+  filterable: true,
+  sortable : true
+},
+{
+  key: 'email',
+  name: 'Email',
+  filterable: true,
+  sortable : true
+},
+{
+  key: 'phone',
+  name: 'Phone',
+  filterable: true
+},
+{
+  key: 'photo',
+  name: 'Photo',
+  filterable: true,
+  formatter:ImageDisplayer
+},
+{
+  key: 'website',
+  name: 'Web Site',
+  filterable: true,
+  sortable : true
+},
+{
+  key: 'notes',
+  name: 'Your Notes',
+  filterable: true,
+  sortable : true
+},
+{
+  key:'id',
+  name: 'İşlemler',
+  formatter:ButtonsColFormatter
+}
+]
+
+
+
 export default class UserProfile extends React.Component {
   constructor(props) {
     super(props);
-    this._dataList = db.getUsers();
-
+      var rows = db.getUsers();
     this.state = {
-      filteredDataList: this._dataList,
+      rows : rows, filters : {},
+      originalRows:rows
     };
-    this._onFilterChange = this._onFilterChange.bind(this);
-    util.bindFunctions.call(this,['handleUserDelete','_onFilterChange'])
+    util.bindFunctions.call(this,['getRows','getSize',
+                                  'rowGetter','handleFilterChange',
+                                  'handleGridSort','handleRowUpdated'])
+userProfileInstance = this;
+  }
+  getRows = function() {
+   return Selectors.getRows(this.state);
+ }
+ handleRowUpdated = function(e){
+    //merge updated row with current row and rerender by setting state
+    var rows = this.state.rows;
+    Object.assign(rows[e.rowIdx], e.updated);
+    this.setState({rows:rows});
   }
 
-  handleChange = function(event, index, value){
-    this.setState({value});
-}
-_onFilterChange(e) {
-  if (!e.target.value) {
-    this.setState({
-      filteredDataList: this._dataList,
-    });
+ getSize = function() {
+   return this.getRows().length;
+ }
 
-  }
-   var filterBy = e.target.value.toLowerCase();
-   var size = this._dataList.length;
-   var arr = [];
-   for (var index = 0; index < size; index++) {
-     var name = this._dataList[index].name;
-     var lastname = this._dataList[index].lastname;
-     console.log(name, lastname);
+ rowGetter = function(rowIdx){
+   var rows = this.getRows();
+   return rows[rowIdx];
+ }
 
-     if (name.toLowerCase().indexOf(filterBy) !== -1 || lastname.toLowerCase().indexOf(filterBy) !== -1 ) {
-       arr.push(this._dataList[index]);
+ handleFilterChange = function(filter){
+   let newFilters = Object.assign({}, this.state.filters);
+   if (filter.filterTerm) {
+     newFilters[filter.columnKey] = filter.filterTerm;
+   } else {
+    delete newFilters[filter.columnKey];
+   }
+   this.setState({filters: newFilters});
+ }
+ handleGridSort = function (sortColumn, sortDirection) {
+   var comparer = function(a, b) {
+     if(sortDirection === 'ASC'){
+       return (a[sortColumn] > b[sortColumn]) ? 1 : -1;
+     }else if(sortDirection === 'DESC'){
+       return (a[sortColumn] < b[sortColumn]) ? 1 : -1;
      }
    }
-  this.setState({
-    filteredDataList: arr
-  });
-}
-  handleSearchSet = function(event, value){
-    this.setState({addOptionDisplay: true});
-  }
-  handleSetSave = function(event, value){
-
-  }
-  handleUserDelete = function(key)
-  {
-    db.UserDelete(key);
-    this.setState({
-      filteredDataList: db.getUsers()
-    });
-
-  }
+   var rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
+   this.setState({rows : rows});
+ }
   render() {
-    var {filteredDataList} = this.state;
-    //console.log(filteredDataList)
-
+    log("User Profile rendered");
     return (
-        <div>
-            <div>
-              <br/>
-                <Toolbar style={styles.toolbar}>
-                  <ToolbarGroup>
-                    <ToolbarTitle text="UserProfile"/>
-                    <FontIcon className="muidocs-icon-custom-sort" />
-                    <ToolbarSeparator />
+              <div>
+                <div>
+             <br/>
+              <h4>User Profile </h4>
+           </div>
+           <br/>
+                <div>
+                  <ReactDataGrid
+                         columns={columns}
+                         rowGetter={this.rowGetter}
+                         enableCellSelect={true}
+                         rowsCount={this.getSize()}
+                         minHeight={500}
+                         toolbar={<Toolbar enableFilter={true}/>}
+                         onAddFilter={this.handleFilterChange}
+                         onGridSort={this.handleGridSort}
+                         onRowUpdated={this.handleRowUpdated} />
+                         />
 
-                    <TextField onChange={this._onFilterChange}
-                      hintText="Kullanıcı Ara"
-                    />
-
-                  </ToolbarGroup>
-                </Toolbar>
-            </div>
-               <Table
-               rowHeight={50}
-               rowsCount={this.state.filteredDataList.length}
-               headerHeight={50}
-               width={1300}
-               height={700}
-               >
-               <Column
-                 header={<Cell>Name Surname</Cell>}
-                 cell={({rowIndex, ...props}) => (
-              <Cell {...props}>
-                {this.state.filteredDataList[rowIndex].name +" "+ this.state.filteredDataList[rowIndex].lastname}
-              </Cell>
-            )}
-                 fixed={true}
-                 width={150}
-               />
-               <Column
-                 header={<Cell>Email</Cell>}
-                 cell={({rowIndex, ...props}) => (
-              <Cell {...props}>
-                {this.state.filteredDataList[rowIndex].email}
-              </Cell>
-            )}
-                 fixed={true}
-                 width={150}
-               />
-               <Column
-                 header={<Cell>Phone</Cell>}
-                 cell={({rowIndex, ...props}) => (
-              <Cell {...props}>
-                {this.state.filteredDataList[rowIndex].phone}
-              </Cell>
-            )}
-                 fixed={true}
-                 width={150}
-               />
-               <Column
-                 header={<Cell>Photo</Cell>}
-                 cell={({rowIndex, ...props}) => (
-              <Cell {...props}>
-                {this.state.filteredDataList[rowIndex].photo}
-              </Cell>
-            )}
-                 fixed={true}
-                 width={150}
-               />
-               <Column
-                 header={<Cell>Web Site</Cell>}
-                 cell={({rowIndex, ...props}) => (
-              <Cell {...props}>
-                {this.state.filteredDataList[rowIndex].wesite}
-              </Cell>
-            )}
-                 fixed={true}
-                 width={150}
-               />
-               <Column
-                 header={<Cell>Your Notes</Cell>}
-                 cell={({rowIndex, ...props}) => (
-              <Cell {...props}>
-                {this.state.filteredDataList[rowIndex].notes}
-              </Cell>
-            )}
-                 fixed={true}
-                 width={150}
-               />
-               <Column
-                 header={<Cell>İşlemler</Cell>}
-                 cell={({rowIndex, ...props}) => (
-                   <Cell {...props}>
-                     {
-                       <div><RaisedButton label="Sil" secondary={true} style={styles.buttonPadding} onTouchTap={()=>this.handleUserDelete(this.state.filteredDataList[rowIndex].id)} />
-                       <RaisedButton label="Düzenle" primary={true}/></div>
-                     }
-                   </Cell>
-                 )
-                   }
-                 width={300}
-               />
-             </Table>
-            <br/>
-        </div>
+                </div>
+              </div>
     );
   }
 }
