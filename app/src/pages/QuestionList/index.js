@@ -8,17 +8,39 @@ import FixedDataTable from 'fixed-data-table';
 import {log2,db,util} from '../../utils/'
 import QuestionsTable from './QuestionsTable'
 import QuestionsFilter from './QuestionsFilter'
+import DropDownMenu from 'material-ui/DropDownMenu';
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import IconMenu from 'material-ui/IconMenu';
+import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
+import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
+import TextField from 'material-ui/TextField';
+
 const {Table, Column, Cell} = FixedDataTable;
-const styles = {
-};
+
 const allQuestions = db.getQuestionsFromStorage();
 export default class QuestionSee extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {data:allQuestions};
-    util.bindFunctions.call(this,['createNew']);
+    this.state = {
+    data: allQuestions,
+    setType: 0,
+    categoryType: 0
+  };
+  util.bindFunctions.call(this,['setTypeValueChange','categoryTypeValueChange']);
+
   }
-  handleChange = (event, index, value) => this.setState({value});
+  setTypeValueChange = function changed(newData, NewSetType){
+  this.setState({data: newData,
+    setType: NewSetType,
+  });
+  }
+  categoryTypeValueChange = function chanced(newData, NewCategoryType){
+  this.setState({
+    data: newData,
+    categoryType: NewCategoryType});
+
+  }
 
   createNew = function () {
     window.location.href = '/adminpanel/questionadd';
@@ -26,10 +48,19 @@ export default class QuestionSee extends React.Component {
   render() {
     return (
       <div>
-        <h2>Question List</h2>
         <div>
+          <Toolbar>
+            <ToolbarGroup>
+              <ToolbarTitle text="Question List"/>
+              <FontIcon className="muidocs-icon-custom-sort" />
+              <ToolbarSeparator />
+
+            <QuestionsFilter onChange={this.setTypeValueChange} setType={this.state.setType} onChangeCategory={this.categoryTypeValueChange} categoryType={this.state.categoryType}/>
+
+            </ToolbarGroup>
+          </Toolbar>
+
           <RaisedButton label="+Create New" secondary={true} onClick={()=> this.createNew()} style={{float:"right"} }/>
-          <QuestionsFilter />
           <QuestionsTable data={this.state.data} />
         </div>
       </div>
