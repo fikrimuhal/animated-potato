@@ -1,7 +1,5 @@
 import _ from 'lodash'
 import {util} from './'
-console.log("--------------")
-console.log(util)
 const questions = []
 const setModels = [
   {
@@ -138,7 +136,7 @@ export const getApplicantList = function getApplicantList() {
   var result = [];
   var seed = 1;
   var names = ["Ahmet","Mehmet","Can","Veli","Öztürk","Türk","Ali","Ayşe","Gül","Levent"]
-  for (var i = 0; i <5; i++) {
+  for (var i = 0; i <500; i++) {
      var name = names[Math.floor(Math.random()*10)];
      var lastName = names[Math.floor(Math.random()*10)];
      var score = Math.floor(Math.random()*100);
@@ -146,7 +144,8 @@ export const getApplicantList = function getApplicantList() {
      result.push({
        fullName: name +' ' + lastName,
        score:score,
-       date:date
+       date:date,
+       id:i
      })
   };
   return result;
