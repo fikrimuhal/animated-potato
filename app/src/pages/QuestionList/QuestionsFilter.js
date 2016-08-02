@@ -20,12 +20,8 @@ const styles = {
     marginLeft:"15px"
   }
 };
-const allSet = [
-  "Default Set","Set 1","Set 2","Set 3", "Back End Set", "Front End Set"
-];
-const categoryList = [
-  "Default Category","Back-End","Front-End","Sistem-Yöneticisi","DBA","Java EE"
-];
+var categoryList = db.getQuestionCategories()
+var allSet = db.getQuestionSets()
 
 export default class QuestionsFilter extends React.Component {
   constructor(props) {

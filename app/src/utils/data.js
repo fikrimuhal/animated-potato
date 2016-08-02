@@ -31,6 +31,7 @@ export const getQuestionsBySetName = function getQuestionsBySetName(setName) {
   var allQuestion = getQuestionsFromStorage();
   var _questions  = _.filter(allQuestion,(q)=> {return _.includes(q.setList,setName);});
   return _questions;
+
 }
 export const getQuestionsByCategory = function getQuestionsByCategory(category) {
   var allQuestion = getQuestionsFromStorage();
@@ -137,7 +138,7 @@ export const getApplicantList = function getApplicantList() {
   var result = [];
   var seed = 1;
   var names = ["Ahmet","Mehmet","Can","Veli","Öztürk","Türk","Ali","Ayşe","Gül","Levent"]
-  for (var i = 0; i <500; i++) {
+  for (var i = 0; i <5; i++) {
      var name = names[Math.floor(Math.random()*10)];
      var lastName = names[Math.floor(Math.random()*10)];
      var score = Math.floor(Math.random()*100);
@@ -153,5 +154,10 @@ export const getApplicantList = function getApplicantList() {
 }
 
 export const getQuestionSets = function getQuestionSets() {
-  return ["Set 1","Set 2","Set 2"];
+  return ["Default Set","Set 1","Set 2","Set 3", "Back End Set", "Front End Set"];
+}
+
+export const getQuestionCategories = function getQuestionCategories(){
+
+  return ["Default Category","Back-End","Front-End","Sistem-Yöneticisi","DBA","Java EE"]
 }
