@@ -1,184 +1,181 @@
-var FakeObjectDataListStore = require('../Deneme/FakeObjectDataListStore');
-var FixedDataTable = require('fixed-data-table');
-var React = require('react');
-import TextField from 'material-ui/TextField';
+import React from 'react'
+require("!style!css!react-data-grid/themes/react-data-grid.css")
+import { Link } from 'react-router'
 import RaisedButton from 'material-ui/RaisedButton';
-import { TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import {log2,util,db} from '../../utils/'
+import {db,log2,util} from '../../utils/'
+import {Table} from 'material-ui/Table';
+import ReactDataGrid from 'react-data-grid';
+import { Toolbar, Data } from 'react-data-grid/addons';
 import IconMenu from 'material-ui/IconMenu';
-import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
 import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
 import MenuItem from 'material-ui/MenuItem';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import _ from 'lodash'
+import TextField from 'material-ui/TextField';
 
-const {Table, Column, Cell} = FixedDataTable;
+const Selectors = Data.Selectors;
+const log = log2("Question Set Details")
+log("Question Set ReactDataGrid",Data)
 
 const styles = {
-  container: {
-    backgroundColor:"#f1f1f1",
-    margin: '134px'
-  },
+  customWidth: {
+   width: 150,
+ },
+};
 
-   buttonPadding: {
-     marginRight: '5'
-   },
-   toolbar:{
-     width: '1000',
-   },
-   toolbarButton:{
-     marginLeft: '270'
-   }
+var questionSetInstance;
+
+class ButtonsColFormatter extends React.Component{
+  constructor(props){
+    super(props)
+    util.bindFunctions.call(this,['onClick'])
+  }
+  onClick = function () {
+    console.dir(questionSetInstance);
+    var rows = questionSetInstance.state.rows;
+    var  news = _.filter(rows,(o)=>{return o.id != this.props.value});
+    questionSetInstance.state={
+      rows : news,
+      originalRows:news,
+      filters:{}
+    };
+    questionSetInstance.forceUpdate();
+
+  }
+  render = function(){
+    console.log("ButtonsColFormatter");
+    return (<div style={{padding:"5px 5px 5px 5px"}}>
+      <RaisedButton primary={true} onClick={this.onClick}>Sil</RaisedButton>
+    </div>)
+  }
 }
 
-const TextCell = ({rowIndex, data, col, ...props}) => (
-  <Cell {...props}>
-    {data.getObjectAt(rowIndex)[col]}
-  </Cell>
-);
+var columns = [
+{
+  key: 'id',
+  name: 'ID',
+  width: 80,
+  filterable: true
+},
+{
+  key: 'title',
+  name: 'Set Adı',
+  sortable : true,
+  editable : true,
+  filterable: true
+},
+{
+  key: 'count',
+  name: 'Soru Sayısı',
+  sortable : true
+},
+{
+  key:'id',
+  name: 'İşlemler',
+  formatter:ButtonsColFormatter
+}
+]
+
 export default class QuestionSetDetails extends React.Component {
   constructor(props) {
     super(props);
-    this._dataList = db.getQuestionSetAddToStorage();
-
+      var rows = db.getQuestionSetAddToStorage();
     this.state = {
-      filteredDataList: this._dataList,
-      value: 3,
-      addOptionDisplay: 'none'
+      rows : rows, filters : {},
+      originalRows:rows
     };
-    this._onFilterChange = this._onFilterChange.bind(this);
-    util.bindFunctions.call(this,['handleQuestionSetDelete'])
+    util.bindFunctions.call(this,['getRows','getSize',
+                                  'rowGetter','handleFilterChange',
+                                  'handleGridSort','handleRowUpdated','handleSetSave'])
+    questionSetInstance = this;
   }
 
-  handleChange = function(event, index, value){
-    this.setState({value});
-}
-  _onFilterChange(e) {
-    if (!e.target.value) {
-      this.setState({
-        filteredDataList: this._dataList,
-      });
+  getRows = function() {
+   return Selectors.getRows(this.state);
+ }
+ handleRowUpdated = function(e){
+    //merge updated row with current row and rerender by setting state
+    var rows = this.state.rows;
+    Object.assign(rows[e.rowIdx], e.updated);
+    this.setState({rows:rows});
+  }
 
-    }
+ getSize = function() {
+   return this.getRows().length;
+ }
 
-     var filterBy = e.target.value.toLowerCase();
-     var size = this._dataList.length;
-     var arr = [];
-     for (var index = 0; index < size; index++) {
-       var setName = this._dataList[index].title;
-       if (setName.toLowerCase().indexOf(filterBy) !== -1) {
-         arr.push(this._dataList[index]);
-       }
+ rowGetter = function(rowIdx){
+   var rows = this.getRows();
+   return rows[rowIdx];
+ }
+
+ handleFilterChange = function(filter){
+   let newFilters = Object.assign({}, this.state.filters);
+   if (filter.filterTerm) {
+     newFilters[filter.columnKey] = filter.filterTerm;
+   } else {
+    delete newFilters[filter.columnKey];
+   }
+   this.setState({filters: newFilters});
+ }
+ handleGridSort = function (sortColumn, sortDirection) {
+   var comparer = function(a, b) {
+     if(sortDirection === 'ASC'){
+       return (a[sortColumn] > b[sortColumn]) ? 1 : -1;
+     }else if(sortDirection === 'DESC'){
+       return (a[sortColumn] < b[sortColumn]) ? 1 : -1;
      }
-    this.setState({
-      filteredDataList: arr
-    });
-  }
-  handleSearchSet = function(event, value){
-    this.setState({addOptionDisplay: true});
-  }
-  handleSetSave = function(event, value){
-      var input = this.refs.inputQuestionSet.input
-      if(input.value != null && input.value != "")
-      {
-        db.setQuestionSetAddToStorage(input.value, util.guid())
-        this.setState({
-          filteredDataList: db.getQuestionSetAddToStorage()
-        })
-      }
-  }
-  handleQuestionSetDelete = function(key)
-  {
-    var n = key.toString();
-    var sets = db.getQuestionSetAddToStorage();
-    var newModels = _.dropWhile(sets, function(set) { return set.id === n});
-
-    console.log(newModels);
-    this.setState({
-      filteredDataList: newModels
-    });
-
-  }
+   }
+   var rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
+   this.setState({rows : rows});
+ }
+handleSetSave = function(event, value){
+  console.log("yeni set adı", value);
+    var input = this.refs.inputQuestionSet.input
+    if(input.value != null && input.value != "")
+    {
+      db.setQuestionSetAddToStorage(input.value, util.guid())
+      var rows = db.getQuestionSetAddToStorage();
+      this.setState({
+        rows : rows,
+        filters : {},
+        originalRows:rows
+      })
+    }
+}
   render() {
-    var {filteredDataList} = this.state;
-    //console.log(filteredDataList)
-
     return (
+
+      <div>
         <div>
-            <div>
-              <br/>
-                <Toolbar style={styles.toolbar}>
-                  <ToolbarGroup>
-                    <ToolbarTitle text="Question Set Details"/>
-                    <FontIcon className="muidocs-icon-custom-sort" />
-                    <ToolbarSeparator />
-
-                    <TextField onChange={this._onFilterChange}
-                      hintText="Soru Seti Ara"
-                    />
-                  <RaisedButton label="Soru Seti Ekle" primary={true} onClick={this.handleSearchSet.bind(this)} style={styles.toolbarButton}/>
-
-                  </ToolbarGroup>
-                </Toolbar>
-
-            </div>
-            <div style={{display: this.state.addOptionDisplay}}>
-            <TextField ref="inputQuestionSet"
-              hintText="Soru Seti Ekle"
-            />
+         <br/>
+          <h4>Question Set Details</h4>
+       </div>
+       <div>
+         <TextField ref="inputQuestionSet"
+                hintText="Soru Seti Ekle"
+              />
             <br/>
-            <RaisedButton label="Ekle" secondary={true} onClick={this.handleSetSave.bind(this)}/>
-            </div>
-
-               <Table
-               rowHeight={50}
-               rowsCount={this.state.filteredDataList.length}
-               headerHeight={50}
-               height={700}
-               width= {1200}
-               >
-
-               <Column
-                 header={<Cell>Soru Seti Adı</Cell>}
-                 cell={({rowIndex, ...props}) => (
-              <Cell {...props}>
-                {this.state.filteredDataList[rowIndex].title}
-              </Cell>
-
-            )}
-                 fixed={true}
-                 width={400}
-               />
-               <Column
-                 header={<Cell>Soru Sayısı</Cell>}
-                 cell={({rowIndex, ...props}) => (
-              <Cell {...props}>
-                {this.state.filteredDataList[rowIndex].count}
-
-              </Cell>
-            )}
-                 fixed={true}
-                 width={400}
-               />
-               <Column
-                 header={<Cell>İşlemler</Cell>}
-                 cell={({rowIndex, ...props}) => (
-                   <Cell {...props}>
-                     {
-
-                       <div><RaisedButton label="Sil" secondary={true} style={styles.buttonPadding}  onClick={()=>this.handleQuestionSetDelete(this.state.filteredDataList[rowIndex].id)}/>
-                           <RaisedButton label="Düzenle" primary={true}/></div>
-                           }
-                   </Cell>
-                 )
-                   }
-                 width={400}
-               />
-             </Table>
-            <br/>
+          <RaisedButton label="Ekle" secondary={true} onClick={this.handleSetSave}/>
         </div>
+
+        <div>
+          <ReactDataGrid
+                 columns={columns}
+                 rowGetter={this.rowGetter}
+                 enableCellSelect={true}
+                 rowsCount={this.getSize()}
+                 minHeight={500}
+                 rowHeight={45}
+                 toolbar={<Toolbar enableFilter={true}/>}
+                 onAddFilter={this.handleFilterChange}
+                 onGridSort={this.handleGridSort}
+                 onRowUpdated={this.handleRowUpdated} />
+        </div>
+      </div>
+
+
     );
   }
 }

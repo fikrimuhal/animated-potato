@@ -19,7 +19,7 @@ class ButtonsColFormatter extends React.Component{
   }
   onClick = function () {
     console.dir(userProfileInstance);
-    var rows = db.getUsers();
+    var rows = userProfileInstance.state.rows;
     var  news = _.filter(rows,(o)=>{return o.id != this.props.value});
     userProfileInstance.state={
       rows : news,
@@ -31,8 +31,8 @@ class ButtonsColFormatter extends React.Component{
   }
   render = function(){
     console.log("ButtonsColFormatter");
-    return (<div style={{padding:"5px 5px 5px 5px"}}>
-      <RaisedButton primary={true} onClick={this.onClick}>Sil</RaisedButton>
+    return (<div>
+      <RaisedButton primary={true} onClick={this.onClick} >Sil</RaisedButton>
     </div>)
   }
 }
@@ -42,7 +42,6 @@ class ImageDisplayer extends React.Component{
     super(props)
   }
   render = function(){
-    console.log("ButtonsColFormatter");
     return (
 
       <img src={this.props.value} width={50} height={30} />
@@ -58,32 +57,7 @@ const styles = {
    width: 150,
  },
 };
-const data = db.getApplicantList();
-function randomDate(start, end) {
-  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toLocaleDateString();
-}
 
-//helper to create a fixed number of rows
-function createRows(numberOfRows){
-  var _rows = [];
-  for (var i = 1; i < numberOfRows; i++) {
-    _rows.push({
-      id: i,
-      task: 'Task ' + i,
-      complete: Math.min(100, Math.round(Math.random() * 110)),
-      priority : ['Critical', 'High', 'Medium', 'Low'][Math.floor((Math.random() * 3) + 1)],
-      issueType : ['Bug', 'Improvement', 'Epic', 'Story'][Math.floor((Math.random() * 3) + 1)],
-      startDate: randomDate(new Date(2015, 3, 1), new Date()),
-      completeDate: randomDate(new Date(), new Date(2016, 0, 1))
-    });
-  }
-  return _rows;
-}
-var rowGetter = function(i){
-  return _rows[i];
-};
-
-//Columns definition
 var columns = [
 {
   key: 'id',
@@ -139,8 +113,6 @@ var columns = [
   formatter:ButtonsColFormatter
 }
 ]
-
-
 
 export default class UserProfile extends React.Component {
   constructor(props) {
@@ -210,11 +182,11 @@ userProfileInstance = this;
                          enableCellSelect={true}
                          rowsCount={this.getSize()}
                          minHeight={500}
+                         rowHeight={45}
                          toolbar={<Toolbar enableFilter={true}/>}
                          onAddFilter={this.handleFilterChange}
                          onGridSort={this.handleGridSort}
                          onRowUpdated={this.handleRowUpdated} />
-                         />
 
                 </div>
               </div>
