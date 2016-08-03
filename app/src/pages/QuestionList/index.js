@@ -36,6 +36,7 @@ export default class QuestionSee extends React.Component {
   });
   }
   categoryTypeValueChange = function chanced(newData, NewCategoryType){
+    console.log("yeni veri", newData);
   this.setState({
     data: newData,
     categoryType: NewCategoryType});
