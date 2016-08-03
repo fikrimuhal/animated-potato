@@ -16,19 +16,16 @@ export  const bindFunctions = function bindFunctions(functions) {
 }
 
 
-
-export const myToast = (stateKey,setState,state)=>(message,duration) => {
-  var toastSettings  = state[stateKey];
+export const myToast = (stateKey,component)=>(message,duration) => {
+  var toastSettings  = component.state[stateKey];
   toastSettings.open=true;
   toastSettings.message=message;
-  setState({
-    [stateKey]:toastSettings
-  });
+  component.state[stateKey] = toastSettings;
+  component.forceUpdate();
  setTimeout(function () {
-   toastSettings.open=close;
-   setState({
-     [stateKey] : toastSettings
-  });
+   toastSettings.open=false;
+   component.state[stateKey] = toastSettings;
+   component.forceUpdate();
   },duration);
 }
 
@@ -37,4 +34,11 @@ export const obj2Array = function obj2Array(obj) {
     return obj[key];
   });
   return arr;
+}
+
+export const setToken = function setToken(token) {
+  localStorage.setItem("token",token);
+}
+export const getToken = function getToken() {
+  return localStorage.getItem("token");
 }

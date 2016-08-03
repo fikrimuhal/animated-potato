@@ -12,9 +12,6 @@ import { Toolbar, Data } from 'react-data-grid/addons';
 const Selectors = Data.Selectors;
 const log = log2("ParticipantList")
 log("ReactDataGrid",Data)
-
-
-
 const styles = {
   customWidth: {
    width: 150,

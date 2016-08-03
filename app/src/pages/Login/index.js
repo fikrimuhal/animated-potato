@@ -24,7 +24,7 @@ export default React.createClass({
         <TextField hintText="Ad Soyad"   floatingLabelText="Ad Soyad" /><br/>
         <TextField hintText="Şifre"      floatingLabelText="Şifre" /> <br/>
         <div style={styles.button}>
-            <Link to="/adminpanel"><RaisedButton label="Giriş Yap" primary={true}/></Link>
+          <Link to="/adminpanel"><RaisedButton label="Giriş Yap" primary={true}/></Link>
           <RaisedButton label="Şifremi Unuttum" secondary={true}/>
         </div>
       </div>

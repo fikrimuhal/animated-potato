@@ -98,6 +98,11 @@ export const setUser = function setUser(userInfo) {
   var users = getUsers();
   users.push(userInfo);
   localStorage.setItem('users', JSON.stringify(users));
+  var result = {
+    status:"ok",
+    token:"abc"
+  }
+  return result;
 }
 
 export const getApplicants = function getApplicants() {
@@ -160,4 +165,15 @@ export const getQuestionSets = function getQuestionSets() {
 export const getQuestionCategories = function getQuestionCategories(){
 
   return ["Default Category","Back-End","Front-End","Sistem-Yöneticisi","DBA","Java EE"]
+}
+export const authenticate = function authenticate(username,password) {
+  var successMessage = {
+    status:"ok",
+    token:"abc"
+  };
+  var errorMessage = {
+    status:"fail"
+  };
+  var result = (Math.floor(Math.random()*10) % 3) != 0;
+  return (result)? successMessage:errorMessage;
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { Link } from 'react-router'
+import Router from 'react-router'
 
 const styles = {
   contente:{
@@ -14,13 +14,17 @@ const styles = {
   display: 'inline-block',
 
 };
-export default React.createClass({
-  render() {
-    return (
-        <div style={styles.container}>
-          <div style={styles.menu}>
-          </div>
-          <div style={styles.contente}>{this.props.children}</div>
+export default class  AdminLayout extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render = function () {
+    return(
+      <div style={styles.container}>
+        <div style={styles.menu}>
         </div>
-    )}
-})
+        <div style={styles.contente}>{this.props.children}</div>
+      </div>      
+    )
+  }
+}

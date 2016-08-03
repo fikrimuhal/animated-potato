@@ -12,7 +12,8 @@
     "test:ci": "npm run karma conf/karma.ci.conf.js -- --single-run",
     "start": "webpack-dev-server --history-api-fallback --config conf/webpack.config.js --port 8081 --hot --progress --colors --content-base ./build",
     "build": "cross-env NODE_ENV=production webpack --config conf/webpack.production.js",
-    "build:gh": "npm run build && node ./build-gh-pages.js && rm -r ./dist"
+    "build:gh": "npm run build && node ./build-gh-pages.js && rm -r ./dist",
+    "deploy:surge":"npm build && surge -p build --domain animatedpotato.surge.sh"
   },
   "author": "Ebru Gulec <glcebru94@gmail.com>",
   "license": "GPL",
