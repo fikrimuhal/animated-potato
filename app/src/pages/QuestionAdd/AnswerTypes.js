@@ -41,6 +41,7 @@ export default class AnswerTypes  extends React.Component {
             <RadioButton value="checkbox" label="Checkbox" style={styles.child}/>
             <RadioButton value="freetext" label="FreeText" style={styles.child} />
             <RadioButton value="number" label="Number" style={styles.child}/>
+            <RadioButton value="yesno" label="Yes/No" style={styles.child}/>
         </RadioButtonGroup>
       </div>
     </div>

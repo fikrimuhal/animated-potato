@@ -91,7 +91,8 @@ export default class ParticipantList extends React.Component {
     log("rendered");
     return (
               <div>
-                <h2>Participant List</h2>
+                <h4>Participant List</h4>
+                <br/>
                 <div>
                   <ReactDataGrid
                          columns={columns}

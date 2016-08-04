@@ -64,10 +64,19 @@ export default class QuestionAdd extends React.Component {
     //Sorunun cevap türü değişikliği üste aktaran event
     var oldStateData = this.props.data;
     var newStateData = oldStateData.update("type", (v) => {return newAnswerType;});
-    if (newAnswerType != "radio" && newAnswerType!="checkbox") {
+    if (newAnswerType != "radio" && newAnswerType!="checkbox" && newAnswerType!="yesno") {
           newStateData = newStateData.remove("options");
           newStateData = newStateData.set("options",Immutable.fromJS([]));
         }
+    if(newAnswerType === "yesno")
+    {
+      var newKey1 = util.guid();
+      var newKey2 = util.guid();
+
+      var options = [{id:newKey1, text: "Yes",weight:1},{id:newKey2, text: "No",weight:0}]
+      newStateData = newStateData.set("options",Immutable.fromJS(options));
+    }
+
     this.props.onChange(newStateData,oldStateData);
   }
   handleOnQuestionOptionsChange = function (newOptions) {
