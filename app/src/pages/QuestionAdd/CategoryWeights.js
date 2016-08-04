@@ -91,7 +91,7 @@ render= ()=>{
                         <div style={styles.child} key={kategori}>
                           <Checkbox ref="cbKategori" checked={checked}  key={kategori} value={kategori} label={kategori} onClick={() =>  this.categorySelected(kategori)}/>
                           <span>Weight: {weight}</span>
-                          <Slider   value={weight} disabled={!checked} onChange={(event,value)=>this.sliderChange(kategori,foundKey,value)} />
+                          <Slider   min={0} max={10} step={1} value={weight} disabled={!checked} onChange={(event,value)=>this.sliderChange(kategori,foundKey,value)} />
                         </div>
                       )
 

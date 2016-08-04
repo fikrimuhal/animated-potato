@@ -21,11 +21,11 @@ const questionModel = {
   categoryWeights:[
     {
       category:"Back-End",
-      weight:0.1
+      weight:1
     },
     {
       category:"Front-End",
-      weight:0.3
+      weight:1
     }
   ],
   options:[],

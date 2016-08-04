@@ -166,14 +166,51 @@ export const getQuestionCategories = function getQuestionCategories(){
 
   return ["Default Category","Back-End","Front-End","Sistem-Yöneticisi","DBA","Java EE"]
 }
+
+
+
 export const authenticate = function authenticate(username,password) {
-  var successMessage = {
-    status:"ok",
-    token:"abc"
-  };
-  var errorMessage = {
-    status:"fail"
-  };
-  var result = (Math.floor(Math.random()*10) % 3) != 0;
-  return (result)? successMessage:errorMessage;
+
+  var promise;
+  console.log(moment().format('LLLL'));
+
+    promise = new Promise(function(resolve, reject) {
+
+      console.log("username,password",username,password);
+      var successMessage = {
+        status:"ok",
+        token:"abc"
+      };
+
+      var errorMessage = {
+        status:"fail"
+      };
+      var result = (Math.floor(Math.random()*10) % 3) != 0;
+      var message = (result)? successMessage:errorMessage;
+      resolve(message)
+      // setTimeout(()=> resolve(message)
+      // ,2000)
+
+    });
+
+
+
+  return promise;
+  // return (result)? successMessage:errorMessage;
 }
+
+export const auth2 = (username,password) => fetch("/authentication",{
+    method:'POST',
+    body:JSON.stringify({"username":username,"password":password})
+  })
+
+
+  export const getApiPromise = method=>data=> fetch('/'+method,{
+    method:'POST',
+    body:  JSON.stringify(data),
+    headers: new Headers({
+     'Content-Type': 'application/json',
+     Accept: 'application/json',
+     token:"1111"
+   })
+ });

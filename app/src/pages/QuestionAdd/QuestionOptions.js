@@ -58,7 +58,7 @@ export default class QuestionOptions extends React.Component{
                       <p>Option Details</p>
                       <hr/>
                       <TextField ref={"txtOptionText-" + itemKey } hintText="Seçenek" value={item.get('text')} onChange={()=>_this.handleOptionTextChanged(itemKey)}/><br />
-                      <Slider  onChange={(event,value)=> _this.handleSliderValueChange(itemKey,value)}  defaultValue={item.get('weight')} value={item.get('weight')} />
+                      <Slider  onChange={(event,value)=> _this.handleSliderValueChange(itemKey,value)}  defaultValue={item.get('weight')} value={item.get('weight')} min={0.05} max={1.0} step={0.05}/>
                       <b>weight: {item.get('weight')}</b>
                       <RaisedButton primary={true} onClick={()=> _this.removeOptionFromModel(itemKey)} style={{float:"right"}}>Remove</RaisedButton>
                   </div>

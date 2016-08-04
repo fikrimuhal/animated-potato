@@ -49,18 +49,19 @@ export default class UserSignIn extends React.Component{
        toastHelper("Fields are required!",2000);
        return;
      }
+      //var promise = db.getApiPromise("authenticate")({"username":username,"password":password})
+     db.authenticate(username,password).then((message)=>{
+       console.log("authenticate then",message);
+        if (message.status=="ok") {
+          util.setToken(message.token);
+           toastHelper("Authentication success. Navigating to homepage...",2000);
+           browserHistory.push("/home");
+        }
+        else {
+          toastHelper("Authentication failed. Try again",2000);
+        }
 
-       if (db.authenticate(username,password)) {
-          toastHelper("Authentication success. Navigating to homepage...",2000);
-
-          setTimeout(()=>{
-            browserHistory.push("/home");
-          },2000)
-
-       }
-       else {
-         toastHelper("Authentication failed. Try again",2000);
-       }
+     });
 
 
    }

@@ -35,7 +35,8 @@ ReactDOM.render((
   <Router history={browserHistory}>
       <Route path="/" component={MainLayoutAuthenticated} >
               <IndexRoute component={pages.UserHome}/>
-              <Route path="interview" component={pages.Interview}>
+              <Route path="home" component={pages.UserHome} />
+          <Route path="interview" component={pages.Interview} >
               <Route path="applicationform" component={pages.ApplyForm}/>
               <Route path="detailssaved/::userId" component={pages.ApplyCompleted}/>
               <Route path="questions/:userId" component={pages.QuestionList}/>

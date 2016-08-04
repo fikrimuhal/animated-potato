@@ -7,7 +7,7 @@ import Subheader    from 'material-ui/Subheader'
 //Styles
 const styles = {
   paperStyle: {
-    width:"800px",
+    width:"80%",
     height:300,
     margin:"0 auto",
     marginTop:"10px",
