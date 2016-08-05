@@ -25,16 +25,46 @@ const styles = {
         marginRight: "5px"
     }
 }
-export default  class  AdminLogin extends  React.Component{
-    constructor(props){
-    super(props)
-    }
-    render = ()=>{
-    return(
-    <div>
 
-    </div>
-    )
+//variables and consts
+var toastHelper = null;
+
+export default  class AdminLogin extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            toastSettings: {
+                open: false,
+                message: "",
+                duration: 0
+            }
+        }
+        util.bindFunctions.call(this, ['signIn']);
+        toastHelper = util.myToast("toastSettings", this);
+    }
+    signIn=function () {
+        var username = this.refs.username.input.value;
+        var password = this.refs.password.input.value;
+        if (username == "" || password == "") {
+            toastHelper("Fields are required!", 2000);
+            return;
+        }
+    }
+    render = ()=> {
+        return (
+            <div>
+                <Paper style={styles.paperStyle}>
+                    <Subheader>Fikrimuhal HR - Admin Login</Subheader>
+                    <TextField ref={"username"} hintText="Username" floatingLabelText="Username"/><br/>
+                    <TextField ref={"password"} hintText="Password" floatingLabelText="Password"/> <br/>
+                    <div>
+                        <RaisedButton label="SignIn" primary={true} onClick={this.signIn}/>
+                        <RaisedButton label="Forget password" secondary={true}/>
+                    </div>
+                </Paper>
+                <Toast settings={this.state.toastSettings}/>
+            </div>
+        )
     }
 }
 

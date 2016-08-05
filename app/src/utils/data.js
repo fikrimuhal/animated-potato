@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import {util} from './'
+import * as util from './utils'
 import moment from 'moment'
 const questions = []
 const setModels = [
@@ -179,7 +179,12 @@ export const authenticate = function authenticate(username,password) {
       console.log("username,password",username,password);
       var successMessage = {
         status:"ok",
-        token:"abc"
+        token:"abc",
+        userInfo:{
+          name:"Mesut",
+          lastname:"Yiğit",
+          admin:(username=="admin")
+        }
       };
 
       var errorMessage = {
@@ -199,18 +204,46 @@ export const authenticate = function authenticate(username,password) {
   // return (result)? successMessage:errorMessage;
 }
 
-export const auth2 = (username,password) => fetch("/authentication",{
-    method:'POST',
-    body:JSON.stringify({"username":username,"password":password})
-  })
+export const auth2 = (username,password) => {
+    return  fetch("/authentication",{
+        method:'POST',
+        body:JSON.stringify({"username":username,"password":password})
+      });
+}
 
+export const getApiPromise = method => data =>{
+    return fetch('/'+method,{
+        method:'POST',
+        body:  JSON.stringify(data),
+        headers: new Headers({
+         'Content-Type': 'application/json',
+         'Accept': 'application/json',
+         'token':"1111"
+       })
+     });
+}
 
-  export const getApiPromise = method=>data=> fetch('/'+method,{
-    method:'POST',
-    body:  JSON.stringify(data),
-    headers: new Headers({
-     'Content-Type': 'application/json',
-     Accept: 'application/json',
-     token:"1111"
-   })
- });
+export const getUserInfo= ()=> {
+  return JSON.parse(localStorage.getItem("userInfo"));
+}
+export const setUserInfo= (userInfo)=> {
+  localStorage.setItem("userInfo",JSON.stringify(userInfo));
+}
+
+export const isLoggedIn = ()=>{
+    return util.getToken() != null;
+}
+
+export const isAdmin = ()=>{
+  var userInfo = getUserInfo();
+  if (isLoggedIn() && userInfo.admin)
+    return true;
+  return false;
+}
+
+export const isUser = ()=>{
+    var userInfo = getUserInfo();
+    if(isLoggedIn() && !userInfo.admin)
+        return true;
+    return false;
+}

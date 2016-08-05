@@ -14,6 +14,7 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import FontIcon from 'material-ui/FontIcon';
 import SvgIcon from 'material-ui/SvgIcon';
 import {log2,util} from '../utils/'
+import * as db from '../utils/data'
 const log = log2("MainLayout.js:")
 const styles = {
   height: '100%'
@@ -32,11 +33,10 @@ export default class MainLayoutAuthenticated extends React.Component {
     }
     util.bindFunctions.call(this,['toogleMenu'])
   }
-  componentWillMount= function() {
+  componentWillMount = function() {
     log("*******cwm********");
-    if (util.getToken() == null) {
-      browserHistory.push("/signin");
-    }
+    if (db.isUser())
+        browserHistory.push("/signin");
   }
   toogleMenu = function (event) {
     console.log("tıklandı");
