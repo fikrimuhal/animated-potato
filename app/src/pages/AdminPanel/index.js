@@ -25,16 +25,11 @@ export default class AdminPanel extends React.Component{
     constructor(props){
         super(props)
     }
-    componentWillMount = ()=>{
-        if(!db.isAdmin()){
-            browserHistory.push("/signin");
-        }
-    }
     render = ()=>{
        return(
-           <div style={styles.container}>
-               <AdminMenu/>
-               <div style={styles.contente}>{this.props.children}</div>
+           <div>
+               {/*<AdminMenu/>*/}
+               {this.props.children}
            </div>
        )
    }

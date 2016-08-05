@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'react'
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Paper from 'material-ui/Paper';

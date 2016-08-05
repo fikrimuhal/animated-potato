@@ -1,49 +1,33 @@
 import React from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Link,browserHistory } from 'react-router'
-import RaisedButton from 'material-ui/RaisedButton';
 import AppBar from 'material-ui/AppBar';
 import Paper from 'material-ui/Paper';
 import Drawer from 'material-ui/Drawer';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import FontIcon from 'material-ui/FontIcon';
-import SvgIcon from 'material-ui/SvgIcon';
-import {log2,util} from '../utils/'
+import {log2} from '../utils/'
+import * as util from '../utils/utils'
 import * as db from '../utils/data'
 const log = log2("MainLayout.js:")
-const styles = {
-  height: '100%'
-};
-var menuItems = [
-  { route: 'interview', text: 'Interview' },
-  { route: '/interview/applicationform', text: 'Apply Form' },
-  { route: '/adminpanel', text: 'Admin Panel' }
-];
-
 export default class MainLayoutAuthenticated extends React.Component {
   constructor(props){
-    super(props)
+    super(props);
     this.state={
       open:false
-    }
+    };
     util.bindFunctions.call(this,['toogleMenu'])
   }
   componentWillMount = function() {
-    log("*******cwm********");
     if (db.isUser())
         browserHistory.push("/signin");
-  }
+  };
   toogleMenu = function (event) {
     console.log("tıklandı");
     this.setState({
       open:!this.state.open
     })
-  }
+  };
   render= function () {
     return  (
 

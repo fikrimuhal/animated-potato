@@ -13,7 +13,7 @@
     "start": "webpack-dev-server --history-api-fallback --config conf/webpack.config.js --port 8081 --hot --progress --colors --content-base ./build",
     "build": "cross-env NODE_ENV=production webpack --config conf/webpack.production.js",
     "build:gh": "npm run build && node ./build-gh-pages.js && rm -r ./dist",
-    "deploy:surge":"npm build && surge -p build --domain animatedpotato.surge.sh"
+    "deploy:surge": "npm build && surge -p build --domain animatedpotato.surge.sh"
   },
   "author": "Ebru Gulec <glcebru94@gmail.com>",
   "license": "GPL",
@@ -71,6 +71,7 @@
     "file-loader": "^0.8.5",
     "gh-pages": "^0.9.0",
     "html-webpack-plugin": "^2.8.1",
+    "image-webpack-loader": "^2.0.0",
     "isparta": "^4.0.0",
     "isparta-instrumenter-loader": "^1.0.0",
     "karma": "^0.13.19",

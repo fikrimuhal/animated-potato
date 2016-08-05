@@ -52,8 +52,7 @@ ReactDOM.render((
             </Route>
             <Route path="deneme" component={pages.Deneme}/>
         </Route>
-
-        <Route path="/" component={MainLayout}>
+        <Route path="/" component={AdminLayout}>
             <Route path="adminpanel" component={pages.AdminPanel}>
                 <Route path="listofparticipants" component={pages.ListOfParticipants}/>
                 <Route path="usersprofile" component={pages.UserProfile}/>
@@ -61,7 +60,6 @@ ReactDOM.render((
                 <Route path="questionsee" component={pages.ViewQuestion}/>
                 <Route path="questionadd" component={pages.QuestionAdd}/>
                 <Route path="questionsetdetails" component={pages.QuestionSetDetails}/>
-
                 <Route path="questionlist" component={pages.QuestionList}/>
             </Route>
         </Route>
