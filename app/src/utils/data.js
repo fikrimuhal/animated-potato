@@ -247,3 +247,8 @@ export const isUser = ()=>{
         return true;
     return false;
 }
+
+export const clearUserAuthenticationInfo = ()=>{
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("token");
+}
