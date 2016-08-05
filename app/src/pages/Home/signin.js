@@ -27,6 +27,10 @@ const styles = {
     rightFloated: {
         float: "right",
         marginRight: "5px"
+    },
+    header:{
+        fontSize:"15px"
+
     }
 }
 
@@ -40,7 +44,7 @@ export default class UserSignIn extends React.Component {
                 duration: 0
             }
         }
-        util.bindFunctions.call(this, ['signIn']);
+        util.bindFunctions.call(this, ['signIn','signUp']);
         toastHelper = util.myToast("toastSettings", this);
     }
 
@@ -51,20 +55,15 @@ export default class UserSignIn extends React.Component {
             toastHelper("Fields are required!", 2000);
             return;
         }
-        //var promise = db.getApiPromise("authenticate")({"username":username,"password":password})
         db.authenticate(username, password).then((message)=> {
             console.log("authenticate then", message);
             if (message.status == "ok") {
                 util.setToken(message.token);
                 db.setUserInfo(message.userInfo);
-                //toastHelper("Authentication success. Navigating to homepage...", 2000);
-
-                    if(db.isUser())
-                        browserHistory.push("/home");
-                    else
-                        browserHistory.push("/adminpanel");
-
-
+                if(db.isUser())
+                    browserHistory.push("/home");
+                else
+                    browserHistory.push("/adminpanel");
             }
             else {
                 toastHelper("Authentication failed. Try again", 1000);
@@ -74,18 +73,21 @@ export default class UserSignIn extends React.Component {
 
 
     }
+    signUp = function () {
+        browserHistory.push("/signup");
+    }
     render = function () {
         return (
-            <div>
-                <Paper style={styles.paperStyle}>
-                    <Subheader>Fikrimuhal - User Sign In</Subheader>
+            <div style={{marginLeft:"20%"}}>
+                    <Subheader style={styles.header}><b> Fikrimuhal HR - Login</b></Subheader>
                     <TextField ref={"username"} hintText="Username" floatingLabelText="Username"/><br/>
                     <TextField ref={"password"} hintText="Password" floatingLabelText="Password"/> <br/>
                     <div>
-                        <RaisedButton label="SignIn" primary={true} onClick={this.signIn}/>
-                        <RaisedButton label="Forget password" secondary={true}/>
+                        <RaisedButton label="Login" primary={true} onClick={this.signIn}/>
+                        <FlatButton label="Sign Up"  onClick={this.signUp} style={{marginLeft:"10px"}}/>
+                        <FlatButton label="Forget password" style={{marginLeft:"10px"}}/>
                     </div>
-                </Paper>
+
                 <Toast settings={this.state.toastSettings}/>
             </div>
         )

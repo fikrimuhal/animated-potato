@@ -9,21 +9,7 @@ import Subheader    from 'material-ui/Subheader';
 //My Components
 import SignUpForm   from './SignUpForm'
 
-//Styles
-const styles = {
-  paperStyle: {
-    width:"800px",
-    minHeight:300,
-    height:"auto !important",
-    margin:"0 auto",
-    marginTop:"10px",
-    padding:"10px"
-  },
-  rightFloated:{
-    float:"right",
-    marginRight:"5px"
-  }
-}
+
 
 export default class UserSignUp extends React.Component{
    constructor(props){
@@ -31,11 +17,9 @@ export default class UserSignUp extends React.Component{
    }
    render=function () {
      return(
-       <div>
-         <Paper style={styles.paperStyle}>
-           <Subheader>Fikrimuhal - User Sign Up</Subheader>
+       <div style={{width:"400px"}}>
+           <Subheader>Fikrimuhal HR - Sign Up</Subheader>
            <SignUpForm />
-         </Paper>
        </div>
      )
    }

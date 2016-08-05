@@ -39,7 +39,6 @@ export default class AdminLayout extends React.Component {
     };
 
     componentWillMount = function () {
-
         if (!db.isAdmin())
             browserHistory.push("/signin");
     };
