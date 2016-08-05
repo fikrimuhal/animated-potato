@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link ,browserHistory} from 'react-router'
 import {log2,db,util} from '../../utils/'
 import {Toast} from '../../components/MyComponents'
 import RaisedButton from 'material-ui/RaisedButton';
@@ -109,12 +110,13 @@ showMessage = function(message,duration) {
 }
 
 backToList = function () {
-  window.location.href="/adminpanel/questionlist";
+    browserHistory.push("/adminpanel/questionlist");
+
 }
   render() {
       return (
               <div>
-                  <RaisedButton label="<- Back to list" secondary={true}  href="/adminpanel/questionlist" />
+                  <RaisedButton label="<- Back to list" secondary={true}  onClick={this.backToList} />
                   <QuestionAdd onChange={this.modelChanged} onSave={this.onSave} data={this.state.data} allSet={allSet} categoryList={categoryList} />
                   <Toast settings={this.state.toastSettings} />
               </div>

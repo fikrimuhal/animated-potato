@@ -1,6 +1,6 @@
 import React from 'react'
 require("!style!css!react-data-grid/themes/react-data-grid.css")
-import { Link } from 'react-router'
+import { Link ,browserHistory} from 'react-router'
 import RaisedButton from 'material-ui/RaisedButton';
 import {db,log2,util} from '../../utils/'
 import {Table} from 'material-ui/Table';
@@ -179,7 +179,7 @@ export default class QuestionList extends React.Component {
    this.setState({rows : rows});
  }
  createNew = function () {
-     window.location.href = '/adminpanel/questionadd';
+     browserHistory.push("/adminpanel/questionadd");
    }
   render() {
     return (

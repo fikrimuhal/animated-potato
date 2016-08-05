@@ -20,6 +20,10 @@ export default class MainLayoutAuthenticated extends React.Component {
   }
   componentWillMount = function() {
     if (db.isUser())
+        browserHistory.push("/home");
+    else if(db.isAdmin())
+        browserHistory.push("/adminpanel");
+    else
         browserHistory.push("/signin");
   };
   toogleMenu = function (event) {

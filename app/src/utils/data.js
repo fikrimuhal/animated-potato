@@ -182,7 +182,7 @@ export const authenticate = function authenticate(username,password) {
         token:"abc",
         userInfo:{
           name:"Mesut",
-          lastname:"Yiğit",
+          lastname:"Can",
           admin:(username=="admin")
         }
       };
