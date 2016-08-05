@@ -1,4 +1,4 @@
 export AdminLayout              from './AdminLayout'
-export MainLayout               from './MainLayout'
+export DefaultLayout            from './DefaultLayout'
 export InterviewLayout          from './InterviewLayout'
 export UserLayout               from './UserLayout'

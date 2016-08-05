@@ -8,7 +8,7 @@ import {log2} from '../utils/'
 import * as util from '../utils/utils'
 import * as db from '../utils/data'
 import AdminAppBar from './AdminAppBar'
-const userInfo = db.getUserInfo();
+var  userInfo = null;
 const log = log2("MainLayout.js:")
 var image = require("../assets/images/bg1.jpg")
 //Styles
@@ -30,11 +30,12 @@ const styles = {
 }
 export default class AdminLayout extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
+        userInfo = db.getUserInfo();
         this.state = {
             open: false
-        }
-        util.bindFunctions.call(this, ['toogleMenu'])
+        };
+        util.bindFunctions.call(this, ['toogleMenu']);
     };
 
     componentWillMount = function () {

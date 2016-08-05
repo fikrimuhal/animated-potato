@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {log2} from './utils/'
 import * as pages from './pages/'
-import {AdminLayout, MainLayout, UserLayout, InterviewLayout}   from './layouts/'
+import {AdminLayout, DefaultLayout, UserLayout, InterviewLayout}   from './layouts/'
 import perf from "react-addons-perf";
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
@@ -42,8 +42,7 @@ ReactDOM.render((
 
         </Route>
 
-        <Route path="/" component={MainLayout}>
-            <IndexRoute component={pages.Home}/>
+        <Route path="/" component={DefaultLayout}>
             <Route path="signin" component={pages.UserSignIn}/>
             <Route path="signup" component={pages.UserSignUp}/>
             <Route path="deneme" component={pages.Deneme}/>
