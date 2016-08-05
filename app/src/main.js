@@ -43,10 +43,7 @@ ReactDOM.render((
               <Route path="testover" component={pages.TestCompleted}/>
               <Route path="skilltest/:userId" component={pages.SkillTest}/>
           </Route>
-          <Route path="adminlayout" component={AdminLayout}>
-              <Route path="singin" component={pages.Login}/>
-              <Route path="singup" component={pages.SignUp}/>
-          </Route>
+
           <Route path="adminpanel" component={pages.AdminPanel}>
                 <Route path="listofparticipants" component={pages.ListOfParticipants}/>
                 <Route path="usersprofile" component={pages.UserProfile}/>
@@ -59,10 +56,15 @@ ReactDOM.render((
           </Route>
         <Route path="deneme" component={pages.Deneme} />
       </Route>
+
       <Route path="/" component={MainLayout} >
         <IndexRoute component={pages.Home}/>
         <Route path="signin" component={pages.UserSignIn}/>
         <Route path="signup" component={pages.UserSignUp}/>
+        <Route path="adminlayout" component={AdminLayout}>
+              <Route path="singin" component={pages.Login}/>
+              <Route path="singup" component={pages.SignUp}/>
+        </Route>
       </Route>
   </Router>
 ), document.getElementById('app'))
