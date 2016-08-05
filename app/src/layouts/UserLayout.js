@@ -10,7 +10,7 @@ import {log2} from '../utils/'
 import * as util from '../utils/utils'
 import * as db from '../utils/data'
 const log = log2("MainLayout.js:")
-export default class MainLayoutAuthenticated extends React.Component {
+export default class UserLayout extends React.Component {
   constructor(props){
     super(props);
     this.state={
@@ -19,12 +19,9 @@ export default class MainLayoutAuthenticated extends React.Component {
     util.bindFunctions.call(this,['toogleMenu'])
   }
   componentWillMount = function() {
-    if (db.isUser())
-        browserHistory.push("/home");
-    else if(db.isAdmin())
-        browserHistory.push("/adminpanel");
-    else
+    if (!db.isUser())
         browserHistory.push("/signin");
+
   };
   toogleMenu = function (event) {
     console.log("tıklandı");

@@ -58,12 +58,12 @@ export default class UserSignIn extends React.Component {
                 util.setToken(message.token);
                 db.setUserInfo(message.userInfo);
                 //toastHelper("Authentication success. Navigating to homepage...", 2000);
-                if(db.isUser()){
-                    browserHistory.push("/home");
-                }
-                else{
-                    browserHistory.push("/adminpanel");
-                }
+                setTimeout(()=>{
+                    if(db.isUser())
+                        browserHistory.push("/home");
+                    else
+                        browserHistory.push("/adminpanel");
+                },1500)
 
             }
             else {

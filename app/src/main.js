@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {log2} from './utils/'
 import * as pages from './pages/'
-import {AdminLayout, MainLayout, MainLayoutAuthenticated, InterviewLayout}   from './layouts/'
+import {AdminLayout, MainLayout, UserLayout, InterviewLayout}   from './layouts/'
 import perf from "react-addons-perf";
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
@@ -29,7 +29,7 @@ const perflog = log2("performance");
 ReactDOM.render((
 
     <Router history={browserHistory}>
-        <Route path="/" component={MainLayoutAuthenticated}>
+        <Route path="/" component={UserLayout}>
             <IndexRoute component={pages.UserHome}/>
             <Route path="home" component={pages.UserHome}/>
             <Route path="interview" component={pages.Interview}>
@@ -46,10 +46,6 @@ ReactDOM.render((
             <IndexRoute component={pages.Home}/>
             <Route path="signin" component={pages.UserSignIn}/>
             <Route path="signup" component={pages.UserSignUp}/>
-            <Route path="adminlayout" component={AdminLayout}>
-                <Route path="singin" component={pages.Login}/>
-                <Route path="singup" component={pages.SignUp}/>
-            </Route>
             <Route path="deneme" component={pages.Deneme}/>
         </Route>
         <Route path="/" component={AdminLayout}>
