@@ -1,6 +1,5 @@
 import React from 'react'
 require("!style!css!react-data-grid/themes/react-data-grid.css")
-import { Link } from 'react-router'
 import RaisedButton from 'material-ui/RaisedButton';
 import {db,log2,util} from '../../utils/'
 import {Table} from 'material-ui/Table';
@@ -13,6 +12,10 @@ import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-mo
 import MenuItem from 'material-ui/MenuItem';
 import _ from 'lodash'
 import TextField from 'material-ui/TextField';
+import { Link ,browserHistory} from 'react-router'
+import Checkbox from 'material-ui/Checkbox';
+
+
 
 const Selectors = Data.Selectors;
 const log = log2("Question List")
@@ -36,20 +39,12 @@ export class setWeightsFormatter extends React.Component {
   constructor(props) {
     super(props)
   }
-  setType = function(){
-    var setList
-    rows.map((row, i) => {
-      return (<div>
-        {row.setList}
-      </div>)
-    })
-  }
-  render(){
+  render(){ 
     return(
       <div>
-        <div>
-          {this.setType()}
-        </div>
+rrtrg
+         
+
       </div>
     )
   }
@@ -138,9 +133,11 @@ export default class QuestionList extends React.Component {
     };
     util.bindFunctions.call(this,['getRows','getSize',
                                   'rowGetter','handleFilterChange',
-                                  'handleGridSort','handleRowUpdated'])
+                                  'handleGridSort','handleRowUpdated','createNew'])
   }
-
+    createNew = function () {
+        browserHistory.push('/adminpanel/questionadd')
+    }
   getRows = function() {
    return Selectors.getRows(this.state);
  }
@@ -188,6 +185,7 @@ export default class QuestionList extends React.Component {
         <div>
          <br/>
           <h4>Question List</h4>
+            <RaisedButton label="+Create New" secondary={true} onClick={()=> this.createNew()} style={{float:"right"} }/>
        </div>
 
         <div>

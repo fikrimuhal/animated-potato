@@ -55,7 +55,7 @@ render = function () {
             value={sliderValue}
             onChange={this.handleSliderChange}
           />
-          <label>{sliderValue} Yıl</label>
+          <label>{sliderValue}</label>
         </div>
 
     }
