@@ -6,6 +6,7 @@ const log = log2("SkillTestContainer")
 const _questions = db.getQuestionsBySetName("Set 1");
 var answers = [];
 var showToast=null;
+
 export default class SkillTestContainer extends React.Component{
 constructor(props){
   super(props);

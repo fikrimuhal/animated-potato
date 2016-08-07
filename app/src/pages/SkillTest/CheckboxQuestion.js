@@ -2,14 +2,17 @@ import React from 'react'
 import {util,log2} from '../../utils/'
 import Checkbox from 'material-ui/Checkbox';
 import Paper from 'material-ui/Paper';
+import FontIcon from 'material-ui/FontIcon';
+import {blue500} from 'material-ui/styles/colors';
 
 const log = log2("CheckboxQuestion")
 const styles = {
   container: {
-    width:"80%",
+    width:"70%",
     backgroundColor : "yellow",
     margin:"0 auto",
     marginTop:"10px",
+
   },
   paperStyle:{
     height: '100%',
@@ -50,8 +53,9 @@ render = function () {
   return (
     <div style={styles.container}>
       <Paper style={styles.paperStyle} zDepth={0} rounded={false} >
+        <FontIcon color={blue500} className="material-icons md-dark md-inactive" >label</FontIcon>
 
-      {this.props.question.title}
+        {this.props.question.title}
 
 
 

@@ -2,6 +2,9 @@ import React from 'react'
 import {util,log2} from '../../utils/'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Paper from 'material-ui/Paper';
+import FontIcon from 'material-ui/FontIcon';
+import {pink500} from 'material-ui/styles/colors';
+
 
 const log = log2("RadioQuestion")
 const styles = {
@@ -37,7 +40,9 @@ render = function () {
   return (
     <div style={styles.container}>
       <Paper style={styles.paperStyle} zDepth={0} rounded={false} >
-      {this.props.question.title}
+        <FontIcon color={pink500} className="material-icons md-dark md-inactive" >flag</FontIcon>
+
+        {this.props.question.title}
 
 
     <RadioButtonGroup name={this.props.question.id} valueSelected={value} onChange={(event,value)=> this.radioChange(value)}>

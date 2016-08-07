@@ -2,12 +2,14 @@ import React from 'react'
 import {util,log2} from '../../utils/'
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
+import FontIcon from 'material-ui/FontIcon';
+import {yellow500} from 'material-ui/styles/colors';
 
 const log = log2("FreeTextQuestion")
 
 const styles = {
   container: {
-    width:"80%",
+    width:"70%",
     backgroundColor : "yellow",
     margin:"0 auto",
     marginTop:"10px",
@@ -40,12 +42,12 @@ render = function () {
     <div style={styles.container}>
 
       <Paper style={styles.paperStyle} zDepth={0} rounded={false} >
+        <FontIcon color={yellow500} className="material-icons md-dark md-inactive" >extension</FontIcon>
 
-      {this.props.question.title}
+        {this.props.question.title}
 
-      {
-        <TextField  floatingLabelText="Your answer" hintText="Your answer" value={textValue} onChange={this.handleTextboxChange} multiLine={true} rows={5} fullWidth={true}/>
-      }
+        <TextField  floatingLabelText="Your answer" hintText="Your answer" value={textValue} onChange={this.handleTextboxChange} multiLine={true} rows={3} fullWidth={true}/>
+
         </Paper>
 </div>
   )

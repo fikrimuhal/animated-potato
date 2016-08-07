@@ -2,6 +2,8 @@ import React from 'react'
 import {util,log2} from '../../utils/'
 import Slider from 'material-ui/Slider';
 import Paper from 'material-ui/Paper';
+import FontIcon from 'material-ui/FontIcon';
+import {red500} from 'material-ui/styles/colors';
 
 const log = log2("FreeTextQuestion")
 
@@ -39,8 +41,9 @@ render = function () {
   return (
     <div style={styles.container}>
       <Paper style={styles.paperStyle} zDepth={0} rounded={false} >
+        <FontIcon color={red500} className="material-icons md-dark md-inactive" >view_agenda</FontIcon>
 
-      {this.props.question.title}
+        {this.props.question.title}
 
     {
         <div>
