@@ -1,7 +1,8 @@
 import React from 'react'
 import {util,log2} from '../../utils/'
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import Checkbox from 'material-ui/Checkbox';
+import Paper from 'material-ui/Paper';
+
 const log = log2("CheckboxQuestion")
 const styles = {
   container: {
@@ -9,7 +10,11 @@ const styles = {
     backgroundColor : "yellow",
     margin:"0 auto",
     marginTop:"10px",
-    padding:"5px,5px,5px,5px"
+  },
+  paperStyle:{
+    height: '100%',
+    width: '100%',
+    display: 'inline-block',
   }
 }
 export default class CheckboxQuestion extends React.Component{
@@ -44,12 +49,12 @@ render = function () {
   var ans = this.props.answer.value;
   return (
     <div style={styles.container}>
-    <Card>
-    <CardHeader
-      title={this.props.question.title}
-      subtitle=""
-    />
-    <CardText>
+      <Paper style={styles.paperStyle} zDepth={0} rounded={false} >
+
+      {this.props.question.title}
+
+
+
       {
         options.map((option) => {
           var checked = false;
@@ -68,9 +73,10 @@ render = function () {
           )
         })
       }
-    </CardText>
-  </Card>
-</div>
+
+      </Paper>
+
+    </div>
   )
 }
 }

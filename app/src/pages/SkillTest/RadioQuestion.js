@@ -1,14 +1,19 @@
 import React from 'react'
 import {util,log2} from '../../utils/'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import Paper from 'material-ui/Paper';
+
 const log = log2("RadioQuestion")
 const styles = {
   container: {
-    width:"60%",
+    width:"70%",
     margin:"0 auto",
     marginTop:"10px",
-    padding:"5px,5px,5px,5px"
+  },
+  paperStyle:{
+    height: '100%',
+    width: '100%',
+    display: 'inline-block',
   }
 }
 export default class RadioQuestion extends React.Component{
@@ -31,12 +36,10 @@ render = function () {
   var value = (ans!=null && ans.length>0)?ans[0]:null;
   return (
     <div style={styles.container}>
-    <Card>
-    <CardHeader
-      title={this.props.question.title}
-      subtitle=""
-    />
-    <CardText>
+      <Paper style={styles.paperStyle} zDepth={0} rounded={false} >
+      {this.props.question.title}
+
+
     <RadioButtonGroup name={this.props.question.id} valueSelected={value} onChange={(event,value)=> this.radioChange(value)}>
       {
         options.map((option) => {
@@ -50,8 +53,8 @@ render = function () {
         })
       }
       </RadioButtonGroup>
-    </CardText>
-  </Card>
+
+    </Paper>
 
 
 

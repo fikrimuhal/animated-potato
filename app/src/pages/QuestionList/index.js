@@ -1,6 +1,6 @@
 import React from 'react'
 require("!style!css!react-data-grid/themes/react-data-grid.css")
-import { Link ,browserHistory} from 'react-router'
+import { Link } from 'react-router'
 import RaisedButton from 'material-ui/RaisedButton';
 import {db,log2,util} from '../../utils/'
 import {Table} from 'material-ui/Table';
@@ -45,7 +45,6 @@ export class setWeightsFormatter extends React.Component {
     })
   }
   render(){
-    console.log("set fonksiyonu",this.setType());
     return(
       <div>
         <div>
@@ -139,8 +138,9 @@ export default class QuestionList extends React.Component {
     };
     util.bindFunctions.call(this,['getRows','getSize',
                                   'rowGetter','handleFilterChange',
-                                  'handleGridSort','handleRowUpdated','createNew'])
+                                  'handleGridSort','handleRowUpdated'])
   }
+
   getRows = function() {
    return Selectors.getRows(this.state);
  }
@@ -154,10 +154,12 @@ export default class QuestionList extends React.Component {
  getSize = function() {
    return this.getRows().length;
  }
+
  rowGetter = function(rowIdx){
    var rows = this.getRows();
    return rows[rowIdx];
  }
+
  handleFilterChange = function(filter){
    let newFilters = Object.assign({}, this.state.filters);
    if (filter.filterTerm) {
@@ -178,9 +180,7 @@ export default class QuestionList extends React.Component {
    var rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
    this.setState({rows : rows});
  }
- createNew = function () {
-     browserHistory.push("/adminpanel/questionadd");
-   }
+
   render() {
     return (
 
@@ -189,9 +189,7 @@ export default class QuestionList extends React.Component {
          <br/>
           <h4>Question List</h4>
        </div>
-       <div>
-         <RaisedButton label="+Create New" secondary={true} onClick={()=> this.createNew()} style={{float:"right"} }/>
-       </div>
+
         <div>
           <ReactDataGrid
                  columns={columns}

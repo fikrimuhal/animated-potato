@@ -1,15 +1,21 @@
 import React from 'react'
 import {util,log2} from '../../utils/'
 import Slider from 'material-ui/Slider';
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import Paper from 'material-ui/Paper';
+
 const log = log2("FreeTextQuestion")
+
 const styles = {
   container: {
     width:"80%",
     backgroundColor : "yellow",
     margin:"0 auto",
     marginTop:"10px",
-    padding:"5px,5px,5px,5px"
+  },
+  paperStyle:{
+    height: '100%',
+    width: '100%',
+    display: 'inline-block',
   }
 }
 export default class NumberQuestion extends React.Component{
@@ -32,13 +38,11 @@ render = function () {
   }
   return (
     <div style={styles.container}>
-    <Card>
-    <CardHeader
-      title={this.props.question.title}
-      subtitle=""
-    />
-    <CardText>
-      {
+      <Paper style={styles.paperStyle} zDepth={0} rounded={false} >
+
+      {this.props.question.title}
+
+    {
         <div>
         <Slider
             min={0}
@@ -51,9 +55,8 @@ render = function () {
           <label>{sliderValue} Yıl</label>
         </div>
 
-      }
-    </CardText>
-  </Card>
+    }
+    </Paper>
 </div>
   )
 }

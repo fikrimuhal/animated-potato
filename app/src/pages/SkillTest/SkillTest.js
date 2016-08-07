@@ -118,7 +118,7 @@ log("render",Router)
         <div ref="animateDiv">
           <Question key={question.id} question={question} onAnswer={this.onAnswer} answer={this.getCurrentAnswer()}  />
         </div>
-        <div style={{float:"right",marginRight:"20%",marginTop:"10px"}}>
+        <div style={{float:"right",marginRight:"20%",marginTop:"90px"}}>
           <RaisedButton  label="< Previous" primary={true}   onClick={()=>this.previousQuestion()}  disabled={firstQuestion}/>
           <RaisedButton  label="Next >" primary={true}   onClick={()=>this.nextQuestion()} style={{marginLeft:"3px"}} disabled={lastQuestion}/>
           <RaisedButton  label="End Test" primary={true}   onClick={()=>this.endTest()} style={{marginLeft:"3px"}} disabled={!endTest}/>
