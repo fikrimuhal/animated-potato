@@ -171,7 +171,7 @@ export const getApplicantList = function getApplicantList() {
 export const getApplicantListFromAPI = function getApplicantListFromAPI() {
     var promise = new Promise((resolve,reject)=>{
         setTimeout(function () {
-            resolve(getApplicants());
+            resolve(getApplicantList());
         },3000);
     });
     return promise;

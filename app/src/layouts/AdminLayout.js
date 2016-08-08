@@ -1,18 +1,20 @@
 /**
  * Created by MYigit on 8.8.2016.
  */
-import React from 'react'
-import AdminMenu from './AdminMenu'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import React                  from 'react'
+import AdminMenu              from './AdminMenu'
+import MuiThemeProvider       from 'material-ui/styles/MuiThemeProvider';
 import {Link, browserHistory} from 'react-router'
-import Paper from 'material-ui/Paper';
-import Drawer from 'material-ui/Drawer';
-import {log2} from '../utils/'
-import * as util from '../utils/utils'
-import * as db from '../utils/data'
-import AdminAppBar from './AdminAppBar'
+import Paper                  from 'material-ui/Paper';
+import Drawer                 from 'material-ui/Drawer';
+import log2                   from '../utils/log2'
+import * as util              from '../utils/utils'
+import * as db                from '../utils/data'
+import AdminAppBar            from './AdminAppBar'
+import hotkey                 from 'react-hotkey'
+import Mousetrap              from 'Mousetrap'
 var  userInfo = null;
-const log = log2("MainLayout.js:")
+const log = log2("AdminLayout.js:")
 var image = require("../assets/images/bg1.jpg")
 //Styles
 const styles = {
@@ -31,6 +33,8 @@ const styles = {
         height:"100%"
     }
 }
+
+
 export default class AdminLayout extends React.Component {
     constructor(props) {
         super(props);
@@ -39,13 +43,47 @@ export default class AdminLayout extends React.Component {
             open: false
         };
         util.bindFunctions.call(this, ['toogleMenu']);
-    };
 
+    };
+    menuHotkey=(e,combo)=>{
+        log(combo);
+        console.log("deneme")
+
+        switch (combo) {
+            case "shift+m+1":
+                browserHistory.push("/adminpanel/listofparticipants");
+                break;
+            case  "shift+m+2":
+                browserHistory.push("/adminpanel/questionlist");
+                break;
+        }
+
+    }
+    generalHotkeys=(e,combo)=>{
+
+       if(combo=="shift+e"){
+           db.clearUserAuthenticationInfo();
+           browserHistory.push("/signin");
+       }
+       else if(combo=="shift+m"){
+           this.toogleMenu();
+       }
+
+    }
     componentWillMount = function () {
 
         if (!db.isAdmin())
             browserHistory.push("/signin");
     };
+    componentDidMount=()=> {
+        Mousetrap.bind([`shift+m+1`, `shift+m+2`], this.menuHotkey);
+        Mousetrap.bind([`shift+e`, `shift+m`], this.generalHotkeys);
+    }
+    componentWillUnmount=()=> {
+        Mousetrap.unbind([`shift+e`, `shift+m`], this.generalHotkeys);
+        Mousetrap.unbind([`shift+m+1`, `shift+m+2`], this.menuHotkey);
+
+    }
     toogleMenu = function (event) {
         this.setState({
             open: !this.state.open

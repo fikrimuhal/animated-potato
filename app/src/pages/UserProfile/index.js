@@ -108,7 +108,6 @@ var columns = [
   formatter:ButtonsColFormatter
 }
 ]
-
 export default class UserProfile extends React.Component {
   constructor(props) {
     super(props);
