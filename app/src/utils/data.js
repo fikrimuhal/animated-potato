@@ -202,8 +202,11 @@ export const authenticate = function authenticate(username,password) {
         userInfo:{
           name:"Mesut",
           lastname:"Can",
-          website:"www.a.com",
-          admin:(username=="admin")
+            email: "mesutcan@gmail.com",
+            photo: "img",
+            website: "mesutcan.com",
+            yournotes: "Beni işe alın!! (^_^) (-_-)",
+            admin:(username=="admin")
         }
       };
 

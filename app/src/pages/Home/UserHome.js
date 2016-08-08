@@ -1,9 +1,4 @@
 import React        from 'react'
-import FlatButton   from 'material-ui/FlatButton'
-import FontIcon     from 'material-ui/FontIcon';
-import Paper        from 'material-ui/Paper'
-import {Link,browserHistory}       from 'react-router'
-import Subheader    from 'material-ui/Subheader'
 import {Tabs, Tab} from 'material-ui/Tabs';
 import UserProfile from './userProfile'
 import FormIntro    from './formIntro'
