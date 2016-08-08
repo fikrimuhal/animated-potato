@@ -77,23 +77,25 @@ export const UserDelete = function UserDelete(key){
 }
 
 export const getUsers= function getUsers() {
-  var storage = localStorage.getItem('users');
-  if(storage == null){
-    localStorage.setItem('users', JSON.stringify(_users));
-    storage = localStorage.getItem('users')
-  }
-  return JSON.parse(storage);
+var storage = localStorage.getItem('users');
+if(storage == null){
+  localStorage.setItem('users', JSON.stringify(_users));
+  storage = localStorage.getItem('users')
 }
+return JSON.parse(storage);
+};
+
+
 export const getUserByEmail = function getUserByEmail(email) {
   var users = getUsers();
   var findIndex = _.findIndex(users,(user)=>{return user.email==email});
   return (findIndex == -1)? null:users[findIndex];
-}
+};
 export const getUserById = function getUserById(id) {
   var users = getUsers();
   var findIndex = _.findIndex(users,(user)=>{return user.id==id});
   return (findIndex == -1)? null:users[findIndex];
-}
+};
 export const setUser = function setUser(userInfo) {
   var users = getUsers();
   users.push(userInfo);
@@ -101,10 +103,18 @@ export const setUser = function setUser(userInfo) {
   var result = {
     status:"ok",
     token:"abc"
-  }
+  };
   return result;
-}
+};
 
+export const getUsersFromAPI =function getUsersFromAPI(){
+    var promise = new Promise((resolve,reject) => {
+        setTimeout(()=>{
+            resolve(getUsers());
+        },3000);
+    });
+    return promise;
+};
 export const getApplicants = function getApplicants() {
   var storage = localStorage.getItem('applicants');
   if(storage == null){
@@ -253,3 +263,15 @@ export const clearUserAuthenticationInfo = ()=>{
     localStorage.removeItem("userInfo");
     localStorage.removeItem("token");
 }
+
+
+/*TO DO
+export const answerQuestion = (questionId,answer)=>{
+
+
+};
+
+export const getNextQuestion = () =>{
+
+};
+*/

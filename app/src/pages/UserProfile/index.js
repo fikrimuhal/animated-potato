@@ -1,20 +1,15 @@
 import React from 'react'
 require("!style!css!react-data-grid/themes/react-data-grid.css")
-import { Link } from 'react-router'
 import RaisedButton from 'material-ui/RaisedButton';
-import {db,log2,util} from '../../utils/'
-import {Table} from 'material-ui/Table';
+import {log2,util} from '../../utils/'
+import * as db from '../../utils/data'
 import ReactDataGrid from 'react-data-grid';
 import { Toolbar, Data } from 'react-data-grid/addons';
-import IconMenu from 'material-ui/IconMenu';
-import FontIcon from 'material-ui/FontIcon';
-import IconButton from 'material-ui/IconButton';
-import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
-import MenuItem from 'material-ui/MenuItem';
 var userProfileInstance;
 class ButtonsColFormatter extends React.Component{
   constructor(props){
-    super(props)
+    super(props);
+
     util.bindFunctions.call(this,['onClick'])
   }
   onClick = function () {
@@ -117,14 +112,22 @@ var columns = [
 export default class UserProfile extends React.Component {
   constructor(props) {
     super(props);
-      var rows = db.getUsers();
+
     this.state = {
-      rows : rows, filters : {},
-      originalRows:rows
+      filters : {},
+      dataLoaded:false
     };
+
     util.bindFunctions.call(this,['getRows','getSize',
                                   'rowGetter','handleFilterChange',
-                                  'handleGridSort','handleRowUpdated'])
+                                  'handleGridSort','handleRowUpdated']);
+      db.getUsersFromAPI().then((message)=>{
+        this.setState({
+            rows:message,
+            dataLoaded:true,
+            originalRows:message
+        })
+      })
 userProfileInstance = this;
   }
   getRows = function() {
@@ -169,27 +172,39 @@ userProfileInstance = this;
   render() {
     log("User Profile rendered");
     return (
-              <div>
-                <div>
-             <br/>
+        <div>
+            <div>
+              <br/>
               <h4>User Profile </h4>
            </div>
            <br/>
                 <div>
-                  <ReactDataGrid
-                         columns={columns}
-                         rowGetter={this.rowGetter}
-                         enableCellSelect={true}
-                         rowsCount={this.getSize()}
-                         minHeight={500}
-                         rowHeight={45}
-                         toolbar={<Toolbar enableFilter={true}/>}
-                         onAddFilter={this.handleFilterChange}
-                         onGridSort={this.handleGridSort}
-                         onRowUpdated={this.handleRowUpdated} />
+                    {
+                        (()=>{
+                            var content;
+                            if(this.state.dataLoaded){
+                                content= <ReactDataGrid
+                                    columns={columns}
+                                    rowGetter={this.rowGetter}
+                                    enableCellSelect={true}
+                                    rowsCount={this.getSize()}
+                                    minHeight={500}
+                                    rowHeight={45}
+                                    toolbar={<Toolbar enableFilter={true}/>}
+                                    onAddFilter={this.handleFilterChange}
+                                    onGridSort={this.handleGridSort}
+                                    onRowUpdated={this.handleRowUpdated} />
+                            }
+                            else {
+                                content=  <p>Data Loading.... !!!</p>
+                            }
+                            return content;
+                        })()
+                    }
+
 
                 </div>
-              </div>
+        </div>
     );
   }
 }
