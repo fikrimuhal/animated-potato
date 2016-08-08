@@ -44,7 +44,7 @@ export default class UserSignIn extends React.Component {
                 duration: 0
             }
         }
-        util.bindFunctions.call(this, ['signIn','signUp']);
+        util.bindFunctions.call(this, ['signIn','signUp','onKeyDown']);
         toastHelper = util.myToast("toastSettings", this);
     }
 
@@ -75,13 +75,18 @@ export default class UserSignIn extends React.Component {
     }
     signUp = function () {
         browserHistory.push("/signup");
+    };
+    onKeyDown= function(event,keyCode){
+        // console.log(event);
+        // console.log(keyCode);
+        this.signIn();
     }
     render = function () {
         return (
             <div style={{marginLeft:"20%"}}>
                     <Subheader style={styles.header}><b> Fikrimuhal HR - Login</b></Subheader>
                     <TextField ref={"username"} hintText="Username" floatingLabelText="Username"/><br/>
-                    <TextField ref={"password"} hintText="Password" floatingLabelText="Password"/> <br/>
+                    <TextField ref={"password"} hintText="Password" floatingLabelText="Password" onEnterKeyDown={(e,v)=>this.onKeyDown(e,v)} /> <br/>
                     <div>
                         <RaisedButton label="Login" primary={true} onClick={this.signIn}/>
                         <FlatButton label="Sign Up"  onClick={this.signUp} style={{marginLeft:"10px"}}/>
