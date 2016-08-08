@@ -1,3 +1,6 @@
+/**
+ * Created by MYigit on 8.8.2016.
+ */
 import React from 'react'
 import AdminMenu from './AdminMenu'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -39,6 +42,7 @@ export default class AdminLayout extends React.Component {
     };
 
     componentWillMount = function () {
+
         if (!db.isAdmin())
             browserHistory.push("/signin");
     };

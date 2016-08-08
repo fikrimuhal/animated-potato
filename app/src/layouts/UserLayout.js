@@ -1,14 +1,13 @@
 import React from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Link,browserHistory } from 'react-router'
-import AppBar from 'material-ui/AppBar';
 import Paper from 'material-ui/Paper';
-import {log2} from '../utils/'
 import * as util from '../utils/utils'
 import * as db from '../utils/data'
-
+import log2 from '../utils/log2'
+import  UserAppBar from './UserAppBar'
 var image = require("../assets/images/bg1.jpg")
-const log = log2("MainLayout.js:")
+const log = log2("UserLayout.js:")
 //Styles
 const styles = {
     paperStyle: {
@@ -26,14 +25,17 @@ const styles = {
         height:"100%"
     }
 }
+var user =null;
 export default class UserLayout extends React.Component {
   constructor(props){
     super(props);
     this.state={
       open:false
     };
+    user = db.getUserInfo();
   }
   componentWillMount = function() {
+      log("**UserLayout cwm",db.isUser())
     if (!db.isUser())
         browserHistory.push("/signin");
 
@@ -43,9 +45,7 @@ export default class UserLayout extends React.Component {
 
     <MuiThemeProvider>
       <div id="page_container" style={styles.main}>
-         <header>
-              <AppBar title="Fikrimuhal Teknoloji - HR"/>
-          </header>
+          <UserAppBar userInfo={user} />
 
           <Paper style={styles.paperStyle}>
              {this.props.children}
