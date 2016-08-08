@@ -183,6 +183,7 @@ export const authenticate = function authenticate(username,password) {
         userInfo:{
           name:"Mesut",
           lastname:"Can",
+          website:"www.a.com",
           admin:(username=="admin")
         }
       };
