@@ -6,6 +6,21 @@ import {log2,util} from '../../utils/'
 import Immutable from  'Immutable'
 const log = log2("QuestionOptions: ")
 const styles = {
+  flexContainer:{
+    display:"flex",
+    flexDirection:"row",
+    justifyContent: "flexStart",
+    flexFlow:"row wrap"
+  },
+  child:{
+    width:"20%",
+    height:"300px",
+    border:'1px solid teal',
+    borderRadius:'5px',
+    padding:'5px 5px 5px 5px',
+    marginBottom:'5px',
+    marginLeft:'10px',
+  },
   secenekBox:{
     border:'1px solid teal',
     borderRadius:'5px',
@@ -48,13 +63,13 @@ export default class QuestionOptions extends React.Component{
     log("rendered")
     var _this = this;
     return (
-      <div>
-        <hr/>
+      <div style = {styles.flexContainer}>
+
         {
           this.props.optionList.map(function(item) {
               var itemKey =_this.props.optionList.findKey( (x)=> {return x.get('id')==item.get("id")});
                 return (
-                  <div key={item.get('id')} style={styles.secenekBox}>
+                  <div key={item.get('id')} style={styles.child}>
                       <p>Option Details</p>
                       <hr/>
                       <TextField ref={"txtOptionText-" + itemKey } hintText="Seçenek" value={item.get('text')} onChange={()=>_this.handleOptionTextChanged(itemKey)}/><br />
