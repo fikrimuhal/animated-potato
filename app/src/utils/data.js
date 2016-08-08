@@ -166,6 +166,15 @@ export const getApplicantList = function getApplicantList() {
      })
   };
   return result;
+};
+
+export const getApplicantListFromAPI = function getApplicantListFromAPI() {
+    var promise = new Promise((resolve,reject)=>{
+        setTimeout(function () {
+            resolve(getApplicants());
+        },3000);
+    });
+    return promise;
 }
 
 export const getQuestionSets = function getQuestionSets() {

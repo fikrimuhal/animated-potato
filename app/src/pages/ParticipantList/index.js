@@ -2,7 +2,8 @@ import React from 'react'
 require("!style!css!react-data-grid/themes/react-data-grid.css")
 import { Link } from 'react-router'
 import RaisedButton from 'material-ui/RaisedButton';
-import {db,log2,util} from '../../utils/'
+import {log2,util} from '../../utils/'
+import * as db from '../../utils/data'
 import {Table} from 'material-ui/Table';
 import MTableHead from './MTableHead'
 import MTableBody from './MTableBody'
@@ -17,7 +18,6 @@ const styles = {
    width: 150,
  },
 };
-const data = db.getApplicantList();
 var columns = [
   {
     key: 'id',
@@ -45,14 +45,22 @@ export default class ParticipantList extends React.Component {
 
   constructor(props) {
     super(props);
-      var rows = data
     this.state = {
-      rows : rows, filters : {},
-      originalRows:rows
+      dataLoaded:false,
+      filters : {},
+
     };
     util.bindFunctions.call(this,['getRows','getSize',
                                   'rowGetter','handleFilterChange',
                                   'handleGridSort'])
+      db.getApplicantListFromAPI().then((rows)=>{
+          this.setState({
+              rows : rows,
+              originalRows:rows,
+              dataLoaded:true
+          });
+          log("then rows",rows);
+      })
   }
   getRows = function() {
    return Selectors.getRows(this.state);
@@ -94,16 +102,30 @@ export default class ParticipantList extends React.Component {
                 <h4>Participant List</h4>
                 <br/>
                 <div>
-                  <ReactDataGrid
-                         columns={columns}
-                         rowGetter={this.rowGetter}
-                         enableCellSelect={true}
-                         rowsCount={this.getSize()}
-                         minHeight={500}
-                         toolbar={<Toolbar enableFilter={true}/>}
-                         onAddFilter={this.handleFilterChange}
-                         onGridSort={this.handleGridSort}
-                         />
+
+                    {
+                        (()=>{
+                            var content;
+                            if(this.state.dataLoaded){
+                                content =<ReactDataGrid
+                                    columns={columns}
+                                    rowGetter={this.rowGetter}
+                                    enableCellSelect={true}
+                                    rowsCount={this.getSize()}
+                                    minHeight={500}
+                                    toolbar={<Toolbar enableFilter={true}/>}
+                                    onAddFilter={this.handleFilterChange}
+                                    onGridSort={this.handleGridSort}
+                                />
+                            }
+                            else {
+                                content =<div>Data loading...</div>
+                            }
+
+                            return content;
+                        })()
+                    }
+
                 </div>
               </div>
     );
