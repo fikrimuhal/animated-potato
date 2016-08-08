@@ -42,9 +42,18 @@ export class setWeightsFormatter extends React.Component {
   render(){ 
     return(
       <div>
-rrtrg
-         
+          {
+              (()=>{
+                  var setList;
+                  setList = rows.map((row, i) => {
+                      <div>
+                          {row.setList}
+                      </div>
 
+                  })
+                  return setList;
+              })()
+          }
       </div>
     )
   }

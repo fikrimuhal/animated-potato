@@ -1,8 +1,7 @@
 import React from 'react'
 import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import {pink500} from 'material-ui/styles/colors';
 import {log2,db,util} from '../../utils'
+
 
 const styles ={
     font:{
@@ -21,55 +20,47 @@ const styles ={
         height: "23px",
         width: "23px",
         marginRight: "5px"
-    }
+    },
+    divCorner: {
+        marginTop: '10px',
 
+        padding: '20px',
+        width: '430px',
+        height: '400px',
+    },
+    form:{
+        marginLeft: 20
+    }
 }
-export default  class  UserProfile extends  React.Component{
+export default  class  UserProfileUpdate extends  React.Component{
     constructor(props){
         super(props)
-        util.bindFunctions.call(this,['goToUpdate']);
-
-    }
-    goToUpdate = function(){
-
     }
     render = ()=>{
+        console.log("Bu user profile")
         return(
-            <div style={styles.font}>
+            <div>
                 <h4>{this.props.user.name} {this.props.user.lastname} - Profil Bilgileri</h4>
-
                 Fotoğraf:
                 <div style={{width: '50px' ,height: '50px', backgroundColor: 'pink'}}>{this.props.user.photo}</div>
-                Ad Soyad:
-                <div style={styles.container}><FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >person</FontIcon>
-                    {this.props.user.name} {this.props.user.lastname}
+                <div style={{marginBottom: 10}}>
+                    Ad: <input style={{marginLeft: 74}} value={this.props.user.name} onChange={this.nameChanced}/>
+                    Soyad: <input value={this.props.user.lastname}/>
                 </div>
-                Email:
-                <div style={styles.container}>
-                    <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >mail</FontIcon>
-                    {this.props.user.email}
-
+                <div style={{marginBottom: 10}}>
+                    Email: <input style={{marginLeft: 58}}  value={this.props.user.email}/>
+                    WebSite: <input value={this.props.user.website}/>
                 </div>
-                Website:
-                <div style={styles.container}>
-                    <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >home</FontIcon>
-                    {this.props.user.website}
+                <div>
+                    Your Notes:
+                    <textarea style={{marginLeft: 25, width: 200}} value={this.props.user.yournotes}/>
                 </div>
-                Notlarınız:
-                <div style={styles.container}>
-                    <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >note</FontIcon>
-
-                    {this.props.user.yournotes}
-
+                <div style={{width: "350px"}}>
+                    <FlatButton label="Kaydet" style={{float:"right"}} secondary={true} onClick={this.goToUpdate}/>
+                    <FlatButton label="İptal" style={{float:"right"}} primary={true} onClick={this.goToUpdate}/>
                 </div>
-                <div style={{width: "350px"}}><FlatButton label="Düzenle" style={{float:"right"}} secondary={true} onTouch={this.goToUpdate}/></div>
-
             </div>
         )
     }
 
-}
-
-UserProfile.propTypes ={
-    user: React.PropTypes.object.isRequired
 }

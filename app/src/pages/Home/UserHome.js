@@ -4,6 +4,7 @@ import UserProfile from './userProfile'
 import FormIntro    from './formIntro'
 import * as db      from  '../../utils/data'
 import * as util    from '../../utils/utils'
+
 //Styles
 const styles = {
   paperStyle: {
@@ -33,7 +34,10 @@ export default class UserHome extends React.Component{
             value: value,
             user: user
         });
-    };
+    }
+    onSave = function(newValues, oldValues){
+
+    }
    render=function () {
      return(
        <div>
@@ -42,7 +46,7 @@ export default class UserHome extends React.Component{
                  onChange={this.handleChange}
              >
                  <Tab label="Profil" value="profile" >
-                    <UserProfile user={this.state.user}/>
+                    <UserProfile user={this.state.user} onSave={this.onSave}/>
                  </Tab>
                  <Tab label="Yeterlilik Formu" value="form">
                     <FormIntro/>
