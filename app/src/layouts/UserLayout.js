@@ -46,10 +46,7 @@ export default class UserLayout extends React.Component {
     <MuiThemeProvider>
       <div id="page_container" style={styles.main}>
           <UserAppBar userInfo={user} />
-
-          <Paper style={styles.paperStyle}>
              {this.props.children}
-          </Paper>
       </div>
     </MuiThemeProvider>
     )

@@ -1,25 +1,9 @@
 import React from 'react'
 import {util,log2} from '../../utils/'
 import Slider from 'material-ui/Slider';
-import Paper from 'material-ui/Paper';
 import FontIcon from 'material-ui/FontIcon';
 import {red500} from 'material-ui/styles/colors';
-
 const log = log2("FreeTextQuestion")
-
-const styles = {
-  container: {
-    width:"80%",
-    backgroundColor : "yellow",
-    margin:"0 auto",
-    marginTop:"10px",
-  },
-  paperStyle:{
-    height: '100%',
-    width: '100%',
-    display: 'inline-block',
-  }
-}
 export default class NumberQuestion extends React.Component{
 constructor(props){
   super(props);
@@ -39,27 +23,25 @@ render = function () {
     sliderValue= ans[0];
   }
   return (
-    <div style={styles.container}>
-      <Paper style={styles.paperStyle} zDepth={0} rounded={false} >
+    <div>
+
         <FontIcon color={red500} className="material-icons md-dark md-inactive" >view_agenda</FontIcon>
-
         {this.props.question.title}
+        {
+            <div>
+            <Slider
+                min={0}
+                max={100}
+                step={1}
+                defaultValue={0}
+                value={sliderValue}
+                onChange={this.handleSliderChange}
+              />
+              <label>{sliderValue}</label>
+            </div>
 
-    {
-        <div>
-        <Slider
-            min={0}
-            max={100}
-            step={1}
-            defaultValue={0}
-            value={sliderValue}
-            onChange={this.handleSliderChange}
-          />
-          <label>{sliderValue}</label>
-        </div>
+        }
 
-    }
-    </Paper>
 </div>
   )
 }

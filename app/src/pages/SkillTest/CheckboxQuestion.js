@@ -1,25 +1,10 @@
 import React from 'react'
 import {util,log2} from '../../utils/'
 import Checkbox from 'material-ui/Checkbox';
-import Paper from 'material-ui/Paper';
 import FontIcon from 'material-ui/FontIcon';
 import {blue500} from 'material-ui/styles/colors';
-
+import _ from 'lodash'
 const log = log2("CheckboxQuestion")
-const styles = {
-  container: {
-    width:"70%",
-    backgroundColor : "yellow",
-    margin:"0 auto",
-    marginTop:"10px",
-
-  },
-  paperStyle:{
-    height: '100%',
-    width: '100%',
-    display: 'inline-block',
-  }
-}
 export default class CheckboxQuestion extends React.Component{
 constructor(props){
   super(props);
@@ -51,40 +36,32 @@ render = function () {
   var options = Object.keys(opts).map(function(k) { return opts[k] });
   var ans = this.props.answer.value;
   return (
-    <div style={styles.container}>
-      <Paper style={styles.paperStyle} zDepth={0} rounded={false} >
+    <div>
         <FontIcon color={blue500} className="material-icons md-dark md-inactive" >label</FontIcon>
 
         {this.props.question.title}
+              {
+                options.map((option) => {
+                  var checked = false;
+                  if (ans != null && ans.length>0) {
+                    checked= _.includes(ans,option.id);
+                  }
 
-
-
-      {
-        options.map((option) => {
-          var checked = false;
-          if (ans != null && ans.length>0) {
-            checked= _.includes(ans,option.id);
-          }
-
-          return (
-            <Checkbox
-            key = {option.id}
-            value = {option.id}
-            label= {option.text}
-            checked={checked}
-            onCheck = {(event,checked)=> this.handleCheckbox(option.id,checked)}
-              />
-          )
-        })
-      }
-
-      </Paper>
-
+                  return (
+                    <Checkbox
+                    key = {option.id}
+                    value = {option.id}
+                    label= {option.text}
+                    checked={checked}
+                    onCheck = {(event,checked)=> this.handleCheckbox(option.id,checked)}
+                      />
+                  )
+                })
+              }
     </div>
   )
 }
 }
-
 CheckboxQuestion.propTypes = {
   question: React.PropTypes.any.isRequired
 }

@@ -97,6 +97,11 @@ export default class SignUpForm extends React.Component{
 
      return(
        <div>
+           <style>
+               {
+                   ".form-group > input,.form-group > textarea,textarea.form-control, input.form-control, [type=text].form-control, [type=password].form-control, [type=email].form-control, [type=tel].form-control, [contenteditable].form-control {\n    webkit-box-shadow: inset 0 -2px 0 #BDBDBD !important;\n    box-shadow: inset 0 -2px 0 #BDBDBD !important;\n}\n.form-group > input,.form-group > textarea,textarea.form-control:focus, input.form-control:focus,  [type=email].form-control:focus, [type=tel].form-control:focus, [contenteditable].form-control:focus {\n    webkit-box-shadow: inset 0 -2px 0 #00BCD4 !important;\n    box-shadow: inset 0 -2px 0 #00BCD4 !important;\n}"
+               }
+           </style>
            <SmartForm schema={schema}
            onSubmit={(formData)=>this.onSubmit(formData)}
            onError={()=> log("errors")}

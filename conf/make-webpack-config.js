@@ -68,16 +68,16 @@ module.exports = function(options) {
           loader: lessLoaders,
         },
         {
+          test: /\.gif$/,
+          loader: 'url?limit=100000&mimetype=image/gif',
+        },
+        {
           test: /\.png$/,
           loader: 'url?limit=100000&mimetype=image/png',
         },
         {
           test: /\.svg$/,
           loader: 'url?limit=100000&mimetype=image/svg+xml',
-        },
-        {
-          test: /\.gif$/,
-          loader: 'url?limit=100000&mimetype=image/gif',
         },
         {
           test: /\.jpg$/,
@@ -87,6 +87,19 @@ module.exports = function(options) {
           test: /\.woff$/,
           loader: 'file',
         },
+        {
+          test: /\.eot$/,
+          loader: 'file',
+        },
+        {
+          test: /\.woff2$/,
+          loader: 'file',
+        },
+        {
+          test: /\.ttf$/,
+          loader: 'file',
+        },
+
         {
           test: /\.(jpe?g|png|gif|svg)$/i,
           loaders: [
@@ -98,6 +111,7 @@ module.exports = function(options) {
     },
     resolve: {
       extensions: ['', '.js', '.sass', '.scss', '.less', '.css','.jpg'],
+      unsafeCache:true
     },
     plugins: options.production ? [
       // Important to keep React file size down

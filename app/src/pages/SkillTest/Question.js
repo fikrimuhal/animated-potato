@@ -4,6 +4,7 @@ import RadioQuestion from './RadioQuestion'
 import CheckboxQuestion from './CheckboxQuestion'
 import FreeTextQuestion from './FreeTextQuestion'
 import NumberQuestion from './NumberQuestion'
+import * as s from '../../layouts/style'
 const log = log2("Question")
 export default class Question extends React.Component{
 constructor(props){
@@ -43,7 +44,9 @@ shouldComponentUpdate= function(nextProps, nextState) {
 render = function () {
   log("render")
   return (
-    this.getQuestionComponent()
+      <div style={s.userLayoutStyles.questionContainer}>
+        {this.getQuestionComponent()}
+      </div>
   )
 }
 }
