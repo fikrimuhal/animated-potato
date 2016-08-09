@@ -11,7 +11,6 @@ import log2                   from '../utils/log2'
 import * as util              from '../utils/utils'
 import * as db                from '../utils/data'
 import AdminAppBar            from './AdminAppBar'
-import hotkey                 from 'react-hotkey'
 import Mousetrap              from 'Mousetrap'
 var  userInfo = null;
 const log = log2("AdminLayout.js:")
@@ -45,7 +44,7 @@ export default class AdminLayout extends React.Component {
         util.bindFunctions.call(this, ['toogleMenu']);
 
     };
-    menuHotkey=(e,combo)=>{
+    v=(e,combo)=>{
         log(combo);
         console.log("deneme")
 

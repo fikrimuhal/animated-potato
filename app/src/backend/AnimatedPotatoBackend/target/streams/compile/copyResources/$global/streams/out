@@ -1,0 +1,5 @@
+[debug] Copy resource mappings: 
+[debug] 	(/home/who/IdeaProjects/animated-potato/AnimatedPotatoBackend/conf/logback.xml,/home/who/IdeaProjects/animated-potato/AnimatedPotatoBackend/target/scala-2.11/classes/logback.xml)
+[debug] 	(/home/who/IdeaProjects/animated-potato/AnimatedPotatoBackend/conf/common.conf,/home/who/IdeaProjects/animated-potato/AnimatedPotatoBackend/target/scala-2.11/classes/common.conf)
+[debug] 	(/home/who/IdeaProjects/animated-potato/AnimatedPotatoBackend/conf/routes,/home/who/IdeaProjects/animated-potato/AnimatedPotatoBackend/target/scala-2.11/classes/routes)
+[debug] 	(/home/who/IdeaProjects/animated-potato/AnimatedPotatoBackend/conf/application.conf,/home/who/IdeaProjects/animated-potato/AnimatedPotatoBackend/target/scala-2.11/classes/application.conf)

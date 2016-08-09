@@ -4,6 +4,7 @@ import {util,log2,db} from '../../utils/'
 import Question from './Question'
 import _ from 'lodash'
 import RaisedButton from 'material-ui/RaisedButton';
+import * as s from '../../layouts/style'
 require("!style!css!../../assets/css/animate.css")
 const log = log2("SkillTest")
 var animationMode=false;
@@ -60,7 +61,7 @@ onAnswer = function (newAnswer) {
 nextQuestion = function () {
   if (this.state.currentIndex < this.props.questions.length -1) {
       animationMode=true;
-      animate="slideInRight"
+      animate="pulse"
     this.setState({
       currentIndex : (this.state.currentIndex + 1)
     })
@@ -71,7 +72,7 @@ nextQuestion = function () {
 previousQuestion = function () {
   if (this.state.currentIndex > 0) {
       animationMode=true
-      animate="slideInLeft"
+      animate="fadeOut"
     this.setState({
       currentIndex : (this.state.currentIndex - 1)
     })
@@ -87,20 +88,19 @@ componentDidUpdate = function (prevProps,prevState) {
     setTimeout(()=>{
       var div = this.refs.animateDiv;
       log("cdu",div);
+      div.classList.add("pulse")
+      div.classList.remove("fadeOut")
       div.classList.add("animated")
-      div.classList.remove("zoomOut")
-      div.classList.add(animate)
       animationMode=false;
-    },250)
+    },50)
   }
 
 }
 componentWillUpdate = function (nextProps,nextState) {
   if (animationMode) {
     var div = this.refs.animateDiv;
-    div.classList.remove("slideInLeft")
-    div.classList.remove("slideInRight")
-    div.classList.add("zoomOut")
+    div.classList.remove("pulse")
+    //div.classList.add("fadeOut")
   }
 
 
@@ -114,18 +114,16 @@ log("render",Router)
  log(firstQuestion,lastQuestion)
   return (
 
-      <div>
-        <div ref="animateDiv">
+      <div style={{height:"100%"}}>
+        <div ref="animateDiv" style={{height:"100%"}}>
           <Question key={question.id} question={question} onAnswer={this.onAnswer} answer={this.getCurrentAnswer()}  />
-        </div>
-        <div style={{float:"right",marginRight:"20%",marginTop:"150px"}}>
-          <RaisedButton  label="< Previous" primary={true}   onClick={()=>this.previousQuestion()}  disabled={firstQuestion}/>
-          <RaisedButton  label="Next >" primary={true}   onClick={()=>this.nextQuestion()} style={{marginLeft:"3px"}} disabled={lastQuestion}/>
-          <RaisedButton  label="End Test" primary={true}   onClick={()=>this.endTest()} style={{marginLeft:"3px"}} disabled={!endTest}/>
+          <div style={s.userLayoutStyles.testButtonGroup}>
+            <RaisedButton  label="< Previous" primary={true}   onClick={()=>this.previousQuestion()}  disabled={firstQuestion}/>
+            <RaisedButton  label="Next >" primary={true}   onClick={()=>this.nextQuestion()} style={{marginLeft:"3px"}} disabled={lastQuestion}/>
+            <RaisedButton  label="End Test" primary={true}   onClick={()=>this.endTest()} style={{marginLeft:"3px"}} disabled={!endTest}/>
+          </div>
         </div>
       </div>
-
-
   )
 }
 

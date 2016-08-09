@@ -3,9 +3,13 @@
  */
 import React from 'react'
 import FlatButton from 'material-ui/FlatButton'
+import {browserHistory} from 'react-router'
 export default  class  FormIntro extends  React.Component{
     constructor(props){
     super(props)
+    }
+    goToTest=function () {
+        browserHistory.push("/interview/skilltest")
     }
     render = ()=>{
     return(
@@ -15,7 +19,7 @@ export default  class  FormIntro extends  React.Component{
             Şirket prensibleri gereği bu formu doldurmanız gerekmektedir. Formda kısaca bilgileriniz kaydedilecek ve bizimle
             çalışmak için uygun olup olmadağınız saptanacaktır.
         </p>
-        <FlatButton label="Teste Başla" primary={true} style={{float:"right"}}></FlatButton>
+        <FlatButton label="Teste Başla" primary={true} style={{float:"right"}} onClick={this.goToTest}></FlatButton>
     </div>
     )
     }

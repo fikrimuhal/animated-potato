@@ -9,6 +9,7 @@ import IconMenu         from 'material-ui/IconMenu';
 import Divider          from 'material-ui/Divider';
 import AccountIcon      from 'material-ui/svg-icons/action/account-circle';
 import PowerOffIcon     from 'material-ui/svg-icons/action/exit-to-app';
+import HomeIcon         from 'material-ui/svg-icons/action/home'
 import * as db          from "../utils/data";
 import {browserHistory} from 'react-router'
 import log2             from '../utils/log2'
@@ -33,12 +34,15 @@ export default  class  UserAppBar extends  React.Component{
         db.clearUserAuthenticationInfo();
         browserHistory.push("/signin");
     };
-
+    goToHome = function () {
+        browserHistory.push("/home");
+    }
     render = ()=>{
     return(
 
         <header>
             <AppBar title="Fikrimuhal Teknoloji - HR" showMenuIconButton={false}                     iconElementRight={
+
                 <IconMenu
                     iconButtonElement={
                         <IconButton><AccountIcon /></IconButton>
@@ -48,6 +52,7 @@ export default  class  UserAppBar extends  React.Component{
                 >
                     <label style={styles.userLabel}>{this.props.userInfo.name} {this.props.userInfo.lastname}</label>
                     <Divider />
+                    <MenuItem primaryText="Anasayfa" leftIcon={<HomeIcon />} onTouchTap={this.goToHome} />
                     <MenuItem primaryText="Çıkış yap" leftIcon={<PowerOffIcon />} onTouchTap={this.singOut} />
                 </IconMenu>
 
