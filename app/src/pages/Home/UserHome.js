@@ -47,6 +47,7 @@ export default class UserHome extends React.Component{
              >
                  <Tab label="Profil" value="profile" >
                     <UserProfile user={this.state.user} onSave={this.onSave}/>
+                     <userInfoForm user={this.state.user}/>
                  </Tab>
                  <Tab label="Yeterlilik Formu" value="form">
                     <FormIntro/>

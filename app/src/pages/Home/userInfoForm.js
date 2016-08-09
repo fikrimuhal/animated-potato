@@ -1,6 +1,3 @@
-/**
- * Created by MYigit on 8.8.2016.
- */
 import React from  'react'
 
 const styles={
@@ -16,6 +13,7 @@ export default  class  UserInfoForm extends  React.Component{
     super(props)
     }
     render = ()=>{
+        console.log("Form Lan bu",this.props.user.name)
     return(
     <div style={styles.formContainer}>
         <div style={styles.divCorner}>
@@ -46,4 +44,8 @@ export default  class  UserInfoForm extends  React.Component{
     </div>
     )
     }
+}
+
+UserInfoForm.propTypes ={
+    user: React.PropTypes.object.isRequired
 }
