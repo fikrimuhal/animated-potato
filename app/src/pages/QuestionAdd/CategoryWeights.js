@@ -6,6 +6,8 @@ import {log2,util} from '../../utils/'
 import Immutable from 'Immutable'
 import { Link ,browserHistory} from 'react-router';
 import Mousetrap from 'Mousetrap';
+import _lodash from 'lodash';
+
 var catMap=[];
 
 const log = log2("CategoryWeights: ")
@@ -38,8 +40,7 @@ export default class CategoryWeights extends React.Component{
     super(props)
     util.bindFunctions.call(this,["categorySelected","sliderChange"]);
   }
-    menuHotkey=(e,combo)=>{
-        log(combo);
+    categoryHotkey=(e,combo)=>{
         if(combo.indexOf("alt") != -1){
             var indis = parseInt(combo.split('+')[2]);
             if(indis !== NaN)
@@ -49,10 +50,20 @@ export default class CategoryWeights extends React.Component{
         }
     }
     componentDidMount=()=> {
-        Mousetrap.bind([`alt+k+1`, `alt+k+2`, `alt+k+3`, `alt+k+4`], this.menuHotkey);
+        var count = _.size(this.props.categoryList);
+        var keyboardList = [];
+        for(var i=1; i<count+1;i++){
+            keyboardList[i-1] = 'alt+k+'.concat(i)
+        }
+        Mousetrap.bind(keyboardList, this.categoryHotkey);
     }
     componentWillUnmount=()=> {
-        Mousetrap.bind([`alt+k+1`, `alt+k+2`, `alt+k+3`, `alt+k+4`], this.menuHotkey);
+        var count = _.size(this.props.categoryList);
+        var keyboardList = [];
+        for(var i=1; i<count+1;i++){
+            keyboardList[i-1] = 'alt+k+'.concat(i)
+        }
+        Mousetrap.bind(keyboardList, this.categoryHotkey);
     }
 categorySelected= function (selectedCategory,event) {
   let oldCategoryWeights = this.props.categoryWeights;
@@ -99,6 +110,7 @@ render= ()=>{
         <label>Category weights of question: </label>
           <div style = {styles.flexContainer}>
                 {
+
 
                   this.props.categoryList.map( (kategori) => {
                       let foundKey = kategoriList.findKey( x=> {return x.toJS().category == kategori;} );

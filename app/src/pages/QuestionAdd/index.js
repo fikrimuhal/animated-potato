@@ -13,7 +13,7 @@ const log = log2("QuestionAdd Index: ")
 var showToast=null;
 
 const categoryList = [
-  "Back-End","Front-End","Sistem-Yöneticisi","DBA","Java EE"
+  "Back-End","Front-End","Sistem-Yöneticisi","DBA","Java EE","Machine Learning"
 ];
 const allSet = [
   "Set 1","Set 2","Set 3"
