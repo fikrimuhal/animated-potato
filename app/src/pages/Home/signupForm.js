@@ -1,4 +1,6 @@
 //core imports
+// import formCss from '../../assets/css/bootstrap-paper.min.css'
+// var formCss = require("style!css!../../assets/css/bootstrap-paper.min.css");
 import React            from 'react'
 import FlatButton       from 'material-ui/FlatButton'
 import FontIcon         from 'material-ui/FontIcon';
@@ -92,6 +94,7 @@ export default class SignUpForm extends React.Component{
    }
 
    render=function () {
+
      return(
        <div>
            <SmartForm schema={schema}
