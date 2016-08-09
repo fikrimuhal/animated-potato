@@ -5,6 +5,8 @@ import {pink500} from 'material-ui/styles/colors';
 import {log2,db,util} from '../../utils';
 import userProfileUpdate from './userProfileUpdate';
 import userInfoForm from './userInfoForm';
+import Paper from 'material-ui/Paper';
+import TextField from 'material-ui/TextField';
 
 
 const styles ={
@@ -23,7 +25,7 @@ const styles ={
         backgroundColor:"#D2CCCC",
         height: "23px",
         width: "23px",
-        marginRight: "5px"
+        marginRight: "5px",
     },
     divCorner: {
         marginTop: '10px',
@@ -34,6 +36,12 @@ const styles ={
     },
     form:{
         marginLeft: 20
+    },
+    paperStyle:{
+       width: '100%',
+        margin: 20,
+        textAlign: 'center',
+        display: 'inline-block',
     }
 }
 export default  class  UserProfile extends  React.Component{
@@ -51,82 +59,56 @@ export default  class  UserProfile extends  React.Component{
         var oldUser = this.props.user
     }
     goToUpdate = function(){
-        if(this.state.activeForm){
+
             this.setState({
                 activeForm:false
-            })}
-            else{
-            this.setState({
-                activeForm:true
             })
-        }
     }
     render = ()=>{
         console.log(this.state.activeForm)
     return(
     <div>
-        {
-            (()=>{
-                var content;
-                if(this.state.activeForm){
-                    content = <div style={styles.divCorner}>
-                        <h4>{this.props.user.name} {this.props.user.lastname} - Profil Bilgileri</h4>
-                        Fotoğraf:
-                        <div style={{width: '50px' ,height: '50px', backgroundColor: 'pink'}}>{this.props.user.photo}</div>
-                        Ad Soyad:
-                        <div style={styles.container}><FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >person</FontIcon>
-                            {this.props.user.name} {this.props.user.lastname}
-                        </div>
-                        Email:
-                        <div style={styles.container}>
-                            <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >mail</FontIcon>
-                            {this.props.user.email}
-                        </div>
-                        Website:
-                        <div style={styles.container}>
-                            <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >home</FontIcon>
-                            {this.props.user.website}
-                        </div>
-                        Notlarınız:
-                        <div style={styles.container}>
-                            <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >note</FontIcon>
-                            {this.props.user.yournotes}
-                        </div>
-                        <div style={{width: "350px"}}><FlatButton label="Düzenle" style={{float:"right"}} secondary={true} onClick={this.goToUpdate}/></div>
-                    </div>
-                }
-                else{
-                    content = <div>
-                        <h4>{this.props.user.name} {this.props.user.lastname} - Profil Bilgileri</h4>
-                        Fotoğraf:
-                        <div style={{width: '50px' ,height: '50px', backgroundColor: 'pink'}}>{this.props.user.photo}</div>
-                        <div style={{marginBottom: 10}}>
-                            Ad: <input style={{marginLeft: 74}} value={this.props.user.name} onChange={this.nameChanced}/>
-                            Soyad: <input value={this.props.user.lastname}/>
-                        </div>
-                        <div style={{marginBottom: 10}}>
-                            Email: <input style={{marginLeft: 58}}  value={this.props.user.email}/>
-                            WebSite: <input value={this.props.user.website}/>
-                        </div>
-                        <div>
-                            Your Notes:
-                            <textarea style={{marginLeft: 25, width: 200}} value={this.props.user.yournotes}/>
-                        </div>
-                        <div style={{width: "350px"}}>
-                            <FlatButton label="Kaydet" style={{float:"right"}} secondary={true} onClick={this.goToUpdate}/>
-                            <FlatButton label="İptal" style={{float:"right"}} primary={true} onClick={this.goToUpdate}/>
-                        </div>
-                    </div>
-                }
-                return content;
-            })()
-        }
+         <div style={styles.divCorner}>
+                <Paper style={styles.paperStyle} zDepth={1} >
+            <h4>{this.props.user.name} {this.props.user.lastname} - Profil Bilgileri</h4>
+                    <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >person</FontIcon>
+                    Adı: <TextField
+                    disabled={this.state.activeForm}
+                        hintText={this.props.user.name}
+                    defaultValue={this.props.user.name}
+                    /><br />
+                    <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >person</FontIcon>
+                    Soyadı: <TextField
+                        disabled={this.state.activeForm}
+                        hintText={this.props.user.lastname}
+                        defaultValue={this.props.user.lastname}
+                    /><br />
+                    <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >mail</FontIcon>
+                    Email:<TextField
+                    disabled={this.state.activeForm}
+                        hintText={this.props.user.email}
+                    defaultValue={this.props.user.email}
+                    /><br />
+                    <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >home</FontIcon>
+                    WebSite: <TextField
+                    disabled={this.state.activeForm}
+                        hintText={this.props.user.website}
+                        defaultValue={this.props.user.website}
+                    /><br />
+                    <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >note</FontIcon>
+                    Your Notes: <TextField
+                    disabled={this.state.activeForm}
+                    hintText={this.props.user.yournotes}
+                    defaultValue={this.props.user.yournotes}
+                />
+                    <FlatButton label="İptal" style={{float:"right"}} secondary={true} disabled={this.state.activeForm}/>
+                    <FlatButton label="Düzenle" style={{float:"right"}} secondary={true} onClick={this.goToUpdate}/>
+             </Paper>
+         </div>
     </div>
     )
     }
-
 }
-
 UserProfile.propTypes ={
     user: React.PropTypes.object.isRequired
 }
