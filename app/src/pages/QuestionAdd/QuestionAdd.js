@@ -91,6 +91,8 @@ export default class QuestionAdd extends React.Component {
     this.props.onSave();
   }
   render() {
+
+
         log("rendered",this.props.data.toJS());
         var categoryWeights = this.props.data.get("categoryWeights");//sorunun kategori ağırlıklar
         var setsOfQuestion = this.props.data.get("setList");//sorunun dahil olduğu setler

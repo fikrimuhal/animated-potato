@@ -28,6 +28,7 @@ export class detailButton extends React.Component {
     super(props)
   }
   render(){
+
     return(
       <div>
         <RaisedButton primary={true} onClick={this.onClick}>Detay</RaisedButton>
@@ -39,7 +40,8 @@ export class setWeightsFormatter extends React.Component {
   constructor(props) {
     super(props)
   }
-  render(){ 
+  render(){
+      console.log(this.props.value)
     return(
       <div>
           {
@@ -47,6 +49,7 @@ export class setWeightsFormatter extends React.Component {
                   var setList;
                   setList = rows.map((row, i) => {
                       <div>
+
                           {row.setList}
                       </div>
 

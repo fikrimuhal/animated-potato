@@ -6,11 +6,14 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Immutable from 'Immutable'
 import QuestionAdd from './QuestionAdd'
 import _lodash from 'lodash'
+import Mousetrap              from 'Mousetrap'
+
+
 const log = log2("QuestionAdd Index: ")
 var showToast=null;
 
 const categoryList = [
-  "Back-End","Front-End","Sistem-Yöneticisi","DBA","Java EE"
+  "Back-End","Front-End","Sistem-Yöneticisi","DBA","Java EE","Machine Learning"
 ];
 const allSet = [
   "Set 1","Set 2","Set 3"
@@ -48,6 +51,7 @@ export default class QuestionAddContainer extends React.Component {
     showToast=util.myToast("toastSettings",this.setState,this.state);
     util.bindFunctions.call(this,['modelChanged','showMessage','onSave']);
 }
+
 modelChanged = function changed(newData,oldData) {
   this.setState({data:newData});
 }

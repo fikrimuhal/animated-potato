@@ -183,7 +183,7 @@ export const getQuestionSets = function getQuestionSets() {
 
 export const getQuestionCategories = function getQuestionCategories(){
 
-  return ["Default Category","Back-End","Front-End","Sistem-Yöneticisi","DBA","Java EE"]
+  return ["Default Category","Back-End","Front-End","Sistem-Yöneticisi","DBA","Java EE","Machine Learning"]
 }
 
 
