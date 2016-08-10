@@ -1,52 +1,61 @@
-import React from 'react'
-import {util,log2} from '../../utils/'
-import RadioQuestion from './RadioQuestion'
+//core imports
+import React            from 'react'
+import RadioQuestion    from './RadioQuestion'
 import CheckboxQuestion from './CheckboxQuestion'
 import FreeTextQuestion from './FreeTextQuestion'
-import NumberQuestion from './NumberQuestion'
-import * as s from '../../layouts/style'
-const log = log2("Question")
-export default class Question extends React.Component{
-constructor(props){
-  super(props);
-  util.bindFunctions.call(this,['getQuestionComponent','onChange'])
-}
-onChange = function (value) {
-  var answer = this.props.answer;
-  answer.value = value;
-  this.props.onAnswer(answer);
-}
-getQuestionComponent = () => {
-  var questionType = this.props.question.type;
-  var component;
-  switch (questionType) {
-    case "radio":
-      component = <RadioQuestion question={this.props.question} answer={this.props.answer}  onChange={this.onChange}/>
-      break;
-      case "checkbox":
-      component = <CheckboxQuestion question={this.props.question} answer={this.props.answer} onChange={this.onChange} />
-        break;
-      case "freetext":
-      component =<FreeTextQuestion question={this.props.question} answer={this.props.answer} onChange={this.onChange}/>
-        break;
-      case "number":
-      component =<NumberQuestion question={this.props.question} answer={this.props.answer} onChange={this.onChange}/>
-        break;
-    default: <div></div>
+import NumberQuestion   from './NumberQuestion'
+import * as util        from '../../utils/utils'
+import log2             from '../../utils/log2'
+import * as s           from '../../layouts/style'
 
-  }
-  return component
-}
-shouldComponentUpdate= function(nextProps, nextState) {
-  // return !this.props.readMode;
-  return true;
-}
-render = function () {
-  log("render")
-  return (
-      <div style={s.userLayoutStyles.questionContainer}>
-        {this.getQuestionComponent()}
-      </div>
-  )
-}
+//variables and const definitions
+const log = log2("Question");
+
+
+//React component
+export default class Question extends React.Component {
+    constructor(props) {
+        super(props);
+        util.bindFunctions.call(this, ['getQuestionComponent', 'onChange'])
+    }
+
+    onChange = function (value) {
+        this.props.onAnswer(value);
+    };
+    getQuestionComponent = () => {
+        var questionType = this.props.question.type;
+        var component;
+        switch (questionType) {
+            case "radio":
+                component = <RadioQuestion question={this.props.question} onChange={this.onChange}/>;
+                break;
+            case "checkbox":
+                component = <CheckboxQuestion question={this.props.question} onChange={this.onChange}/>;
+                break;
+            case "freetext":
+                component = <FreeTextQuestion question={this.props.question} onChange={this.onChange}/>;
+                break;
+            case "number":
+                component = <NumberQuestion question={this.props.question} onChange={this.onChange}/>;
+                break;
+            case "yesno":
+                component = <RadioQuestion question={this.props.question} onChange={this.onChange}/>;
+                break;
+            default:
+                <div></div>
+
+        }
+        return component
+    }
+    shouldComponentUpdate = function (nextProps, nextState) {
+        return true;
+    }
+    render = function () {
+        log("rendered");
+        return (
+            <div style={s.userLayoutStyles.questionContainer}>
+                {this.getQuestionComponent()}
+            </div>
+        )
+    }
 }

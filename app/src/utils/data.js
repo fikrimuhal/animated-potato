@@ -281,17 +281,19 @@ export const clearUserAuthenticationInfo = ()=>{
 export const startTest = ()=>{
     var promise = new Promise((resolve,reject)=>{
        setTimeout(()=>{
-           var questions = ["adsada","adasdadas"];
-           questions = getQuestionsFromStorage();
+
+           var questions = getQuestionsFromStorage();
            var index = Math.floor(Math.random() * questions.length);
            var response = {
-               valid:(Math.floor(Math.random()*10) % 3 == 1),
+               valid:(Math.floor(Math.random()*10) % 4 != 3),
                firstQuestion: questions[index]
            };
+           console.log("startTest()->",response)
             resolve(response);
        },2000)
     });
-}
+    return promise;
+};
 export const answerQuestion = (questionId,answer)=>{
     var data = {
         questionId:questionId,
@@ -303,23 +305,13 @@ export const answerQuestion = (questionId,answer)=>{
             var questions = getQuestionsFromStorage();
             var index = Math.floor(Math.random() * questions.length);
             var response = {
-                testOver:(Math.floor(Math.random()*10) % 4 == 2),
+                testOver:(Math.floor(Math.random()*1000) % 5 == 0),
                 nextQuestion: questions[index]
             };
             resolve(response);
-        },3000)
+        },Math.floor(500+Math.random()*1500))
     });
-
+    return promise;
 };
 
-// export const getNextQuestion = () =>{
-//  var promise = new Promise((resolve,reject)=>{
-//     var waitTime = Math.floor(Math.random()*1000*6)+1;
-//     setTimeout(()=>{
-//         var questions = getQuestionsFromStorage();
-//         var index = Math.floor(Math.random() * questions.length);
-//         resolve(questions[index]);
-//     },waitTime)
-//  })
-// };
 

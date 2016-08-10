@@ -1,109 +1,108 @@
-import React from 'react'
-import Paper from 'material-ui/Paper'
-import SkillTest from './SkillTest'
-import {util, log2} from '../../utils/'
-import {Toast} from '../../components/MyComponents'
-import * as s  from '../../layouts/style'
-import * as db from '../../utils/data'
-const log = log2("SkillTestContainer")
-//const _questions = db.getQuestionsBySetName("Set 1");
-//var answers = [];
+//core imports
+import React        from 'react';
+import Paper        from 'material-ui/Paper';
+import SkillTest    from './SkillTest';
+import log2         from '../../utils/log2';
+import {Toast}      from '../../components/MyComponents';
+import * as s       from '../../layouts/style';
+import * as db      from '../../utils/data';
+import * as util    from '../../utils/utils'
+
+//variables and const definitions
+const log = log2("SkillTestContainer");
 var showToast = null;
 
+//React component
 export default class SkillTestContainer extends React.Component {
     constructor(props) {
         super(props);
-        // var applicant = db.getApplicantByUserId(props.params.userId);
-        //log("applicant", applicant)
-        //answers = (applicant!=null)?applicant.answers:[];
-        // var readMode = false;
-        // if (applicant != null) {
-        //     answers = applicant.answers;
-        //     readMode = true;
-        // }
-        // else {
-        //     answers = [];
-        // }
-
         this.state = {
-            ///answers: answers,
             toastSettings: {
                 open: false,
                 message: "",
                 duration: 2000
             },
-            dataWaiting:true
-            //readMode: readMode
+            questionReady: false,
+            testOver: false,
+            answer: [],
+            status: "ok"
         };
+        util.bindFunctions.call(this, ['getQuestionContainer', 'answerAndNextQuestion', 'saveAnswer', 'startTest']);
+        showToast = util.myToast("toastSettings", this.setState, this.state);
+        this.startTest();
+    }
 
-        //TO DO////////////////////////
-        db.startTest().then((response)=>{
-            if(response.valid){
-                var question =response.firstQuestion;
+    startTest = ()=> {
+        db.startTest().then((response)=> {
+            if (response.valid) {
+                var question = response.firstQuestion;
+                //log("soru geldi",question);
                 this.setState({
-
+                    currentQuestion: question,
+                    questionReady: true,
+                    testOver: false
                 });
             }
-            else{
-
+            else {
+                this.setState({
+                    status: "fail"
+                })
             }
         });
-        ////////////////////////
-        util.bindFunctions.call(this, ['handleOnChangeAnswer', 'handleOnSaveTest', 'showMessage']);
-        showToast = util.myToast("toastSettings", this.setState, this.state);
-    }
+    };
+    getQuestionContainer = function () {
+        var content;
+        if (this.state.status == "ok") {
+            if (this.state.testOver) {
+                content = <div>Test bitti.......</div>
+            }
+            else {
+                if (this.state.questionReady) {
+                    content = <SkillTest
+                        question={this.state.currentQuestion}
+                        testOver={this.state.testOver}
+                        answerAndNextQuestion={this.answerAndNextQuestion}
+                        saveAnswer={this.saveAnswer}/>
+                }
+                else {
+                    content = <div>Bir sonraki soru hazırlanıyor.....</div>
+                }
+            }
 
-    handleOnChangeAnswer = function (newData) {
-        if (this.state.readMode) {
-            this.showMessage("Your cannot edit answers", 2000);
         }
         else {
+            content = <div>Bu teste giremezseniz.....</div>
+        }
+
+        return content;
+    };
+    saveAnswer = function (answer) {
+        this.setState({
+            answer: answer
+        })
+    };
+
+    answerAndNextQuestion = function () {
+        this.setState({
+            questionReady: false
+        });
+        db.answerQuestion(this.state.currentQuestion.id, this.state.answer).then((response)=> {
+
             this.setState({
-                answers: newData
-            })
-        }
-
-    }
-    showMessage = function (message, duration) {
-        var toastSettings = {
-            open: true,
-            message: message,
-            duration: duration
-        }
-        this.setState({toastSettings: toastSettings});
-        var _this = this;
-        setTimeout(() => {
-            toastSettings.open = false;
-            this.setState({toastSettings: toastSettings});
-        }, duration);
-    }
-    handleOnSaveTest = function () {
-        if (this.state.readMode) {
-            this.showMessage("Your answers has been saved before !!", 3000);
-        }
-        else {
-            log("saved.");
-            var userId = this.props.params.userId;
-            var answers = this.state.answers;
-            db.setApplicant(userId, answers);
-            this.showMessage("Your answers succesfully saved. !!", 3000);
-        }
-
-    }
+                currentQuestion: response.testOver ? null : response.nextQuestion,
+                questionReady: !response.testOver,
+                testOver: response.testOver,
+                answer: []
+            });
+        });
+    };
     render = function () {
-        log("rendered", this.state)
+        log("rendered")
         return (
-
-
             <Paper style={s.userLayoutStyles.skillTestPaper}>
-                <SkillTest questions={_questions} answers={this.state.answers}
-                           onChangeAnswer={this.handleOnChangeAnswer} onSaveTest={this.handleOnSaveTest}
-                           readMode={this.state.readMode}/>
+                {this.getQuestionContainer()}
                 <Toast settings={this.state.toastSettings}/>
             </Paper>
-
-
-
         )
     }
 }

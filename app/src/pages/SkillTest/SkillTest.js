@@ -1,135 +1,65 @@
-import React from 'react'
-import Router from 'react-router'
-import {util,log2,db} from '../../utils/'
-import Question from './Question'
-import _ from 'lodash'
+//core imports
+import React        from 'react'
+import Router       from 'react-router'
+import Question     from './Question'
+import _            from 'lodash'
 import RaisedButton from 'material-ui/RaisedButton';
-import * as s from '../../layouts/style'
-require("!style!css!../../assets/css/animate.css")
-const log = log2("SkillTest")
-var animationMode=false;
-var animate=""
-export default class SkillTest extends React.Component{
-constructor(props){
-  super(props);
-  this.state = {
-    currentIndex:0
-  }
-  util.bindFunctions.call(this,['nextQuestion','previousQuestion',
-                                'onAnswer','getCurrentAnswer',
-                                'endTest']);
-}
-getCurrentAnswer = function () {
+import * as s       from '../../layouts/style'
+import * as util    from '../../utils/utils'
+import log2         from '../../utils/log2'
+import * as db      from '../../utils/data'
 
-  var answers = this.props.answers;
-  var question = this.props.questions[this.state.currentIndex];
-  var answerIndex = _.findIndex(answers,(ans)=>{return ans.questionId==question.id});
-  var ans = {};
-  if (answerIndex == -1) {
-     ans = {
-       questionId:question.id,
-       value : null
-     }
-  }
-  else {
-    ans = answers[answerIndex];
-  }
-  //log("getCurrentAnswer",ans,answers,answerIndex);
-  return ans;
-}
-  onAnswer = function (newAnswer) {
-    //log("onAnswer");
-    var answers = this.props.answers;
-    var currentAnswer  =this.getCurrentAnswer();
-      var qType = this.props.questions[this.state.currentIndex].type;
-    log("currentAnswer",currentAnswer)
-    if (currentAnswer.value == null) {
-       //answer.value = newAnswer.value;
-       answers.push(newAnswer);
-    }
-    else {
-      var updateIndex = _.findIndex(answers,(a)=>{return a.questionId==currentAnswer.questionId})
-      answers[updateIndex].value = newAnswer.value;
-    }
-    log("degisti",answers)
-    this.props.onChangeAnswer(answers);
-    if (qType=="radio") {
-      this.nextQuestion();
+//css  referancing
+require("!style!css!../../assets/css/animate.css");
+
+//variables and const definitions
+const log = log2("SkillTest");
+
+//React component
+export default class SkillTest extends React.Component {
+    constructor(props) {
+        super(props);
+        util.bindFunctions.call(this, ['nextQuestion', 'onAnswer']);
     }
 
-  }
-  nextQuestion = function () {
-    if (this.state.currentIndex < this.props.questions.length -1) {
-        animationMode=true;
-        animate="pulse"
-      this.setState({
-        currentIndex : (this.state.currentIndex + 1)
-      })
+    onAnswer = function (answer) {
+        this.props.saveAnswer(answer);
+    };
+    nextQuestion = function () {
+        this.props.answerAndNextQuestion();
+    };
+    componentDidMount = ()=> {
+        setTimeout(()=> {
+            var div = this.refs.animateDiv;
+            div.classList.remove("animated");
+            div.classList.remove("pulse");
+            div.classList.add("animated");
+            div.classList.add("pulse");
+        }, 50)
+    };
 
-    }
+    render = function () {
+        log("rendered")
+        var question = this.props.question;
+        var testOver = this.props.testOver;
+        return (
 
-  }
-  previousQuestion = function () {
-    if (this.state.currentIndex > 0) {
-        animationMode=true
-        animate="fadeOut"
-      this.setState({
-        currentIndex : (this.state.currentIndex - 1)
-      })
-
-    }
-  }
-  endTest = function () {
-    log("endTest")
-    this.props.onSaveTest();
-  }
-  componentDidUpdate = function (prevProps,prevState) {
-    if (animationMode) {
-      setTimeout(()=>{
-        var div = this.refs.animateDiv;
-        log("cdu",div);
-        div.classList.add("pulse")
-        div.classList.remove("fadeOut")
-        div.classList.add("animated")
-        animationMode=false;
-      },50)
-    }
-
-  }
-  componentWillUpdate = function (nextProps,nextState) {
-    if (animationMode) {
-      var div = this.refs.animateDiv;
-      div.classList.remove("pulse")
-      //div.classList.add("fadeOut")
-    }
-
-
-  }
-  render = function () {
-  log("render",Router)
-    var question  = this.props.questions[this.state.currentIndex];
-    var firstQuestion = (this.state.currentIndex == 0);
-    var lastQuestion = (this.state.currentIndex == (this.props.questions.length -1))
-    var endTest = (this.props.answers.length == this.props.questions.length)
-   log(firstQuestion,lastQuestion)
-    return (
-
-        <div style={{height:"100%"}}>
-          <div ref="animateDiv" style={{height:"100%"}}>
-            <Question key={question.id} question={question} onAnswer={this.onAnswer} answer={this.getCurrentAnswer()}  />
-            <div style={s.userLayoutStyles.testButtonGroup}>
-              <RaisedButton  label="< Previous" primary={true}   onClick={()=>this.previousQuestion()}  disabled={firstQuestion}/>
-              <RaisedButton  label="Next >" primary={true}   onClick={()=>this.nextQuestion()} style={{marginLeft:"3px"}} disabled={lastQuestion}/>
-              <RaisedButton  label="End Test" primary={true}   onClick={()=>this.endTest()} style={{marginLeft:"3px"}} disabled={!endTest}/>
+            <div style={{height: "100%"}}>
+                <div ref="animateDiv" style={{height: "100%"}}>
+                    <Question key={question.id} question={question} onAnswer={this.onAnswer}/>
+                    <div style={s.userLayoutStyles.testButtonGroup}>
+                        <RaisedButton label="Next >" primary={true} onClick={()=>this.nextQuestion()}
+                                      style={{marginLeft: "3px"}} disabled={testOver}/>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-    )
-  }
+        )
+    }
+}
 
-  }
+SkillTest.propTypes = {
+    question: React.PropTypes.object.isRequired,
+    testOver: React.PropTypes.bool.isRequired,
+    saveAnswer: React.PropTypes.func.isRequired
 
-  SkillTest.propTypes = {
-    questions: React.PropTypes.array.isRequired
-
-  }
+};
