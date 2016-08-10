@@ -4,7 +4,8 @@ import UserProfile from './userProfile'
 import FormIntro    from './formIntro'
 import * as db      from  '../../utils/data'
 import * as util    from '../../utils/utils'
-
+import * as s  from '../../layouts/style'
+import Paper from 'material-ui/Paper'
 //Styles
 const styles = {
   paperStyle: {
@@ -40,7 +41,8 @@ export default class UserHome extends React.Component{
     }
    render=function () {
      return(
-       <div>
+
+           <Paper style={s.userLayoutStyles.paperStyle}>
              <Tabs
                  value={this.state.value}
                  onChange={this.handleChange}
@@ -52,8 +54,8 @@ export default class UserHome extends React.Component{
                     <FormIntro/>
                  </Tab>
              </Tabs>
+           </Paper>
 
-       </div>
      )
    }
 }

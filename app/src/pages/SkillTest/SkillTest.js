@@ -37,99 +37,99 @@ getCurrentAnswer = function () {
   //log("getCurrentAnswer",ans,answers,answerIndex);
   return ans;
 }
-onAnswer = function (newAnswer) {
-  //log("onAnswer");
-  var answers = this.props.answers;
-  var currentAnswer  =this.getCurrentAnswer();
-    var qType = this.props.questions[this.state.currentIndex].type;
-  log("currentAnswer",currentAnswer)
-  if (currentAnswer.value == null) {
-     //answer.value = newAnswer.value;
-     answers.push(newAnswer);
-  }
-  else {
-    var updateIndex = _.findIndex(answers,(a)=>{return a.questionId==currentAnswer.questionId})
-    answers[updateIndex].value = newAnswer.value;
-  }
-  log("degisti",answers)
-  this.props.onChangeAnswer(answers);
-  if (qType=="radio") {
-    this.nextQuestion();
-  }
-  
-}
-nextQuestion = function () {
-  if (this.state.currentIndex < this.props.questions.length -1) {
-      animationMode=true;
-      animate="pulse"
-    this.setState({
-      currentIndex : (this.state.currentIndex + 1)
-    })
+  onAnswer = function (newAnswer) {
+    //log("onAnswer");
+    var answers = this.props.answers;
+    var currentAnswer  =this.getCurrentAnswer();
+      var qType = this.props.questions[this.state.currentIndex].type;
+    log("currentAnswer",currentAnswer)
+    if (currentAnswer.value == null) {
+       //answer.value = newAnswer.value;
+       answers.push(newAnswer);
+    }
+    else {
+      var updateIndex = _.findIndex(answers,(a)=>{return a.questionId==currentAnswer.questionId})
+      answers[updateIndex].value = newAnswer.value;
+    }
+    log("degisti",answers)
+    this.props.onChangeAnswer(answers);
+    if (qType=="radio") {
+      this.nextQuestion();
+    }
 
   }
+  nextQuestion = function () {
+    if (this.state.currentIndex < this.props.questions.length -1) {
+        animationMode=true;
+        animate="pulse"
+      this.setState({
+        currentIndex : (this.state.currentIndex + 1)
+      })
 
-}
-previousQuestion = function () {
-  if (this.state.currentIndex > 0) {
-      animationMode=true
-      animate="fadeOut"
-    this.setState({
-      currentIndex : (this.state.currentIndex - 1)
-    })
+    }
 
   }
-}
-endTest = function () {
-  log("endTest")
-  this.props.onSaveTest();
-}
-componentDidUpdate = function (prevProps,prevState) {
-  if (animationMode) {
-    setTimeout(()=>{
+  previousQuestion = function () {
+    if (this.state.currentIndex > 0) {
+        animationMode=true
+        animate="fadeOut"
+      this.setState({
+        currentIndex : (this.state.currentIndex - 1)
+      })
+
+    }
+  }
+  endTest = function () {
+    log("endTest")
+    this.props.onSaveTest();
+  }
+  componentDidUpdate = function (prevProps,prevState) {
+    if (animationMode) {
+      setTimeout(()=>{
+        var div = this.refs.animateDiv;
+        log("cdu",div);
+        div.classList.add("pulse")
+        div.classList.remove("fadeOut")
+        div.classList.add("animated")
+        animationMode=false;
+      },50)
+    }
+
+  }
+  componentWillUpdate = function (nextProps,nextState) {
+    if (animationMode) {
       var div = this.refs.animateDiv;
-      log("cdu",div);
-      div.classList.add("pulse")
-      div.classList.remove("fadeOut")
-      div.classList.add("animated")
-      animationMode=false;
-    },50)
+      div.classList.remove("pulse")
+      //div.classList.add("fadeOut")
+    }
+
+
   }
+  render = function () {
+  log("render",Router)
+    var question  = this.props.questions[this.state.currentIndex];
+    var firstQuestion = (this.state.currentIndex == 0);
+    var lastQuestion = (this.state.currentIndex == (this.props.questions.length -1))
+    var endTest = (this.props.answers.length == this.props.questions.length)
+   log(firstQuestion,lastQuestion)
+    return (
 
-}
-componentWillUpdate = function (nextProps,nextState) {
-  if (animationMode) {
-    var div = this.refs.animateDiv;
-    div.classList.remove("pulse")
-    //div.classList.add("fadeOut")
-  }
-
-
-}
-render = function () {
-log("render",Router)
-  var question  = this.props.questions[this.state.currentIndex];
-  var firstQuestion = (this.state.currentIndex == 0);
-  var lastQuestion = (this.state.currentIndex == (this.props.questions.length -1))
-  var endTest = (this.props.answers.length == this.props.questions.length)
- log(firstQuestion,lastQuestion)
-  return (
-
-      <div style={{height:"100%"}}>
-        <div ref="animateDiv" style={{height:"100%"}}>
-          <Question key={question.id} question={question} onAnswer={this.onAnswer} answer={this.getCurrentAnswer()}  />
-          <div style={s.userLayoutStyles.testButtonGroup}>
-            <RaisedButton  label="< Previous" primary={true}   onClick={()=>this.previousQuestion()}  disabled={firstQuestion}/>
-            <RaisedButton  label="Next >" primary={true}   onClick={()=>this.nextQuestion()} style={{marginLeft:"3px"}} disabled={lastQuestion}/>
-            <RaisedButton  label="End Test" primary={true}   onClick={()=>this.endTest()} style={{marginLeft:"3px"}} disabled={!endTest}/>
+        <div style={{height:"100%"}}>
+          <div ref="animateDiv" style={{height:"100%"}}>
+            <Question key={question.id} question={question} onAnswer={this.onAnswer} answer={this.getCurrentAnswer()}  />
+            <div style={s.userLayoutStyles.testButtonGroup}>
+              <RaisedButton  label="< Previous" primary={true}   onClick={()=>this.previousQuestion()}  disabled={firstQuestion}/>
+              <RaisedButton  label="Next >" primary={true}   onClick={()=>this.nextQuestion()} style={{marginLeft:"3px"}} disabled={lastQuestion}/>
+              <RaisedButton  label="End Test" primary={true}   onClick={()=>this.endTest()} style={{marginLeft:"3px"}} disabled={!endTest}/>
+            </div>
           </div>
         </div>
-      </div>
-  )
-}
+    )
+  }
 
-}
+  }
 
-SkillTest.propTypes = {
-  questions: React.PropTypes.array.isRequired
+  SkillTest.propTypes = {
+    questions: React.PropTypes.array.isRequired
 
-}
+  }

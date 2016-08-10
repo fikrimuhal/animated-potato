@@ -277,13 +277,49 @@ export const clearUserAuthenticationInfo = ()=>{
 }
 
 
-/*TO DO
+
+export const startTest = ()=>{
+    var promise = new Promise((resolve,reject)=>{
+       setTimeout(()=>{
+           var questions = ["adsada","adasdadas"];
+           questions = getQuestionsFromStorage();
+           var index = Math.floor(Math.random() * questions.length);
+           var response = {
+               valid:(Math.floor(Math.random()*10) % 3 == 1),
+               firstQuestion: questions[index]
+           };
+            resolve(response);
+       },2000)
+    });
+}
 export const answerQuestion = (questionId,answer)=>{
-
+    var data = {
+        questionId:questionId,
+        answer:answer,
+        token:util.getToken()
+    };
+    var promise = new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            var questions = getQuestionsFromStorage();
+            var index = Math.floor(Math.random() * questions.length);
+            var response = {
+                testOver:(Math.floor(Math.random()*10) % 4 == 2),
+                nextQuestion: questions[index]
+            };
+            resolve(response);
+        },3000)
+    });
 
 };
 
-export const getNextQuestion = () =>{
+// export const getNextQuestion = () =>{
+//  var promise = new Promise((resolve,reject)=>{
+//     var waitTime = Math.floor(Math.random()*1000*6)+1;
+//     setTimeout(()=>{
+//         var questions = getQuestionsFromStorage();
+//         var index = Math.floor(Math.random() * questions.length);
+//         resolve(questions[index]);
+//     },waitTime)
+//  })
+// };
 
-};
-*/

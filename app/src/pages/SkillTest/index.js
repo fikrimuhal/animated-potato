@@ -1,37 +1,54 @@
 import React from 'react'
 import Paper from 'material-ui/Paper'
 import SkillTest from './SkillTest'
-import {util, log2, db} from '../../utils/'
+import {util, log2} from '../../utils/'
 import {Toast} from '../../components/MyComponents'
 import * as s  from '../../layouts/style'
+import * as db from '../../utils/data'
 const log = log2("SkillTestContainer")
-const _questions = db.getQuestionsBySetName("Set 1");
-var answers = [];
+//const _questions = db.getQuestionsBySetName("Set 1");
+//var answers = [];
 var showToast = null;
 
 export default class SkillTestContainer extends React.Component {
     constructor(props) {
         super(props);
-        var applicant = db.getApplicantByUserId(props.params.userId);
-        log("applicant", applicant)
+        // var applicant = db.getApplicantByUserId(props.params.userId);
+        //log("applicant", applicant)
         //answers = (applicant!=null)?applicant.answers:[];
-        var readMode = false;
-        if (applicant != null) {
-            answers = applicant.answers;
-            readMode = true;
-        }
-        else {
-            answers = [];
-        }
+        // var readMode = false;
+        // if (applicant != null) {
+        //     answers = applicant.answers;
+        //     readMode = true;
+        // }
+        // else {
+        //     answers = [];
+        // }
+
         this.state = {
-            answers: answers,
+            ///answers: answers,
             toastSettings: {
                 open: false,
                 message: "",
                 duration: 2000
             },
-            readMode: readMode
-        }
+            dataWaiting:true
+            //readMode: readMode
+        };
+
+        //TO DO////////////////////////
+        db.startTest().then((response)=>{
+            if(response.valid){
+                var question =response.firstQuestion;
+                this.setState({
+
+                });
+            }
+            else{
+
+            }
+        });
+        ////////////////////////
         util.bindFunctions.call(this, ['handleOnChangeAnswer', 'handleOnSaveTest', 'showMessage']);
         showToast = util.myToast("toastSettings", this.setState, this.state);
     }
