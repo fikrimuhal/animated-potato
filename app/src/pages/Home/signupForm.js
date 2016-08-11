@@ -77,6 +77,8 @@ export default class SignUpForm extends React.Component{
      formData = userInfo;
        api.signUp(userInfo).then((res)=>{
           console.dir(res);
+           log(res.headers.get("user"));
+           log(res.headers.get('Authorization'));
        }).catch((err)=>{
            console.dir(err);
        });

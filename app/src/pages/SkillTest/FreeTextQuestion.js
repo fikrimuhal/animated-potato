@@ -20,6 +20,14 @@ export default class FreeTextQuestion extends React.Component {
         //log(value);
         this.props.onChange([value]);
     };
+    componentDidMount=()=> {
+        log(this.refs.txtQuestion);
+        setTimeout(()=>{
+
+            this.refs.txtQuestion.input.focus();
+        },100);
+
+    };
     render = function () {
         log("rendered");
         return (
@@ -29,7 +37,7 @@ export default class FreeTextQuestion extends React.Component {
                     {this.props.question.title}
                 </p>
                 <TextField floatingLabelText="Your answer" hintText="Your answer" onChange={this.handleTextboxChange}
-                           multiLine={true} rows={3} fullWidth={true}/>
+                           multiLine={true} rows={3} fullWidth={true} ref="txtQuestion"/>
 
             </div>
         )

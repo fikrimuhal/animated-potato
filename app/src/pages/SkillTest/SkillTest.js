@@ -32,7 +32,7 @@ export default class SkillTest extends React.Component {
     handleHotkey = function (e, combo) {
         log("combo", combo);
 
-        if (combo == "enter") {
+        if (combo == "enter" && !this.props.testOver) {
             this.props.answerAndNextQuestion();
         }
     };
@@ -56,6 +56,7 @@ export default class SkillTest extends React.Component {
                     <div style={s.userLayoutStyles.testButtonGroup}>
                         <RaisedButton label="Next >" primary={true} onClick={()=>this.nextQuestion()}
                                       style={{marginLeft: "3px"}} disabled={testOver}/>
+                        <span style={s.userLayoutStyles.tusStili}>Enter</span>
                     </div>
                 </div>
             </div>
