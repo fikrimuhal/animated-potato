@@ -5,7 +5,7 @@ import * as util    from '../../utils/utils'
 import Checkbox     from 'material-ui/Checkbox';
 import FontIcon     from 'material-ui/FontIcon';
 import {blue500}    from 'material-ui/styles/colors';
-import _            from 'lodash'
+import * as _            from 'lodash'
 import * as s       from '../../layouts/style'
 //variables and const definitions
 const log = log2("CheckboxQuestion");
@@ -23,18 +23,25 @@ export default class CheckboxQuestion extends React.Component {
 
     handleCheckbox = function (optionId, checked) {
 
-        log("filled",answer);
+
+        var answer = this.state.answer;
+        log("old answer",answer);
         if(checked){
-            var answer = this.state.answer;
-            answer.push(checked);
+            answer.push(optionId);
         }
+        else{
+         answer = _.filter(answer,(ans)=> {
+             return ans != optionId
+         });
+        }
+        log("new answer",answer);
         this.setState({
             answer:answer
         });
         this.props.onChange(answer);
     };
     isChecked = function (optionId) {
-        log(optionId,this.state.answer);
+        //log(optionId,this.state.answer);
       return  undefined !=  this.state.answer.find((v,k)=>{return v==optionId});
 
     };
@@ -43,8 +50,8 @@ export default class CheckboxQuestion extends React.Component {
         var answer = [];
         options.map((opt)=> {
             var checkbox = this.refs[opt.id];
-            console.dir(checkbox);
-            log(checkbox.state.switched);
+            //console.dir(checkbox);
+            //log(checkbox.state.switched);
             if(checkbox.state.switched){
                 answer.push(opt.id);
             }
