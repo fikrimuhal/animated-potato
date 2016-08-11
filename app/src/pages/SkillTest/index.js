@@ -1,13 +1,14 @@
 //core imports
-import React        from 'react';
-import Paper        from 'material-ui/Paper';
-import SkillTest    from './SkillTest';
-import log2         from '../../utils/log2';
-import {Toast}      from '../../components/MyComponents';
-import * as s       from '../../layouts/style';
-import * as db      from '../../utils/data';
-import * as util    from '../../utils/utils'
-
+import React         from 'react';
+import Paper         from 'material-ui/Paper';
+import SkillTest     from './SkillTest';
+import log2          from '../../utils/log2';
+import {Toast}       from '../../components/MyComponents';
+import * as s        from '../../layouts/style';
+import * as db       from '../../utils/data';
+import * as util     from '../../utils/utils'
+import WaitingPanel  from './WaitingPanel'
+import TestOverPanel from './TestOver'
 //variables and const definitions
 const log = log2("SkillTestContainer");
 var showToast = null;
@@ -54,7 +55,7 @@ export default class SkillTestContainer extends React.Component {
         var content;
         if (this.state.status == "ok") {
             if (this.state.testOver) {
-                content = <div>Test bitti.......</div>
+                content = <TestOverPanel/>
             }
             else {
                 if (this.state.questionReady) {
@@ -65,7 +66,7 @@ export default class SkillTestContainer extends React.Component {
                         saveAnswer={this.saveAnswer}/>
                 }
                 else {
-                    content = <div>Bir sonraki soru hazırlanıyor.....</div>
+                    content = <WaitingPanel/>
                 }
             }
 

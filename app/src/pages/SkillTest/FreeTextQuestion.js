@@ -5,7 +5,7 @@ import TextField    from 'material-ui/TextField';
 import FontIcon     from 'material-ui/FontIcon';
 import {yellow500}  from 'material-ui/styles/colors';
 import * as util    from '../../utils/utils';
-
+import * as s       from '../../layouts/style'
 //variables and const definitions
 const log = log2("FreeTextQuestion");
 
@@ -25,7 +25,9 @@ export default class FreeTextQuestion extends React.Component {
         return (
             <div>
                 <FontIcon color={yellow500} className="material-icons md-dark md-inactive">extension</FontIcon>
-                {this.props.question.title}
+                <p style={s.userLayoutStyles.questionText}>
+                    {this.props.question.title}
+                </p>
                 <TextField floatingLabelText="Your answer" hintText="Your answer" onChange={this.handleTextboxChange}
                            multiLine={true} rows={3} fullWidth={true}/>
 

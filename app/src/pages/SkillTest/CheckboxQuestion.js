@@ -6,7 +6,7 @@ import Checkbox     from 'material-ui/Checkbox';
 import FontIcon     from 'material-ui/FontIcon';
 import {blue500}    from 'material-ui/styles/colors';
 import _            from 'lodash'
-
+import * as s       from '../../layouts/style'
 //variables and const definitions
 const log = log2("CheckboxQuestion");
 
@@ -14,14 +14,45 @@ const log = log2("CheckboxQuestion");
 export default class CheckboxQuestion extends React.Component {
     constructor(props) {
         super(props);
-        util.bindFunctions.call(this, ['handleCheckbox'])
+        this.state={
+            answer:[]
+        };
+        util.bindFunctions.call(this, ['handleCheckbox','isChecked']);
+        log("constructor")
     }
 
     handleCheckbox = function (optionId, checked) {
-        var options = util.obj2Array(this.props.question.options);
-        options.map((opt)=> {
-            console.dir(this.refs[opt.id])
+
+        log("filled",answer);
+        if(checked){
+            var answer = this.state.answer;
+            answer.push(checked);
+        }
+        this.setState({
+            answer:answer
         });
+        this.props.onChange(answer);
+    };
+    isChecked = function (optionId) {
+        log(optionId,this.state.answer);
+      return  undefined !=  this.state.answer.find((v,k)=>{return v==optionId});
+
+    };
+    componentWillUpdate = function(nextProps, nextState) {
+        var options = util.obj2Array(this.props.question.options);
+        var answer = [];
+        options.map((opt)=> {
+            var checkbox = this.refs[opt.id];
+            console.dir(checkbox);
+            log(checkbox.state.switched);
+            if(checkbox.state.switched){
+                answer.push(opt.id);
+            }
+        });
+        this.state.answer = answer;
+    };
+    shouldComponentUpdate = function (nextProps, nextState) {
+        return true;
     };
     render = function () {
         log("rendered");
@@ -29,7 +60,9 @@ export default class CheckboxQuestion extends React.Component {
         return (
             <div>
                 <FontIcon color={blue500} className="material-icons md-dark md-inactive">label</FontIcon>
-                {this.props.question.title}
+                <p style={s.userLayoutStyles.questionText}>
+                    {this.props.question.title}
+                </p>
                 {
                     options.map((option) => {
 
@@ -37,10 +70,12 @@ export default class CheckboxQuestion extends React.Component {
                             <Checkbox
                                 ref={option.id}
                                 key={option.id}
+                                name={"options"}
                                 value={option.id}
                                 label={option.text}
-                                //checked={checked}
+                                checked={this.isChecked(option.id)}
                                 onCheck={(event, checked)=> this.handleCheckbox(option.id, checked)}
+                                labelStyle={s.userLayoutStyles.optionText}
                             />
                         )
                     })
@@ -51,4 +86,4 @@ export default class CheckboxQuestion extends React.Component {
 }
 CheckboxQuestion.propTypes = {
     question: React.PropTypes.any.isRequired
-}
+};

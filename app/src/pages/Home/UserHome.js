@@ -20,15 +20,17 @@ const styles = {
     marginRight:"5px"
   }
 }
-const user = db.getUserInfo();
+var user = null;
 export default class UserHome extends React.Component{
    constructor(props){
      super(props);
+      user=db.getUserInfo();
      this.state = {
            value: 'profile',
            user:user
        };
        util.bindFunctions.call(this,['handleChange']);
+
    }
     handleChange = (value) => {
         this.setState({

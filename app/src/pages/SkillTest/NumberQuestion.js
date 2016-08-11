@@ -5,7 +5,7 @@ import * as util  from '../../utils/utils';
 import Slider     from 'material-ui/Slider';
 import FontIcon   from 'material-ui/FontIcon';
 import {red500}   from 'material-ui/styles/colors';
-
+import * as s     from '../../layouts/style'
 //variables and const definitions
 const log = log2("NumberQuestion");
 
@@ -31,7 +31,9 @@ export default class NumberQuestion extends React.Component {
             <div>
 
                 <FontIcon color={red500} className="material-icons md-dark md-inactive">view_agenda</FontIcon>
-                {this.props.question.title}
+                <p style={s.userLayoutStyles.questionText}>
+                    {this.props.question.title}
+                </p>
                 {
                     <div>
                         <Slider

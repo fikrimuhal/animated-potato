@@ -235,13 +235,13 @@ export const auth2 = (username,password) => {
 }
 
 export const getApiPromise = method => data =>{
-    return fetch('/'+method,{
+    return fetch('http://192.168.1.61:9000/'+method,{
         method:'POST',
         body:  JSON.stringify(data),
         headers: new Headers({
          'Content-Type': 'application/json',
          'Accept': 'application/json',
-         'token':"1111"
+            'Access-Control-Allow-Origin':'*'
        })
      });
 }
@@ -285,7 +285,7 @@ export const startTest = ()=>{
            var questions = getQuestionsFromStorage();
            var index = Math.floor(Math.random() * questions.length);
            var response = {
-               valid:(Math.floor(Math.random()*10) % 4 != 3),
+               valid:(Math.floor(Math.random()*100) % 6 != 0),
                firstQuestion: questions[index]
            };
            console.log("startTest()->",response)
@@ -294,6 +294,7 @@ export const startTest = ()=>{
     });
     return promise;
 };
+
 export const answerQuestion = (questionId,answer)=>{
     var data = {
         questionId:questionId,
@@ -305,7 +306,7 @@ export const answerQuestion = (questionId,answer)=>{
             var questions = getQuestionsFromStorage();
             var index = Math.floor(Math.random() * questions.length);
             var response = {
-                testOver:(Math.floor(Math.random()*1000) % 5 == 0),
+                testOver:(Math.floor(Math.random()*1000) % 6 == 0),
                 nextQuestion: questions[index]
             };
             resolve(response);
@@ -313,5 +314,3 @@ export const answerQuestion = (questionId,answer)=>{
     });
     return promise;
 };
-
-

@@ -34,5 +34,15 @@ export const userLayoutStyles = {
 
         marginTop:"10px",
         minHeight:"80%"
+    },
+    questionText:{
+        fontSize:"21px",
+        color:"#444444",
+        fontWeight:"500"
+    },
+    optionText:{
+        fontSize:"20px",
+        color:"rgb(44, 94, 101)",
+        fontWeight:"500"
     }
 }

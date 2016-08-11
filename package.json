@@ -10,7 +10,7 @@
     "test:watch": "npm run karma conf/karma.conf.js",
     "test:coverage": "npm run karma conf/karma.coverage.conf.js -- --single-run",
     "test:ci": "npm run karma conf/karma.ci.conf.js -- --single-run",
-    "start": "webpack-dev-server --history-api-fallback --config conf/webpack.config.js --port 8081 --hot --progress --colors --content-base ./build",
+    "start": "webpack-dev-server --history-api-fallback --config conf/webpack.config.js --port 8081 --host 0.0.0.0 --hot --progress --colors --content-base ./build",
     "build": "cross-env NODE_ENV=production webpack --config conf/webpack.production.js",
     "build:gh": "npm run build && node ./build-gh-pages.js && rm -r ./dist",
     "deploy:surge": "npm build && surge -p build --domain animatedpotato.surge.sh"
@@ -95,6 +95,7 @@
     "react-addons-test-utils": "^15.0.0",
     "react-data-grid": "^1.0.21",
     "react-hotkey": "^0.6.0",
+    "react-spin": "^0.6.2",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",

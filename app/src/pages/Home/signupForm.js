@@ -9,7 +9,9 @@ import {Router, Route, Link,browserHistory}           from 'react-router'
 import Subheader        from 'material-ui/Subheader';
 import SmartForm        from "react-jsonschema-form"
 //my imports
-import {log2,util,db}   from '../../utils/'
+import {log2,util}   from '../../utils/'
+import * as db from '../../utils/data'
+import * as api from '../../utils/api'
 import {Toast}          from '../../components/MyComponents'
 
 //variables and consts
@@ -73,25 +75,30 @@ export default class SignUpForm extends React.Component{
      log(data);
      var userInfo = data.formData;
      formData = userInfo;
-     var validUser= db.getUserByEmail(userInfo.email) == null;
-     if (validUser) {
-         userInfo.id = util.guid();
-         var info = db.setUser(userInfo);
-         console.dir(info);
-        if (info.status=="ok") {
-            toastHelper("Your info succesfully saved.",2000);
-            util.setToken(info.token);
-             browserHistory.push("/home")
-        }
-        else {
-            toastHelper("An error occured when saving info. Try again.",2000);
-        }
-     }
-     else {
-           toastHelper("usernam/email invalid !!!!",2000);
-
-     }
-   }
+       api.signUp(userInfo).then((res)=>{
+          console.dir(res);
+       }).catch((err)=>{
+           console.dir(err);
+       });
+     //var validUser= db.getUserByEmail(userInfo.email) == null;
+     // if (validUser) {
+     //     userInfo.id = util.guid();
+     //     var info = db.setUser(userInfo);
+     //     console.dir(info);
+     //    if (info.status=="ok") {
+     //        toastHelper("Your info succesfully saved.",2000);
+     //        util.setToken(info.token);
+     //         browserHistory.push("/home")
+     //    }
+     //    else {
+     //        toastHelper("An error occured when saving info. Try again.",2000);
+     //    }
+     // }
+     // else {
+     //       toastHelper("usernam/email invalid !!!!",2000);
+     //
+     // }
+   };
 
    render=function () {
 

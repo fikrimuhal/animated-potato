@@ -5,7 +5,7 @@ import FontIcon                         from 'material-ui/FontIcon';
 import {pink500}                        from 'material-ui/styles/colors';
 import * as util                        from '../../utils/utils'
 import log2                             from '../../utils/log2'
-
+import * as s                           from '../../layouts/style'
 //variables and const definitions
 const log = log2("RadioQuestion");
 
@@ -28,7 +28,11 @@ export default class RadioQuestion extends React.Component {
         return (
             <div>
                 <FontIcon color={pink500} className="material-icons md-dark md-inactive">flag</FontIcon>
-                {this.props.question.title}
+
+                    <p style={s.userLayoutStyles.questionText}>
+                        {this.props.question.title}
+                    </p>
+
 
                 <RadioButtonGroup name={this.props.question.id} onChange={(event, value)=> this.radioChange(value)}>
                     {
@@ -38,6 +42,7 @@ export default class RadioQuestion extends React.Component {
                                     key={option.id}
                                     value={option.id}
                                     label={option.text}
+                                    labelStyle={s.userLayoutStyles.optionText}
                                 />
                             )
                         })

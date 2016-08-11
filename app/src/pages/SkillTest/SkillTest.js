@@ -23,6 +23,7 @@ export default class SkillTest extends React.Component {
     }
 
     onAnswer = function (answer) {
+        log("answer",answer);
         this.props.saveAnswer(answer);
     };
     nextQuestion = function () {
