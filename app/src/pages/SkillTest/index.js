@@ -21,7 +21,7 @@ export default class SkillTestContainer extends React.Component {
             toastSettings: {
                 open: false,
                 message: "",
-                duration: 2000
+                duration: 0
             },
             questionReady: false,
             testOver: false,
@@ -29,7 +29,7 @@ export default class SkillTestContainer extends React.Component {
             status: "ok"
         };
         util.bindFunctions.call(this, ['getQuestionContainer', 'answerAndNextQuestion', 'saveAnswer', 'startTest']);
-        showToast = util.myToast("toastSettings", this.setState, this.state);
+        showToast = util.myToast("toastSettings", this);
         this.startTest();
     }
 
@@ -84,18 +84,23 @@ export default class SkillTestContainer extends React.Component {
     };
 
     answerAndNextQuestion = function () {
-        this.setState({
-            questionReady: false
-        });
-        db.answerQuestion(this.state.currentQuestion.id, this.state.answer).then((response)=> {
-
+        if(this.state.answer.length == 0){
+            showToast("Soruya cevaplamadan geçemezseniz",1200);
+        }
+        else {
             this.setState({
-                currentQuestion: response.testOver ? null : response.nextQuestion,
-                questionReady: !response.testOver,
-                testOver: response.testOver,
-                answer: []
+                questionReady: false
             });
-        });
+            db.answerQuestion(this.state.currentQuestion.id, this.state.answer).then((response)=> {
+
+                this.setState({
+                    currentQuestion: response.testOver ? null : response.nextQuestion,
+                    questionReady: !response.testOver,
+                    testOver: response.testOver,
+                    answer: []
+                });
+            });
+        }
     };
     render = function () {
         log("rendered")
