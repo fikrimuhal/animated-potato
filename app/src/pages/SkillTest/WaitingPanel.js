@@ -10,11 +10,11 @@ export default  class  WaitingPanel extends  React.Component{
     }
     render = ()=>{
         var spinCfg = {
-            lines: 10 // The number of lines to draw
-            , length: 2 // The length of each line
-            , width: 45 // The line thickness
-            , radius: 15 // The radius of the inner circle
-            , scale: 0.8 // Scales overall size of the spinner
+            lines: 5 // The number of lines to draw
+            , length: 0 // The length of each line
+            , width: 35 // The line thickness
+            , radius: 10 // The radius of the inner circle
+            , scale: 0.5 // Scales overall size of the spinner
             , corners: 1 // Corner roundness (0..1)
             , color: 'rgb(0, 188, 212)' // #rgb or #rrggbb or array of colors
             , opacity: 0.2 // Opacity of the lines
@@ -25,7 +25,7 @@ export default  class  WaitingPanel extends  React.Component{
             , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
             , zIndex: 2e9 // The z-index (defaults to 2000000000)
             , className: 'spinner' // The CSS class to assign to the spinner
-            , top: '25%' // Top position relative to parent
+            , top: '35%' // Top position relative to parent
             , left: '50%' // Left position relative to parent
             , shadow: false // Whether to render a shadow
             , hwaccel: true // Whether to use hardware acceleration
