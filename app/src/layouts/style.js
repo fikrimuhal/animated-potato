@@ -44,5 +44,18 @@ export const userLayoutStyles = {
         fontSize:"20px",
         color:"rgb(44, 94, 101)",
         fontWeight:"500"
+    },
+    tusStili:{
+        display:            "inline-block",
+        padding:            "3px 5px",
+        font:               "11px Consolas, 'Liberation Mono', Menlo, Courier, monospace",
+        lineHeight:         "10px",
+        color:              "#555",
+        verticalAlign:      "middle",
+        backgroundColor:    "#fcfcfc",
+        borderSolid:        "1px   #ccc",
+        borderBottomColor:   "#bbb",
+        borderRadius:       "3px",
+        boxShadow:          "inset 0 -1px 0 #bbb"
     }
 }

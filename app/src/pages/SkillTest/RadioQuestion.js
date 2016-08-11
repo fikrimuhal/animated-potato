@@ -15,7 +15,7 @@ const log = log2("RadioQuestion");
 export default class RadioQuestion extends React.Component {
     constructor(props) {
         super(props);
-        util.bindFunctions.call(this, ['radioChange','handleHotkey']);
+        util.bindFunctions.call(this, ['radioChange','handleHotkey','radioQuestionText']);
         this.state={
             valueSelected:""
         }
@@ -62,6 +62,15 @@ export default class RadioQuestion extends React.Component {
             Mousetrap.unbind([`e`, `h`], this.handleHotkey);
         }
     };
+    radioQuestionText=(option)=>{
+        if(this.props.question.type == "yesno"){
+            var buttonText = (["yes","evet"].includes(option.text.toLowerCase().trim()))?"E":"H";
+            return <span>{option.text}<i style={s.userLayoutStyles.tusStili}>{buttonText}</i></span>
+        }
+        else{
+            return <span>{option.text}</span>
+        }
+    }
     render = function () {
         log("rendered",);
         var options = util.obj2Array(this.props.question.options);
@@ -81,7 +90,7 @@ export default class RadioQuestion extends React.Component {
                                 <RadioButton
                                     key={option.id}
                                     value={option.id}
-                                    label={option.text}
+                                    label={this.radioQuestionText(option)}
                                     labelStyle={s.userLayoutStyles.optionText}
                                 />
                             )

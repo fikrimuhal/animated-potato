@@ -5,11 +5,12 @@ import * as util    from '../../utils/utils'
 import Checkbox     from 'material-ui/Checkbox';
 import FontIcon     from 'material-ui/FontIcon';
 import {blue500}    from 'material-ui/styles/colors';
-import * as _            from 'lodash'
+import * as _       from 'lodash'
 import * as s       from '../../layouts/style'
+import Mousetrap    from 'Mousetrap'
 //variables and const definitions
 const log = log2("CheckboxQuestion");
-
+var keyOptionMap=[];
 //React component
 export default class CheckboxQuestion extends React.Component {
     constructor(props) {
@@ -17,7 +18,7 @@ export default class CheckboxQuestion extends React.Component {
         this.state={
             answer:[]
         };
-        util.bindFunctions.call(this, ['handleCheckbox','isChecked']);
+        util.bindFunctions.call(this, ['handleCheckbox','isChecked','handleHotkey']);
         log("constructor")
     }
 
@@ -45,6 +46,13 @@ export default class CheckboxQuestion extends React.Component {
       return  undefined !=  this.state.answer.find((v,k)=>{return v==optionId});
 
     };
+    handleHotkey = function (e,combo) {
+        if(Object.keys(keyOptionMap).includes(combo)){
+            var optId = keyOptionMap[combo];
+            var checked = !this.refs[optId].state.switched;
+            this.handleCheckbox(optId,checked);
+        }
+    };
     componentWillUpdate = function(nextProps, nextState) {
         var options = util.obj2Array(this.props.question.options);
         var answer = [];
@@ -58,12 +66,36 @@ export default class CheckboxQuestion extends React.Component {
         });
         this.state.answer = answer;
     };
+    componentDidMount = ()=> {
+        var keyCombines = [];
+        var options = util.obj2Array(this.props.question.options);
+        keyOptionMap=[];
+        for(var i=1;i<=options.length;i++){
+            keyCombines.push(i.toString());
+            keyOptionMap[i]=options[i-1].id;
+        }
+        //log("keyCombines",keyCombines);
+        //log("keyOptionMap",keyOptionMap);
+        Mousetrap.bind(keyCombines, this.handleHotkey);
+
+    };
+    componentWillUnmount = function () {
+        var keyCombines = [];
+        var options = util.obj2Array(this.props.question.options);
+        keyOptionMap=[];
+        for(var i=1;i <= options.length;i++){
+            keyCombines.push(i.toString());
+        }
+        Mousetrap.unbind(keyCombines, this.handleHotkey);
+
+    };
     shouldComponentUpdate = function (nextProps, nextState) {
         return true;
     };
     render = function () {
         log("rendered");
         var options = util.obj2Array(this.props.question.options);
+        var counter =1;
         return (
             <div>
                 <FontIcon color={blue500} className="material-icons md-dark md-inactive">label</FontIcon>
@@ -71,19 +103,23 @@ export default class CheckboxQuestion extends React.Component {
                     {this.props.question.title}
                 </p>
                 {
+
                     options.map((option) => {
 
                         return (
+                           <div>
+
                             <Checkbox
                                 ref={option.id}
                                 key={option.id}
                                 name={"options"}
                                 value={option.id}
-                                label={option.text}
+                                label={<span>{option.text}<i style={s.userLayoutStyles.tusStili}>{counter++}</i></span>}
                                 checked={this.isChecked(option.id)}
                                 onCheck={(event, checked)=> this.handleCheckbox(option.id, checked)}
                                 labelStyle={s.userLayoutStyles.optionText}
                             />
+                           </div>
                         )
                     })
                 }
