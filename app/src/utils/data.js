@@ -290,7 +290,7 @@ export const startTest = ()=>{
            };
            console.log("startTest()->",response)
             resolve(response);
-       },2000)
+       },800)
     });
     return promise;
 };
@@ -310,7 +310,7 @@ export const answerQuestion = (questionId,answer)=>{
                 nextQuestion: questions[index]
             };
             resolve(response);
-        },Math.floor(500+Math.random()*1500))
+        },Math.floor(Math.random()*500))
     });
     return promise;
 };

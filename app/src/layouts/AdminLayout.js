@@ -77,12 +77,12 @@ export default class AdminLayout extends React.Component {
     componentDidMount=()=> {
         Mousetrap.bind([`shift+m+1`, `shift+m+2`], this.menuHotkey);
         Mousetrap.bind([`shift+e`, `shift+m`], this.generalHotkeys);
-    }
+    };
     componentWillUnmount=()=> {
         Mousetrap.unbind([`shift+e`, `shift+m`], this.generalHotkeys);
         Mousetrap.unbind([`shift+m+1`, `shift+m+2`], this.menuHotkey);
 
-    }
+    };
     toogleMenu = function (event) {
         this.setState({
             open: !this.state.open
