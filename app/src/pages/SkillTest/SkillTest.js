@@ -30,13 +30,13 @@ export default class SkillTest extends React.Component {
         this.props.answerAndNextQuestion();
     };
     componentDidMount = ()=> {
-        setTimeout(()=> {
-            var div = this.refs.animateDiv;
-            div.classList.remove("animated");
-            div.classList.remove("pulse");
-            div.classList.add("animated");
-            div.classList.add("pulse");
-        }, 50)
+        // setTimeout(()=> {
+        //     var div = this.refs.animateDiv;
+        //     div.classList.remove("animated");
+        //     div.classList.remove("pulse");
+        //     div.classList.add("animated");
+        //     div.classList.add("pulse");
+        // }, 50)
     };
 
     render = function () {
