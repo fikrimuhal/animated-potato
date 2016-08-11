@@ -6,7 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Immutable from 'Immutable'
 import QuestionAdd from './QuestionAdd'
 import _lodash from 'lodash'
-import Mousetrap              from 'Mousetrap'
+import Mousetrap from 'Mousetrap';
 
 
 const log = log2("QuestionAdd Index: ")
@@ -52,10 +52,36 @@ export default class QuestionAddContainer extends React.Component {
     util.bindFunctions.call(this,['modelChanged','showMessage','onSave']);
 }
 
+    categoryWeightHotkey=(e,combo)=>{
+        if(combo.indexOf("alt") != -1){
+            var indis = parseInt(combo.split('+')[2]);
+            if(indis !== NaN)
+            {
+                this.categorySelected(catMap[indis-1],null);
+            }
+        }
+
+    }
+    setsHotkey=(e,combo)=>{
+
+
+    }
+    categoryHotkey=(e,combo)=>{
+
+
+    }
+    componentDidMount=()=> {
+
+    }
+    componentWillUnmount=()=> {
+
+    }
+
 modelChanged = function changed(newData,oldData) {
   this.setState({data:newData});
 }
 onSave = function () {
+
  var questionObj = this.state.data.toJS();
  log(questionObj)
  if (questionObj.type == "radio" || questionObj.type=="checkbox") {

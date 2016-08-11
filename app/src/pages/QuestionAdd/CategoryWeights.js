@@ -110,8 +110,6 @@ render= ()=>{
         <label>Category weights of question: </label>
           <div style = {styles.flexContainer}>
                 {
-
-
                   this.props.categoryList.map( (kategori) => {
                       let foundKey = kategoriList.findKey( x=> {return x.toJS().category == kategori;} );
                       let checked = foundKey != undefined;

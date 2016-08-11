@@ -28,15 +28,16 @@ export default class AnswerTypes  extends React.Component {
     this.props.onChangeAnswerType(value);
   }
  shouldComponentUpdate= function(nextProps, nextState) {
-   return false;
+   return true;
  }
   render () {
     log("rendered")
+      console.log("bu type",this.props.answerType)
     return (
       <div>
       <label>Answer Type:</label> <br/>
       <div style={styles.container}>
-        <RadioButtonGroup name="radiosAnswerTypes" defaultSelected="radio"  onChange={this.handleRadiButtonChange} style={styles.flexContainer} >
+        <RadioButtonGroup name="radiosAnswerTypes" valueSelected={this.props.answerType}  onChange={this.handleRadiButtonChange} style={styles.flexContainer} >
             <RadioButton value="radio" label="Radio" style={styles.child}/>
             <RadioButton value="checkbox" label="Checkbox" style={styles.child}/>
             <RadioButton value="freetext" label="FreeText" style={styles.child} />
