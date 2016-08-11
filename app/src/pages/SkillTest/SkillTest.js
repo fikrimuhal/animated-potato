@@ -8,7 +8,7 @@ import * as s       from '../../layouts/style'
 import * as util    from '../../utils/utils'
 import log2         from '../../utils/log2'
 import * as db      from '../../utils/data'
-
+import Mousetrap    from 'Mousetrap'
 //css  referancing
 require("!style!css!../../assets/css/animate.css");
 
@@ -19,26 +19,31 @@ const log = log2("SkillTest");
 export default class SkillTest extends React.Component {
     constructor(props) {
         super(props);
-        util.bindFunctions.call(this, ['nextQuestion', 'onAnswer']);
+        util.bindFunctions.call(this, ['nextQuestion', 'onAnswer', 'handleHotkey']);
     }
 
     onAnswer = function (answer) {
-        log("answer",answer);
+        log("answer", answer);
         this.props.saveAnswer(answer);
     };
     nextQuestion = function () {
         this.props.answerAndNextQuestion();
     };
-    componentDidMount = ()=> {
-        // setTimeout(()=> {
-        //     var div = this.refs.animateDiv;
-        //     div.classList.remove("animated");
-        //     div.classList.remove("pulse");
-        //     div.classList.add("animated");
-        //     div.classList.add("pulse");
-        // }, 50)
-    };
+    handleHotkey = function (e, combo) {
+        log("combo", combo);
 
+        if (combo == "enter") {
+            this.props.answerAndNextQuestion();
+        }
+    };
+    componentDidMount = ()=> {
+        Mousetrap.bind([`enter`], this.handleHotkey);
+    };
+    componentWillUnmount = function () {
+
+        Mousetrap.unbind([`enter`], this.handleHotkey);
+
+    };
     render = function () {
         log("rendered")
         var question = this.props.question;

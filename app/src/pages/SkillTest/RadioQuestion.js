@@ -43,7 +43,7 @@ export default class RadioQuestion extends React.Component {
             log("yesOption",yesOption)
             this.radioChange(yesOption.id);
         }
-        else{
+        else if(combo=="h"){
             var noOption = _.filter(options,(q)=>{return q.text.trim().toLowerCase() =="no"
                                                                               || q.text.trim().toLowerCase() =="hayır"});
             noOption=noOption[0];
@@ -51,6 +51,7 @@ export default class RadioQuestion extends React.Component {
             this.radioChange(noOption.id);
 
         }
+
     };
     componentDidMount = ()=> {
         if (this.props.question.type == "yesno") {
