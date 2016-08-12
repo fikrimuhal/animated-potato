@@ -1,0 +1,41 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET         /                                  controllers.ParticipantController.index
+
+POST        /insertParticipant                 controllers.ParticipantController.insertParticipant
+POST        /updateParticipant                 controllers.ParticipantController.updateParticipant
+POST        /admin/deleteParticipant           controllers.ParticipantController.deleteParticipant
+GET         /admin/getParticipants             controllers.ParticipantController.getParticipantswithPage(n: String)
+#GET         /admin/getParticipants             controllers.ParticipantController.getParticipants()
+
+POST        /admin/insertQuestion              controllers.QuestionController.insertQuestion
+POST        /admin/updateQuestion              controllers.QuestionController.updateQuestion
+POST        /admin/deleteQuestion              controllers.QuestionController.deleteQuestion
+GET         /admin/getQuestion/:n              controllers.QuestionController.getQuestionById(n)
+
+
+#POST        /admin/insertQuestionOption        controllers.QuestionOptionController.insertQuestionOption
+#POST        /admin/updateQuestionOption        controllers.QuestionOptionController.updateQuestionOption
+#POST        /admin/deleteQuestionOption        controllers.QuestionOptionController.deleteQuestionOption
+#GET         /admin/getQuestionOptions          controllers.QuestionOptionController.getQuestionOptions
+
+
+POST        /admin/insertCategory              controllers.CategoryController.insertCategory
+POST        /admin/updateCategory              controllers.CategoryController.updateCategory
+POST        /admin/deleteCategory              controllers.CategoryController.deleteCategory
+GET         /admin/getCategory/:n              controllers.CategoryController.getCategory(n)
+GET         /admin/getCategories               controllers.CategoryController.getCategories
+
+POST        /signUp                             controllers.LoginSignUpController.signUp()
+POST        /addAdmin                           controllers.LoginSignUpController.addAdmin()
+POST        /login                              controllers.LoginSignUpController.login()
+
+GET         /answer                             controllers.InterviewController.answer()
+
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file                      controllers.Assets.at(path="/public", file)
+
+    
