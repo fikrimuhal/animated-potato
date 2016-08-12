@@ -2,15 +2,18 @@ package InterviewService
 
 import akka.actor.{Actor, Props}
 import akka.actor.Actor.Receive
+import animatedPotato.protocol.protocol._
 
 /**
-  * Created by who on 08.08.2016.
+  * verilen kullanıcı ve  verilen test oturumu için sonraki soruyu döner
   */
 class RandomInterview extends Actor {
   var counter = 0
 
   override def receive: Receive = {
-    case _ => ???
+    case GetNextQuestion(answer :YesNoAnswer) =>
+      //answer.answer
+      sender ! NextQuestion(0)
   }
 }
 
