@@ -8,13 +8,15 @@ import animatedPotato.protocol.protocol._
   * verilen kullanıcı ve  verilen test oturumu için sonraki soruyu döner
   */
 class RandomInterview extends Actor {
-  var counter = 0
 
   override def receive: Receive = {
-    case GetNextQuestion(answer :YesNoAnswer) =>
-      //answer.answer
-      sender ! NextQuestion(0)
+
+
+    case GetNextQuestion(answer :YesNoAnswer) => sender ! NextQuestion(0)
+//    case TestReportRequest(id) => sender ! TestReport(id.left,id.right,scores =(1->33) )
+
   }
+
 }
 
 object RandomInterview {

@@ -4,7 +4,7 @@ import utils.{Constants, DatabaseConfig}
 
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
-
+case class YesNoAnswer(questionId: Int, value: Boolean)
 case class Answer(id : Option[Int],userid: Int, questionId: Int, answer: List[String]= Nil)
 
 object Answers {

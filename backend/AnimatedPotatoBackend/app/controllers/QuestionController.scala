@@ -47,7 +47,7 @@ class QuestionController @Inject() extends Controller {
   def getQuestionById(id: String) = Action {
     try {
       val question: Question = Questions.getQuestionById(id.toInt)
-      if (question.id == -1) BadRequest("-1")
+      if (question.id == Some(-1)) BadRequest("-1")
       else Ok(Json.toJson(Questions.getQuestionById(id.toInt)))
     }
     catch {

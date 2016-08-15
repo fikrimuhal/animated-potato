@@ -16,11 +16,6 @@ class AnswerController extends Controller {
     catch {
       case e: Exception => BadRequest("-1")
     }
-
-
   }
-
-
-
 
 }

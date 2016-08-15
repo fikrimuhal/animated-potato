@@ -6,10 +6,10 @@ object protocol {
   /**
     * Interview servise yollanacak, bu komuttan sonra interview
     * servisinin sonraki soruyu göndermesi gerek
-    *
+    * ilk soru için answer = None olarak gönderilecek
     * @param answer : kullanıcıdan gelen cevap,
     */
-  case class GetNextQuestion(answer: YesNoAnswer)
+  case class GetNextQuestion(answer: Option[YesNoAnswer]= None)
 
   /**
     * getNextQuestion'a response olarak bunun dönmesi gerek
@@ -25,8 +25,13 @@ object protocol {
     * @param restrictedCategoryList : None ise tüm kategoriler için hesaplanacak
     *                               Some(_) ise içindeki tüm parametreler için hesaplanacak
     */
-  case class TestStart(interviewId: InterviewId, userId: UserIdType,restrictedCategoryList : Option[List[CategoryId]])
+  case class TestStart(interviewId: InterviewId, userId: UserIdType, restrictedCategoryList: Option[List[CategoryId]] = None)
 
+  /**
+    *
+    * @param interviewId
+    * @param userId
+    */
   case class TestFinish(interviewId: InterviewId, userId: UserIdType)
 
   case class TestReport(interviewId: InterviewId, userId: UserIdType, scores: Map[CategoryId, Score])
@@ -34,9 +39,10 @@ object protocol {
   /**
     * backend interview servise yollar
     * interview servis cevap olarak TestReport yollar
+    *
     * @param id
     */
-  case class TestReportRequest(id: Either[InterviewId,UserIdType])
+  case class TestReportRequest(id: Either[InterviewId, UserIdType])
 
   case class UserQuestionAnswerTuple(userId: UserIdType, questionId: QuestionId, value: Boolean)
 
@@ -44,9 +50,10 @@ object protocol {
   /**
     * interview service tarafından yollanacak
     * backend cevap olarak List[Question] döndürecek
+    *
     * @param questionSetId
     */
-  case class RequestQuestions(questionSetId : IdType)
+  case class RequestQuestions(questionSetId: IdType)
 
   /**
     * interview service tarafından yollanacak
@@ -57,13 +64,14 @@ object protocol {
   /**
     * interview service tarafından yollanacak
     * backend cevap olarak Question döndürecek
+    *
     * @param questionId
     */
   case class RequestQuestion(questionId: QuestionId)
 
   case class QuestionCategoryWeightTuple(questionId: QuestionId,
                                          categoryId: CategoryId,
-                                         weight : Double)
+                                         weight: Double)
 
   /**
     *
@@ -79,7 +87,6 @@ object protocol {
   case object RequestAllQuestionCategoryWeight
 
 
-
   /**
     * interview serviceten geliyor
     * bu gelince aşağıdaki AllAnswerEvents yollanacak
@@ -93,6 +100,7 @@ object protocol {
     * @param value
     */
   case class AllAnswerEvents(value: List[UserQuestionAnswerTuple])
+
   type UserIdType = IdType
   type IdType = Long
   type InterviewId = Long
@@ -106,4 +114,6 @@ object protocol {
     * @param questionId
     * @param value
     */
-  case class YesNoAnswer(questionId: Int, value: Boolean)
+  case class YesNoAnswer(questionId: QuestionId, value: Boolean)
+
+}

@@ -8,7 +8,8 @@ import play.api.libs.json.{JsArray, JsObject, JsValue, Json}
 import play.api.mvc._
 import utils.Formatter._
 import javax.inject.{Inject, Named}
-
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import scala.concurrent.duration._
 import akka.actor.{Actor, ActorRef}
 
 class ParticipantController @Inject()(@Named("root") root: ActorRef) extends Controller with Secured {
@@ -17,12 +18,13 @@ class ParticipantController @Inject()(@Named("root") root: ActorRef) extends Con
 
   implicit val defaultTimeOut = Timeout(2 seconds)
 
-  def index = Action/*.async*/ {
-    Ok("READYs")
+  def index = Action {
+   // Ok("READY")
+//    (root ? ("interview", 4)).mapTo[String].map{response => Ok(response)}
 //    root ! 123
 //    root ! "Merhaba"
 //    (root ? "Merhaba").mapTo[String].map { response => Ok(response) }
-
+Ok("READY")
   }
 
   def insertParticipant() = Action { implicit request =>
@@ -53,7 +55,7 @@ class ParticipantController @Inject()(@Named("root") root: ActorRef) extends Con
     }
   }
 
-  def getParticipantswithPage(n: String) = Action {
+  def getParticipantsWithPage(n: String) = Action {
     try {
       Ok(Json.toJson(Participants.getParticipantsWithPage(n.toInt)))
     }
