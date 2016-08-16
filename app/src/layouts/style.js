@@ -84,5 +84,15 @@ export const userLayoutStyles = {
         backgroundColor: "#f9feff",
         height: "100%",
         margin: "15px"
+    },
+    signUpFormContainer:{
+        border: "1px dotted teal",
+        padding: "30px",
+        backgroundColor: "#f9feff",
+        height: "100%",
+        margin: "0 auto",
+        maxWidth:"500px",
+        width:"300px"
+
     }
 }

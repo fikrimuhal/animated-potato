@@ -1,18 +1,12 @@
 //core imports
-// import formCss from '../../assets/css/bootstrap-paper.min.css'
-// var formCss = require("style!css!../../assets/css/bootstrap-paper.min.css");
-import React            from 'react'
-import FlatButton       from 'material-ui/FlatButton'
-import FontIcon         from 'material-ui/FontIcon';
-import Paper            from 'material-ui/Paper'
-import {Router, Route, Link,browserHistory}           from 'react-router'
-import Subheader        from 'material-ui/Subheader';
-import SmartForm        from "react-jsonschema-form"
+import React                    from 'react'
+import SmartForm                from "react-jsonschema-form"
 //my imports
-import {log2,util}   from '../../utils/'
-import * as db from '../../utils/data'
-import * as api from '../../utils/api'
-import {Toast}          from '../../components/MyComponents'
+import {log2,util}              from '../../utils/'
+import * as db                  from '../../utils/data'
+import * as api                 from '../../utils/api'
+import {Toast}                  from '../../components/MyComponents'
+import * as s                   from '../../layouts/style'
 
 //variables and consts
 var toastHelper=null;
@@ -38,15 +32,15 @@ const schema = {
   type: "object",
   required: ["name","lastname","email","phone","username","password"],
   properties: {
-    name:     {type: "string", title: "Name"},
-    lastname: {type: "string", title: "Last Name"},
-    email:    {type: "string", title: "Email"},
-    phone:    {type: "string", title: "Phone"},
-    photo:    {type: "string", title: "Photo", format: "data-url"},
+    name:     {type: "string", title: "Adınız"},
+    lastname: {type: "string", title: "Soyadınız"},
+    email:    {type: "string", title: "Eposta"},
+    phone:    {type: "string", title: "Telefon"},
+    photo:    {type: "string", title: "Resim", format: "data-url"},
     website:  {type: "string", title: "Website"},
-    notes:    {type: "string", title: "Your Notes"},
-    username: {type: "string", title: "User Name"},
-    password: {type: "string", title: "Password"}
+    notes:    {type: "string", title: "Açıklama,Not"},
+    username: {type: "string", title: "Kullanıcı Adı"},
+    password: {type: "string", title: "Şifre"}
   }
 };
 const uiSchema = {
@@ -80,41 +74,12 @@ export default class SignUpForm extends React.Component{
        }).catch((err)=>{
            console.dir(err);
        });
-
-       // var xhr = new XMLHttpRequest();
-       // xhr.open('POST', 'http://192.168.1.61:9000/signUp', true);
-       // xhr.setRequestHeader("Content-type", "application/json");
-       // //var x = new  FormData();
-       // //x.append('data',JSON.stringify(formData));
-       //
-       // xhr.onreadystatechange = function () {
-       //     log(this);
-       // };
-       // xhr.send(JSON.stringify(formData));
-     //var validUser= db.getUserByEmail(userInfo.email) == null;
-     // if (validUser) {
-     //     userInfo.id = util.guid();
-     //     var info = db.setUser(userInfo);
-     //     console.dir(info);
-     //    if (info.status=="ok") {
-     //        toastHelper("Your info succesfully saved.",2000);
-     //        util.setToken(info.token);
-     //         browserHistory.push("/home")
-     //    }
-     //    else {
-     //        toastHelper("An error occured when saving info. Try again.",2000);
-     //    }
-     // }
-     // else {
-     //       toastHelper("username/email invalid !!!!",2000);
-     //
-     // }
    };
 
    render=function () {
 
      return(
-       <div>
+       <div style={s.userLayoutStyles.signInContainer}>
            <style>
                {
                    ".form-group > input,.form-group > textarea,textarea.form-control, input.form-control, [type=text].form-control, [type=password].form-control, [type=email].form-control, [type=tel].form-control, [contenteditable].form-control {\n    webkit-box-shadow: inset 0 -2px 0 #BDBDBD !important;\n    box-shadow: inset 0 -2px 0 #BDBDBD !important;\n}\n.form-group > input,.form-group > textarea,textarea.form-control:focus, input.form-control:focus,  [type=email].form-control:focus, [type=tel].form-control:focus, [contenteditable].form-control:focus {\n    webkit-box-shadow: inset 0 -2px 0 #00BCD4 !important;\n    box-shadow: inset 0 -2px 0 #00BCD4 !important;\n}"

@@ -240,7 +240,8 @@ export const getApiPromise = method => data =>{
         body:  JSON.stringify(data),
         headers: new Headers({
          'Content-Type': 'application/json',
-         'Accept': 'application/json'
+         'Accept': 'application/json',
+          'mode':'cors'
        })
      });
 }
