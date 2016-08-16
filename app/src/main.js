@@ -32,17 +32,14 @@ ReactDOM.render((
         <Route path="/" component={UserLayout}>
             <IndexRoute component={pages.UserHome}/>
             <Route path="home" component={pages.UserHome}/>
-            <Route path="interview" component={pages.Interview}>
-                <Route path="applicationform" component={pages.ApplyForm}/>
-                <Route path="detailssaved/::userId" component={pages.ApplyCompleted}/>
-                <Route path="questions/:userId" component={pages.QuestionList}/>
-                <Route path="testover" component={pages.TestCompleted}/>
-                <Route path="skilltest" component={pages.SkillTest}/>
-            </Route>
+
 
         </Route>
 
         <Route path="/" component={DefaultLayout}>
+            <Route path="interview" component={pages.Interview}>
+                <Route path="skilltest" component={pages.SkillTest}/>
+            </Route>
             <Route path="signin" component={pages.UserSignIn}/>
             <Route path="signup" component={pages.UserSignUp}/>
             <Route path="deneme" component={pages.Deneme}/>
