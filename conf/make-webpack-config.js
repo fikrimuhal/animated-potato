@@ -26,7 +26,7 @@ module.exports = function(options) {
 
   return {
     entry: options.production ? './app/src/main.js' : [
-      'webpack-dev-server/client?http://localhost:8081',
+      'webpack-dev-server/client?http://192.168.1.191:8081',
       'webpack/hot/only-dev-server',
       './app/src/main.js',
     ],
@@ -34,7 +34,7 @@ module.exports = function(options) {
     devtool: options.devtool,
     output: {
       path: options.production ? './dist' : './build',
-      publicPath: options.production ? '' : 'http://localhost:8081/',
+      publicPath: options.production ? '' : 'http://192.168.1.191:8081/',
       filename: options.production ? 'app.[hash].js' : 'app.js',
     },
     module: {

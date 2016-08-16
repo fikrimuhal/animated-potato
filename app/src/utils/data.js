@@ -284,8 +284,9 @@ export const startTest = ()=>{
            var questions = getQuestionsFromStorage();
            var index = Math.floor(Math.random() * questions.length);
            var response = {
-               valid:(Math.floor(Math.random()*100) % 6 != 0),
-               firstQuestion: questions[index]
+               valid:(Math.floor(Math.random()*100) % 7 != 0),
+               firstQuestion: questions[index],
+               questionCount: Math.floor(Math.random() * 100)
            };
            console.log("startTest()->",response)
             resolve(response);
@@ -305,8 +306,9 @@ export const answerQuestion = (questionId,answer)=>{
             var questions = getQuestionsFromStorage();
             var index = Math.floor(Math.random() * questions.length);
             var response = {
-                testOver:(Math.floor(Math.random()*1000) % 6 == 0),
-                nextQuestion: questions[index]
+                testOver:(Math.floor(Math.random()*1000) % 7 == 0),
+                nextQuestion: questions[index],
+                questionCount: Math.floor(Math.random() * 100)
             };
             resolve(response);
         },Math.floor(Math.random()*500))

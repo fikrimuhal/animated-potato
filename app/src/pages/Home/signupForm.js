@@ -76,12 +76,21 @@ export default class SignUpForm extends React.Component{
      var userInfo = data.formData;
      formData = userInfo;
        api.signUp(userInfo).then((res)=>{
-          console.dir(res);
-           log(res.headers.get("user"));
-           log(res.headers.get('Authorization'));
+          log(res);
        }).catch((err)=>{
            console.dir(err);
        });
+
+       // var xhr = new XMLHttpRequest();
+       // xhr.open('POST', 'http://192.168.1.61:9000/signUp', true);
+       // xhr.setRequestHeader("Content-type", "application/json");
+       // //var x = new  FormData();
+       // //x.append('data',JSON.stringify(formData));
+       //
+       // xhr.onreadystatechange = function () {
+       //     log(this);
+       // };
+       // xhr.send(JSON.stringify(formData));
      //var validUser= db.getUserByEmail(userInfo.email) == null;
      // if (validUser) {
      //     userInfo.id = util.guid();
@@ -97,7 +106,7 @@ export default class SignUpForm extends React.Component{
      //    }
      // }
      // else {
-     //       toastHelper("usernam/email invalid !!!!",2000);
+     //       toastHelper("username/email invalid !!!!",2000);
      //
      // }
    };

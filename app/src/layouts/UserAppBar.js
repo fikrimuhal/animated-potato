@@ -36,7 +36,7 @@ export default  class  UserAppBar extends  React.Component{
     };
     goToHome = function () {
         browserHistory.push("/home");
-    }
+    };
     render = ()=>{
     return(
 

@@ -21,19 +21,36 @@ export const userLayoutStyles = {
         margin: "0 auto",
         border: "1px teal solid",
         borderRadius: "10px",
-        height: "300px",
-        width: "40%",
+        height: "auto !important",
+        minHeight:"350px",
+        width: "65%",
         padding: "15px",
         marginTop: "10px"
     },
+    skillTestPaperMobil:{
+        margin: "0 auto",
+        //border: "1px teal solid",
+        //borderRadius: "10px",
+        height: "auto !important",
+        minHeight:"350px",
+        //width: "40%",
+        padding: "15px",
+        marginTop: "10px",
+        boxShadow:"none"
+    },
     testButtonGroup:{
         float:"right",
-        marginRight:"1%"
+        marginRight:"1%",
+        position:"relative",
+        bottom:0,
+        marginTop:"12%",
+        height:'20%'
     },
     questionContainer:{
 
         marginTop:"10px",
-        minHeight:"80%"
+        minHeight:"84%",
+        height: 'auto !important'
     },
     questionText:{
         fontSize:"21px",

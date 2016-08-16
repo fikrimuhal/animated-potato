@@ -9,6 +9,7 @@ import * as util    from '../../utils/utils'
 import log2         from '../../utils/log2'
 import * as db      from '../../utils/data'
 import Mousetrap    from 'Mousetrap'
+import {Grid, Row, Col} from 'react-flexbox-grid/lib/index';
 //css  referancing
 require("!style!css!../../assets/css/animate.css");
 
@@ -30,7 +31,7 @@ export default class SkillTest extends React.Component {
         this.props.answerAndNextQuestion();
     };
     handleHotkey = function (e, combo) {
-        log("combo", combo);
+        log("combo", combo, "testOver", this.props.testOver);
 
         if (combo == "enter" && !this.props.testOver) {
             this.props.answerAndNextQuestion();
@@ -49,17 +50,31 @@ export default class SkillTest extends React.Component {
         var question = this.props.question;
         var testOver = this.props.testOver;
         return (
+            <div>
+                <style>
+                    {
+                        ".gridX {width:auto}"
+                    }
+                </style>
+                <Grid width="500px" className={"gridX"}>
+                    <Row height={"80%"}>
+                        <Col xs={12} md={12} lg={12}>
+                            <Question key={question.id} question={question} onAnswer={this.onAnswer}/>
+                        </Col>
+                    </Row>
+                    <Row end="lg" style={{marginTop:"12%",textAlign:"right"}}>
+                        <Col xs={12} md={12} lg={12}>
+                            <RaisedButton label="Next >" primary={true} onClick={()=>this.nextQuestion()}
+                                          style={{marginLeft: "3px"}} disabled={testOver}/>
+                            <span style={s.userLayoutStyles.tusStili}>Enter</span>
+                        </Col>
+                    </Row>
 
-            <div style={{height: "100%"}}>
-                <div ref="animateDiv" style={{height: "100%"}}>
-                    <Question key={question.id} question={question} onAnswer={this.onAnswer}/>
-                    <div style={s.userLayoutStyles.testButtonGroup}>
-                        <RaisedButton label="Next >" primary={true} onClick={()=>this.nextQuestion()}
-                                      style={{marginLeft: "3px"}} disabled={testOver}/>
-                        <span style={s.userLayoutStyles.tusStili}>Enter</span>
-                    </div>
-                </div>
+                </Grid>
+
             </div>
+
+
         )
     }
 }

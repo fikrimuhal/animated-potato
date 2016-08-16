@@ -1,14 +1,15 @@
 //core imports
-import React         from 'react';
-import Paper         from 'material-ui/Paper';
-import SkillTest     from './SkillTest';
-import log2          from '../../utils/log2';
-import {Toast}       from '../../components/MyComponents';
-import * as s        from '../../layouts/style';
-import * as db       from '../../utils/data';
-import * as util     from '../../utils/utils'
-import WaitingPanel  from './WaitingPanel'
-import TestOverPanel from './TestOver'
+import React          from 'react';
+import Paper          from 'material-ui/Paper';
+import SkillTest      from './SkillTest';
+import log2           from '../../utils/log2';
+import {Toast}        from '../../components/MyComponents';
+import * as s         from '../../layouts/style';
+import * as db        from '../../utils/data';
+import * as util      from '../../utils/utils'
+import WaitingPanel   from './WaitingPanel'
+import TestOverPanel  from './TestOver'
+import LinearProgress from 'material-ui/LinearProgress';
 //variables and const definitions
 const log = log2("SkillTestContainer");
 var showToast = null;
@@ -26,11 +27,29 @@ export default class SkillTestContainer extends React.Component {
             questionReady: false,
             testOver: false,
             answer: [],
-            status: "ok"
+            status: "ok",
+            answeredQuestionCount: 0,
+            questionCount: 0,
+            progressValue: 0,
+            screenWidth:0
         };
         util.bindFunctions.call(this, ['getQuestionContainer', 'answerAndNextQuestion', 'saveAnswer', 'startTest']);
         showToast = util.myToast("toastSettings", this);
         this.startTest();
+        var clientW = document.documentElement.clientWidth;
+        this.state.paperStyle=clientW<=500 ? s.userLayoutStyles.skillTestPaperMobil:s.userLayoutStyles.skillTestPaper;
+        this.state.screenWidth= clientW;
+        setInterval(()=>{
+            var clientW = document.documentElement.clientWidth;
+            if(clientW != this.state.screenWidth){
+                   this.setState({
+                       paperStyle:clientW<=500 ? s.userLayoutStyles.skillTestPaperMobil:s.userLayoutStyles.skillTestPaper
+                   })
+            }
+
+        },1000);
+
+
     }
 
     startTest = ()=> {
@@ -41,7 +60,8 @@ export default class SkillTestContainer extends React.Component {
                 this.setState({
                     currentQuestion: question,
                     questionReady: true,
-                    testOver: false
+                    testOver: false,
+                    questionCount: response.questionCount
                 });
             }
             else {
@@ -84,12 +104,13 @@ export default class SkillTestContainer extends React.Component {
     };
 
     answerAndNextQuestion = function () {
-        if(this.state.answer.length == 0){
-            showToast("Soruya cevaplamadan geçemezseniz",1200);
+        if (this.state.answer.length == 0) {
+            showToast("Soruya cevaplamadan geçemezseniz", 1200);
         }
         else {
             this.setState({
-                questionReady: false
+                questionReady: false,
+                answeredQuestionCount: (this.state.answeredQuestionCount + 1)
             });
             db.answerQuestion(this.state.currentQuestion.id, this.state.answer).then((response)=> {
 
@@ -97,16 +118,26 @@ export default class SkillTestContainer extends React.Component {
                     currentQuestion: response.testOver ? null : response.nextQuestion,
                     questionReady: !response.testOver,
                     testOver: response.testOver,
-                    answer: []
+                    answer: [],
+                    questionCount: !response.testOver ? response.questionCount : 0
                 });
             });
         }
     };
+    getProgressValue = function () {
+        var answeredQuestionCount = this.state.answeredQuestionCount;
+        var waitingQuestionCount = this.state.questionCount;
+        var progressValue = (parseFloat(answeredQuestionCount) / (answeredQuestionCount + waitingQuestionCount)) * 100;
+        log("answeredQuestionCount,waitingQuestionCount,progressValue",answeredQuestionCount,waitingQuestionCount,progressValue)
+        return progressValue;
+    };
     render = function () {
         log("rendered")
         return (
-            <Paper style={s.userLayoutStyles.skillTestPaper}>
+            <Paper style={this.state.paperStyle}>
+                <LinearProgress mode="determinate" value={this.getProgressValue()} color={"red"}/>
                 {this.getQuestionContainer()}
+
                 <Toast settings={this.state.toastSettings}/>
             </Paper>
         )
