@@ -116,4 +116,22 @@ object protocol {
     */
   case class YesNoAnswer(questionId: QuestionId, value: Boolean)
 
+  case class QuestionOption(questionId: IdType,
+                            id: Option[IdType],
+                            title: String,
+                            weight: Double) {
+    require(title.toString.length <= 255)
+  }
+
+  case class Question(id: Option[IdType],
+                      title: String,
+                      qType: String,
+                      opts: List[QuestionOption],
+                      categories: List[QuestionCategoryRequest],
+                      setList: List[Int])
+
+  case class QuestionCategoryRequest(categoryid: CategoryId, weight: Double)
+  case class Category(id: Option[IdType],category : String)
+  case class Set(id: Option[Int], title: String, count: Int)
+
 }
