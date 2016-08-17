@@ -24,6 +24,7 @@ export default class DefaultLayout extends React.Component {
     super(props);
   }
   render= function () {
+    log("rendered")
     return  (
     <MuiThemeProvider>
       <div id="page_container">

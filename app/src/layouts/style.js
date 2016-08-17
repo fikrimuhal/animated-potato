@@ -77,13 +77,14 @@ export const userLayoutStyles = {
     },
     signInContainer: {
         margin: "0 auto",
-        //width: "368px",
         minWidth: "299px",
         border: "1px dotted teal",
         padding: "54px",
         backgroundColor: "#f9feff",
         height: "100%",
-        margin: "15px"
+        maxWidth: "500px",
+        margin: "0 auto",
+        marginTop: "15px"
     },
     signUpFormContainer:{
         border: "1px dotted teal",

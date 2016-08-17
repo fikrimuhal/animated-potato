@@ -48,7 +48,7 @@ export default class SkillTestContainer extends React.Component {
             }
 
         },1000);
-
+        log("this.props",this.props);
 
     }
 

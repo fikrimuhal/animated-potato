@@ -37,7 +37,7 @@ ReactDOM.render((
         </Route>
 
         <Route path="/" component={DefaultLayout}>
-            <Route path="interview" component={pages.Interview}>
+            <Route path="interview" component={pages.InterView}>
                 <Route path="skilltest" component={pages.SkillTest}/>
             </Route>
             <Route path="signin" component={pages.UserSignIn}/>
