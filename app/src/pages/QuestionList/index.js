@@ -19,7 +19,7 @@ import Checkbox from 'material-ui/Checkbox';
 
 const Selectors = Data.Selectors;
 const log = log2("Question List")
-log("Question List",Data)
+//log("Question List",Data)
 
 var rows = db.getQuestionsFromStorage();
 

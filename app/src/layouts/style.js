@@ -1,8 +1,8 @@
 /**
  * Created by MYigit on 9.8.2016.
  */
-var image = require("../assets/images/bg1.jpg")
-export const userLayoutStyles = {
+var image=require("../assets/images/bg1.jpg")
+export const userLayoutStyles={
     paperStyle: {
         margin: "0 auto",
         border: "1px teal solid",
@@ -29,11 +29,8 @@ export const userLayoutStyles = {
     },
     skillTestPaperMobil: {
         margin: "0 auto",
-        //border: "1px teal solid",
-        //borderRadius: "10px",
         height: "auto !important",
         minHeight: "350px",
-        //width: "40%",
         padding: "15px",
         marginTop: "10px",
         boxShadow: "none"
@@ -86,14 +83,14 @@ export const userLayoutStyles = {
         margin: "0 auto",
         marginTop: "15px"
     },
-    signUpFormContainer:{
+    signUpFormContainer: {
         border: "1px dotted teal",
         padding: "30px",
         backgroundColor: "#f9feff",
         height: "100%",
         margin: "0 auto",
-        maxWidth:"500px",
-        width:"300px"
+        maxWidth: "500px",
+        width: "300px"
 
     }
 }

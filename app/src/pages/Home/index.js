@@ -1,12 +1,11 @@
-import React        from 'react'
-import RaisedButton   from 'material-ui/RaisedButton'
-import FontIcon     from 'material-ui/FontIcon';
-import Paper        from 'material-ui/Paper'
-import TextField    from 'material-ui/TextField'
-import {Link, browserHistory}       from 'react-router'
-import {log2}       from '../../utils/log2'
-import * as s       from '../../layouts/style'
-import * as util    from '../../utils/utils'
+import React                   from 'react'
+import RaisedButton            from 'material-ui/RaisedButton'
+import TextField               from 'material-ui/TextField'
+import {browserHistory}        from 'react-router'
+import {log2}                  from '../../utils/log2'
+import * as s                  from '../../layouts/style'
+import * as util               from '../../utils/utils'
+import * as db                 from '../../utils/data'
 const log=log2("StartTest");
 export default class StartTest extends React.Component {
     constructor(props) {
@@ -21,6 +20,14 @@ export default class StartTest extends React.Component {
         var query=this.props.location.search + "&email=" + email;
         log(query);
         browserHistory.push("/skilltest" + query)
+    };
+    componentWillMount=function () {
+        if(db.isLoggedIn()) {
+            browserHistory.push("/")
+        }
+        else {
+            //browserHistory.push("/interview")
+        }
     };
     render=function () {
         log("rendered");

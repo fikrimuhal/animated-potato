@@ -3,5 +3,4 @@ coverage
 dist
 .idea
 npm-debug.log
-src/
 .editorconfig.example

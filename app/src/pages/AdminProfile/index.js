@@ -17,7 +17,7 @@ import TextField from 'material-ui/TextField';
 
 const Selectors = Data.Selectors;
 const log = log2("Admin Profile")
-log("Admin Profile")
+//log("Admin Profile")
 
 const styles = {
   customWidth: {

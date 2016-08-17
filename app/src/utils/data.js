@@ -295,6 +295,24 @@ export const startTest = ()=>{
     });
     return promise;
 };
+export const startTestWithoutAuthentication = (email)=>{
+    //Request to API by email and without auth token
+    var promise = new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+
+            var questions = getQuestionsFromStorage();
+            var index = Math.floor(Math.random() * questions.length);
+            var response = {
+                valid:(Math.floor(Math.random()*100) % 7 != 0),
+                firstQuestion: questions[index],
+                questionCount: Math.floor(Math.random() * 100)
+            };
+            console.log("startTest()->",response)
+            resolve(response);
+        },800)
+    });
+    return promise;
+};
 
 export const answerQuestion = (questionId,answer)=>{
     var data = {
@@ -309,7 +327,8 @@ export const answerQuestion = (questionId,answer)=>{
             var response = {
                 testOver:(Math.floor(Math.random()*1000) % 7 == 0),
                 nextQuestion: questions[index],
-                questionCount: Math.floor(Math.random() * 100)
+                questionCount: Math.floor(Math.random() * 100),
+                isValidUser:Math.floor(Math.random() * 100) % 5 == 0 // eğer false ise kayıt olma ekranına gidecek,true ise oturum açma ekranına gidicek
             };
             resolve(response);
         },Math.floor(Math.random()*500))

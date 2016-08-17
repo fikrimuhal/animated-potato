@@ -9,7 +9,7 @@ import perf from "react-addons-perf";
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 const log=log2("app");
-const perflog=log2("performance");
+//const perflog=log2("performance");
 // setTimeout(function () {
 //   perflog("started");
 //   //perf.start();
@@ -60,7 +60,7 @@ ReactDOM.render((
 
     </Router>
 ), document.getElementById('app'))
-perflog(perf);
+//perflog(perf);
 if(module.hot) {
     module.hot.accept();
 }
