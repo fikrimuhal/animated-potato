@@ -23,7 +23,7 @@ export const userLayoutStyles = {
         borderRadius: "10px",
         height: "auto !important",
         minHeight: "350px",
-        width: "65%",
+        width: "55%",
         padding: "15px",
         marginTop: "10px"
     },

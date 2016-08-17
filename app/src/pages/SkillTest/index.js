@@ -135,7 +135,7 @@ export default class SkillTestContainer extends React.Component {
         log("rendered")
         return (
             <Paper style={this.state.paperStyle}>
-                <LinearProgress mode="determinate" value={this.getProgressValue()} color={"red"}/>
+                <LinearProgress mode="determinate" value={this.getProgressValue()} color={"red"} style={{height:"10px"}} />
                 {this.getQuestionContainer()}
 
                 <Toast settings={this.state.toastSettings}/>
