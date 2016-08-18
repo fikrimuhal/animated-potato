@@ -6,8 +6,6 @@ import Paper        from 'material-ui/Paper'
 import {Link}       from 'react-router'
 import Subheader    from 'material-ui/Subheader';
 
-//My Components
-import SignUpForm   from './SignUpForm'
 
 
 

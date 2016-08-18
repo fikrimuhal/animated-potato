@@ -11,7 +11,7 @@ import log2                   from '../utils/log2'
 import * as util              from '../utils/utils'
 import * as db                from '../utils/data'
 import AdminAppBar            from './AdminAppBar'
-import Mousetrap              from 'Mousetrap'
+import Mousetrap              from 'mousetrap'
 var  userInfo = null;
 const log = log2("AdminLayout.js:")
 var image = require("../assets/images/bg1.jpg")

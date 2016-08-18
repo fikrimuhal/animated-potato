@@ -6,8 +6,8 @@ import AnswerTypes from './AnswerTypes';
 import QuestionSets from './QuestionSets'
 import CategoryWeights from './CategoryWeights'
 import QuestionOptions from './QuestionOptions'
-import Immutable from 'Immutable'
-import Mousetrap from 'Mousetrap';
+import Immutable from 'immutable'
+import Mousetrap from 'mousetrap';
 
 
 const log = log2("QuestionAdd: ")

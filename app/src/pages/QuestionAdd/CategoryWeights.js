@@ -3,9 +3,9 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Slider from 'material-ui/Slider';
 import Checkbox from 'material-ui/Checkbox'
 import {log2,util} from '../../utils/'
-import Immutable from 'Immutable'
+import Immutable from 'immutable'
 import { Link ,browserHistory} from 'react-router';
-import Mousetrap from 'Mousetrap';
+import Mousetrap from 'mousetrap';
 import _lodash from 'lodash';
 
 var catMap=[];

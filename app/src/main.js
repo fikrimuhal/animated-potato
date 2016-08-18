@@ -44,7 +44,7 @@ ReactDOM.render((
             </Route>
             <Route path="signin" component={pages.UserSignIn}/>
             <Route path="signup" component={pages.UserSignUp}/>
-            <Route path="deneme" component={pages.Deneme}/>
+            <Route path="graphicinfo" component={pages.GraphicInfo}/>
         </Route>
         <Route path="/" component={AdminLayout}>
             <Route path="adminpanel" component={pages.AdminPanel}>

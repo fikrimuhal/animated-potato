@@ -3,10 +3,11 @@ import { Link ,browserHistory} from 'react-router'
 import {log2,db,util} from '../../utils/'
 import {Toast} from '../../components/MyComponents'
 import RaisedButton from 'material-ui/RaisedButton';
-import Immutable from 'Immutable'
+var Immutable = require('immutable');
+var Mousetrap = require('mousetrap');
 import QuestionAdd from './QuestionAdd'
 import _lodash from 'lodash'
-import Mousetrap from 'Mousetrap';
+
 
 
 const log = log2("QuestionAdd Index: ")

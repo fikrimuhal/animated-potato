@@ -7,7 +7,6 @@ import {Toast}          from '../../components/MyComponents';
 import * as s           from '../../layouts/style';
 import * as db          from '../../utils/data';
 import * as util        from '../../utils/utils'
-import WaitingPanel     from './WaitingPanel'
 import TestOverPanel    from './TestOver'
 import LinearProgress   from 'material-ui/LinearProgress';
 import {browserHistory} from 'react-router'

@@ -1,14 +1,13 @@
 //core imports
 import React               from 'react'
 import Router              from 'react-router'
-import Question            from './Question'
 import _                   from 'lodash'
 import RaisedButton        from 'material-ui/RaisedButton';
 import * as s              from '../../layouts/style'
 import * as util           from '../../utils/utils'
 import log2                from '../../utils/log2'
 import * as db             from '../../utils/data'
-import Mousetrap           from 'Mousetrap'
+import Mousetrap           from 'mousetrap'
 import {Grid, Row, Col}    from 'react-flexbox-grid/lib/index';
 import Toggle              from 'material-ui/Toggle';
 //css  referancing
