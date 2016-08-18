@@ -24,15 +24,16 @@ export default class DefaultLayout extends React.Component {
     super(props);
   }
   render= function () {
+    log("rendered")
     return  (
     <MuiThemeProvider>
       <div id="page_container">
          <header>
               <AppBar title="Fikrimuhal Teknoloji - HR" showMenuIconButton={false}/>
           </header>
-          <Paper style={styles.paperStyle} zDepth={4}>
+          {/*<Paper style={styles.paperStyle} zDepth={4}>*/}
             {this.props.children}
-          </Paper>
+          {/*</Paper>*/}
       </div>
     </MuiThemeProvider>
     )

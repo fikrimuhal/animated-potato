@@ -21,10 +21,9 @@ export default class FreeTextQuestion extends React.Component {
         this.props.onChange([value]);
     };
     componentDidMount=()=> {
-        log(this.refs.txtQuestion);
+        //log(this.refs.txtQuestion);
         setTimeout(()=>{
-
-            this.refs.txtQuestion.input.focus();
+            this.refs.txtQuestion.input.refs.input.focus();
         },100);
 
     };

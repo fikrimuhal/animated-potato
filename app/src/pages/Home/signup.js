@@ -6,8 +6,6 @@ import Paper        from 'material-ui/Paper'
 import {Link}       from 'react-router'
 import Subheader    from 'material-ui/Subheader';
 
-//My Components
-import SignUpForm   from './SignUpForm'
 
 
 
@@ -17,7 +15,7 @@ export default class UserSignUp extends React.Component{
    }
    render=function () {
      return(
-       <div style={{width:"400px"}}>
+       <div>
            <Subheader>Fikrimuhal HR - Sign Up</Subheader>
            <SignUpForm />
        </div>

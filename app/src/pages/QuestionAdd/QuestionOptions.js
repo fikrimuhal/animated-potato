@@ -3,7 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Slider from 'material-ui/Slider';
 import TextField from 'material-ui/TextField'
 import {log2,util} from '../../utils/'
-import Immutable from  'Immutable'
+import Immutable from  'immutable'
 const log = log2("QuestionOptions: ")
 const styles = {
   flexContainer:{

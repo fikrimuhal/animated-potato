@@ -5,14 +5,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {log2,util} from '../../utils/'
 import * as db from '../../utils/data'
 import {Table} from 'material-ui/Table';
-import MTableHead from './MTableHead'
-import MTableBody from './MTableBody'
-import OrderFilterPanel from './OrderFilterPanel'
 import ReactDataGrid from 'react-data-grid';
 import { Toolbar, Data } from 'react-data-grid/addons';
 const Selectors = Data.Selectors;
 const log = log2("ParticipantList")
-log("ReactDataGrid",Data)
+//log("ReactDataGrid",Data)
 const styles = {
   customWidth: {
    width: 150,
@@ -26,7 +23,6 @@ var columns = [
 {
   key: 'fullName',
   name: 'Full Name',
-  filterable: true,
   sortable : true
 },
 {

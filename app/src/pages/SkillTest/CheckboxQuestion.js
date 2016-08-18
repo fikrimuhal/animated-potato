@@ -19,7 +19,7 @@ export default class CheckboxQuestion extends React.Component {
             answer:[]
         };
         util.bindFunctions.call(this, ['handleCheckbox','isChecked','handleHotkey']);
-        log("constructor")
+        //log("constructor")
     }
 
     handleCheckbox = function (optionId, checked) {

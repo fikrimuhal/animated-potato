@@ -100,6 +100,9 @@
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.13",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "classnames": "^2.2.5",
+    "flexboxgrid": "^6.3.1",
+    "react-flexbox-grid": "^0.10.2"
   }
 }

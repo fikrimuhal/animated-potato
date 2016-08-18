@@ -1,8 +1,8 @@
 /**
  * Created by MYigit on 9.8.2016.
  */
-var image = require("../assets/images/bg1.jpg")
-export const userLayoutStyles = {
+var image=require("../assets/images/bg1.jpg")
+export const userLayoutStyles={
     paperStyle: {
         margin: "0 auto",
         border: "1px teal solid",
@@ -15,47 +15,82 @@ export const userLayoutStyles = {
     },
     main: {
         backgroundImage: "url(" + image + ")",
-        height:"100%"
+        height: "100%"
     },
-    skillTestPaper:{
+    skillTestPaper: {
         margin: "0 auto",
         border: "1px teal solid",
         borderRadius: "10px",
-        height: "300px",
-        width: "40%",
+        height: "auto !important",
+        minHeight: "350px",
+        width: "55%",
         padding: "15px",
         marginTop: "10px"
     },
-    testButtonGroup:{
-        float:"right",
-        marginRight:"1%"
+    skillTestPaperMobil: {
+        margin: "0 auto",
+        height: "auto !important",
+        minHeight: "350px",
+        padding: "15px",
+        marginTop: "10px",
+        boxShadow: "none"
     },
-    questionContainer:{
+    testButtonGroup: {
+        float: "right",
+        marginRight: "1%",
+        position: "relative",
+        bottom: 0,
+        marginTop: "12%",
+        height: '20%'
+    },
+    questionContainer: {
 
-        marginTop:"10px",
-        minHeight:"80%"
+        marginTop: "10px",
+        minHeight: "84%",
+        height: 'auto !important'
     },
-    questionText:{
-        fontSize:"21px",
-        color:"#444444",
-        fontWeight:"500"
+    questionText: {
+        fontSize: "21px",
+        color: "#444444",
+        fontWeight: "500"
     },
-    optionText:{
-        fontSize:"20px",
-        color:"rgb(44, 94, 101)",
-        fontWeight:"500"
+    optionText: {
+        fontSize: "20px",
+        color: "rgb(44, 94, 101)",
+        fontWeight: "500"
     },
-    tusStili:{
-        display:            "inline-block",
-        padding:            "3px 5px",
-        font:               "11px Consolas, 'Liberation Mono', Menlo, Courier, monospace",
-        lineHeight:         "10px",
-        color:              "#555",
-        verticalAlign:      "middle",
-        backgroundColor:    "#fcfcfc",
-        borderSolid:        "1px   #ccc",
-        borderBottomColor:   "#bbb",
-        borderRadius:       "3px",
-        boxShadow:          "inset 0 -1px 0 #bbb"
+    tusStili: {
+        display: "inline-block",
+        padding: "3px 5px",
+        font: "11px Consolas, 'Liberation Mono', Menlo, Courier, monospace",
+        lineHeight: "10px",
+        color: "#555",
+        verticalAlign: "middle",
+        backgroundColor: "#fcfcfc",
+        borderSolid: "1px   #ccc",
+        borderBottomColor: "#bbb",
+        borderRadius: "3px",
+        boxShadow: "inset 0 -1px 0 #bbb"
+    },
+    signInContainer: {
+        margin: "0 auto",
+        minWidth: "299px",
+        border: "1px dotted teal",
+        padding: "54px",
+        backgroundColor: "#f9feff",
+        height: "100%",
+        maxWidth: "500px",
+        margin: "0 auto",
+        marginTop: "15px"
+    },
+    signUpFormContainer: {
+        border: "1px dotted teal",
+        padding: "30px",
+        backgroundColor: "#f9feff",
+        height: "100%",
+        margin: "0 auto",
+        maxWidth: "500px",
+        width: "300px"
+
     }
 }

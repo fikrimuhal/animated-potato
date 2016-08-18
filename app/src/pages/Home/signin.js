@@ -6,6 +6,7 @@ import FontIcon     from 'material-ui/FontIcon';
 import Paper        from 'material-ui/Paper'
 import {Link, browserHistory}       from 'react-router'
 import Subheader    from 'material-ui/Subheader'
+import * as s       from '../../layouts/style'
 //my imports
 import {log2, util}   from '../../utils/'
 import * as db from '../../utils/data.js'
@@ -83,14 +84,14 @@ export default class UserSignIn extends React.Component {
     }
     render = function () {
         return (
-            <div style={{marginLeft:"20%"}}>
-                    <Subheader style={styles.header}><b> Fikrimuhal HR - Login</b></Subheader>
-                    <TextField ref={"username"} hintText="Username" floatingLabelText="Username"/><br/>
-                    <TextField ref={"password"} hintText="Password" floatingLabelText="Password" onEnterKeyDown={(e,v)=>this.onKeyDown(e,v)} /> <br/>
+            <div className="xx" style={s.userLayoutStyles.signInContainer}>
+                    <Subheader style={styles.header}><b> Fikrimuhal HR - Giriş</b></Subheader>
+                    <TextField ref={"username"} hintText="Kullanıcı Adı/Eposta" floatingLabelText="Kullanıcı Adı/Eposta"/><br/>
+                    <TextField ref={"password"} hintText="Şifre" floatingLabelText="Şifre" onEnterKeyDown={(e,v)=>this.onKeyDown(e,v)} /> <br/>
                     <div>
-                        <RaisedButton label="Login" primary={true} onClick={this.signIn}/>
-                        <FlatButton label="Sign Up"  onClick={this.signUp} style={{marginLeft:"10px"}}/>
-                        <FlatButton label="Forget password" style={{marginLeft:"10px"}}/>
+                        <RaisedButton label="Giriş" primary={true} onClick={this.signIn}/>
+                        <FlatButton label="Kayıt ol"  onClick={this.signUp} style={{marginLeft:"10px"}}/>
+                        <FlatButton label="Şifremi unuttum.."/>
                     </div>
 
                 <Toast settings={this.state.toastSettings}/>

@@ -16,7 +16,7 @@ import TextField from 'material-ui/TextField';
 
 const Selectors = Data.Selectors;
 const log = log2("Question Set Details")
-log("Question Set ReactDataGrid",Data)
+//log("Question Set ReactDataGrid",Data)
 
 const styles = {
   customWidth: {

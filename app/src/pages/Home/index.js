@@ -1,46 +1,44 @@
-import React        from 'react'
-import FlatButton   from 'material-ui/FlatButton'
-import FontIcon     from 'material-ui/FontIcon';
-import Paper        from 'material-ui/Paper'
-import {Link}       from 'react-router'
-//Styles
-const styles = {
-  paperStyle: {
-    width:"800px",
-    height:300,
-    margin:"0 auto",
-    marginTop:"10px",
-    padding:"10px"
-  },
-  rightFloated:{
-    float:"right",
-    marginRight:"5px"
-  }
-}
+import React                   from 'react'
+import RaisedButton            from 'material-ui/RaisedButton'
+import TextField               from 'material-ui/TextField'
+import {browserHistory}        from 'react-router'
+import {log2}                  from '../../utils/log2'
+import * as s                  from '../../layouts/style'
+import * as util               from '../../utils/utils'
+import * as db                 from '../../utils/data'
+const log=log2("StartTest");
+export default class StartTest extends React.Component {
+    constructor(props) {
+        super(props);
+        util.bindFunctions.call(this, ['onClick'])
+    }
 
-export default class Home extends React.Component{
-   constructor(props){
-     super(props);
-   }
-   render=function () {
-     return(
-       <div>
-         <Paper style={styles.paperStyle}>
-           <h4>Fikrimuhal mülakatlarına katılabilmek için sisteme üye olmanız gerekmektedir.<br/> Zaten üye iseniz giriş yapınız.
-           </h4>
-           <Link to='/signin'>
-             <FlatButton label="Sign In" secondary={true}
-               backgroundColor="lightgrey"
-               style={styles.rightFloated}/>
-           </Link>
-           <Link to='/signup'>
-             <FlatButton label="Sign Up" secondary={true}
-               backgroundColor="lightgrey"
-               style={styles.rightFloated}/>
-           </Link>
+    onClick=function () {
+        log(this.refs.txtEmail);
+        var email=this.refs.txtEmail.input.value;
+        log(this.props, this.props.location.search);
+        var query=this.props.location.search + "&email=" + email;
+        log(query);
+        browserHistory.push("/skilltest" + query)
+    };
+    componentWillMount=function () {
+        if(db.isLoggedIn()) {
+            browserHistory.push("/")
+        }
+        else {
+            //browserHistory.push("/interview")
+        }
+    };
+    render=function () {
+        log("rendered");
+        return (
 
-         </Paper>
-       </div>
-     )
-   }
+            <div style={s.userLayoutStyles.signInContainer}>
+                <h4>Fikrimuhal Mülakat Testi</h4>
+                Eposta Adresiniz: <TextField ref="txtEmail" hintText={"Eposta"} floatingLabelText={"Eposta"}
+                                             type={"email"} required="required"></TextField><br/>
+                <RaisedButton label={"Test başla"} style={{float: "right"}} onClick={this.onClick}></RaisedButton>
+            </div>
+        )
+    }
 }

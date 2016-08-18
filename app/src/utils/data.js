@@ -240,7 +240,8 @@ export const getApiPromise = method => data =>{
         body:  JSON.stringify(data),
         headers: new Headers({
          'Content-Type': 'application/json',
-         'Accept': 'application/json'
+         'Accept': 'application/json',
+          'mode':'cors'
        })
      });
 }
@@ -284,12 +285,31 @@ export const startTest = ()=>{
            var questions = getQuestionsFromStorage();
            var index = Math.floor(Math.random() * questions.length);
            var response = {
-               valid:(Math.floor(Math.random()*100) % 6 != 0),
-               firstQuestion: questions[index]
+               valid:(Math.floor(Math.random()*100) % 7 != 0),
+               firstQuestion: questions[index],
+               questionCount: Math.floor(Math.random() * 100)
            };
            console.log("startTest()->",response)
             resolve(response);
        },800)
+    });
+    return promise;
+};
+export const startTestWithoutAuthentication = (email)=>{
+    //Request to API by email and without auth token
+    var promise = new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+
+            var questions = getQuestionsFromStorage();
+            var index = Math.floor(Math.random() * questions.length);
+            var response = {
+                valid:(Math.floor(Math.random()*100) % 7 != 0),
+                firstQuestion: questions[index],
+                questionCount: Math.floor(Math.random() * 100)
+            };
+            console.log("startTest()->",response)
+            resolve(response);
+        },800)
     });
     return promise;
 };
@@ -305,8 +325,10 @@ export const answerQuestion = (questionId,answer)=>{
             var questions = getQuestionsFromStorage();
             var index = Math.floor(Math.random() * questions.length);
             var response = {
-                testOver:(Math.floor(Math.random()*1000) % 6 == 0),
-                nextQuestion: questions[index]
+                testOver:(Math.floor(Math.random()*1000) % 7 == 0),
+                nextQuestion: questions[index],
+                questionCount: Math.floor(Math.random() * 100),
+                isValidUser:Math.floor(Math.random() * 100) % 5 == 0 // eğer false ise kayıt olma ekranına gidecek,true ise oturum açma ekranına gidicek
             };
             resolve(response);
         },Math.floor(Math.random()*500))

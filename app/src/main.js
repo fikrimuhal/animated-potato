@@ -8,8 +8,8 @@ import {AdminLayout, DefaultLayout, UserLayout, InterviewLayout}   from './layou
 import perf from "react-addons-perf";
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
-const log = log2("app");
-const perflog = log2("performance");
+const log=log2("app");
+//const perflog=log2("performance");
 // setTimeout(function () {
 //   perflog("started");
 //   //perf.start();
@@ -32,20 +32,19 @@ ReactDOM.render((
         <Route path="/" component={UserLayout}>
             <IndexRoute component={pages.UserHome}/>
             <Route path="home" component={pages.UserHome}/>
-            <Route path="interview" component={pages.Interview}>
-                <Route path="applicationform" component={pages.ApplyForm}/>
-                <Route path="detailssaved/::userId" component={pages.ApplyCompleted}/>
-                <Route path="questions/:userId" component={pages.QuestionList}/>
-                <Route path="testover" component={pages.TestCompleted}/>
-                <Route path="skilltest" component={pages.SkillTest}/>
-            </Route>
+
 
         </Route>
 
         <Route path="/" component={DefaultLayout}>
+            <Route path="interview" component={pages.InterView}>
+
+            </Route>
+            <Route path="skilltest" component={pages.SkillTest}>
+            </Route>
             <Route path="signin" component={pages.UserSignIn}/>
             <Route path="signup" component={pages.UserSignUp}/>
-            <Route path="deneme" component={pages.Deneme}/>
+            <Route path="graphicinfo" component={pages.GraphicInfo}/>
         </Route>
         <Route path="/" component={AdminLayout}>
             <Route path="adminpanel" component={pages.AdminPanel}>
@@ -61,7 +60,7 @@ ReactDOM.render((
 
     </Router>
 ), document.getElementById('app'))
-perflog(perf);
-if (module.hot) {
+//perflog(perf);
+if(module.hot) {
     module.hot.accept();
 }
