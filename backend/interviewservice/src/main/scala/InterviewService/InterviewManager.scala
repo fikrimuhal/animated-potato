@@ -23,9 +23,9 @@ class InterviewManager(database: ActorRef) extends Actor with Stash {
 
   override def receive: Receive = init
 
-   def init: Receive = {
+  def init: Receive = {
 
-    case TestStart(interviewId, userId, restrictedCategoryList) =>
+    case (x: String, TestStart(interviewId, userId, restrictedCategoryList)) =>
       println("Interview Manager: TestStart")
 
       val qcwtFuture = (database ? RequestAllQuestionCategoryWeight).mapTo[QuestionCategoryWeightTupleList]
@@ -36,8 +36,12 @@ class InterviewManager(database: ActorRef) extends Actor with Stash {
       val categoryList = Await.result(categoryListFuture, 5 seconds)
       val allAnswerEvents = Await.result(userQuestionAnswerTupleFuture, 5 seconds)
       val initMessage = InitMessage(interviewId, userId, restrictedCategoryList, questionCategoryWeightTupleList, categoryList, allAnswerEvents)
+      var interview: ActorRef = context.actorOf(InterviewActor.props(initMessage, sender), "interview")
 
-      val interview: ActorRef = context.actorOf(InterviewActor.props(initMessage,sender), "interview")
+      if (x == "random") {
+        interview = context.actorOf(RandomInterview.props(initMessage, sender), "randominterview")
+      }
+
       unstashAll()
       context become ready(interview)
 
@@ -45,11 +49,11 @@ class InterviewManager(database: ActorRef) extends Actor with Stash {
 
   }
 
-   def ready(interview:ActorRef) : Receive = {
-     case TestReportRequest(id) =>
-      interview ! TestReport(1,1, Map(1.toLong -> 1.5))
+  def ready(interview: ActorRef): Receive = {
+    case TestReportRequest(id) =>
+      interview ! TestReport(1, 1, Map(1.toLong -> 1.5))
 
-     case x =>
+    case x =>
       println(s"bunu interview halletsin : $x")
       interview forward x
   }

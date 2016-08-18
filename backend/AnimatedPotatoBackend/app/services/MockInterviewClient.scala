@@ -31,7 +31,7 @@ class MockInterviewClient(interviewManager : ActorRef) extends Actor  {
   override def preStart = {
 
     println("Client Started!")
-    interviewManager ! TestStart(1,1)
+    interviewManager ! ("random",TestStart(1,1))
     interviewManager ! GetNextQuestion()
 
   }
