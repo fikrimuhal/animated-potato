@@ -1,6 +1,8 @@
 package models
 
+import animatedPotato.protocol.protocol.IdType
 import utils.{Constants, DatabaseConfig}
+
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
 

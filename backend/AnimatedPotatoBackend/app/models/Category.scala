@@ -1,12 +1,13 @@
 package models
+import animatedPotato.protocol.protocol.IdType
 import utils.{Constants, DatabaseConfig}
+
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
 /**
   * Created by who on 09.08.2016.
   */
-case class Category(id: Option[Int],category : String)
-
+case class Category(id: Option[IdType],category : String)
 object Categories {
 
 
@@ -31,11 +32,10 @@ object Categories {
     if (deletedRowCount > 0) true else false
   }
 
-  def getCategories(): List[Category] = DatabaseConfig.DB.withSession {
-    implicit session =>
-      categories.list
+  def getAll(): List[Category] = DatabaseConfig.DB.withSession { implicit session =>
+    categories.list
   }
-  def getCategory(n: Int) : Category = DatabaseConfig.DB.withSession{implicit  session =>
+  def get(n: Long) : Category = DatabaseConfig.DB.withSession{ implicit session =>
     val categoryList =  categories.filter(_.id === n).list
     if(categoryList != Nil) categoryList.head
     else Category(Some(-1),"")
@@ -44,7 +44,7 @@ object Categories {
 
 class Categories(tag: Tag) extends Table[Category](tag, "category") {
 
-  def id = column[Int]("id", O.PrimaryKey,O.AutoInc)
+  def id = column[IdType]("id", O.PrimaryKey,O.AutoInc)
 
   def category = column[String]("category")
 

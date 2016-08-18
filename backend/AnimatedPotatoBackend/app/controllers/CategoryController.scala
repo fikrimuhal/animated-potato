@@ -44,7 +44,7 @@ class CategoryController extends Controller {
 
   def getCategory(n: String) = Action {
     try {
-      val category = Categories.getCategory(n.toInt)
+      val category = Categories.get(n.toInt)
       if (category.id == Some(-1)) BadRequest("-1")
       else Ok(Json.toJson(category))
     }
@@ -55,7 +55,7 @@ class CategoryController extends Controller {
 
   def getCategories() = Action {
     try {
-      Ok(Json.toJson(Categories.getCategories()))
+      Ok(Json.toJson(Categories.getAll()))
     }
     catch {
       case e: Exception => BadRequest("-1")

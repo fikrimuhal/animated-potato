@@ -19,7 +19,7 @@ class LoginSignUpController extends Controller with Secured {
   def signUp() = Action { implicit request =>
     try {
       val form: SignUp = request.body.asJson.get.as[SignUp]
-      val user: User = User(form.username, form.password.bcrypt)
+      val user: User = User(form.id,form.username,form.password.bcrypt)
       val participant: Participant = Participant(form.id, form.username, form.name, form.lastname, form.email, form.phone, form.photo, form.website, form.notes)
       if (!Participants.insert(participant)) BadRequest("email vaar")
       if (!Users.insert(user)) BadRequest("username var ")

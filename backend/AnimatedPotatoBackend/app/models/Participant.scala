@@ -1,11 +1,12 @@
 package models
 
+import animatedPotato.protocol.protocol.UserIdType
 import utils.{Constants, DatabaseConfig}
 
 import slick.driver.PostgresDriver.simple._
 
 
-case class Participant(id: Option[Int],
+case class Participant(id: Option[UserIdType],
                        username: String,
                        name: String,
                        lastname: String,
@@ -75,7 +76,7 @@ object Participants {
 }
 
 class Participants(tag: Tag) extends Table[Participant](tag, "participant") {
-  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+  def id = column[UserIdType]("id", O.PrimaryKey, O.AutoInc)
 
   def username = column[String]("username")
 

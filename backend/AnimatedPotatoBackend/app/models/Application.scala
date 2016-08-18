@@ -1,13 +1,16 @@
 package models
 
 import java.sql.Date
+
+import animatedPotato.protocol.protocol.IdType
 import utils.{Constants, DatabaseConfig}
+
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
 
 case class Application(username : String, applicationDate: String, answerList: List[Answer], isFinished : Option[Boolean] = Some(false))
 
-case class ApplicationTable(usename : String, applicationDate: String, answerList: List[Int],isFinished : Option[Boolean] = Some(false))
+case class ApplicationTable(usename : String, applicationDate: String, answerList: List[Long],isFinished : Option[Boolean] = Some(false))
 
 object Applications {
   lazy val applications = TableQuery[Applications]
@@ -34,7 +37,7 @@ class Applications(tag: Tag) extends Table[ApplicationTable](tag, "Application")
 
   def applicationDate = column[String]("applicationDate")
 
-  def answerList = column[List[Int]]("questionid")
+  def answerList = column[List[IdType]]("questionid")
 
   def isFinished = column[Boolean]("isFinished")
 

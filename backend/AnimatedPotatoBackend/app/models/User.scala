@@ -1,14 +1,16 @@
 package models
 
+import animatedPotato.protocol.protocol.UserIdType
 import com.github.t3hnar.bcrypt._
 import utils.{Constants, DatabaseConfig}
+
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
 
 /**
   * Created by who on 09.08.2016.
   */
-case class User(username: String, password: String, isadmin : Option[Boolean] = Some(false))
+case class User(id : Option[UserIdType],username : String, password: String, isadmin : Option[Boolean] = Some(false))
 
 object Users {
   lazy val users = TableQuery[Users]
@@ -56,13 +58,11 @@ object Users {
 
 }
 
-
-
 class Users(tag: Tag) extends Table[User](tag, "usera") {
-
+  def id = column[UserIdType]("id",O.AutoInc,O.PrimaryKey)
   def username = column[String]("username")
   def password = column[String]("password")
   def isadmin = column[Boolean]("isadmin")
 
-  def * = (username, password,isadmin.?) <> (User.tupled, User.unapply)
+  def * = (id.?,username, password,isadmin.?) <> (User.tupled, User.unapply)
 }

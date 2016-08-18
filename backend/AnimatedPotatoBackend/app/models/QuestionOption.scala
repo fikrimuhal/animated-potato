@@ -1,14 +1,16 @@
 package models
 
+import animatedPotato.protocol.protocol.{IdType, QuestionId}
+
 import slick.driver.PostgresDriver.simple._
 import utils.{Constants, DatabaseConfig}
 
 /**
   * Created by who on 07.08.2016.
   */
-case class QuestionOption(questionId: Int,
-                          id: Option[Int],
-                          title: String ,
+case class QuestionOption(questionId: IdType,
+                          id: Option[IdType],
+                          title: String,
                           weight: Double) {
   require(title.toString.length <= 255)
 }
@@ -42,9 +44,9 @@ object QuestionOptions {
 }
 
 class QuestionOptions(tag: Tag) extends Table[QuestionOption](tag, "questionoption") {
-  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+  def id = column[IdType]("id", O.PrimaryKey, O.AutoInc)
 
-  def questionId = column[Int]("questionid")
+  def questionId = column[QuestionId]("questionid")
 
   def title = column[String]("title")
 

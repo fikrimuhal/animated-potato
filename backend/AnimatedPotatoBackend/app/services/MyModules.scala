@@ -1,6 +1,6 @@
 package services
 
-import InterviewService.InterviewActor
+import InterviewService.{InterviewActor, InterviewManager}
 import com.google.inject.AbstractModule
 import play.api.libs.concurrent.AkkaGuiceSupport
 
@@ -15,6 +15,18 @@ class RootActorModule extends AbstractModule with AkkaGuiceSupport {
 class InterviewActorModule extends AbstractModule with AkkaGuiceSupport {
 
   def configure = bindActor[InterviewActor]("interview")
+
+}
+
+class DatabaseActorModule extends AbstractModule with AkkaGuiceSupport {
+
+  def configure = bindActor[Database]("database")
+
+}
+
+class InterviewManagerModule extends AbstractModule with AkkaGuiceSupport {
+
+  def configure = bindActor[InterviewManager]("interviewmanager")
 
 }
 

@@ -15,7 +15,7 @@
     <logger name="play" level="WARN" />
     <logger name="application" level="WARN" />
 
-    <logger name="play.api.db.slick" level="WARN" />
+    <!--<logger name="play.api.db.slick" level="WARN" />-->
     <!--<logger name="scala.slick" level="SQL" />-->
 
     <!-- Off these ones as they are annoying, and anyway we manage configuration ourself -->
@@ -24,7 +24,7 @@
     <logger name="com.avaje.ebeaninternal.server.lib.BackgroundThread" level="OFF" />
     <logger name="com.gargoylesoftware.htmlunit.javascript" level="OFF" />
 <!--DONT DELETE THESE THREE LINES -->
-    <root level="DEBUG">
+    <root level="ERROR">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>

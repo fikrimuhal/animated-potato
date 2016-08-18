@@ -1,11 +1,11 @@
 package models
 
+import animatedPotato.protocol.protocol.{IdType, QuestionId, UserIdType}
 import utils.{Constants, DatabaseConfig}
 
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
-case class YesNoAnswer(questionId: Int, value: Boolean)
-case class Answer(id : Option[Int],userid: Int, questionId: Int, answer: List[String]= Nil)
+case class Answer(id : Option[IdType], questionId: QuestionId, userid: UserIdType, answer: Boolean)
 
 object Answers {
   lazy val answers = TableQuery[Answers]
@@ -39,24 +39,27 @@ object Answers {
 
   }
 
-  def getAnswers(userID: Int): List[Answer] = DatabaseConfig.DB.withSession { implicit session =>
-        answers.filter( _.userid === userID).list
+  def getAnswers(userid: UserIdType): List[Answer] = DatabaseConfig.DB.withSession { implicit session =>
+        answers.filter( _.userid === userid).list
   }
 
-  def getAnswer(userID : Int, questionID : Int): List[Answer] = DatabaseConfig.DB.withSession{ implicit sesison =>
-    answers.filter(a => a.userid === userID && a.questionid == questionID).list
+  def getAnswer(userid : UserIdType, questionID : QuestionId): List[Answer] = DatabaseConfig.DB.withSession{ implicit sesison =>
+    answers.filter(a => a.userid === userid && a.questionid === questionID).list
+  }
+  def getAll(): List[Answer] = DatabaseConfig.DB.withSession{ implicit session =>
+    answers.list
   }
 }
 
 class Answers(tag: Tag) extends Table[Answer](tag, "answer") {
 
-  def id = column[Int]("id",O.AutoInc,O.PrimaryKey)
+  def id = column[IdType]("id",O.AutoInc,O.PrimaryKey)
 
-  def questionid = column[Int]("questionid")
+  def questionid = column[QuestionId]("questionid")
 
-  def userid = column[Int]("questionid")
+  def userid = column[UserIdType]("userid")
 
-  def answer = column[List[String]]("answer")
+  def answer = column[Boolean]("answer")
 
   def * = (id.?, questionid, userid, answer) <> (Answer.tupled, Answer.unapply)
 }

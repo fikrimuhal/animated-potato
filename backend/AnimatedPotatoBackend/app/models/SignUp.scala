@@ -1,6 +1,8 @@
 package models
 
-case class SignUp(id : Option[Int],
+import animatedPotato.protocol.protocol.IdType
+
+case class SignUp(id : Option[IdType],
                   name: String,
                   lastname: String,
                   email: String,

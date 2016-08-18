@@ -81,7 +81,7 @@ object protocol {
 
   /**
     * interview servisi tarafından istenir
-    * backend response olarak QuestionCategoryWeightTuple döner
+    * backend response olarak List[QuestionCategoryWeightTuple] döner
     */
 
   case object RequestAllQuestionCategoryWeight
@@ -116,22 +116,27 @@ object protocol {
     */
   case class YesNoAnswer(questionId: QuestionId, value: Boolean)
 
-  case class QuestionOption(questionId: IdType,
-                            id: Option[IdType],
-                            title: String,
-                            weight: Double) {
-    require(title.toString.length <= 255)
-  }
 
   case class Question(id: Option[IdType],
                       title: String,
                       qType: String,
                       opts: List[QuestionOption],
-                      categories: List[QuestionCategoryRequest],
+                      categories: List[QuestionCategory],
                       setList: List[Int])
 
-  case class QuestionCategoryRequest(categoryid: CategoryId, weight: Double)
+  case class QuestionOption(questionId: IdType,
+                            id: Option[IdType],
+                            title: String,
+                            weight: Double)
+
+  case class QuestionCategory(categoryid: CategoryId, weight: Double)
   case class Category(id: Option[IdType],category : String)
   case class Set(id: Option[Int], title: String, count: Int)
+  case class Answer(id : Option[IdType],userid: UserIdType, questionId: QuestionId, answer: Boolean)
+  case class QuestionList(value : List[Question])
+  case class CategoryList(value : List[Category])
+  case class AnswerList(value : List[Answer])
+  case class QuestionCategoryWeightTupleList(value : List[QuestionCategoryWeightTuple])
+  case class UserQuestionAnswerTupleList(value : List[UserQuestionAnswerTuple])
 
 }

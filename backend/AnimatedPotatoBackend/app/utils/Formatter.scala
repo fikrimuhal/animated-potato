@@ -1,7 +1,9 @@
 package utils
 
+import animatedPotato.protocol.protocol.IdType
 import models._
 import play.api.libs.json.Json
+
 import slick.driver.PostgresDriver.simple._
 
 
@@ -17,13 +19,17 @@ object Formatter {
   implicit val signUpFormat = Json.format[SignUp]
   implicit val answerFormat = Json.format[Answer]
 
-  implicit def intListToString = MappedColumnType.base[List[Int], String](
+  implicit def longListToString = MappedColumnType.base[List[IdType], String](
     list => list mkString ",",
-    str => (str split "," map Integer.parseInt).toList
+    str => (str split "," map(_.  toLong)).toList
   )
   implicit def stringListToString = MappedColumnType.base[List[String], String](
     list => list mkString ",",
     str => (str split ",").toList
+  )
+  implicit def intListToString = MappedColumnType.base[List[Int], String](
+    list => list mkString ",",
+    str => (str split "," map Integer.parseInt).toList
   )
 //  implicit def mapToString = MappedColumnType.base[List[Map[Int,Double]],String](
 //    mapList => mapList mkString "," ,
