@@ -1,0 +1,90 @@
+version: "2"
+
+services:
+
+  bogazici:
+
+    image: dist.fikrimuhal.com/hivecdn/bogazici
+
+    build:
+      context: ./api
+      dockerfile: ./development.Dockerfile
+
+    ports:
+      - '2552:2552'
+      - '10000:10000'
+
+#    command: echo "hellooo"
+
+    volumes:
+      - ~/.ivy2":/root/.ivy2
+      - ~/.m2":/root/.m2
+#      -  ./content/src:/home/src
+#      -  ./content/node_modules:/home/node_modules
+
+    environment:
+#      HOST: localhost
+      PORT_9000: 10000
+      PORT_2552: 2552
+
+
+    networks:
+      - hivecdn
+
+    hostname: bogazici
+
+
+
+
+  servicea:
+    image: dist.fikrimuhal.com/hivecdn/servicea
+
+    build:
+      context: ./examples/serviceA
+      dockerfile: ./development.Dockerfile
+
+    volumes:
+      - ~/.ivy2":/root/.ivy2
+      - ~/.m2":/root/.m2
+#      -  ./content/src:/home/src
+
+    environment:
+      PORT_2552: 2552
+
+    links:
+      - bogazici
+
+    networks:
+      - hivecdn
+
+  serviceb:
+    image: dist.fikrimuhal.com/hivecdn/serviceb
+
+    build:
+      context: ./examples/serviceB
+      dockerfile: ./development.Dockerfile
+
+    volumes:
+      - ~/.ivy2":/root/.ivy2
+      - ~/.m2":/root/.m2
+#      -  ./content/src:/home/src
+
+    environment:
+      PORT_2552: 2552
+
+    links:
+      - bogazici
+
+    networks:
+      - hivecdn
+
+
+
+
+
+
+
+networks:
+  hivecdn:
+    external:
+        name: hivecdn
