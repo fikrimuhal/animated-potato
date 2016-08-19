@@ -1,142 +1,109 @@
-import React            from 'react';
-import {log2, util}     from '../../utils/';
-import * as db          from '../../utils/data';
-import ReactDataGrid    from 'react-data-grid';
-import {Toolbar, Data}  from 'react-data-grid/addons';
-import FlatButton       from 'material-ui/FlatButton';
-import DeleteIcon       from 'material-ui/svg-icons/action/delete';
-import ViewIcon         from 'material-ui/svg-icons/action/visibility';
-import {browserHistory} from 'react-router'
-import CircularProgress from 'material-ui/CircularProgress';
-require("!style!css!react-data-grid/themes/react-data-grid.css");
-
+import React from 'react'
+require("!style!css!react-data-grid/themes/react-data-grid.css")
+import { Link } from 'react-router'
+import RaisedButton from 'material-ui/RaisedButton';
+import {log2,util} from '../../utils/'
+import * as db from '../../utils/data'
+import {Table} from 'material-ui/Table';
+import ReactDataGrid from 'react-data-grid';
+import { Toolbar, Data } from 'react-data-grid/addons';
 const Selectors = Data.Selectors;
-const log=log2("ParticipantList");
-var columns=[
-    {
-        key: 'id',
-        name: 'NO',
-        width: 70,
-        resizable: false
-    },
-    {
-        key: 'fullName',
-        name: 'Full Name',
-        filterable: true,
-        sortable: true,
-        width: 200,
-        resizable: true
-    },
-    {
-        key: 'date',
-        name: 'Apply Date',
-        filterable: true,
-        sortable: true,
-        width: 300,
-        resizable: true
-    },
-    {
-        key: 'score',
-        name: 'Score',
-        sortable: true,
-        width: 100,
-        resizable: false
-    },
-    {
-        key: 'options',
-        name: 'Options',
-        width: 200
-    }
+const log = log2("ParticipantList")
+//log("ReactDataGrid",Data)
+const styles = {
+  customWidth: {
+   width: 150,
+ },
+};
+var columns = [
+  {
+    key: 'id',
+    name: 'NO'
+  },
+{
+  key: 'fullName',
+  name: 'Full Name',
+  sortable : true
+},
+{
+  key: 'date',
+  name: 'Apply Date',
+  filterable: true,
+  sortable : true
+},
+{
+  key: 'score',
+  name: 'Score',
+  sortable : true
+},
 ]
 export default class ParticipantList extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state={
-            dataLoaded: false,
-            filters: {},
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataLoaded:false,
+      filters : {},
 
-        };
-        util.bindFunctions.call(this, ['getRows', 'getSize',
-            'rowGetter', 'handleFilterChange',
-            'handleGridSort', 'getOptionCell']);
-        db.getApplicantListFromAPI().then((rows)=> {
-            var tableData=rows.map(r => {
-                r.options=this.getOptionCell(r);
-                return r;
-            });
-
-            this.setState({
-                rows: tableData,
-                originalRows: tableData,
-                dataLoaded: true
-            });
-            //log("then rows", rows);
-        })
     };
+    util.bindFunctions.call(this,['getRows','getSize',
+                                  'rowGetter','handleFilterChange',
+                                  'handleGridSort'])
+      db.getApplicantListFromAPI().then((rows)=>{
+          this.setState({
+              rows : rows,
+              originalRows:rows,
+              dataLoaded:true
+          });
+          log("then rows",rows);
+      })
+  }
+  getRows = function() {
+   return Selectors.getRows(this.state);
+ }
 
-    getOptionCell=(rowData) => {
-        return (<div>
-            <FlatButton icon={<DeleteIcon/>} onClick={this.deleteRow(rowData.id)}></FlatButton>
-            <FlatButton icon={<ViewIcon/>} onClick={this.viewRow(rowData.id)}></FlatButton>
-        </div>);
-    };
-    deleteRow=index => ()=> {
-        log("deleting row ->", index);
-    };
-    viewRow=index => ()=> {
-        log("viewing row ->", index);
-        browserHistory.push("/adminpanel/skilltestreport/" + index)
-    };
-    getRows=function () {
-        return Selectors.getRows(this.state);
-    }
+ getSize = function() {
+   return this.getRows().length;
+ }
 
-    getSize=function () {
-        return this.getRows().length;
-    }
+ rowGetter = function(rowIdx){
+   var rows = this.getRows();
+   return rows[rowIdx];
+ }
 
-    rowGetter=function (rowIdx) {
-        var rows=this.getRows();
-        return rows[rowIdx];
-    }
-
-    handleFilterChange=function (filter) {
-        let newFilters=Object.assign({}, this.state.filters);
-        if(filter.filterTerm) {
-            newFilters[filter.columnKey]=filter.filterTerm;
-        }
-        else {
-            delete newFilters[filter.columnKey];
-        }
-        this.setState({filters: newFilters});
-    }
-    handleGridSort=function (sortColumn, sortDirection) {
-        var comparer=function (a, b) {
-            if(sortDirection === 'ASC') {
-                return (a[sortColumn] > b[sortColumn]) ? 1 : -1;
-            }
-            else if(sortDirection === 'DESC') {
-                return (a[sortColumn] < b[sortColumn]) ? 1 : -1;
-            }
-        }
-        var rows=sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
-        this.setState({rows: rows});
-    }
-
-    render() {
-        log("rendered");
-        return (
-            <div>
+ handleFilterChange = function(filter){
+   let newFilters = Object.assign({}, this.state.filters);
+   if (filter.filterTerm) {
+     newFilters[filter.columnKey] = filter.filterTerm;
+   } else {
+    delete newFilters[filter.columnKey];
+   }
+   this.setState({filters: newFilters});
+ }
+ handleGridSort = function (sortColumn, sortDirection) {
+   var comparer = function(a, b) {
+     if(sortDirection === 'ASC'){
+       return (a[sortColumn] > b[sortColumn]) ? 1 : -1;
+     }else if(sortDirection === 'DESC'){
+       return (a[sortColumn] < b[sortColumn]) ? 1 : -1;
+     }
+   }
+   var rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
+   this.setState({rows : rows});
+ }
+  render() {
+    log("rendered");
+    return (
+              <div>
                 <h4>Participant List</h4>
                 <br/>
                 <div>
 
                     {
-                        (()=> {
+                        (()=>{
                             var content;
-                            if(this.state.dataLoaded) {
-                                content=<ReactDataGrid
+                            if(this.state.dataLoaded){
+                                content =<ReactDataGrid
                                     columns={columns}
                                     rowGetter={this.rowGetter}
                                     enableCellSelect={true}
@@ -145,11 +112,10 @@ export default class ParticipantList extends React.Component {
                                     toolbar={<Toolbar enableFilter={true}/>}
                                     onAddFilter={this.handleFilterChange}
                                     onGridSort={this.handleGridSort}
-
                                 />
                             }
                             else {
-                                content=<div><CircularProgress size={1.5}/></div>
+                                content =<div>Data loading...</div>
                             }
 
                             return content;
@@ -157,7 +123,7 @@ export default class ParticipantList extends React.Component {
                     }
 
                 </div>
-            </div>
-        );
-    }
+              </div>
+    );
+  }
 }

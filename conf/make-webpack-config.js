@@ -4,13 +4,11 @@ var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-
 function extractForProduction(loaders) {
   return ExtractTextPlugin.extract('style', loaders.substr(loaders.indexOf('!')));
 }
 
 module.exports = function(options) {
-  options.ip = options.ip ||  'localhost';
   options.lint = fs.existsSync(path.resolve(__dirname, '..', '.eslintrc')) && options.lint !== false;
 
   var localIdentName = options.production ? '[hash:base64]' : '[path]-[local]-[hash:base64:5]';
@@ -28,7 +26,7 @@ module.exports = function(options) {
 
   return {
     entry: options.production ? './app/src/main.js' : [
-      'webpack-dev-server/client?http://'+options.ip+':8081',
+      'webpack-dev-server/client?http://0.0.0.0:8081',
       'webpack/hot/only-dev-server',
       './app/src/main.js',
     ],
@@ -36,7 +34,7 @@ module.exports = function(options) {
     devtool: options.devtool,
     output: {
       path: options.production ? './dist' : './build',
-      publicPath: options.production ? '' : 'http://'+options.ip+':8081/',
+      publicPath: options.production ? '' : 'http://0.0.0.0:8081/',
       filename: options.production ? 'app.[hash].js' : 'app.js',
     },
     module: {
