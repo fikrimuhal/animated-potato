@@ -11,7 +11,7 @@ import scala.concurrent.Future
   *
   */
 
-class RandomInterview(initMessage: InitMessage, client: ActorRef) extends Actor with Stash {
+class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
   println("RandomInterview : Constructor")
   var shuffledQuestionIds: List[IdType] = scala.util.Random.shuffle(initMessage.questionCategoryWeightTuple.value.map(_.questionId).distinct)
 
@@ -21,15 +21,17 @@ class RandomInterview(initMessage: InitMessage, client: ActorRef) extends Actor 
 
     case x: GetNextQuestion =>
       println("RandomInterview'e GetNextQuestion geldi ")
-      client ! getNextQuestionId().map(NextQuestion(_)).getOrElse {
+      sender ! getNextQuestionId.map(NextQuestion(_)).getOrElse {
         println("RandomInterview TestFinish yollayacak")
-        client ! TestFinish(initMessage.interviewId, initMessage.userId)
+        sender ! TestFinish(initMessage.interviewId, initMessage.userId)
         unstashAll()
         context become testFinished
       }
       println("RandomInterview getNextQuestion'a cevap verdi")
 
-    case x => stash
+    case x =>
+      println(s"random interview ready'de stashe atıyor : $x")
+      stash
 
   }
 
@@ -37,18 +39,15 @@ class RandomInterview(initMessage: InitMessage, client: ActorRef) extends Actor 
 
     case x: TestReport =>
       println(s"RandomInterview TestReport geldi : $x")
-      client ! x
+      sender ! x
 
-    case x => sender ! new IllegalStateException(s"unsopperted operation: $x")
-
-  }
-
-  override def preStart() = {
-    println("RandomInterview: preStart")
+    case x =>
+      println(s"RandomInterview TestFinished garip bir mesaj: $x")
+      sender ! new IllegalStateException(s"unsopperted operation: $x")
 
   }
 
-  def getNextQuestionId() = {
+  def getNextQuestionId = {
     val maybeQuestionId = shuffledQuestionIds.headOption
     if (maybeQuestionId.isDefined) shuffledQuestionIds = shuffledQuestionIds.tail
     maybeQuestionId
@@ -58,6 +57,6 @@ class RandomInterview(initMessage: InitMessage, client: ActorRef) extends Actor 
 
 object RandomInterview {
 
-  def props(initMessage: InitMessage, client: ActorRef) = Props(classOf[RandomInterview], initMessage, client)
+  def props(initMessage: InitMessage) = Props(classOf[RandomInterview], initMessage)
 
 }
