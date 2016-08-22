@@ -1,7 +1,7 @@
 package models
 
 import animatedPotato.protocol.protocol.UserIdType
-import utils.{Constants, DatabaseConfig}
+import utils.{Constants, DB}
 
 import slick.driver.PostgresDriver.simple._
 
@@ -31,7 +31,7 @@ case class ParticipantResponse(participantList: List[Participant], page: Int, nu
 object Participants {
   lazy val participants = TableQuery[Participants]
 
-  def insert(participant: Participant): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def insert(participant: Participant): Boolean = DB { implicit session =>
     if (exists(participant)) false
     else {
       participants += participant;
@@ -39,26 +39,26 @@ object Participants {
     }
   }
 
-  def exists(participant: Participant): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def exists(participant: Participant): Boolean = DB { implicit session =>
     participants.filter(_.email === participant.email).list.nonEmpty
   }
 
-  def update(participant: Participant): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def update(participant: Participant): Boolean = DB { implicit session =>
     val updatedRowCount: Int = participants.filter(_.email === participant.email).update(participant)
     updatedRowCount > 0
   }
 
-  def delete(participant: Participant): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def delete(participant: Participant): Boolean = DB { implicit session =>
     val deletedRowCount = participants.filter(_.email === participant.email).delete
     if (deletedRowCount > 0) true else false
   }
 
-  def getParticipants(): List[Participant] = DatabaseConfig.DB.withSession {
+  def getParticipants(): List[Participant] = DB {
     implicit session =>
       participants.list
   }
 
-  def getParticipantsWithPage(page: Int): ParticipantResponse = DatabaseConfig.DB.withSession { implicit session =>
+  def getParticipantsWithPage(page: Int): ParticipantResponse = DB { implicit session =>
     val participantList = participants
       .sortBy(p => (p.name, p.lastname))
       .drop(page * 20)
@@ -67,7 +67,7 @@ object Participants {
     ParticipantResponse(participantList, page + 1, ((participantList.length / Constants.PAGE_SIZE) + 1))
   }
 
-  def getParticipant(userName: String): Option[Participant] = DatabaseConfig.DB.withSession { implicit session =>
+  def getParticipant(userName: String): Option[Participant] = DB { implicit session =>
     val participantList: List[Participant] = participants.filter(_.username === userName).list
     if (participantList.nonEmpty) Some(participantList.head)
     else None

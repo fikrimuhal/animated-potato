@@ -1,7 +1,7 @@
 package models
 
 import animatedPotato.protocol.protocol.IdType
-import utils.{Constants, DatabaseConfig}
+import utils.{Constants, DB}
 
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
@@ -12,7 +12,7 @@ object Sets {
   
   lazy val sets = TableQuery[Sets]
 
-  def insert(set: Set): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def insert(set: Set): Boolean = DB { implicit session =>
     try {
       sets += set; true
     }
@@ -21,43 +21,43 @@ object Sets {
     }
   }
 
-  def update(set: Set): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def update(set: Set): Boolean = DB { implicit session =>
     val updatedRowCount: Int = sets.filter(_.id === set.id).update(set)
     if (updatedRowCount > 0) true else false
   }
-  def updateBySetList(ids : List[Int]): Boolean = DatabaseConfig.DB.withSession{implicit session =>
+  def updateBySetList(ids : List[Int]): Boolean = DB{ implicit session =>
     val setss: List[Set] = sets.filter(_.id inSet ids).list
     setss.foreach{ s => sets.update(s.copy(count = s.count +1))}
     true
   }
 
-  def delete(set: Set): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def delete(set: Set): Boolean = DB { implicit session =>
     val deletedRowCount: Int = sets.filter(_.id === set.id).delete
     if (deletedRowCount > 0) true else false
   }
 
-  def getAllSets(): List[Set] = DatabaseConfig.DB.withSession {implicit session =>
+  def getAllSets(): List[Set] = DB { implicit session =>
       sets.list
   }
 
-  def getSet(n: Int): Set = DatabaseConfig.DB.withSession { implicit session =>
+  def getSet(n: Int): Set = DB { implicit session =>
     val setList = sets.filter(_.id === n).list
     if (setList.nonEmpty) setList.head
     else Set(Some(-1),"",-1)
   }
 
-  def getSets(n: List[Int]): Set = DatabaseConfig.DB.withSession { implicit session =>
+  def getSets(n: List[Int]): Set = DB { implicit session =>
     val setList = sets.filter(_.id inSet n).list
     if (setList.nonEmpty) setList.head
     else Set(Some(-1),"",-1)
   }
 
-  def decreaseCount(id : Int) = DatabaseConfig.DB.withSession{implicit session =>
+  def decreaseCount(id : Int) = DB{ implicit session =>
     val set: Set = sets.filter(_.id === id).list.head
     sets.filter(_.id === id).update(set.copy(count = set.count -1))
   }
 
-  def increaseCount(id : Int) = DatabaseConfig.DB.withSession{implicit session =>
+  def increaseCount(id : Int) = DB{ implicit session =>
     val set: Set = sets.filter(_.id === id).list.head
     sets.filter(_.id === id).update(set.copy(count = set.count +1))
   }
