@@ -21,7 +21,7 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
 
     case x: GetNextQuestion =>
       println("RandomInterview'e GetNextQuestion geldi ")
-      sender ! getNextQuestionId.map(NextQuestion(_)).getOrElse {
+      sender ! getNextQuestionId.map(NextQuestion).getOrElse {
         println("RandomInterview TestFinish yollayacak")
         sender ! TestFinish(initMessage.interviewId, initMessage.userId)
         unstashAll()
@@ -37,9 +37,12 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
 
   def testFinished: Receive = {
 
+    case x: TestReportRequest =>
+      context.parent ! x
+
     case x: TestReport =>
       println(s"RandomInterview TestReport geldi : $x")
-      sender ! x
+     // sender ! x
 
     case x =>
       println(s"RandomInterview TestFinished garip bir mesaj: $x")

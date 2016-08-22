@@ -1,0 +1,42 @@
+version: "2"
+
+services:
+
+  backend:
+    image: dist.fikrimuhal.com/mulakat/backend
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - '2552:2552'
+      - '9001:9000'
+#    command: echo "hellooo"
+    volumes:
+      - ~/.ivy2":/root/.ivy2
+      - ~/.m2":/root/.m2
+    environment:
+      PORT_2552: 2552
+    networks:
+      - mulakat
+    hostname: backend
+#    links:
+#      - db
+
+#  db:
+#    image: postgres
+#    environment:
+#        POSTGRES_PASSWORD: postgres
+#        POSTGRES_USER: password
+#        POSTGRES_DB: deneme
+#        #PGDATA:/var/lib/postgresql/data
+#    ports:
+#        - "5433:5432"
+#    container_name: db
+#    networks:
+#      - mulakat
+
+
+networks:
+  mulakat:
+    external:
+        name: mulakat

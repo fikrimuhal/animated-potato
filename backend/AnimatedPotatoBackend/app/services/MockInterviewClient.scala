@@ -6,39 +6,41 @@ import animatedPotato.protocol.protocol._
 import models.Answers
 import play.libs.Scala
 import akka.pattern.ask
+
 /**
   * Created by who on 15.08.2016.
   */
-class MockInterviewClient(interviewManager : ActorRef) extends Actor  {
+class MockInterviewClient extends Actor {
 
 
   override def receive: Receive = {
+
     case NextQuestion(questionId) =>
-      interviewManager ! GetNextQuestion(answer = Some(YesNoAnswer(questionId,scala.util.Random.nextBoolean())))
+      sender ! GetNextQuestion(answer = Some(YesNoAnswer(questionId, scala.util.Random.nextBoolean())))
       println(s"Client'a next question geldi $questionId")
 
-    case TestReport(interviewId,userId,scores) =>
+    case TestReport(interviewId, userId, scores) =>
       println(s"Client'a rapor geldi :interviewID : $interviewId, userId : $userId, scores : $scores")
 
-    case m:TestFinish =>
+    case m: TestFinish =>
       println(s"Client'a test finish geldi : $m")
-      interviewManager ! TestReportRequest(Left(1))
+      sender ! TestReportRequest(Left(1))
 
     case x =>
       println(s"Client: Unexpected message : $x")
+
   }
 
   override def preStart = {
 
     println("Client Started!")
-    interviewManager ! ("random",TestStart(1,1))
-    interviewManager ! GetNextQuestion()
+    context.parent ! ("interview", TestStart(1, 1))
+    context.parent ! ("interview", GetNextQuestion())
 
   }
 }
 
-object MockInterviewClient  {
+object MockInterviewClient {
 
-  def props(interviewManager : ActorRef) = Props(classOf[MockInterviewClient],interviewManager)
-
+  def props = Props(classOf[MockInterviewClient])
 }
