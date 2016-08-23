@@ -64,5 +64,5 @@ export default  class  AdminAppBar extends  React.Component{
 }
 AdminAppBar.propTypes={
     toogleMenu:React.PropTypes.func,
-    userInfo: React.PropTypes.object.isRequired
+    userInfo: React.PropTypes.object
 }
