@@ -12,7 +12,7 @@ lazy val interviewService = ProjectRef(id = "interviewService", base = file("../
 
 lazy val root = project in file(".") enablePlugins(PlayScala) aggregate(protocol,interviewService) dependsOn(protocol,interviewService)
 
-libraryDependencies ++= Seq( jdbc , cache , ws, specs2 % Test,filters )
+libraryDependencies ++= Seq( jdbc , cache , ws, specs2 % Test,filters,evolutions )
 
 libraryDependencies ++= Seq(
   "com.typesafe.slick" %% "slick"      % "2.1.0",
@@ -20,9 +20,12 @@ libraryDependencies ++= Seq(
   "com.pauldijou" %% "jwt-play" % "0.8.0",
   "com.github.t3hnar" %% "scala-bcrypt" % "2.6")
 
+libraryDependencies ++= Seq( "com.jason-goodwin" %% "authentikat-jwt" % "0.4.1")
+
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )  
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
+resolvers ++= Seq("snapshots", "releases").map(Resolver.sonatypeRepo)
 
 packageName in Universal := "backend"
 

@@ -33,3 +33,4 @@ object AdminAction extends ActionBuilder[AuthenticatedRequest] {
       case _ => Future.successful(Unauthorized)
     }
 }
+

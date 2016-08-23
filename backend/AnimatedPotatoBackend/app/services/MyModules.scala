@@ -4,11 +4,9 @@ import InterviewService.{InterviewActor, InterviewManager, RandomInterview}
 import com.google.inject.AbstractModule
 import play.api.libs.concurrent.AkkaGuiceSupport
 
-
 class RootActorModule extends AbstractModule with AkkaGuiceSupport {
 
   def configure = bindActor[RootActor]("root")
-
 
 }
 
@@ -35,5 +33,3 @@ class InterviewManagerModule extends AbstractModule with AkkaGuiceSupport {
   def configure = bindActor[InterviewManager]("interviewmanager")
 
 }
-
-

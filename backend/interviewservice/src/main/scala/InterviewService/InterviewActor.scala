@@ -13,9 +13,9 @@ case class NonEx(message: String) extends Throwable
   *
   */
 
-class InterviewActor(initMessage: InitMessage) extends Actor with Stash {
+class InterviewActor (initMessage: InitMessage) extends Actor with Stash {
   println("InterviewActor : Constructor")
-  var allQuestionIds: List[IdType] = initMessage.questionCategoryWeightTuple.value.filter(q => q.weight > 0 && initMessage.restrictedCategoryList.contains(q.categoryId) ).map(_.questionId).distinct
+  var allQuestionIds: List[IdType] = initMessage.questionCategoryWeightTuple.value.filter(q => q.weight > 0 && initMessage.restrictedCategoryList.contains(Some(q.categoryId))).map(_.questionId).distinct
 
   override def receive: Receive = ready
 
@@ -23,7 +23,7 @@ class InterviewActor(initMessage: InitMessage) extends Actor with Stash {
 
     case x: GetNextQuestion =>
       println("interviewActor'e GetNextQuestion geldi ")
-      sender ! getNextQuestionId().map(NextQuestion).getOrElse {
+      sender ! getNextQuestionId.map(NextQuestion).getOrElse {
         println("interviewActor TestFinish yollayacak")
         sender ! TestFinish(initMessage.interviewId, initMessage.userId)
         unstashAll()
@@ -50,7 +50,7 @@ class InterviewActor(initMessage: InitMessage) extends Actor with Stash {
 
   }
 
-  def getNextQuestionId() = {
+  def getNextQuestionId = {
     val maybeQuestionId = allQuestionIds.headOption
     if (maybeQuestionId.isDefined) allQuestionIds = allQuestionIds.tail
     maybeQuestionId

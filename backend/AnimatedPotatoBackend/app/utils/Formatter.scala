@@ -31,10 +31,5 @@ object Formatter {
     list => list mkString ",",
     str => (str split "," map Integer.parseInt).toList
   )
-//  implicit def mapToString = MappedColumnType.base[List[Map[Int,Double]],String](
-//    mapList => mapList mkString "," ,
-//    str =>
-//
-//  )
 
 }

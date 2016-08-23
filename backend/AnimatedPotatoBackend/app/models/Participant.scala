@@ -34,7 +34,7 @@ object Participants {
   def insert(participant: Participant): Boolean = DB { implicit session =>
     if (exists(participant)) false
     else {
-      participants += participant;
+      participants += participant
       true
     }
   }
@@ -53,8 +53,7 @@ object Participants {
     if (deletedRowCount > 0) true else false
   }
 
-  def getParticipants(): List[Participant] = DB {
-    implicit session =>
+  def getParticipants: List[Participant] = DB {implicit session =>
       participants.list
   }
 
@@ -64,13 +63,12 @@ object Participants {
       .drop(page * 20)
       .take((page + 1) * 20)
       .list
-    ParticipantResponse(participantList, page + 1, ((participantList.length / Constants.PAGE_SIZE) + 1))
+    ParticipantResponse(participantList, page + 1, (participantList.length / Constants.PAGE_SIZE) + 1)
   }
 
   def getParticipant(userName: String): Option[Participant] = DB { implicit session =>
     val participantList: List[Participant] = participants.filter(_.username === userName).list
-    if (participantList.nonEmpty) Some(participantList.head)
-    else None
+    participantList.headOption
   }
 
 }

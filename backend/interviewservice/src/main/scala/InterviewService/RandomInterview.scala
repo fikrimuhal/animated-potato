@@ -1,7 +1,7 @@
 package InterviewService
 
 import akka.actor.{Actor, ActorRef, Props, Stash, SupervisorStrategy}
-import animatedPotato.protocol.protocol.{UserQuestionAnswerTuple, _}
+import animatedPotato.protocol.protocol._
 import akka.pattern.ask
 import scala.concurrent.Future
 
@@ -42,11 +42,17 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
 
     case x: TestReport =>
       println(s"RandomInterview TestReport geldi : $x")
-     // sender ! x
+    // sender ! x
 
     case x =>
       println(s"RandomInterview TestFinished garip bir mesaj: $x")
       sender ! new IllegalStateException(s"unsopperted operation: $x")
+
+  }
+
+  override def preStart = {
+
+    println("RandomInterview: preStart")
 
   }
 

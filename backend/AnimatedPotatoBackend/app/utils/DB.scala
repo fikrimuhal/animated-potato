@@ -1,5 +1,6 @@
 package utils
 
+import scala.slick.jdbc.meta.MTable
 import slick.driver.PostgresDriver.simple._
 
 object DB {
@@ -11,6 +12,6 @@ object DB {
   val DRIVER: String = "org.postgresql.Driver"
   val DB = Database.forURL(URL, USER_NAME, PASSWORD, null, DRIVER)
 
-
   def apply[T](f: Session => T): T = DB.withSession(f)
+
 }
