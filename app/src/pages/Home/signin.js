@@ -51,10 +51,10 @@ export default class UserSignIn extends React.Component {
 
     signIn = function () {
         var username = this.refs.username.input.value;
-        var password = this.refs.password.input.value;
-        if (username == "" || password == "") {
-            toastHelper("Fields are required!", 2000);
-            return;
+            var password = this.refs.password.input.value;
+            if (username == "" || password == "") {
+                toastHelper("Fields are required!", 2000);
+                return;
         }
         db.authenticate(username, password).then((message)=> {
             console.log("authenticate then", message);

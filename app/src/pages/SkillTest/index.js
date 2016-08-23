@@ -60,7 +60,11 @@ export default class SkillTestContainer extends React.Component {
 
         log(this.props.location);
         var reqQuery = this.props.location.query;
+       
         if(!db.isLoggedIn() && (!reqQuery.companyToken || !reqQuery.trackNo || !reqQuery.email)){
+            if(reqQuery.trackNo == "new" ){
+                    
+            }
             browserHistory.push("signin");
         }
     };

@@ -111,6 +111,7 @@ render= ()=>{
           <div style = {styles.flexContainer}>
                 {
                   this.props.categoryList.map( (kategori) => {
+                      //TODO kategori scritpi calıstığında x.TOJS hata veriyor kontrol edilecek
                       let foundKey = kategoriList.findKey( x=> {return x.toJS().category == kategori;} );
                       let checked = foundKey != undefined;
                       let weight = (checked)? kategoriList.get(foundKey).toJS().weight:0;
