@@ -7,7 +7,7 @@ import FontIcon     from 'material-ui/FontIcon';
 import {blue500}    from 'material-ui/styles/colors';
 import * as _       from 'lodash'
 import * as s       from '../../layouts/style'
-import Mousetrap    from 'Mousetrap'
+import Mousetrap    from 'mousetrap'
 //variables and const definitions
 const log = log2("CheckboxQuestion");
 var keyOptionMap=[];

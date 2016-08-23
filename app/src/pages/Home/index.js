@@ -19,7 +19,7 @@ export default class StartTest extends React.Component {
         log(this.props, this.props.location.search);
         var query=this.props.location.search + "&email=" + email;
         log(query);
-        browserHistory.push("/skilltest" + query)
+        browserHistory.push("/skilltest/?" + query)
     };
     componentWillMount=function () {
         if(db.isLoggedIn()) {

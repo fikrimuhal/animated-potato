@@ -1,6 +1,7 @@
 //core imports
 import React               from 'react'
 import Router              from 'react-router'
+import Question            from './Question'
 import _                   from 'lodash'
 import RaisedButton        from 'material-ui/RaisedButton';
 import * as s              from '../../layouts/style'
@@ -47,9 +48,9 @@ export default class SkillTest extends React.Component {
         Mousetrap.unbind([`enter`], this.handleHotkey);
     };
     onToggle = function () {
-      this.setState({
-          enterKeyPassing:!this.state.enterKeyPassing
-      })
+        this.setState({
+            enterKeyPassing:!this.state.enterKeyPassing
+        })
     };
     render=function () {
         log("rendered",this.state)
