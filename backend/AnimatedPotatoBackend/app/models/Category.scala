@@ -1,6 +1,6 @@
 package models
 import animatedPotato.protocol.protocol.IdType
-import utils.{Constants, DatabaseConfig}
+import utils.{Constants, DB}
 
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
@@ -13,7 +13,7 @@ object Categories {
 
   lazy val categories = TableQuery[Categories]
   
-  def insert(category: Category): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def insert(category: Category): Boolean = DB { implicit session =>
     try {
       categories += category; true
     }
@@ -22,20 +22,20 @@ object Categories {
     }
   }
 
-  def update(category: Category): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def update(category: Category): Boolean = DB { implicit session =>
     val updatedRowCount: Int = categories.filter(_.id === category.id).update(category)
     if (updatedRowCount > 0) true else false
   }
 
-  def delete(category: Category): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def delete(category: Category): Boolean = DB { implicit session =>
     val deletedRowCount: Int = categories.filter(_.id === category.id).delete
     if (deletedRowCount > 0) true else false
   }
 
-  def getAll(): List[Category] = DatabaseConfig.DB.withSession { implicit session =>
+  def getAll(): List[Category] = DB { implicit session =>
     categories.list
   }
-  def get(n: Long) : Category = DatabaseConfig.DB.withSession{ implicit session =>
+  def get(n: Long) : Category = DB{ implicit session =>
     val categoryList =  categories.filter(_.id === n).list
     if(categoryList != Nil) categoryList.head
     else Category(Some(-1),"")
