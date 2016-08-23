@@ -65,7 +65,7 @@ Ok("READY")
   }
 
   def getParticipants() = Action {
-    Ok(Json.prettyPrint(Json.toJson(Participants.getParticipants())))
+    Ok(Json.prettyPrint(Json.toJson(Participants.getParticipants)))
   }
 
 }

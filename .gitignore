@@ -4,3 +4,4 @@ dist
 .idea
 npm-debug.log
 .editorconfig.example
+app/InterviewService/
