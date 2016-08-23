@@ -1,7 +1,7 @@
 package models
 
 import animatedPotato.protocol.protocol.{IdType, QuestionId, UserIdType}
-import utils.{Constants, DatabaseConfig}
+import utils.{Constants, DB}
 
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
@@ -10,7 +10,7 @@ case class Answer(id : Option[IdType], questionId: QuestionId, userid: UserIdTyp
 object Answers {
   lazy val answers = TableQuery[Answers]
 
-  def insert(answer: Answer): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def insert(answer: Answer): Boolean = DB { implicit session =>
     try {
       answers += answer; true
     }
@@ -19,7 +19,7 @@ object Answers {
     }
   }
 
-  def update(answer: Answer): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def update(answer: Answer): Boolean = DB { implicit session =>
     try {
       answers.filter(a => a.userid === answer.userid && a.questionid === answer.questionId).update(answer) > 0
     }
@@ -29,7 +29,7 @@ object Answers {
 
   }
 
-  def delete(answer: Answer): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def delete(answer: Answer): Boolean = DB { implicit session =>
     try {
       answers.filter(a => a.userid === answer.userid && a.questionid === answer.questionId).delete > 0
     }
@@ -39,14 +39,14 @@ object Answers {
 
   }
 
-  def getAnswers(userid: UserIdType): List[Answer] = DatabaseConfig.DB.withSession { implicit session =>
+  def getAnswers(userid: UserIdType): List[Answer] = DB { implicit session =>
         answers.filter( _.userid === userid).list
   }
 
-  def getAnswer(userid : UserIdType, questionID : QuestionId): List[Answer] = DatabaseConfig.DB.withSession{ implicit sesison =>
+  def getAnswer(userid : UserIdType, questionID : QuestionId): List[Answer] = DB{ implicit sesison =>
     answers.filter(a => a.userid === userid && a.questionid === questionID).list
   }
-  def getAll(): List[Answer] = DatabaseConfig.DB.withSession{ implicit session =>
+  def getAll(): List[Answer] = DB{ implicit session =>
     answers.list
   }
 }

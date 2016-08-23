@@ -2,89 +2,41 @@ version: "2"
 
 services:
 
-  bogazici:
-
-    image: dist.fikrimuhal.com/hivecdn/bogazici
-
+  backend:
+    image: dist.fikrimuhal.com/mulakat/backend
     build:
-      context: ./api
-      dockerfile: ./development.Dockerfile
-
+      context: .
+      dockerfile: ./Dockerfile
     ports:
       - '2552:2552'
-      - '10000:10000'
-
+      - '9001:9000'
 #    command: echo "hellooo"
-
     volumes:
       - ~/.ivy2":/root/.ivy2
       - ~/.m2":/root/.m2
-#      -  ./content/src:/home/src
-#      -  ./content/node_modules:/home/node_modules
-
-    environment:
-#      HOST: localhost
-      PORT_9000: 10000
-      PORT_2552: 2552
-
-
-    networks:
-      - hivecdn
-
-    hostname: bogazici
-
-
-
-
-  servicea:
-    image: dist.fikrimuhal.com/hivecdn/servicea
-
-    build:
-      context: ./examples/serviceA
-      dockerfile: ./development.Dockerfile
-
-    volumes:
-      - ~/.ivy2":/root/.ivy2
-      - ~/.m2":/root/.m2
-#      -  ./content/src:/home/src
-
     environment:
       PORT_2552: 2552
-
-    links:
-      - bogazici
-
     networks:
-      - hivecdn
+      - mulakat
+    hostname: backend
+#    links:
+#      - db
 
-  serviceb:
-    image: dist.fikrimuhal.com/hivecdn/serviceb
-
-    build:
-      context: ./examples/serviceB
-      dockerfile: ./development.Dockerfile
-
-    volumes:
-      - ~/.ivy2":/root/.ivy2
-      - ~/.m2":/root/.m2
-#      -  ./content/src:/home/src
-
-    environment:
-      PORT_2552: 2552
-
-    links:
-      - bogazici
-
-    networks:
-      - hivecdn
-
-
-
-
-
+#  db:
+#    image: postgres
+#    environment:
+#        POSTGRES_PASSWORD: postgres
+#        POSTGRES_USER: password
+#        POSTGRES_DB: deneme
+#        #PGDATA:/var/lib/postgresql/data
+#    ports:
+#        - "5433:5432"
+#    container_name: db
+#    networks:
+#      - mulakat
 
 
 networks:
-  hivecdn:
+  mulakat:
     external:
-        name: hivecdn
+        name: mulakat

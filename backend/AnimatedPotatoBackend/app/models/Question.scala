@@ -2,7 +2,7 @@ package models
 
 import animatedPotato.protocol.protocol.{CategoryId, IdType}
 import com.sun.xml.internal.bind.v2.TODO
-import utils.{Constants, DatabaseConfig}
+import utils.{Constants, DB}
 
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
@@ -32,7 +32,7 @@ object Questions {
   lazy val questionCategories = TableQuery[QuestionCategories]
   lazy val sets = TableQuery[Sets]
 
-  def insert(question: Question): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def insert(question: Question): Boolean = DB { implicit session =>
 
     questions += QuestionTable(question.id,
       question.title,
@@ -45,7 +45,7 @@ object Questions {
 
   }
 
-  def update(question: Question): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def update(question: Question): Boolean = DB { implicit session =>
     try {
       val questionTable = QuestionTable(question.id,
         question.title,
@@ -76,12 +76,12 @@ object Questions {
     }
   }
 
-  def delete(question: Question): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def delete(question: Question): Boolean = DB { implicit session =>
     val deletedRowCount: Int = questions.filter(_.id === question.id).delete
     if (deletedRowCount > 0) true else false
   }
 
-  def getAll = DatabaseConfig.DB.withSession { implicit session =>
+  def getAll = DB { implicit session =>
     val questionList = questions.list
     for (qt <- questionList) yield
       Question(qt.id, qt.title, qt.qType,
@@ -93,7 +93,7 @@ object Questions {
 
   }
 
-  def getQuestionById(id: Long): Question = DatabaseConfig.DB.withSession { implicit session =>
+  def getQuestionById(id: Long): Question = DB { implicit session =>
     val qt: QuestionTable = questions.filter(_.id === id.toLong).list.head
     Question(qt.id,qt.title,qt.qType,
       questionOptions.filter(qopt => qopt.id inSet qt.options).list,

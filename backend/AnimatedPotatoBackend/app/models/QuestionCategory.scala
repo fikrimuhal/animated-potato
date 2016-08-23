@@ -1,7 +1,7 @@
 package models
 
 import animatedPotato.protocol.protocol.{CategoryId, QuestionId}
-import utils.{Constants, DatabaseConfig}
+import utils.{Constants, DB}
 
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
@@ -11,15 +11,15 @@ case class QuestionCategory(questionId: Option[QuestionId], categoryId: Category
 object QuestionCategories {
   lazy val questionCategories = TableQuery[QuestionCategories]
 
-  def insert(questionCategory: QuestionCategory): Long = DatabaseConfig.DB.withSession { implicit session =>
+  def insert(questionCategory: QuestionCategory): Long = DB { implicit session =>
     questionCategories += questionCategory
   }
 
-  def update(questionCategory: QuestionCategory): Boolean = DatabaseConfig.DB.withSession { implicit session =>
+  def update(questionCategory: QuestionCategory): Boolean = DB { implicit session =>
     questionCategories.filter(q => (q.questionId === questionCategory.questionId).&&(q.categoryId === questionCategory.categoryId)).update(questionCategory) == 1
   }
 
-  def getAll(): List[QuestionCategory] = DatabaseConfig.DB.withSession { implicit session =>
+  def getAll(): List[QuestionCategory] = DB { implicit session =>
     questionCategories.list
   }
 }

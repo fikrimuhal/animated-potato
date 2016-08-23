@@ -13,9 +13,9 @@ case class NonEx(message: String) extends Throwable
   *
   */
 
-class InterviewActor(initMessage: InitMessage, client: ActorRef) extends Actor with Stash {
+class InterviewActor(initMessage: InitMessage) extends Actor with Stash {
   println("InterviewActor : Constructor")
-  var allQuestionIds: List[IdType] = initMessage.questionCategoryWeightTuple.value.map(_.questionId).distinct
+  var allQuestionIds: List[IdType] = initMessage.questionCategoryWeightTuple.value.filter(q => q.weight > 0 && initMessage.restrictedCategoryList.contains(q.categoryId) ).map(_.questionId).distinct
 
   override def receive: Receive = ready
 
@@ -23,9 +23,9 @@ class InterviewActor(initMessage: InitMessage, client: ActorRef) extends Actor w
 
     case x: GetNextQuestion =>
       println("interviewActor'e GetNextQuestion geldi ")
-      client ! getNextQuestionId().map(NextQuestion(_)).getOrElse {
+      sender ! getNextQuestionId().map(NextQuestion).getOrElse {
         println("interviewActor TestFinish yollayacak")
-        client ! TestFinish(initMessage.interviewId, initMessage.userId)
+        sender ! TestFinish(initMessage.interviewId, initMessage.userId)
         unstashAll()
         context become testFinished
       }
@@ -39,7 +39,7 @@ class InterviewActor(initMessage: InitMessage, client: ActorRef) extends Actor w
 
     case x: TestReport =>
       println(s"Interview Actore TestReport geldi : $x")
-      client ! x
+      sender ! x
 
     case x => sender ! new IllegalStateException(s"unsopperted operation: $x")
 
@@ -60,6 +60,6 @@ class InterviewActor(initMessage: InitMessage, client: ActorRef) extends Actor w
 
 object InterviewActor {
 
-  def props(initMessage: InitMessage, client: ActorRef) = Props(classOf[InterviewActor], initMessage, client)
+  def props(initMessage: InitMessage) = Props(classOf[InterviewActor], initMessage)
 
 }
