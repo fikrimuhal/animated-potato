@@ -8,9 +8,10 @@ import DeleteIcon       from 'material-ui/svg-icons/action/delete';
 import ViewIcon         from 'material-ui/svg-icons/action/visibility';
 import {browserHistory} from 'react-router'
 import CircularProgress from 'material-ui/CircularProgress';
+import * as Cache       from  '../../utils/cache'
 require("!style!css!react-data-grid/themes/react-data-grid.css");
 
-const Selectors = Data.Selectors;
+const Selectors=Data.Selectors;
 const log=log2("ParticipantList");
 var columns=[
     {
@@ -52,29 +53,52 @@ export default class ParticipantList extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state={
-            dataLoaded: false,
-            filters: {},
-
-        };
         util.bindFunctions.call(this, ['getRows', 'getSize',
             'rowGetter', 'handleFilterChange',
-            'handleGridSort', 'getOptionCell']);
+            'handleGridSort', 'getOptionCell',
+            'initializeDataFromCache','initializeDataFromApi']);
+        this.state={
+            dataLoaded: false,
+            filters: {}
+        };
+        if(Cache.checkParticipantListFromCache())
+            this.initializeDataFromCache();
+        else
+            this.initializeDataFromApi();
+
+    };
+
+    initializeDataFromCache=function () {
+        log("Data from CACHE");
+        var rows=Cache.getParticipantListFromCache();
+        var tableData=this.convertTableRawData(rows);
+        this.state={
+            rows: tableData,
+            originalRows: tableData,
+            dataLoaded: true
+        };
+    };
+    initializeDataFromApi=function () {
+        log("Data from SERVER");
         db.getApplicantListFromAPI().then((rows)=> {
-            var tableData=rows.map(r => {
-                r.options=this.getOptionCell(r);
-                return r;
-            });
+            rows = JSON.parse(rows);
+            Cache.cacheParticipantList(rows);
+            var tableData=this.convertTableRawData(rows);
 
             this.setState({
                 rows: tableData,
                 originalRows: tableData,
                 dataLoaded: true
             });
-            //log("then rows", rows);
         })
     };
-
+    convertTableRawData=(rows)=> {
+        var tableData=rows.map(r => {
+            r.options=this.getOptionCell(r);
+            return r;
+        });
+        return tableData;
+    };
     getOptionCell=(rowData) => {
         return (<div>
             <FlatButton icon={<DeleteIcon/>} onClick={this.deleteRow(rowData.id)}></FlatButton>

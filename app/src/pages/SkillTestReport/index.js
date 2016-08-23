@@ -7,17 +7,30 @@ import Graph            from '../GraphicInfo/index'
 import * as mockApi     from '../../utils/mock_api'
 import CircularProgress from 'material-ui/CircularProgress';
 import log2             from '../../utils/log2'
+import * as Cache       from '../../utils/cache'
+import * as util        from '../../utils/utils'
 //consts and variables
 const log=log2("SkillTestReportContainer");
 
 export default  class SkillTestReportContainer extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
+        util.bindFunctions.call(this,['initializeFromAPI','initializeFromCache']);
         this.state={
             dataWaiting: true
         };
-        log(this.props);
-        mockApi.getUserSkillTestReport(this.props.params.userId).then(response=> {
+        var userId = this.props.params.userId;
+        if(Cache.checkTestResultReportCache(userId))
+            this.initializeFromCache(userId)
+        else
+            this.initializeFromAPI(userId)
+
+        //log(this.props);
+
+    }
+    initializeFromAPI = function (userId) {
+        log("Data from SERVER");
+        mockApi.getUserSkillTestReport(userId).then(response=> {
             var data=JSON.parse(response);
             log("data",data);
             this.setState({
@@ -25,8 +38,16 @@ export default  class SkillTestReportContainer extends React.Component {
                 data: data
             });
         })
-    }
-
+    };
+    initializeFromCache = function (userId) {
+        log("Data from CACHE");
+        var data = Cache.getTestResultReportFromCache(userId);
+        data.isValidUser=true;
+        this.state = {
+            dataWaiting: false,
+            data: data
+        }
+    };
     goToList=function () {
         browserHistory.push("/adminpanel/listofparticipants");
     };
