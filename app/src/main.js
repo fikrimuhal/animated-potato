@@ -32,19 +32,14 @@ ReactDOM.render((
         <Route path="/" component={UserLayout}>
             <IndexRoute component={pages.UserHome}/>
             <Route path="home" component={pages.UserHome}/>
-
-
         </Route>
 
         <Route path="/" component={DefaultLayout}>
-            <Route path="interview" component={pages.InterView}>
-
-            </Route>
-            <Route path="skilltest" component={pages.SkillTest}>
-            </Route>
+            <Route path="interview" component={pages.InterView}/>
+            <Route path="skilltest" component={pages.SkillTest}/>
             <Route path="signin" component={pages.UserSignIn}/>
             <Route path="signup" component={pages.UserSignUp}/>
-            <Route path="graphicinfo" component={pages.GraphicInfo}/>
+            <Route path="deneme" component={pages.Deneme}/>
         </Route>
         <Route path="/" component={AdminLayout}>
             <Route path="adminpanel" component={pages.AdminPanel}>
@@ -55,6 +50,7 @@ ReactDOM.render((
                 <Route path="questionadd" component={pages.QuestionAdd}/>
                 <Route path="questionsetdetails" component={pages.QuestionSetDetails}/>
                 <Route path="questionlist" component={pages.QuestionList}/>
+                <Route path="skilltestreport/:userId" component={pages.SkillTestReport}/>
             </Route>
         </Route>
 
