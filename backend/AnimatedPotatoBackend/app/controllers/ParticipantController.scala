@@ -19,12 +19,12 @@ class ParticipantController @Inject()(@Named("root") root: ActorRef) extends Con
   implicit val defaultTimeOut = Timeout(2 seconds)
 
   def index = Action {
-   // Ok("READY")
-//    (root ? ("interview", 4)).mapTo[String].map{response => Ok(response)}
-//    root ! 123
-//    root ! "Merhaba"
-//    (root ? "Merhaba").mapTo[String].map { response => Ok(response) }
-Ok("READY")
+    // Ok("READY")
+    //    (root ? ("interview", 4)).mapTo[String].map{response => Ok(response)}
+    //    root ! 123
+    //    root ! "Merhaba"
+    //    (root ? "Merhaba").mapTo[String].map { response => Ok(response) }
+    Ok("READY")
   }
 
   def insertParticipant() = Action { implicit request =>

@@ -10,28 +10,18 @@ import utils.Formatter._
 /**
   * Created by who on 09.08.2016.
   */
-case class User(id : Option[UserIdType]=None,username : String, password: String, isadmin : Option[Boolean] = Some(false))
+case class User(id: Option[UserIdType] = None, username: String, password: String, email: Option[String] = None, isadmin: Option[Boolean] = Some(false))
 
 object Users {
   lazy val users = TableQuery[Users]
 
-  def insert(user: User): Boolean = DB { implicit session =>
-    try {
-      if (exists(user)) false
-      else {
-        users += user.copy(password = user.password.bcrypt);
-        true
-      }
-    }
-    catch {
-      case e: Exception => println(s"hataa $e")
-        false
-    }
+  def insert(user: User) = DB { implicit session =>
+    users += user.copy(password = user.password.bcrypt)
   }
 
   def exists(user: User): Boolean = DB { implicit session =>
     try {
-      users.filter(_.username === user.username).list.nonEmpty
+      users.filter(u => (u.username === user.username) && (u.email === user.email)).list.nonEmpty
     }
     catch {
       case e: Exception => false
@@ -48,21 +38,51 @@ object Users {
     if (deletedRowCount > 0) true else false
   }
 
-  def isValid(user : User): Boolean = DB{ implicit session =>
-    try{users.filter(u => u.username === user.username && u.password === user.password.bcrypt).list.nonEmpty}
-    catch {case e : Exception => false}
+  def isValid(userNameOrEmail: String, password: String): Boolean = DB { implicit session =>
+    try {
+      val a = users.filter(u => (u.username === userNameOrEmail) || (u.email === userNameOrEmail)).list.distinct
+      if (a.nonEmpty) {
+        password.isBcrypted(a.head.password)
+      }
+      else false
+    }
+    catch {
+      case e: Exception => false
+    }
   }
-  def getUserByName(username : String) : User = DB{ implicit session =>
-    users.filter(_.username === username).list.head
+
+  def get(usernameOrEmail: String): Option[User] = DB { implicit session =>
+    users.filter(u => (u.username === usernameOrEmail) || (u.email === usernameOrEmail)).list.distinct match {
+      case x :: xs=> Some(x)
+      case _ => None
+    }
   }
+
+  def getById(id: UserIdType): User = DB { implicit session =>
+    users.filter(_.id === id).list.head
+  }
+
+  def getAll: List[User] = DB { implicit session =>
+    users.list
+  }
+
+  def isAdmin(user: User): Boolean = DB { implicit session =>
+    users.filter(_.username === user.username).map(u => u.isadmin).list.head
+  }
+
 
 }
 
 class Users(tag: Tag) extends Table[User](tag, "users") {
-  def id = column[UserIdType]("id",O.AutoInc,O.PrimaryKey)
+  def id = column[UserIdType]("id", O.AutoInc, O.PrimaryKey)
+
   def username = column[String]("username")
+
   def password = column[String]("password")
+
+  def email = column[String]("email")
+
   def isadmin = column[Boolean]("isadmin")
 
-  def * = (id.?,username, password,isadmin.?) <> (User.tupled, User.unapply)
+  def * = (id.?, username, password, email.?, isadmin.?) <> (User.tupled, User.unapply)
 }

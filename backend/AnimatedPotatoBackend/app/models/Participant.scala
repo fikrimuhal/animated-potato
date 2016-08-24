@@ -40,17 +40,16 @@ object Participants {
   }
 
   def exists(participant: Participant): Boolean = DB { implicit session =>
-    participants.filter(_.email === participant.email).list.nonEmpty
+    participants.filter(p => (p.email === participant.email || p.username === participant.username)).list.nonEmpty
   }
 
   def update(participant: Participant): Boolean = DB { implicit session =>
-    val updatedRowCount: Int = participants.filter(_.email === participant.email).update(participant)
-    updatedRowCount > 0
+   participants.filter(_.email === participant.email).update(participant) > 0
+
   }
 
   def delete(participant: Participant): Boolean = DB { implicit session =>
-    val deletedRowCount = participants.filter(_.email === participant.email).delete
-    if (deletedRowCount > 0) true else false
+   participants.filter(_.email === participant.email).delete > 0
   }
 
   def getParticipants: List[Participant] = DB {implicit session =>
@@ -66,9 +65,26 @@ object Participants {
     ParticipantResponse(participantList, page + 1, (participantList.length / Constants.PAGE_SIZE) + 1)
   }
 
-  def getParticipant(userName: String): Option[Participant] = DB { implicit session =>
-    val participantList: List[Participant] = participants.filter(_.username === userName).list
+  def getParticipant(userNameOrEmail: String): Option[Participant] = DB { implicit session =>
+    participants.filter(p =>
+      (p.email === userNameOrEmail) || (p.username === userNameOrEmail)
+    ).list.distinct match {
+      case x :: xs => Some(x)
+      case _ => None
+    }
+  }
+
+  def getByEmail(email: String): Option[Participant] = DB { implicit session =>
+    val participantList: List[Participant] = participants.filter(_.email === email).list
     participantList.headOption
+  }
+  def getUserNameByEmail(email: String): Option[String] = DB { implicit session =>
+     participants.filter(p => (p.email === email) || (p.username === email)).list match
+       {
+       case x :: xs => Some(x.username)
+       case _ => None
+     }
+
   }
 
 }
