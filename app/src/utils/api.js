@@ -14,11 +14,5 @@ import * as db from './data.js'
  *              message:string
  */
 export const authenticate = db.getApiPromise("login");
-
-
-
-
-
-
 export const questionList = db.getApiPromise("questionList");
 export const signUp = db.getApiPromise("signUp");
