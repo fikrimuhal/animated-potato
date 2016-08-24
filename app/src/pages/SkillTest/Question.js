@@ -30,19 +30,19 @@ export default class Question extends React.Component {
         var component;
         switch (questionType) {
             case "radio":
-                component = <RadioQuestion question={this.props.question} onChange={this.onChange}/>;
+                component = <RadioQuestion question={this.props.question} onChange={this.onChange} currentQuestionNumber={this.props.currentQuestionNumber}/>;
                 break;
             case "checkbox":
-                component = <CheckboxQuestion question={this.props.question} onChange={this.onChange}/>;
+                component = <CheckboxQuestion question={this.props.question} onChange={this.onChange} currentQuestionNumber={this.props.currentQuestionNumber} />;
                 break;
             case "freetext":
-                component = <FreeTextQuestion question={this.props.question} onChange={this.onChange}/>;
+                component = <FreeTextQuestion question={this.props.question} onChange={this.onChange} currentQuestionNumber={this.props.currentQuestionNumber} />;
                 break;
             case "number":
-                component = <NumberQuestion question={this.props.question} onChange={this.onChange}/>;
+                component = <NumberQuestion question={this.props.question} onChange={this.onChange} currentQuestionNumber={this.props.currentQuestionNumber} />;
                 break;
             case "yesno":
-                component = <RadioQuestion question={this.props.question} onChange={this.onChange}/>;
+                component = <RadioQuestion question={this.props.question} onChange={this.onChange}currentQuestionNumber={this.props.currentQuestionNumber} />;
                 break;
             default:
                 <div></div>

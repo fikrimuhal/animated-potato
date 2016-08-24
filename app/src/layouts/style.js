@@ -52,7 +52,44 @@ export const userLayoutStyles={
     questionText: {
         fontSize: "21px",
         color: "#444444",
-        fontWeight: "500"
+        fontWeight: "500",
+        marginLeft:"14px"
+    },
+    questionBadgeRed:{
+        width:"36px",
+        height:"36px",
+        backgroundColor:"rgb(255, 64, 129)",
+        fontWeight: "800",
+        fontSize: "16px",
+        top:"22px",
+        left:"-13px"
+    },
+    questionBadgeYellow:{
+        width:"36px",
+        height:"36px",
+        backgroundColor:"rgb(212, 197, 41)",
+        fontWeight: "800",
+        fontSize: "16px",
+        top:"22px",
+        left:"-13px"
+    },
+    questionBadgeBlue:{
+        width:"36px",
+        height:"36px",
+        backgroundColor:"#2196f3",
+        fontWeight: "800",
+        fontSize: "16px",
+        top:"22px",
+        left:"-13px"
+    },
+    questionBadgeGreen:{
+        width:"36px",
+        height:"36px",
+        backgroundColor:"#4caf50",
+        fontWeight: "800",
+        fontSize: "16px",
+        top:"22px",
+        left:"-13px"
     },
     optionText: {
         fontSize: "20px",

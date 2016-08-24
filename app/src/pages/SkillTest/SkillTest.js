@@ -66,7 +66,7 @@ export default class SkillTest extends React.Component {
                 <Grid width="500px" className={"gridX"}>
                     <Row height={"80%"}>
                         <Col xs={12} md={12} lg={12}>
-                            <Question key={question.id} question={question} onAnswer={this.onAnswer}/>
+                            <Question key={question.id} question={question} onAnswer={this.onAnswer} currentQuestionNumber={this.props.currentQuestionNumber}/>
                         </Col>
                     </Row>
                     <Row  style={{marginTop: "12%"}}>
@@ -97,6 +97,7 @@ export default class SkillTest extends React.Component {
 SkillTest.propTypes={
     question: React.PropTypes.object.isRequired,
     testOver: React.PropTypes.bool.isRequired,
-    saveAnswer: React.PropTypes.func.isRequired
+    saveAnswer: React.PropTypes.func.isRequired,
+    currentQuestionNumber:React.PropTypes.number.isRequired
 
 };

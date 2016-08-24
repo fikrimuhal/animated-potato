@@ -124,7 +124,9 @@ export default class SkillTestContainer extends React.Component {
                         question={this.state.currentQuestion}
                         testOver={this.state.testOver}
                         answerAndNextQuestion={this.answerAndNextQuestion}
-                        saveAnswer={this.saveAnswer}/>
+                        saveAnswer={this.saveAnswer}
+                        currentQuestionNumber = {this.state.answeredQuestionCount +1}
+                    />
                 }
                 else {
                     content = <WaitingPanel/>
