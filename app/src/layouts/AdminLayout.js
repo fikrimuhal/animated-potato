@@ -31,9 +31,9 @@ const styles = {
         backgroundImage: "url(" + image + ")",
         height:"100%"
     }
-}
+};
 
-
+var loggedIn=false;
 export default class AdminLayout extends React.Component {
     constructor(props) {
         super(props);
@@ -71,8 +71,8 @@ export default class AdminLayout extends React.Component {
     }
     componentWillMount = function () {
 
-        if (!db.isAdmin())
-            browserHistory.push("/signin");
+        if (db.isAdmin()) loggedIn=true;
+
     };
     componentDidMount=()=> {
         Mousetrap.bind([`shift+m+1`, `shift+m+2`], this.menuHotkey);
@@ -95,7 +95,12 @@ export default class AdminLayout extends React.Component {
         })
     }
     render = function () {
-        log("userInfo",userInfo)
+        log("userInfo",userInfo);
+        if(!loggedIn)
+        {
+            browserHistory.push("/signin");
+            return <div></div>
+        };
         return (
             <MuiThemeProvider>
                 <div id="page_container" style={styles.main}>

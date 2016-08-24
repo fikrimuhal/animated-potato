@@ -9,7 +9,7 @@ export default  class  FormIntro extends  React.Component{
     super(props)
     }
     goToTest=function () {
-        browserHistory.push("/interview/skilltest")
+        browserHistory.push("/skilltest?companyToken=fikrimuhal&trackno=new")
     }
     render = ()=>{
     return(

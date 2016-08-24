@@ -42,3 +42,7 @@ export const setToken = function setToken(token) {
 export const getToken = function getToken() {
   return localStorage.getItem("token");
 }
+
+export const isNumeric  = function (value) {
+  return !isNaN(value);
+}

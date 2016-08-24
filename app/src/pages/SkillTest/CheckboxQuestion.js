@@ -7,7 +7,8 @@ import FontIcon     from 'material-ui/FontIcon';
 import {blue500}    from 'material-ui/styles/colors';
 import * as _       from 'lodash'
 import * as s       from '../../layouts/style'
-import Mousetrap    from 'Mousetrap'
+import Mousetrap    from 'mousetrap'
+import Badge        from 'material-ui/Badge';
 //variables and const definitions
 const log = log2("CheckboxQuestion");
 var keyOptionMap=[];
@@ -98,10 +99,12 @@ export default class CheckboxQuestion extends React.Component {
         var counter =1;
         return (
             <div>
-                <FontIcon color={blue500} className="material-icons md-dark md-inactive">label</FontIcon>
-                <p style={s.userLayoutStyles.questionText}>
-                    {this.props.question.title}
-                </p>
+                {/*<FontIcon color={blue500} className="material-icons md-dark md-inactive">label</FontIcon>*/}
+                <Badge badgeContent={this.props.currentQuestionNumber} primary={true}  badgeStyle={s.userLayoutStyles.questionBadgeRed}>
+                    <p style={s.userLayoutStyles.questionText}>
+                        {this.props.question.title}
+                    </p>
+                </Badge>
                 {
 
                     options.map((option) => {

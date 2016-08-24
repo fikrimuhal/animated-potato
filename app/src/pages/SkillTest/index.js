@@ -7,6 +7,7 @@ import {Toast}          from '../../components/MyComponents';
 import * as s           from '../../layouts/style';
 import * as db          from '../../utils/data';
 import * as util        from '../../utils/utils'
+import WaitingPanel     from './WaitingPanel'
 import TestOverPanel    from './TestOver'
 import LinearProgress   from 'material-ui/LinearProgress';
 import {browserHistory} from 'react-router'
@@ -44,10 +45,10 @@ export default class SkillTestContainer extends React.Component {
             var clientW = document.documentElement.clientWidth;
             //log(this.state.screenWidth,clientW)
             if(clientW != this.state.screenWidth){
-                   this.setState({
-                       screenWidth:clientW,
-                       paperStyle:clientW<=500 ? s.userLayoutStyles.skillTestPaperMobil:s.userLayoutStyles.skillTestPaper
-                   })
+                this.setState({
+                    screenWidth:clientW,
+                    paperStyle:clientW<=500 ? s.userLayoutStyles.skillTestPaperMobil:s.userLayoutStyles.skillTestPaper
+                })
             }
 
         },1000);
@@ -59,7 +60,11 @@ export default class SkillTestContainer extends React.Component {
 
         log(this.props.location);
         var reqQuery = this.props.location.query;
+       
         if(!db.isLoggedIn() && (!reqQuery.companyToken || !reqQuery.trackNo || !reqQuery.email)){
+            if(reqQuery.trackNo == "new" ){
+                    
+            }
             browserHistory.push("signin");
         }
     };
@@ -119,7 +124,9 @@ export default class SkillTestContainer extends React.Component {
                         question={this.state.currentQuestion}
                         testOver={this.state.testOver}
                         answerAndNextQuestion={this.answerAndNextQuestion}
-                        saveAnswer={this.saveAnswer}/>
+                        saveAnswer={this.saveAnswer}
+                        currentQuestionNumber = {this.state.answeredQuestionCount +1}
+                    />
                 }
                 else {
                     content = <WaitingPanel/>

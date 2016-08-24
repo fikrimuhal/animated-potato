@@ -1,6 +1,7 @@
 //core imports
 import React               from 'react'
 import Router              from 'react-router'
+import Question            from './Question'
 import _                   from 'lodash'
 import RaisedButton        from 'material-ui/RaisedButton';
 import * as s              from '../../layouts/style'
@@ -47,9 +48,9 @@ export default class SkillTest extends React.Component {
         Mousetrap.unbind([`enter`], this.handleHotkey);
     };
     onToggle = function () {
-      this.setState({
-          enterKeyPassing:!this.state.enterKeyPassing
-      })
+        this.setState({
+            enterKeyPassing:!this.state.enterKeyPassing
+        })
     };
     render=function () {
         log("rendered",this.state)
@@ -65,7 +66,7 @@ export default class SkillTest extends React.Component {
                 <Grid width="500px" className={"gridX"}>
                     <Row height={"80%"}>
                         <Col xs={12} md={12} lg={12}>
-                            <Question key={question.id} question={question} onAnswer={this.onAnswer}/>
+                            <Question key={question.id} question={question} onAnswer={this.onAnswer} currentQuestionNumber={this.props.currentQuestionNumber}/>
                         </Col>
                     </Row>
                     <Row  style={{marginTop: "12%"}}>
@@ -96,6 +97,7 @@ export default class SkillTest extends React.Component {
 SkillTest.propTypes={
     question: React.PropTypes.object.isRequired,
     testOver: React.PropTypes.bool.isRequired,
-    saveAnswer: React.PropTypes.func.isRequired
+    saveAnswer: React.PropTypes.func.isRequired,
+    currentQuestionNumber:React.PropTypes.number.isRequired
 
 };
