@@ -20,7 +20,12 @@ const styles={
         float: "right"
     }
 };
-const answerType=["radio", "checkbox", "freetext", "number", "yesno"]
+const answerType=["radio", "checkbox", "freetext", "number", "yesno"];
+var lastCommandTexts={
+    categoryCommand: "",
+    setCommand: "",
+    typeCommand: ""
+};
 export default class QuestionAdd extends React.Component {
     constructor(props) {
         super(props);
@@ -62,7 +67,7 @@ export default class QuestionAdd extends React.Component {
         //Sorunun başlığı değiştiği zaman tetiklenen fonksiyon
         var oldStateData=this.props.data;
         var categoryProps=this.props.categoryList;
-        log("categoryProps", categoryProps);
+        //log("categoryProps", categoryProps);
         value=value.trim();
         if(value.indexOf('//') != -1) {
             var title=value.split('//')[0];
@@ -75,11 +80,11 @@ export default class QuestionAdd extends React.Component {
                         var commandType=command.split(':')[0];
                         var commandText=command.split(':')[1];
                         //log("commandType,commandText", commandType, commandText);
-                        if(commandType == 'c') {
+                        if(commandType == 'c' && lastCommandTexts.categoryCommand!=commandText) {
                             //bu kısım sorunun kategorilerini ve ağırlıklarını ayarlar
                             //TODO
                             var categoryCommands=commandText.split(',');
-                            var newCategories = [];
+                            var newCategories=[];
                             categoryCommands.forEach(categoryCommand=> {
                                 if(categoryCommand.length > 2 && categoryCommand.indexOf('-') != -1) {
                                     var cNameIndex=categoryCommand.split('-')[0];
@@ -89,25 +94,27 @@ export default class QuestionAdd extends React.Component {
                                         var cName=categoryProps[cNameIndex - 1];
                                         cWeight=parseInt(cWeight);
                                         newCategories.push({
-                                            category:cName,
-                                            weight:cWeight
+                                            category: cName,
+                                            weight: cWeight
                                         });
                                     }
                                 }
                             });
 
-                            log("newCategories",newCategories);
+                            log("newCategories", newCategories);
 
-                            var newCategoryWeightsImmutable=oldStateData.set(
-                               "categoryWeights",
+                            var newCategoryWeightsImmutable=
                                 Immutable.fromJS(newCategories,
-                                    (key,value)=>{return value.toOrderedMap()}
-                                )
-                            );
-                            this.categoryWeightsChanged(newCategoryWeightsImmutable)
+                                    (key, value)=> {return value.toOrderedMap()}
+                                );
+                            lastCommandTexts.categoryCommand = commandText;
+                            setTimeout(()=> {
+                                log("degisen -> c");
+                                this.categoryWeightsChanged(newCategoryWeightsImmutable)
+                            }, 100)
 
                         }
-                        else if(commandType == 's') {
+                        else if(commandType == 's' && lastCommandTexts.setCommand!=commandText) {
                             //bu kısım sorunun dahil olduğu setleri değiştirir
                             var selectedSetIndexes=commandText.split(',');
                             var selectedSets=[];
@@ -119,14 +126,23 @@ export default class QuestionAdd extends React.Component {
                             });
                             //log("s command", selectedSetIndexes, selectedSets);
                             var newData=Immutable.fromJS(selectedSets, (key, value)=> {return value.toOrderedMap()})
-                            this.handleOnChangeSetsOfQuestion(newData);
+                            lastCommandTexts.setCommand = commandText;
+                            setTimeout(()=> {
+                                log("degisen -> s");
+                                this.handleOnChangeSetsOfQuestion(newData);
+                            }, 100)
                         }
-                        else if(commandType == 't' && util.isNumeric(commandText)) {
+                        else if(commandType == 't' && util.isNumeric(commandText) && lastCommandTexts.typeCommand!=commandText) {
                             //Bu kısım sorunun cevap türünü değiştirir
                             var selectedType=parseInt(commandText);
                             //log("t command", selectedType, answerType[selectedType - 1]);
                             //this.handleOnQuestionOptionsChange(answerType[typeKomutu - 1])
-                            this.handleOnChangeAnswerType(answerType[selectedType - 1])
+                            lastCommandTexts.typeCommand=commandText;
+                            setTimeout(()=> {
+                                log("degisen -> t");
+                                this.handleOnChangeAnswerType(answerType[selectedType - 1])
+                            }, 100)
+
                         }
                         ;
                     }
@@ -138,7 +154,6 @@ export default class QuestionAdd extends React.Component {
 
     }
     categoryWeightsChanged=function (newCategoryWeights) {
-        //onsole.log("heyyy", newCategoryWeights)
         //sorunun kategorisinde herhangi bir değişiklik olduğunda tetiklenir
         var oldStateData=this.props.data;
         var newStateData=oldStateData.set('categoryWeights', newCategoryWeights);
@@ -166,8 +181,8 @@ export default class QuestionAdd extends React.Component {
         }
 
         this.props.onChange(newStateData, oldStateData);
-        log("handleOnChangeAnswerType", newAnswerType);
-        log("types", oldStateData.get("type"), newStateData.get("type"));
+        //log("handleOnChangeAnswerType", newAnswerType);
+        //log("types", oldStateData.get("type"), newStateData.get("type"));
     }
     handleOnQuestionOptionsChange=function (newOptions) {
         //Sorunun seçeneklerinde bir değişiklik olduğundan bu değişikliği üste aktaran event
@@ -183,7 +198,7 @@ export default class QuestionAdd extends React.Component {
 
     render() {
 
-        log("rendered");
+        //log("rendered");
         var categoryWeights=this.props.data.get("categoryWeights");//sorunun kategori ağırlıklar
         var setsOfQuestion=this.props.data.get("setList");//sorunun dahil olduğu setler
         var answerType=this.props.data.get("type");//sorunun cevap tipi
