@@ -24,196 +24,196 @@ const log = log2("Question List")
 var rows = db.getQuestionsFromStorage();
 
 export class detailButton extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-  render(){
+    constructor(props) {
+        super(props)
+    }
+    render(){
 
-    return(
-      <div>
-        <RaisedButton primary={true} onClick={this.onClick}>Detay</RaisedButton>
-      </div>
-    )
-  }
+        return(
+            <div>
+                <RaisedButton primary={true} onClick={this.onClick}>Detay</RaisedButton>
+            </div>
+        )
+    }
 }
 export class setWeightsFormatter extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-  render(){
-      console.log(this.props.value)
-    return(
-      <div>
-          {
-              (()=>{
-                  var setList;
-                  setList = rows.map((row, i) => {
-                      <div>
+    constructor(props) {
+        super(props)
+    }
+    render(){
+        console.log(this.props.value)
+        return(
+            <div>
+                {
+                    (()=>{
+                        var setList;
+                        setList = rows.map((row, i) => {
+                            <div>
 
-                          {row.setList}
-                      </div>
+                                {row.setList}
+                            </div>
 
-                  })
-                  return setList;
-              })()
-          }
-      </div>
-    )
-  }
+                        })
+                        return setList;
+                    })()
+                }
+            </div>
+        )
+    }
 }
 
 export class categoryWeightsFormatter extends React.Component{
-  constructor(props){
-    super(props);
-  }
-  categoryType = function(){
-    var result;
+    constructor(props){
+        super(props);
+    }
+    categoryType = function(){
+        var result;
 
-    rows.map((row, i) => {
-      var cWeights = util.obj2Array(row.categoryWeights)
-       return( cWeights.map((c,j)=>{
+        rows.map((row, i) => {
+            var cWeights = util.obj2Array(row.categoryWeights)
+            return( cWeights.map((c,j)=>{
 
-            <div>{c.category}</div>
+                        <div>{c.category}</div>
 
-        }
+                    }
+                )
+            )
+        })
+    }
+    render(){
+        return(
+            <div>
+                {this.categoryType()}
+            </div>
         )
-      )
-    })
-  }
-  render(){
-    return(
-      <div>
-        {this.categoryType()}
-      </div>
-    )
-  }
+    }
 }
 
 const styles = {
-  customWidth: {
-   width: 150,
- },
+    customWidth: {
+        width: 150,
+    },
 };
 
 var columns = [
-{
-  key: 'id',
-  name: 'ID',
-  width: 80,
-  filterable: true
-},
-{
-  key: 'title',
-  name: 'Soru Adı',
-  sortable : true,
-  editable : true,
-  filterable: true
-},
-{
-  key: 'type',
-  name: 'Cevap Türü',
-},
-{
-  key: 'id',
-  name: 'Set Türü',
-  sortable : true,
-  filterable: true,
-  formatter: setWeightsFormatter
-},
-{
-  key: 'id',
-  name: 'Kategori Türü',
-  sortable : true,
-  sortable : true,
-  filterable: true,
-  formatter: categoryWeightsFormatter
-},
-{
-  key: 'id',
-  name: 'Detay',
-  formatter: detailButton
-},
+    {
+        key: 'id',
+        name: 'ID',
+        width: 80,
+        filterable: true
+    },
+    {
+        key: 'title',
+        name: 'Soru Adı',
+        sortable : true,
+        editable : true,
+        filterable: true
+    },
+    {
+        key: 'type',
+        name: 'Cevap Türü',
+    },
+    {
+        key: 'id',
+        name: 'Set Türü',
+        sortable : true,
+        filterable: true,
+        formatter: setWeightsFormatter
+    },
+    {
+        key: 'id',
+        name: 'Kategori Türü',
+        sortable : true,
+        sortable : true,
+        filterable: true,
+        formatter: categoryWeightsFormatter
+    },
+    {
+        key: 'id',
+        name: 'Detay',
+        formatter: detailButton
+    },
 
 ]
 
 export default class QuestionList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      rows : rows, filters : {},
-      originalRows:rows
-    };
-    util.bindFunctions.call(this,['getRows','getSize',
-                                  'rowGetter','handleFilterChange',
-                                  'handleGridSort','handleRowUpdated','createNew'])
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            rows : rows, filters : {},
+            originalRows:rows
+        };
+        util.bindFunctions.call(this,['getRows','getSize',
+            'rowGetter','handleFilterChange',
+            'handleGridSort','handleRowUpdated','createNew'])
+    }
     createNew = function () {
         browserHistory.push('/adminpanel/questionadd')
     }
-  getRows = function() {
-   return Selectors.getRows(this.state);
- }
- handleRowUpdated = function(e){
-    //merge updated row with current row and rerender by setting state
-    var rows = this.state.rows;
-    Object.assign(rows[e.rowIdx], e.updated);
-    this.setState({rows:rows});
-  }
+    getRows = function() {
+        return Selectors.getRows(this.state);
+    }
+    handleRowUpdated = function(e){
+        //merge updated row with current row and rerender by setting state
+        var rows = this.state.rows;
+        Object.assign(rows[e.rowIdx], e.updated);
+        this.setState({rows:rows});
+    }
 
- getSize = function() {
-   return this.getRows().length;
- }
+    getSize = function() {
+        return this.getRows().length;
+    }
 
- rowGetter = function(rowIdx){
-   var rows = this.getRows();
-   return rows[rowIdx];
- }
+    rowGetter = function(rowIdx){
+        var rows = this.getRows();
+        return rows[rowIdx];
+    }
 
- handleFilterChange = function(filter){
-   let newFilters = Object.assign({}, this.state.filters);
-   if (filter.filterTerm) {
-     newFilters[filter.columnKey] = filter.filterTerm;
-   } else {
-    delete newFilters[filter.columnKey];
-   }
-   this.setState({filters: newFilters});
- }
- handleGridSort = function (sortColumn, sortDirection) {
-   var comparer = function(a, b) {
-     if(sortDirection === 'ASC'){
-       return (a[sortColumn] > b[sortColumn]) ? 1 : -1;
-     }else if(sortDirection === 'DESC'){
-       return (a[sortColumn] < b[sortColumn]) ? 1 : -1;
-     }
-   }
-   var rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
-   this.setState({rows : rows});
- }
+    handleFilterChange = function(filter){
+        let newFilters = Object.assign({}, this.state.filters);
+        if (filter.filterTerm) {
+            newFilters[filter.columnKey] = filter.filterTerm;
+        } else {
+            delete newFilters[filter.columnKey];
+        }
+        this.setState({filters: newFilters});
+    }
+    handleGridSort = function (sortColumn, sortDirection) {
+        var comparer = function(a, b) {
+            if(sortDirection === 'ASC'){
+                return (a[sortColumn] > b[sortColumn]) ? 1 : -1;
+            }else if(sortDirection === 'DESC'){
+                return (a[sortColumn] < b[sortColumn]) ? 1 : -1;
+            }
+        }
+        var rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
+        this.setState({rows : rows});
+    }
 
-  render() {
-    return (
+    render() {
+        return (
 
-      <div>
-        <div>
-         <br/>
-          <h4>Question List</h4>
-            <RaisedButton label="+Create New" secondary={true} onClick={()=> this.createNew()} style={{float:"right"} }/>
-       </div>
+            <div>
+                <div>
+                    <br/>
+                    <h4>Question List</h4>
+                    <RaisedButton label="+Create New" secondary={true} onClick={()=> this.createNew()} style={{float:"right"} }/>
+                </div>
 
-        <div>
-          <ReactDataGrid
-                 columns={columns}
-                 rowGetter={this.rowGetter}
-                 enableCellSelect={true}
-                 rowsCount={this.getSize()}
-                 minHeight={500}
-                 rowHeight={50}
-                 toolbar={<Toolbar enableFilter={true}/>}
-                 onAddFilter={this.handleFilterChange}
-                 onGridSort={this.handleGridSort}
-                 onRowUpdated={this.handleRowUpdated} />
-        </div>
-      </div>
-    );
-  }
+                <div>
+                    <ReactDataGrid
+                        columns={columns}
+                        rowGetter={this.rowGetter}
+                        enableCellSelect={true}
+                        rowsCount={this.getSize()}
+                        minHeight={500}
+                        rowHeight={50}
+                        toolbar={<Toolbar enableFilter={true}/>}
+                        onAddFilter={this.handleFilterChange}
+                        onGridSort={this.handleGridSort}
+                        onRowUpdated={this.handleRowUpdated} />
+                </div>
+            </div>
+        );
+    }
 }
