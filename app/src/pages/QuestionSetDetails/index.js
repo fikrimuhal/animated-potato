@@ -1,99 +1,118 @@
-import React from 'react'
+//core imports
+import React            from 'react'
+import RaisedButton     from 'material-ui/RaisedButton';
+import {db,log2,util}   from '../../utils/'
+import ReactDataGrid    from 'react-data-grid';
+import {Toolbar,Data}   from 'react-data-grid/addons';
+import TextField        from 'material-ui/TextField';
+import CircularProgress from 'material-ui/CircularProgress';
+import * as mockApi     from '../../utils/mock_api'
+import * as Cache       from  '../../utils/cache'
+import DeleteIcon       from 'material-ui/svg-icons/action/delete';
+import FlatButton       from 'material-ui/FlatButton';
+import ViewIcon         from 'material-ui/svg-icons/action/visibility';
+
+//css referenaces
 require("!style!css!react-data-grid/themes/react-data-grid.css")
-import {Link} from 'react-router'
-import RaisedButton from 'material-ui/RaisedButton';
-import {db,log2,util} from '../../utils/'
-import {Table} from 'material-ui/Table';
-import ReactDataGrid from 'react-data-grid';
-import {Toolbar,Data} from 'react-data-grid/addons';
-import _ from 'lodash'
-import TextField from 'material-ui/TextField';
 
 //const and variable
 const Selectors = Data.Selectors;
 const log = log2("Question Set Details")
-//log("Question Set ReactDataGrid",Data)
-
-const styles = {
-    customWidth:{
-        width:150,
-    },
-};
 
 var questionSetInstance;
-
-class ButtonsColFormatter extends React.Component {
-    constructor(props){
-        super(props);
-        this.state={
-          dataWaiting:true
-        };
-        util.bindFunctions.call(this,['onClick'])
-    }
-
-    onClick = function (){
-        console.dir(questionSetInstance);
-        var rows = questionSetInstance.state.rows;
-        var news = _.filter(rows,(o)=>{return o.id != this.props.value});
-        questionSetInstance.state = {
-            rows:news,
-            originalRows:news,
-            filters:{}
-        };
-        questionSetInstance.forceUpdate();
-
-    }
-    render = function (){
-        console.log("ButtonsColFormatter");
-        return (<div style={{padding:"5px 5px 5px 5px"}}>
-            <RaisedButton primary={true} onClick={this.onClick}>Sil</RaisedButton>
-        </div>)
-    }
-}
 
 var columns = [
     {
         key:'id',
-        name:'ID',
-        width:80,
-        filterable:true
+        name:'Set NO',
+        width:70,
+        filterable:false,
+        resizable: false
     },
     {
         key:'title',
         name:'Set Adı',
         sortable:true,
-        editable:true,
+        width:200,
+        editable:false,
         filterable:true
     },
     {
-        key:'count',
-        name:'Soru Sayısı',
-        sortable:true
+        key:'questionCount',
+        name:'Setdeki Soru Sayısı',
+        sortable:true,
+        width:200,
     },
     {
-        key:'id',
-        name:'İşlemler',
-        formatter:ButtonsColFormatter
+        key:'options',
+        name:'Varsayılan Set',
+
     }
 ]
 
 export default class QuestionSetDetails extends React.Component {
     constructor(props){
         super(props);
-        var rows = db.getQuestionSetAddToStorage();
+        //var rows = db.getQuestionSetAddToStorage();
         this.state = {
-            rows:rows,filters:{},
-            originalRows:rows
+            dataLoaded:false
+            //rows:rows,filters:{},
+            //originalRows:rows
         };
         util.bindFunctions.call(this,['getRows','getSize',
             'rowGetter','handleFilterChange',
             'handleGridSort','handleRowUpdated','handleSetSave'])
         questionSetInstance = this;
+        if(Cache.checkQuestionSetsFromCache())
+            this.initializeDataFromCache();
+        else
+            this.initializeDataFromApi();
+
     }
 
+    initializeDataFromCache = function (){
+        log("Data from CACHE");
+        var rows = Cache.getQuestionSetsFromCache();
+        var tableData = this.convertTableRawData(rows);
+        this.state = {
+            rows:tableData,
+            originalRows:tableData,
+            dataLoaded:true
+        };
+    };
+    initializeDataFromApi = function (){
+        log("Data from SERVER");
+        mockApi.getQuestionSets().then(response=>{
+            var rows = JSON.parse(response);
+            Cache.cacheQuestionSets(rows);
+            var tableData = this.convertTableRawData(rows);
+            this.setState({
+                rows:tableData,
+                originalRows:tableData,
+                dataLoaded:true
+            });
+        });
+
+    };
+    convertTableRawData = (rows)=>{
+        var tableData = rows.map(r =>{
+            r.options = this.getOptionCell(r);
+            return r;
+        });
+        return tableData;
+    };
+    getOptionCell = (rowData) =>{
+        return (<div>
+            <FlatButton icon={<DeleteIcon/>} onClick={this.deleteQuestionSet(rowData.id)}></FlatButton>
+
+        </div>);
+    };
+    deleteQuestionSet = setId => ()=>{
+        log("deleting set-> ", setId);
+    };
     getRows = function (){
         return Selectors.getRows(this.state);
-    }
+    };
     handleRowUpdated = function (e){
         //merge updated row with current row and rerender by setting state
         var rows = this.state.rows;

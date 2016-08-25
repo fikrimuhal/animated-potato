@@ -4,7 +4,7 @@ export const questionSets = (count)=>{
     for( var i = 0; i < count; i++ ) {
         result.push({
             id:i,
-            title:"Set" + faker.Name(),
+            title:"Set-" + faker.Name.firstName(),
             questionCount:Math.floor(Math.random() * 100),
             isDefault:(i == 3)
         });

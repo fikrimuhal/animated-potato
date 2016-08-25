@@ -29,7 +29,7 @@ export const getQuestionSets = () =>{
     var promise = new Promise((resolve,reject)=>{
         setTimeout(()=>{
             var response = mockDataFactory.questionSets(5);
-            resolve(response);
+            resolve(JSON.stringify(response));
         },Math.floor(Math.random() * 2000));
     });
     return promise;
