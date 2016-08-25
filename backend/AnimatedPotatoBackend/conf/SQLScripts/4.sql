@@ -1,4 +1,5 @@
 # --- !Ups
+DROP TABLE IF EXISTS questionoption;
 CREATE TABLE questionoption
 (
   id bigserial NOT NULL,

@@ -3,45 +3,54 @@
 # ~~~~
 
 # Home page
-GET         /                               controllers.ParticipantController.index
+GET         /                                  controllers.ParticipantController.index
 
-POST        /insertParticipant              controllers.ParticipantController.insertParticipant
-POST        /updateParticipant              controllers.ParticipantController.updateParticipant
-POST        /admin/deleteParticipant        controllers.ParticipantController.deleteParticipant
-GET         /admin/getParticipants          controllers.ParticipantController.getParticipants
+POST        /insertParticipant                 controllers.ParticipantController.insertParticipant
+POST        /updateParticipant                 controllers.ParticipantController.updateParticipant
+POST        /admin/deleteParticipant           controllers.ParticipantController.deleteParticipant
+GET         /admin/getParticipants             controllers.ParticipantController.getParticipants
 #GET         /admin/getParticipants             controllers.ParticipantController.getParticipants()
 
-POST        /admin/insertUser               controllers.UserController.insertUser
-POST        /admin/updateUser               controllers.UserController.updateUser
-POST        /admin/deleteUser               controllers.UserController.deleteUser
-GET         /admin/getUsers                  controllers.UserController.getUsers
-GET         /admin/getUser/:n             controllers.UserController.getUser(n)
+POST        /admin/insertUser                  controllers.UserController.insertUser
+POST        /admin/updateUser                  controllers.UserController.updateUser
+POST        /admin/deleteUser                  controllers.UserController.deleteUser
+GET         /admin/getUsers                    controllers.UserController.getUsers
+GET         /admin/getUser/:n                  controllers.UserController.getUser(n)
 
-POST        /admin/insertQuestion           controllers.QuestionController.insertQuestion
-POST        /admin/updateQuestion           controllers.QuestionController.updateQuestion
-POST        /admin/deleteQuestion           controllers.QuestionController.deleteQuestion
-GET         /admin/getQuestion/:n           controllers.QuestionController.getQuestionById(n)
-
-
-#POST        /admin/insertQuestionOption        controllers.QuestionOptionController.insertQuestionOption
-#POST        /admin/updateQuestionOption        controllers.QuestionOptionController.updateQuestionOption
-#POST        /admin/deleteQuestionOption        controllers.QuestionOptionController.deleteQuestionOption
-#GET         /admin/getQuestionOptions          controllers.QuestionOptionController.getQuestionOptions
+POST        /admin/insertQuestion              controllers.QuestionController.insertQuestion
+POST        /admin/updateQuestion              controllers.QuestionController.updateQuestion
+POST        /admin/deleteQuestion              controllers.QuestionController.deleteQuestion
+GET         /admin/getQuestion/:n              controllers.QuestionController.getQuestionById(n)
 
 
-POST        /admin/insertCategory           controllers.CategoryController.insertCategory
-POST        /admin/updateCategory           controllers.CategoryController.updateCategory
-POST        /admin/deleteCategory           controllers.CategoryController.deleteCategory
-GET         /admin/getCategory/:n           controllers.CategoryController.getCategory(n)
-GET         /admin/getCategories            controllers.CategoryController.getCategories
+POST        /admin/insertQuestionOption        controllers.QuestionOptionController.insertQuestionOption
+POST        /admin/updateQuestionOption        controllers.QuestionOptionController.updateQuestionOption
+POST        /admin/deleteQuestionOption        controllers.QuestionOptionController.deleteQuestionOption
+GET         /admin/getQuestionOptions          controllers.QuestionOptionController.getQuestionOptions
 
-POST        /signUp                         controllers.LoginSignUpController.signUp()
-POST        /addAdmin                       controllers.LoginSignUpController.addAdmin()
-POST        /login                          controllers.LoginSignUpController.login()
 
-POST        /answer                             controllers.AnswerController.insertAnswer
+POST        /admin/insertCategory              controllers.CategoryController.insertCategory
+POST        /admin/updateCategory              controllers.CategoryController.updateCategory
+POST        /admin/deleteCategory              controllers.CategoryController.deleteCategory
+GET         /admin/getCategory/:n              controllers.CategoryController.getCategory(n)
+POST        /admin/getCategories               controllers.CategoryController.getCategories
+
+
+
+
+
+GET          /admin/getSets                        controllers.SetController.getSets
+POST         /admin/insertSet                   controllers.SetController.insertSet
+
+
+
+
+POST        /signUp                            controllers.LoginSignUpController.signUp()
+POST        /login                             controllers.LoginSignUpController.login()
+
+POST        /answer                            controllers.AnswerController.insertAnswer
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                   controllers.Assets.at(path="/public", file)
+GET         /assets/*file                      controllers.Assets.at(path="/public", file)
 
     

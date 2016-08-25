@@ -1,4 +1,6 @@
 # --- !Ups
+
+DROP TABLE IF EXISTS participant;
 CREATE TABLE participant
 (
   id bigserial NOT NULL,

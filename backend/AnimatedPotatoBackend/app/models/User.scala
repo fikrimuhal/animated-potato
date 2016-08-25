@@ -10,7 +10,12 @@ import utils.Formatter._
 /**
   * Created by who on 09.08.2016.
   */
-case class User(id: Option[UserIdType] = None, username: String, password: String, email: Option[String] = None, isadmin: Option[Boolean] = Some(false))
+case class User(id: Option[UserIdType] = None,
+                username: String,
+                password: String,
+                email: Option[String] = None,
+                isadmin: Option[Boolean] = Some(false),
+                ispersonnel: Option[Boolean] = Some(false))
 
 object Users {
   lazy val users = TableQuery[Users]
@@ -70,7 +75,16 @@ object Users {
     users.filter(_.username === user.username).map(u => u.isadmin).list.head
   }
 
-
+  def makePersonnel(id: UserIdType) = DB { implicit session =>
+    val filtered = users.filter(_.id === id)
+    val user = filtered.list.head
+    filtered.update(user.copy(ispersonnel = Some(true)))
+  }
+  def makeAdmin(id: UserIdType) = DB { implicit session =>
+    val filtered = users.filter(_.id === id)
+    val user = filtered.list.head
+    filtered.update(user.copy(isadmin = Some(true)))
+  }
 }
 
 class Users(tag: Tag) extends Table[User](tag, "users") {
@@ -84,5 +98,7 @@ class Users(tag: Tag) extends Table[User](tag, "users") {
 
   def isadmin = column[Boolean]("isadmin")
 
-  def * = (id.?, username, password, email.?, isadmin.?) <> (User.tupled, User.unapply)
+  def ispersonnel = column[Boolean]("ispersonnel")
+
+  def * = (id.?, username, password, email.?, isadmin.?, ispersonnel.?) <> (User.tupled, User.unapply)
 }

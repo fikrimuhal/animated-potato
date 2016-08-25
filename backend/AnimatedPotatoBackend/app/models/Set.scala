@@ -6,7 +6,7 @@ import utils.{Constants, DB}
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
 
-case class Set(id: Option[Int], title: String, count: Int)
+case class Set(id: Option[Int], title: String, count: Int,isDefaultSet : Boolean)
 
 object Sets {
   
@@ -43,13 +43,13 @@ object Sets {
   def getSet(n: Int): Set = DB { implicit session =>
     val setList = sets.filter(_.id === n).list
     if (setList.nonEmpty) setList.head
-    else Set(Some(-1),"",-1)
+    else Set(Some(-1),"",-1,false)
   }
 
   def getSets(n: List[Int]): Set = DB { implicit session =>
     val setList = sets.filter(_.id inSet n).list
     if (setList.nonEmpty) setList.head
-    else Set(Some(-1),"",-1)
+    else Set(Some(-1),"",-1,false)
   }
 
   def decreaseCount(id : Int) = DB{ implicit session =>
@@ -62,10 +62,9 @@ object Sets {
     sets.filter(_.id === id).update(set.copy(count = set.count +1))
   }
 
-
 }
 
-class Sets(tag: Tag) extends Table[Set](tag, "set") {
+class Sets(tag: Tag) extends Table[Set](tag, "sets") {
 
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
@@ -73,5 +72,7 @@ class Sets(tag: Tag) extends Table[Set](tag, "set") {
 
   def count = column[Int]("count")
 
-  def * = (id.?, title, count) <> (Set.tupled, Set.unapply)
+  def isdefaultset = column[Boolean]("isdefaultset")
+
+  def * = (id.?, title, count,isdefaultset) <> (Set.tupled, Set.unapply)
 }

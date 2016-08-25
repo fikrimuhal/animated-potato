@@ -131,7 +131,7 @@ object protocol {
 
   case class QuestionCategory(categoryid: CategoryId, weight: Double)
   case class Category(id: Option[IdType],category : String)
-  case class Set(id: Option[Int], title: String, count: Int)
+  case class Set(id: Option[Int], title: String)
   case class Answer(id : Option[IdType],userid: UserIdType, questionId: QuestionId, answer: Boolean)
   case class QuestionList(value : List[Question])
   case class CategoryList(value : List[Category])

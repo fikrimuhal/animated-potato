@@ -18,7 +18,7 @@ class QuestionOptionController @Inject()  extends Controller{
       if (QuestionOptions.insert(question)) Ok("1") else BadRequest("-1")
     }
     catch {
-      case e: Exception => BadRequest("-1")
+      case e: Exception => BadRequest(s"-1 $e")
     }
   }
 

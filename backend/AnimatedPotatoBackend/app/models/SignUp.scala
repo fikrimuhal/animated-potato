@@ -42,10 +42,6 @@ object SignUp{
     }
   }
 
-
-
-
-
   def checkUserName(userName : String) : Boolean = {
     Users.get(userName) match {
       case Some(x) => false
