@@ -212,7 +212,7 @@ export const authenticate=function authenticate(username, password) {
         };
         var result=(Math.floor(Math.random() * 10) % 3) != 0;
         var message=(result) ? successMessage : errorMessage;
-        resolve(message)
+        resolve(message);
         // setTimeout(()=> resolve(message)
         // ,2000)
 

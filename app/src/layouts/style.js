@@ -131,3 +131,10 @@ export const userLayoutStyles={
 
     }
 }
+
+
+export const questionSetDetailPage = {
+    setCreateToolbar : {
+        textAlign:"right"
+    }
+}

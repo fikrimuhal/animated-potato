@@ -136,3 +136,46 @@ export const checkQuestionSetsFromCache  = ()=>{
     return diff.minute <= 3;
 };
 //endregion
+//region Soru Kategorileri Cacheleme
+/**
+ * veri yapısı :
+ * kategori listesi cache veri yapısı :
+ * {
+ *      data : Array of categoryInfo
+ *      createdTime   -> cache time
+ * }
+ *      categoryInfo ->
+ *      {
+ *         id               -> int
+ *         category         -> string,
+ *
+ *      }
+ */
+
+export const cacheCategories = data =>{
+    var cacheData = {
+        data:data,
+        createdTime:Date.now()
+    };
+    localStorage.setItem("categoriesCache",JSON.stringify(cacheData));
+};
+
+export const getCategoriesFromCache = ()=>{
+    var categoriesCache = localStorage.getItem("categoriesCache");
+    var list = [];
+    if(categoriesCache != null) {
+        list = JSON.parse(categoriesCache).data;
+    }
+    return list;
+};
+
+export const checkCategoriesFromCache  = ()=>{
+    var categoriesCache = localStorage.getItem("categoriesCache");
+    if(categoriesCache == null)return false;
+    var cache = JSON.parse(categoriesCache);
+    var cacheTime = cache.createdTime;
+    var now = Date.now();
+    var diff = time.timeDiff(now,cacheTime);
+    return diff.minute <= 60;
+};
+//endregion

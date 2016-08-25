@@ -11,7 +11,8 @@ import * as Cache       from  '../../utils/cache'
 import DeleteIcon       from 'material-ui/svg-icons/action/delete';
 import FlatButton       from 'material-ui/FlatButton';
 import ViewIcon         from 'material-ui/svg-icons/action/visibility';
-
+import QuestionSetCreateToolbar     from './SetCreateToolbar'
+import * as s           from '../../layouts/style'
 //css referenaces
 require("!style!css!react-data-grid/themes/react-data-grid.css")
 
@@ -27,7 +28,7 @@ var columns = [
         name:'Set NO',
         width:70,
         filterable:false,
-        resizable: false
+        resizable:false
     },
     {
         key:'title',
@@ -108,7 +109,7 @@ export default class QuestionSetDetails extends React.Component {
         </div>);
     };
     deleteQuestionSet = setId => ()=>{
-        log("deleting set-> ", setId);
+        log("deleting set-> ",setId);
     };
     getRows = function (){
         return Selectors.getRows(this.state);
@@ -169,18 +170,8 @@ export default class QuestionSetDetails extends React.Component {
         return (
 
             <div>
-                <div>
-                    <br/>
-                    <h4>Question Set Details</h4>
-                </div>
-                <div>
-                    <TextField ref="inputQuestionSet"
-                               hintText="Soru Seti Ekle"
-                    />
-                    <br/>
-                    <RaisedButton label="Ekle" secondary={true} onClick={this.handleSetSave}/>
-                </div>
-
+                <h4>Question Set Details</h4><br/>
+                <QuestionSetCreateToolbar/>
                 <div>
                     <ReactDataGrid
                         columns={columns}
