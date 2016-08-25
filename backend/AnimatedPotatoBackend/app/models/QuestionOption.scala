@@ -8,7 +8,7 @@ import utils.{Constants, DB}
 /**
   * Created by who on 07.08.2016.
   */
-case class QuestionOption(questionId: IdType,
+  case class QuestionOption(questionId: IdType,
                           id: Option[IdType],
                           title: String,
                           weight: Double) {

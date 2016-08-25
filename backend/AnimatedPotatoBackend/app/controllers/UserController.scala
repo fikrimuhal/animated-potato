@@ -13,7 +13,7 @@ class UserController extends Controller{
   def insertUser() = Action { implicit request =>
     try {
       val user: User = request.body.asJson.get.as[User]
-      Users.insert(user)
+      Users.insert(User(username = user.username,password = user.password,email = user.email))
       Ok("1")
     }
     catch {

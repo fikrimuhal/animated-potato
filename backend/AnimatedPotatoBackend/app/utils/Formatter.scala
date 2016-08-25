@@ -18,6 +18,7 @@ object Formatter {
   implicit val userFormat = Json.format[User]
   implicit val signUpFormat = Json.format[SignUp]
   implicit val answerFormat = Json.format[Answer]
+  implicit val setFormat = Json.format[Set]
 
   implicit def longListToString = MappedColumnType.base[List[IdType], String](
     list => list mkString ",",

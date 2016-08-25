@@ -1,4 +1,5 @@
 # --- !Ups
+DROP TABLE IF EXISTS answer;
 CREATE TABLE answer
 (
   id bigserial NOT NULL,

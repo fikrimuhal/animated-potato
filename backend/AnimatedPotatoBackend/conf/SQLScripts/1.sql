@@ -1,4 +1,5 @@
 # --- !Ups
+DROP TABLE IF EXISTS category;
 CREATE TABLE category
 (
   id bigserial NOT NULL,
