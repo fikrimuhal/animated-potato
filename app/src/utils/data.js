@@ -230,7 +230,7 @@ export const auth2=(username, password) => {
 }
 
 export const getApiPromise=method => data => {
-    return fetch('http://192.168.1.61:9000/' + method, {
+    return fetch('http://localhost:9000/' + method, {
         method: 'POST',
         body: JSON.stringify(data),
         headers: new Headers({

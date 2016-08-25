@@ -39,8 +39,8 @@ POST        /admin/getCategories               controllers.CategoryController.ge
 
 
 
-GET          /admin/getSets                        controllers.SetController.getSets
-POST         /admin/insertSet                   controllers.SetController.insertSet
+GET         /admin/getSets                     controllers.SetController.getSets
+POST        /admin/insertSet                   controllers.SetController.insertSet
 
 
 
