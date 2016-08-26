@@ -18,11 +18,17 @@ object Formatter {
   implicit val userFormat = Json.format[User]
   implicit val signUpFormat = Json.format[SignUp]
   implicit val answerFormat = Json.format[Answer]
-  implicit val setFormat = Json.format[Set]
+  implicit val setFormat = Json.format[QuestionSet]
+  implicit val responseMessageFormat = Json.format[ResponseMessage]
+
 
   implicit def longListToString = MappedColumnType.base[List[IdType], String](
     list => list mkString ",",
-    str => (str split "," map(_.  toLong)).toList
+    str =>
+      if (str.length > 1) {(str split "," map(_.toLong)).toList}
+      else if (str.length == 1) {List(str.toLong)}
+      else Nil
+
   )
   implicit def stringListToString = MappedColumnType.base[List[String], String](
     list => list mkString ",",

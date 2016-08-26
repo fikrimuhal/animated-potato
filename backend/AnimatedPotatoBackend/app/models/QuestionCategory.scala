@@ -6,7 +6,7 @@ import utils.{Constants, DB}
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
 
-case class QuestionCategory(questionId: Option[QuestionId], categoryId: CategoryId, weight: Double)
+case class QuestionCategory(questionId: QuestionId, categoryId: CategoryId, weight: Double)
 
 object QuestionCategories {
   lazy val questionCategories = TableQuery[QuestionCategories]
@@ -32,5 +32,5 @@ class QuestionCategories(tag: Tag) extends Table[QuestionCategory](tag, "questio
 
   def weight = column[Double]("weight")
 
-  def * = (questionId.?, categoryId, weight) <> (QuestionCategory.tupled, QuestionCategory.unapply)
+  def * = (questionId, categoryId, weight) <> (QuestionCategory.tupled, QuestionCategory.unapply)
 }

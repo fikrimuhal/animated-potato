@@ -11,13 +11,13 @@ import pdi.jwt._
 /**
   * Created by who on 08.08.2016.
   */
-case class QuestionCategoryRequest(categoryid: CategoryId, weight: Double)
+case class QuestionCategoryRequest(id: CategoryId, weight: Double)
 
 case class Question(id: Option[IdType],
                     title: String,
                     qType: String,
-                    opts: List[QuestionOption],
-                    categories: List[QuestionCategoryRequest],
+                    options: List[QuestionOption],
+                    categoryWeights: List[QuestionCategoryRequest],
                     setList: List[Int])
 
 case class QuestionTable(id: Option[IdType],
@@ -30,45 +30,51 @@ object Questions {
   lazy val questions = TableQuery[Questions]
   lazy val questionOptions = TableQuery[QuestionOptions]
   lazy val questionCategories = TableQuery[QuestionCategories]
-  lazy val sets = TableQuery[Sets]
+  lazy val sets = TableQuery[QuestionSets]
 
   def insert(question: Question): Boolean = DB { implicit session =>
 
-    questions += QuestionTable(question.id,
+    val id = (questions returning questions.map(_.id)) += QuestionTable(question.id,
       question.title,
       question.qType,
-      question.opts.flatMap(_.id),
+      question.options.flatMap(_.id),
       question.setList)
-    question.categories.foreach { c => QuestionCategories.insert(QuestionCategory(question.id, c.categoryid, c.weight)) }
-    Sets.updateBySetList(question.setList)
+
+
+    question.options.foreach{ opt => QuestionOptions.insert(QuestionOption(Some(id),None,opt.title,opt.weight)) }
+
+    question.categoryWeights.foreach { c => QuestionCategories.insert(QuestionCategory(id, c.id, c.weight)) }
+
+    QuestionSets.updateBySetList(question.setList)
+
     true
 
   }
 
   def update(question: Question): Boolean = DB { implicit session =>
     try {
-      val questionTable = QuestionTable(question.id,
-        question.title,
-        question.qType,
-        question.opts.flatMap(_.id),
-        question.setList)
-
-      val options: List[QuestionOption] = questionOptions.filter(_.questionId inSet question.opts.map(_.questionId)).list
-      val willbedeletedOptions: List[IdType] = options.flatMap(_.id).filterNot(question.opts.flatMap(_.id).toSet)
-      question.opts.foreach { x => questionOptions.insertOrUpdate(x) }
-      willbedeletedOptions.foreach { id => questionOptions.filter(x => (x.questionId === question.id) && (x.id === id)).delete }
-
-      val currentCategories: List[QuestionCategory] = questionCategories.filter(_.questionId === question.id).list
-      val willbedeletedquestionCategories = currentCategories.map(_.categoryId).filterNot(question.categories.map(_.categoryid).toSet)
-      question.categories.foreach { c => questionCategories.insertOrUpdate(QuestionCategory(question.id, c.categoryid, c.weight)) }
-      willbedeletedquestionCategories.foreach { id => questionCategories.filter(x => (x.questionId === question.id) && x.categoryId == id).delete }
-
-      val currentQuestion = questions.filter(_.id === question.id).list.head
-      val willdecreasedIDs = currentQuestion.setList.toSet.diff(question.setList.toSet)
-      val willincreasedIDs = question.setList.toSet.diff(currentQuestion.setList.toSet)
-
-      willbedeletedOptions.foreach(id => Sets.decreaseCount(id.toInt))
-      willincreasedIDs.foreach(id => Sets.increaseCount(id))
+//      val questionTable = QuestionTable(question.id,
+//        question.title,
+//        question.qType,
+//        question.options.flatMap(_.id),
+//        question.setList)
+//
+//      val options: List[QuestionOption] = questionOptions.filter(_.questionId inSet question.options.map(_.questionId)).list
+//      val willbedeletedOptions: List[IdType] = options.flatMap(_.id).filterNot(question.options.flatMap(_.id).toSet)
+//      question.options.foreach { x => questionOptions.insertOrUpdate(x) }
+//      willbedeletedOptions.foreach { id => questionOptions.filter(x => (x.questionId === question.id) && (x.id === id)).delete }
+//
+//      val currentCategories: List[QuestionCategory] = questionCategories.filter(_.questionId === question.id).list
+//      val willbedeletedquestionCategories = currentCategories.map(_.categoryId).filterNot(question.categoryWeights.map(_.id).toSet)
+//      question.categoryWeights.foreach { c => questionCategories.insertOrUpdate(QuestionCategory(question.id, c.id, c.weight)) }
+//      willbedeletedquestionCategories.foreach { id => questionCategories.filter(x => (x.questionId === question.id) && x.categoryId == id).delete }
+//
+//      val currentQuestion = questions.filter(_.id === question.id).list.head
+//      val willdecreasedIDs = currentQuestion.setList.toSet.diff(question.setList.toSet)
+//      val willincreasedIDs = question.setList.toSet.diff(currentQuestion.setList.toSet)
+//
+//      willbedeletedOptions.foreach(id => QuestionSets.decreaseCount(id.toInt))
+//      willincreasedIDs.foreach(id => QuestionSets.increaseCount(id))
       true
     }
     catch {
