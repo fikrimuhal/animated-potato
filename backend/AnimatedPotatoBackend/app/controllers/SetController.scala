@@ -10,17 +10,20 @@ import utils.Formatter._
   */
 class SetController extends Controller {
 
-
   def insertSet() = Action { implicit request =>
-    try {
-      val set: Set = request.body.asJson.get.as[Set]
-      if (Sets.insert(set)) Ok("1") else BadRequest("-1")
-    }
-    catch {
-      case e: Exception => BadRequest("-1")
+
+    request.body.asJson.flatMap(_.validate[Set].asOpt) match {
+
+      case Some(set) if Sets.insert(set) =>
+        Ok("1")
+
+      case Some(_) =>
+        Ok("0")
+
+      case None =>
+        Ok("-1")
     }
   }
-
 
   def updateSet() = Action { implicit request =>
     try {

@@ -13,25 +13,13 @@ class AuthenticatedRequest[A](val user: User, request: Request[A]) extends Wrapp
 
 trait Secured {
   def Authenticated = AuthenticatedAction
-
   def Admin = AdminAction
 }
-
 
 object AuthenticatedAction extends ActionBuilder[AuthenticatedRequest] {
   def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]) =
     request.jwtSession.getAs[User]("user") match {
       case Some(user) => block(new AuthenticatedRequest(user, request)).map(_.refreshJwtSession(request))
-      case _ => Future.successful(Unauthorized)
-    }
-}
-
-object UserAction extends ActionBuilder[AuthenticatedRequest] {
-  def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]) =
-    request.jwtSession.getAs[User]("user") match {
-      case Some(user) => {
-        block(new AuthenticatedRequest(user, request)).map(_.refreshJwtSession(request))
-      }
       case _ => Future.successful(Unauthorized)
     }
 }

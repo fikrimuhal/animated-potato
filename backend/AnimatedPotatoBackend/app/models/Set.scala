@@ -6,7 +6,7 @@ import utils.{Constants, DB}
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
 
-case class Set(id: Option[Int], title: String, count: Int,isDefaultSet : Boolean)
+case class Set(id: Option[Int], title: String, count: Option[Int] = Some(0),isDefaultSet : Boolean)
 
 object Sets {
   
@@ -14,10 +14,12 @@ object Sets {
 
   def insert(set: Set): Boolean = DB { implicit session =>
     try {
-      sets += set; true
+      sets += set.copy(count = Some(0)); true
     }
     catch {
-      case e: Exception => false
+      case e: Exception =>
+        println(e)
+        false
     }
   }
 
@@ -27,7 +29,7 @@ object Sets {
   }
   def updateBySetList(ids : List[Int]): Boolean = DB{ implicit session =>
     val setss: List[Set] = sets.filter(_.id inSet ids).list
-    setss.foreach{ s => sets.update(s.copy(count = s.count +1))}
+    setss.foreach{ s => sets.update(s.copy(count = Some(s.count.get +1)))}
     true
   }
 
@@ -43,23 +45,23 @@ object Sets {
   def getSet(n: Int): Set = DB { implicit session =>
     val setList = sets.filter(_.id === n).list
     if (setList.nonEmpty) setList.head
-    else Set(Some(-1),"",-1,false)
+    else Set(Some(-1),"",Some(-1),false)
   }
 
   def getSets(n: List[Int]): Set = DB { implicit session =>
     val setList = sets.filter(_.id inSet n).list
     if (setList.nonEmpty) setList.head
-    else Set(Some(-1),"",-1,false)
+    else Set(Some(-1),"",Some(-1),false)
   }
 
   def decreaseCount(id : Int) = DB{ implicit session =>
     val set: Set = sets.filter(_.id === id).list.head
-    sets.filter(_.id === id).update(set.copy(count = set.count -1))
+    sets.filter(_.id === id).update(set.copy(count = Some(set.count.get -1)))
   }
 
   def increaseCount(id : Int) = DB{ implicit session =>
     val set: Set = sets.filter(_.id === id).list.head
-    sets.filter(_.id === id).update(set.copy(count = set.count +1))
+    sets.filter(_.id === id).update(set.copy(count = Some(set.count.get +1)))
   }
 
 }
@@ -74,5 +76,5 @@ class Sets(tag: Tag) extends Table[Set](tag, "sets") {
 
   def isdefaultset = column[Boolean]("isdefaultset")
 
-  def * = (id.?, title, count,isdefaultset) <> (Set.tupled, Set.unapply)
+  def * = (id.?, title, count.?,isdefaultset) <> (Set.tupled, Set.unapply)
 }
