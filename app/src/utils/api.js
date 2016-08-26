@@ -16,4 +16,6 @@ import * as db from './data.js'
 export const authenticate = db.getApiPromise("login");
 export const questionList = db.getApiPromise("questionList");
 export const getCategoryList = db.getApiPromise("admin/getCategories");
+export const getAllQuestionSet = db.getApiPromise("admin/getSets");
+export const setQuestionSet = db.getApiPromise("admin/insertSet");
 export const signUp = db.getApiPromise("signUp");

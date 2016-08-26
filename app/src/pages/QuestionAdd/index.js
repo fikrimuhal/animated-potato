@@ -1,38 +1,21 @@
-import React from 'react'
-import {Link,browserHistory} from 'react-router'
-import {log2,db,util} from '../../utils/'
-import {Toast} from '../../components/MyComponents'
-import RaisedButton from 'material-ui/RaisedButton';
+import React            from 'react'
+import {browserHistory} from 'react-router'
+import {log2,db,util}   from '../../utils/'
+import {Toast}          from '../../components/MyComponents'
+import RaisedButton     from 'material-ui/RaisedButton';
 import QuestionAdd      from './QuestionAdd'
-import _lodash          from 'lodash'
 import * as api         from '../../utils/api';
 import * as Cache       from '../../utils/cache'
 var Immutable = require('immutable');
-var Mousetrap = require('mousetrap');
 
-const log = log2("QuestionAdd Index: ")
+const log = log2("QuestionAdd Index: ");
 var showToast = null;
-
-var categoryList = [];
-const allSet = [
-    "Set 1","Set 2","Set 3"
-]
 const questionModel = {
-    title:"Aşağıdakilerden hangisinde daha iyisiniz?",
-    id:1,
-    type:"radio",
-    categoryWeights:[
-        {
-            category:"Back-End",
-            weight:1
-        },
-        {
-            category:"Front-End",
-            weight:1
-        }
-    ],
+    title:"Başlıksız soru ?",
+    qType:"radio",
+    categoryWeights:[],
     options:[],
-    setList:["Set 1"]
+    setList:[]
 };
 
 export default class QuestionAddContainer extends React.Component {
@@ -46,22 +29,33 @@ export default class QuestionAddContainer extends React.Component {
                 message:"",
                 duration:2000
             },
-            categoryListLoaded:false,
-            categoryList:[]
+            categoryList:[],
+            allQuestionSets:[]
         };
         showToast = util.myToast("toastSettings",this.setState,this.state);
-        util.bindFunctions.call(this,['modelChanged','showMessage','onSave']);
-        this.initialize();
+        util.bindFunctions.call(this,['modelChanged','showMessage','onSave','initialize']);
 
     }
 
+    componentDidMount = function (){
+        log("componentDidMount");
+        this.initialize();
+    };
+    componentWillMount = function (){
+        log("componentDidMount");
+    };
     initialize = function (){
+        log("initializing***");
+        this.initCategories();
+        this.initQuestionSets();
+    };
+    initCategories = function (){
         if(Cache.checkCategoriesFromCache()) {
             log("categories from CACHE");
-            this.state = {
-                categoryListLoaded:true
-            };
-            this.state.categoryList = Cache.getCategoriesFromCache();
+            this.setState({
+                categoryList:Cache.getCategoriesFromCache()
+            });
+            //this.state.categoryList = Cache.getCategoriesFromCache();
         }
         else {
             log("categories from API");
@@ -70,12 +64,38 @@ export default class QuestionAddContainer extends React.Component {
                 return response.json();
             }).then(json=>{
                 log("json",json);
-                categoryList = json;
+                //categoryList = json;
+                Cache.cacheCategories(json);
                 this.setState({
                     categoryList:json
                 });
             }).catch(err=>{
                 log("error",err);
+            });
+        }
+
+    }
+    initQuestionSets = function (){
+        if(Cache.checkQuestionSetsFromCache()) {
+            log("question sets from CACHE");
+            this.setState({
+                allQuestionSets:Cache.getQuestionSetsFromCache()
+            });
+            //this.state.allQuestionSets = Cache.getQuestionSetsFromCache();
+        }
+        else {
+            log("question sets from API");
+            api.getAllQuestionSet({}).then(response=>{
+                log("getAllQuestionSet api response",response);
+                return response.json();
+            }).then(json=>{
+                log("getAllQuestionSet api json",json);
+                Cache.cacheQuestionSets(json);
+                this.setState({
+                    allQuestionSets:json
+                });
+            }).catch(err=>{
+                log("getAllQuestionSet api ERROR",err);
             });
         }
     };
@@ -94,13 +114,6 @@ export default class QuestionAddContainer extends React.Component {
     categoryHotkey = (e,combo)=>{
 
     }
-    componentDidMount = ()=>{
-
-    }
-    componentWillUnmount = ()=>{
-
-    }
-
     modelChanged = function changed(newData,oldData){
         this.setState({data:newData});
     }
@@ -108,7 +121,7 @@ export default class QuestionAddContainer extends React.Component {
 
         var questionObj = this.state.data.toJS();
         log(questionObj)
-        if(questionObj.type == "radio" || questionObj.type == "checkbox") {
+        if(questionObj.qType == "radio" || questionObj.qType == "checkbox") {
             questionObj = this.normalizeOptionWeight(questionObj);
         }
         questionObj = this.normalizeCategoryWeight(questionObj);
@@ -172,7 +185,8 @@ export default class QuestionAddContainer extends React.Component {
         return (
             <div>
                 <RaisedButton label="<- Back to list" secondary={true} onClick={this.backToList}/>
-                <QuestionAdd onChange={this.modelChanged} onSave={this.onSave} data={this.state.data} allSet={allSet}
+                <QuestionAdd onChange={this.modelChanged} onSave={this.onSave} data={this.state.data}
+                             allSet={this.state.allQuestionSets}
                              categoryList={this.state.categoryList}/>
                 <Toast settings={this.state.toastSettings}/>
             </div>

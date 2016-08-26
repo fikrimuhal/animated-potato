@@ -33,4 +33,4 @@ export const getQuestionSets = () =>{
         },Math.floor(Math.random() * 2000));
     });
     return promise;
-}
+};

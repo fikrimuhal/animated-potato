@@ -62,7 +62,7 @@ export default class QuestionSetDetails extends React.Component {
         };
         util.bindFunctions.call(this,['getRows','getSize',
             'rowGetter','handleFilterChange',
-            'handleGridSort','handleRowUpdated','handleSetSave'])
+            'handleGridSort','handleRowUpdated','handleSetSave','saveQuestionSet'])
         questionSetInstance = this;
         if(Cache.checkQuestionSetsFromCache())
             this.initializeDataFromCache();
@@ -165,13 +165,16 @@ export default class QuestionSetDetails extends React.Component {
             })
         }
     }
+    saveQuestionSet = function (setName){
+        this.context.showMessage(setName,1500);
+    };
 
     render(){
         return (
 
             <div>
                 <h4>Question Set Details</h4><br/>
-                <QuestionSetCreateToolbar/>
+                <QuestionSetCreateToolbar saveQuestionSet={this.saveQuestionSet}/>
                 <div>
                     <ReactDataGrid
                         columns={columns}
@@ -191,3 +194,6 @@ export default class QuestionSetDetails extends React.Component {
         );
     }
 }
+QuestionSetDetails.contextTypes = {
+    showMessage:React.PropTypes.func
+};

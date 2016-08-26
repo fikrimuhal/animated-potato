@@ -1,7 +1,6 @@
 import * as time    from './timeUtil';
 import * as _       from 'lodash'
 import log2         from './log2'
-
 const log = log2("Cache.js->");
 
 //region Katılımcısı Listesi cache kontrol
@@ -91,51 +90,6 @@ export const getTestResultReportFromCache = (userId)=>{
 };
 // ************Katılımcı Test Sonuç Raporu Cache Kontrol***************end
 //endregion
-//region Soru Set Bilgileri Cacheleme
-/**
- * veri yapısı :
- * question set cache veri yapısı :
- * {
- *      data : Array of questionSetInfo
- *      createdTime   -> cache time
- * }
- *      questionSetInfo ->
- *      {
- *         title         -> string,
- *         id            -> int,
- *         questionCount -> int
- *         isDefault     -> boolean
- *
- *      }
- */
-
-export const cacheQuestionSets = data =>{
-    var cacheData = {
-        data:data,
-        createdTime:Date.now()
-    };
-    localStorage.setItem("questionSetsCache",JSON.stringify(cacheData));
-};
-
-export const getQuestionSetsFromCache = ()=>{
-    var questionSetsCache = localStorage.getItem("questionSetsCache");
-    var list = [];
-    if(questionSetsCache != null) {
-        list = JSON.parse(questionSetsCache).data;
-    }
-    return list;
-};
-
-export const checkQuestionSetsFromCache  = ()=>{
-    var questionSetsCache = localStorage.getItem("questionSetsCache");
-    if(questionSetsCache == null)return false;
-    var cache = JSON.parse(questionSetsCache);
-    var cacheTime = cache.createdTime;
-    var now = Date.now();
-    var diff = time.timeDiff(now,cacheTime);
-    return diff.minute <= 3;
-};
-//endregion
 //region Soru Kategorileri Cacheleme
 /**
  * veri yapısı :
@@ -173,6 +127,50 @@ export const checkCategoriesFromCache  = ()=>{
     var categoriesCache = localStorage.getItem("categoriesCache");
     if(categoriesCache == null)return false;
     var cache = JSON.parse(categoriesCache);
+    var cacheTime = cache.createdTime;
+    var now = Date.now();
+    var diff = time.timeDiff(now,cacheTime);
+    return diff.minute <= 60;
+};
+//endregion
+//region Soru Setlerini Cacheleme
+/**
+ * veri yapısı :
+ * soru setleri listesi cache veri yapısı :
+ * {
+ *      data : Array of setInfo
+ *      createdTime   -> cache time
+ * }
+ *      setInfo ->
+ *      {
+ *         id            -> int
+ *         title        -> string,
+ *         count:       -> int (setdeki soru sayısı)
+ *         isdefaultset -> boolean (default soru setimi)
+ *      }
+ */
+
+export const cacheQuestionSets = data =>{
+    var cacheData = {
+        data:data,
+        createdTime:Date.now()
+    };
+    localStorage.setItem("questionSetsCache",JSON.stringify(cacheData));
+};
+
+export const getQuestionSetsFromCache = ()=>{
+    var questionSetsCache = localStorage.getItem("questionSetsCache");
+    var list = [];
+    if(questionSetsCache != null) {
+        list = JSON.parse(questionSetsCache).data;
+    }
+    return list;
+};
+
+export const checkQuestionSetsFromCache  = ()=>{
+    var questionSetsCache = localStorage.getItem("questionSetsCache");
+    if(questionSetsCache == null)return false;
+    var cache = JSON.parse(questionSetsCache);
     var cacheTime = cache.createdTime;
     var now = Date.now();
     var diff = time.timeDiff(now,cacheTime);
