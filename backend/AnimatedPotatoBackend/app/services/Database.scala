@@ -17,7 +17,7 @@ class Database extends Actor  {
     case RequestAllQuestionCategoryWeight =>
       println("Database: RequestAllQuestionCategoryWeight geldi")
       sender ! QuestionCategoryWeightTupleList(
-        QuestionCategories.getAll().map(qc => QuestionCategoryWeightTuple(qc.questionId.getOrElse(-1),qc.categoryId,qc.weight))
+        QuestionCategories.getAll().map(qc => QuestionCategoryWeightTuple(qc.questionId,qc.categoryId,qc.weight))
       )
     case RequestAllCategories =>
       println("Database: RequestAllCategories geldi")

@@ -20,7 +20,7 @@ class QuestionController @Inject() extends Controller {
       if (Questions.insert(question)) Ok("1") else BadRequest("-1")
     }
     catch {
-      case e: Exception => BadRequest("-1")
+      case e: Exception => BadRequest(s"-1 $e")
     }
   }
 
@@ -53,6 +53,9 @@ class QuestionController @Inject() extends Controller {
     catch {
       case e: Exception => BadRequest("-1")
     }
+  }
+  def getQuestions = Action {
+   Ok(Json.toJson(Questions.getAll))
   }
 
 }
