@@ -1,0 +1,38 @@
+@(content: Html)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+<style>
+    body,html{
+        width: 100%;
+        height: 100%;
+    }
+    body{
+        background-color: black;
+    }
+    svg{
+        width: 800px;
+        height: 2000px;
+        margin-left: 20px;
+    }
+
+</style>
+        <title>svg test</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+    </head>
+    <body>
+        <svg>
+            <style>
+            /* <![CDATA[ */
+            svg{
+                background-color: white;
+            }
+            /* ]]> */
+            </style>
+            @content
+        </svg>
+    </body>
+</html>

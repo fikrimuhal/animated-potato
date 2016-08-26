@@ -1,0 +1,32 @@
+@()
+
+
+@main {
+      @layout.box(90,20,750,70){
+            @layout.titleBox(550,60)
+      }
+      @layout.box(70,90,300,300){
+            @layout.pieGraph()
+      }
+      @layout.box(380, 90, 300, 300){
+            @layout.lineGraph()
+      }
+      @layout.box(70,350,300,300){
+            @layout.barGraph()
+      }
+      @layout.box(380,350,300,300){
+            @layout.spidergraph()
+      }
+      @layout.box(70,650, 700, 300){
+            @layout.testInformation()
+      }
+      @layout.box(70,660, 700, 300){
+            @layout.sufficiency()
+      }
+      @layout.box(70,680, 700, 300){
+            @layout.best()
+      }
+      @layout.box(70,850,600,600){
+            @layout.pieGraph()
+      }
+}
