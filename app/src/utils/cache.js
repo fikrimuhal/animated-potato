@@ -130,7 +130,7 @@ export const checkCategoriesFromCache  = ()=>{
     var cacheTime = cache.createdTime;
     var now = Date.now();
     var diff = time.timeDiff(now,cacheTime);
-    return diff.minute <= 60;
+    return diff.minute <= 1;
 };
 //endregion
 //region Soru Setlerini Cacheleme
@@ -174,6 +174,6 @@ export const checkQuestionSetsFromCache  = ()=>{
     var cacheTime = cache.createdTime;
     var now = Date.now();
     var diff = time.timeDiff(now,cacheTime);
-    return diff.minute <= 60;
+    return diff.minute <= 1;
 };
 //endregion
