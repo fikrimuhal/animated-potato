@@ -135,3 +135,8 @@ play.sbt.PlayExceptions$CompilationException: Compilation error[type SetControll
 	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1689)
 	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1644)
 	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+2016-08-25 16:57:31,841 [INFO] from play.core.server.NettyServer in pool-20-thread-10 - Stopping server...
+2016-08-25 16:57:38,876 [INFO] from play.core.server.NettyServer in pool-34-thread-2 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+2016-08-25 17:06:00,198 [INFO] from play.core.server.NettyServer in pool-40-thread-2 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+2016-08-25 17:10:15,680 [INFO] from play.core.server.NettyServer in pool-50-thread-6 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+2016-08-25 17:14:46,507 [INFO] from play.core.server.NettyServer in pool-56-thread-4 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
