@@ -3,7 +3,7 @@ import {RadioButton,RadioButtonGroup} from 'material-ui/RadioButton';
 import log2                           from '../../utils/log2'
 import {Grid,Row,Col}                   from 'react-flexbox-grid/lib/index';
 import * as util                       from '../../utils/utils'
-
+import * as s              from '../../layouts/style'
 const log = log2("AnswerTypes: ")
 const styles = {
     flexContainer:{
@@ -14,7 +14,8 @@ const styles = {
     container:{
         backgroundColor:"#f1f1f1",
         padding:"5px 5px 5px 5px",
-        marginTop:"5px"
+        marginTop:"5px",
+        border:"dotted 1px teal"
     },
     child:{
         width:"140px",
@@ -35,11 +36,12 @@ export default class AnswerTypes extends React.Component {
     }
 
     render(){
-        log("rendered")
+        //log("rendered")
         return (
-            <div>
-                <label>Answer Type:</label> <br/>
-                <div style={styles.container}>
+            <div  style={styles.container}>
+                <label style={s.questionAddPage.sectionTitle}>Answer Type:</label>
+                <br/>
+                <div>
 
                     <RadioButtonGroup name="radiosAnswerTypes" valueSelected={this.props.answerType}
                                       onChange={this.handleRadiButtonChange} style={styles.flexContainer}>

@@ -1,25 +1,21 @@
 //core imports
-import React        from 'react'
-import Checkbox     from 'material-ui/Checkbox';
-import log2         from '../../utils/log2'
-import * as util    from '../../utils/utils'
-import  Immutable   from 'immutable'
+import React               from 'react'
+import Checkbox            from 'material-ui/Checkbox';
+import log2                from '../../utils/log2'
+import * as util           from '../../utils/utils'
+import  Immutable          from 'immutable'
 import {Grid, Row, Col}    from 'react-flexbox-grid/lib/index';
+import * as s              from '../../layouts/style'
+import LinearProgress from 'material-ui/LinearProgress';
 const log = log2("QuestionSets: ");
 const styles = {
     container:{
-        display:"flex",
+
         backgroundColor:"#f1f1f1",
         padding:"5px 5px 5px 5px",
         marginTop:"5px",
-        flexDirection:"row",
-        justifyContent:"flexStart",
-        flexFlow:"row wrap"
-    },
-    child:{
-        width:"100px",
+        border:"dotted 1px teal"
 
-        marginLeft:'5px'
     }
 }
 
@@ -37,7 +33,7 @@ export default class QuestionSets extends React.Component {
         nextProps = Immutable.fromJS(nextProps,(key,value)=>{return value.toOrderedMap();});
         var isEqualProps = nextProps.equals(currentProps);
         //var isEqualState = nextProps.setsOfQuestion.equals(this.props.setsOfQuestion);
-        log("isEqualProps",isEqualProps)
+        //log("isEqualProps",isEqualProps)
         return !isEqualProps;
     }
     handleChekboxSetClick = (setId,key)=>{
@@ -51,24 +47,23 @@ export default class QuestionSets extends React.Component {
         this.props.onChangeSetsOfQuestion(newMap);
     }
     render = ()=>{
-        log("rendered",this.props.allSet);
+        //log("rendered",this.props.allSet);
         const _this = this;
         const setsOfQuestion = this.props.setsOfQuestion;
         var counter=1;
         return (
-            <div>
-                <label>Sets of Question</label>
-
+            <div style={styles.container}>
+                <label style={s.questionAddPage.sectionTitle}>Sets of Question</label>
+                <LinearProgress mode="indeterminate" color="red"
+                                style={{display:this.props.setListWaiting ? "" : "none"}}/>
                 <div>
                     <Row>
                         {
-
-
                             this.props.allSet.map((qSet)=>{
                                 let foundKey = setsOfQuestion.findKey(k =>{return k == qSet.id;});
                                 let checked = foundKey != undefined;
                                 return (
-                                <Col xs={12} sm={4} md={3} lg={2}>
+                                <Col lg>
                                     <Checkbox key={qSet.id} value={qSet.id} label={qSet.title + "(" + (counter++) + ")"} checked={checked}
                                               onClick={ ()=> _this.handleChekboxSetClick(qSet.id,foundKey)}/>
                                 </Col>

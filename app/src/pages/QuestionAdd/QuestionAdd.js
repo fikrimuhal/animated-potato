@@ -10,6 +10,8 @@ import CategoryWeights from './CategoryWeights'
 import QuestionOptions from './QuestionOptions'
 import * as Immutable from 'immutable'
 import Mousetrap from 'mousetrap';
+import LinearProgress from 'material-ui/LinearProgress';
+import {Grid,Row,Col}    from 'react-flexbox-grid/lib/index';
 
 const log = log2("QuestionAdd: ")
 const styles = {
@@ -37,29 +39,16 @@ export default class QuestionAdd extends React.Component {
         ]);
     }
 
-    shouldComponentUpdate = function (nextProps,nextState){
-        return true;
-    }
-
-    categoryHotkey = (e,combo)=>{
-
-    }
-    componentDidMount = ()=>{
-
-    }
-    componentWillUnmount = ()=>{
-
-    }
     addNewOption = function (){
         var newKey = util.guid();
         var oldStateData = this.props.data;
-        var newOption = Immutable.fromJS({id:newKey,text:"deneme",weight:0.5},
+        var newOption = Immutable.fromJS({id:newKey,title:"ootion title",weight:0.5},
             (k,v)=>{return v.toOrderedMap()}
         )
         var oldOptionsMap = oldStateData.get("options");
         var newOptionsMap = oldOptionsMap.toList().push(newOption).toOrderedMap();
         var newStateData = oldStateData.remove("options");
-        newStateData = oldStateData.set("options",newOptionsMap);
+        newStateData = newStateData.set("options",newOptionsMap);
         log(newStateData);
         this.props.onChange(newStateData,oldStateData);
     };
@@ -103,11 +92,11 @@ export default class QuestionAdd extends React.Component {
                 var cWeight = categoryCommand.split('-')[1];
                 if(util.isNumeric(cNameIndex) && util.isNumeric(cWeight)) {
                     cNameIndex = parseInt(cNameIndex);
-                    var cName = categoryProps[cNameIndex - 1].id;
-                    log("ct->",categoryProps,cNameIndex,cName);
+                    var categoryId = categoryProps[cNameIndex - 1].id;
+                    //log("ct->",categoryProps,cNameIndex,cName);
                     cWeight = parseInt(cWeight);
                     newCategories.push({
-                        category:cName,
+                        id:categoryId,
                         weight:cWeight
                     });
                 }
@@ -140,12 +129,12 @@ export default class QuestionAdd extends React.Component {
                 }
             }
         });
-        log("selectedSets",selectedSets);
+        //log("selectedSets",selectedSets);
         //log("s command", selectedSetIndexes, selectedSets);
         var newData = Immutable.fromJS(selectedSets,(key,value)=>{return value.toOrderedMap();})
         lastCommandTexts.setCommand = commandText;
         setTimeout(()=>{
-            log("degisen -> s");
+            //log("degisen -> s");
             this.handleOnChangeSetsOfQuestion(newData);
         },100)
     };
@@ -155,7 +144,7 @@ export default class QuestionAdd extends React.Component {
         //this.handleOnQuestionOptionsChange(answerType[typeKomutu - 1])
         lastCommandTexts.typeCommand = commandText;
         setTimeout(()=>{
-            log("degisen -> t");
+            //log("degisen -> t");
             this.handleOnChangeAnswerType(answerType[selectedType - 1])
         },100)
     };
@@ -182,7 +171,7 @@ export default class QuestionAdd extends React.Component {
         if(newAnswerType === "yesno") {
             var newKey1 = util.guid();
             var newKey2 = util.guid();
-            var options = [{id:newKey1,text:"Yes",weight:1},{id:newKey2,text:"No",weight:0}]
+            var options = [{id:newKey1,title:"Evet",weight:1},{id:newKey2,title:"Hayır",weight:0}]
             newStateData = newStateData.set("options",Immutable.fromJS(options));
         }
 
@@ -213,26 +202,41 @@ export default class QuestionAdd extends React.Component {
         if(answerType == "radio" || answerType == "checkbox") {
             addOptionDisabled = false;
         }
+        var showOptions = ["radio","checkbox","yesno"].includes(answerType);
         //console.log("bu ağırlık", categoryWeights)
         return (
             <div>
-                <div>
-                    <h3>New Question</h3>
-                </div>
-                <RaisedButton style={styles.rightFloated} label="Save Question" secondary={true}
-                              onClick={()=>this.handleSaveQuestion()}/>
-                <TextField hintText="Question Title" onChange={this.handleQuestionTextChange}/>
-                <CategoryWeights style={styles.w100} categoryList={this.props.categoryList}
-                                 categoryWeights={categoryWeights}
-                                 categoryWeightsChanged={this.categoryWeightsChanged}/>
-                <QuestionSets style={styles.w100} allSet={this.props.allSet} setsOfQuestion={setsOfQuestion}
-                              onChangeSetsOfQuestion={this.handleOnChangeSetsOfQuestion}/>
-                <AnswerTypes onChangeAnswerType={this.handleOnChangeAnswerType} answerType={answerType}/><br/>
-                <RaisedButton label="+Add Option" secondary={true} onClick={()=> this.addNewOption()}
-                              style={{float:"right"} } disabled={addOptionDisabled}/>
-                <QuestionOptions optionList={optionList}
-                                 onQuestionOptionsChange={this.handleOnQuestionOptionsChange}/><br/>
-
+                <Row><h3>New Question</h3></Row>
+                <Row>
+                    <Col xs={9} sm={9} md={9} lg={9}>
+                        <TextField hintText="Question Title" floatingLabelText="Question Title"
+                                   onChange={this.handleQuestionTextChange} style={{width:"100%"}}/></Col>
+                    <Col xs={3} sm={3} md={3} lg={3}>
+                        <RaisedButton label="Save Question" secondary={true}
+                                      onClick={()=>this.handleSaveQuestion()}/></Col>
+                </Row>
+                <Row>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                        <CategoryWeights style={styles.w100} categoryList={this.props.categoryList}
+                                         categoryWeights={categoryWeights}
+                                         categoryWeightsChanged={this.categoryWeightsChanged} categoriesWaiting={this.props.categoriesWaiting}/>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                        <QuestionSets style={styles.w100} allSet={this.props.allSet} setsOfQuestion={setsOfQuestion}
+                                      onChangeSetsOfQuestion={this.handleOnChangeSetsOfQuestion} setListWaiting={this.props.setListWaiting}/>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                        <AnswerTypes onChangeAnswerType={this.handleOnChangeAnswerType} answerType={answerType}/><br/>
+                    </Col>
+                    <Col xs={4} sm={4} md={2} lg={2} lgOffset={10} mdOffset={10}>
+                        <RaisedButton label="+Add Option" secondary={true} onClick={()=> this.addNewOption()}
+                                      style={{float:"right"} } disabled={addOptionDisabled}/>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12} style={{display:(showOptions?"":"noe")}}>
+                        <QuestionOptions optionList={optionList}
+                                         onQuestionOptionsChange={this.handleOnQuestionOptionsChange}/><br/>
+                    </Col>
+                </Row>
             </div>
         );
     }

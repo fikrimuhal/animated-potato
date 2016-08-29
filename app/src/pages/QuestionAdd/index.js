@@ -9,7 +9,7 @@ import * as util        from '../../utils/utils'
 import * as db          from  '../../utils/data'
 import log2             from '../../utils/log2'
 import * as Immutable from 'immutable'
-
+import LinearProgress from 'material-ui/LinearProgress';
 const log = log2("QuestionAdd Index: ");
 var showToast = null;
 const questionModel = {
@@ -32,13 +32,14 @@ export default class QuestionAddContainer extends React.Component {
                 duration:2000
             },
             categoryList:[],
-            allQuestionSets:[]
+            allQuestionSets:[],
+            loadingShow:false,
+            categoriesWaiting:true,
+            setListWaiting:true
         };
         showToast = util.myToast("toastSettings",this.setState,this.state);
         util.bindFunctions.call(this,['modelChanged','showMessage','onSave','initialize']);
-
     }
-
     componentDidMount = function (){
         log("componentDidMount");
         this.initialize();
@@ -55,7 +56,8 @@ export default class QuestionAddContainer extends React.Component {
         if(Cache.checkCategoriesFromCache()) {
             log("categories from CACHE");
             this.setState({
-                categoryList:Cache.getCategoriesFromCache()
+                categoryList:Cache.getCategoriesFromCache(),
+                categoriesWaiting:false
             });
             //this.state.categoryList = Cache.getCategoriesFromCache();
         }
@@ -69,7 +71,8 @@ export default class QuestionAddContainer extends React.Component {
                 //categoryList = json;
                 Cache.cacheCategories(json);
                 this.setState({
-                    categoryList:json
+                    categoryList:json,
+                    categoriesWaiting:false
                 });
             }).catch(err=>{
                 log("error",err);
@@ -81,7 +84,8 @@ export default class QuestionAddContainer extends React.Component {
         if(Cache.checkQuestionSetsFromCache()) {
             log("question sets from CACHE");
             this.setState({
-                allQuestionSets:Cache.getQuestionSetsFromCache()
+                allQuestionSets:Cache.getQuestionSetsFromCache(),
+                setListWaiting:false
             });
             //this.state.allQuestionSets = Cache.getQuestionSetsFromCache();
         }
@@ -94,7 +98,8 @@ export default class QuestionAddContainer extends React.Component {
                 log("getAllQuestionSet api json",json);
                 Cache.cacheQuestionSets(json);
                 this.setState({
-                    allQuestionSets:json
+                    allQuestionSets:json,
+                    setListWaiting:false
                 });
             }).catch(err=>{
                 log("getAllQuestionSet api ERROR",err);
@@ -110,34 +115,81 @@ export default class QuestionAddContainer extends React.Component {
         }
 
     }
-    setsHotkey = (e,combo)=>{
-
-    }
-    categoryHotkey = (e,combo)=>{
-
-    }
     modelChanged = function changed(newData,oldData){
         this.setState({data:newData});
     }
     onSave = function (){
         //TODO API kullanılarak sunucuya gönderilecek.
         var questionObj = this.state.data.toJS();
-        log(questionObj);
-        if(questionObj.qType == "radio" || questionObj.qType == "checkbox") {
-            questionObj = this.normalizeOptionWeight(questionObj);
-        }
-        questionObj = this.normalizeCategoryWeight(questionObj);
-        questionObj.title = this.normalizeTitle(questionObj.title);
-        //db.setQuestionToStorage(questionObj);
-        var questionModel = this.createQuestionModel(questionObj);
-        log("questionObj: ",questionModel);
-        this.showMessage("Question saved!!",2000);
+        if(this.checkModelValid(this.state.data)) {
+            this.setState({
+                loadingShow:true
+            });
 
+            log(questionObj);
+            if(questionObj.qType == "radio" || questionObj.qType == "checkbox") {
+                questionObj = this.normalizeOptionWeight(questionObj);
+            }
+            questionObj = this.normalizeCategoryWeight(questionObj);
+            questionObj.title = this.normalizeTitle(questionObj.title);
+            //db.setQuestionToStorage(questionObj);
+            var questionModel = this.createQuestionModel(questionObj);
+            log("questionObj: ",questionModel);
+            api.insertQuestion(questionModel).then(response=>{
+                return response.json();
+            }).then(json=>{
+                if(json.status == "OK") {
+                    this.showMessage("Question saved!!",2000);
+                }
+                else if(json.status == "FAIL") {
+                    this.showMessage("An error encountered!! Question hasn't saved.",2000);
+                    log(json.message);
+                }
+                this.setState({
+                    loadingShow:false
+                });
+            });
+        }
     };
+
+    checkModelValid = function (immutableQuestion){
+        var qType = immutableQuestion.get("qType");
+        var options = immutableQuestion.get("options");
+        var cWeights = immutableQuestion.get("categoryWeights");
+        var title = immutableQuestion.get("title");
+        var setList = immutableQuestion.get("setList");
+        var result = true;
+        if((qType == "radio" || qType == "checkbox" || qType == "yesno") && options.size == 0) {
+            this.showMessage("You must add option",1000);
+            result = false;
+        }
+        if(title.length == 0) {
+            this.showMessage("Title required",1000);
+            result = false;
+        }
+        if(cWeights.size == 0) {
+            this.showMessage("You must add category&weights",1000);
+            result = false;
+        }
+        if(setList.size == 0) {
+            this.showMessage("You must add question set",1000);
+            result = false;
+        }
+
+        return result;
+    }
+
     createQuestionModel = function (questionObj){
         questionObj.setList = util.obj2Array(questionObj.setList);
         questionObj.categoryWeights = util.obj2Array(questionObj.categoryWeights);
         questionObj.options = util.obj2Array(questionObj.options);
+        questionObj.options = questionObj.options.map(opt =>{
+            return {
+                title:opt.title,
+                weight:opt.weight
+            }
+        });
+
         return questionObj;
     };
     normalizeTitle = function (title){
@@ -197,10 +249,12 @@ export default class QuestionAddContainer extends React.Component {
     render(){
         return (
             <div>
+                <LinearProgress mode="indeterminate" color="red"
+                                style={{display:this.state.loadingShow ? "" : "none"}}/><br/>
                 <RaisedButton label="<- Back to list" secondary={true} onClick={this.backToList}/>
                 <QuestionAdd onChange={this.modelChanged} onSave={this.onSave} data={this.state.data}
                              allSet={this.state.allQuestionSets}
-                             categoryList={this.state.categoryList}/>
+                             categoryList={this.state.categoryList} setListWaiting={this.state.setListWaiting} categoriesWaiting={this.state.categoriesWaiting}/>
                 <Toast settings={this.state.toastSettings}/>
             </div>
         );
