@@ -1,0 +1,11 @@
+# bunun gibi bir sey docker compose v2 ye gecirilecek
+db:
+    build: ./etc/database
+    environment:
+        POSTGRES_PASSWORD: secretpass
+        POSTGRES_USER: root
+        #POSTGRES_DBi:root
+        #PGDATA:/var/lib/postgresql/data
+    ports:
+        - "5432:5432"
+    container_name: db

@@ -31,7 +31,8 @@ export default class UserLayout extends React.Component {
         super(props);
         //log("UserLayout consttttttttttttttttttttttttttttttttttttttt")
         if(!db.isLoggedIn()){
-            window.location.href="/signin";
+            browserHistory.push("/signin");
+            //window.location.href="/signin";
             return false;
             //browserHistory.push("/signin");
         }

@@ -212,7 +212,7 @@ export const authenticate=function authenticate(username, password) {
         };
         var result=(Math.floor(Math.random() * 10) % 3) != 0;
         var message=(result) ? successMessage : errorMessage;
-        resolve(message)
+        resolve(message);
         // setTimeout(()=> resolve(message)
         // ,2000)
 
@@ -229,9 +229,9 @@ export const auth2=(username, password) => {
     });
 }
 
-export const getApiPromise=method => data => {
-    return fetch('http://192.168.1.61:9000/' + method, {
-        method: 'POST',
+export const getApiPromise= (url,method) => data => {
+    return fetch('http://localhost:9000/' + url, {
+        method: method,
         body: JSON.stringify(data),
         headers: new Headers({
             'Content-Type': 'application/json',

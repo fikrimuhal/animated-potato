@@ -22,6 +22,10 @@ POST        /admin/updateQuestion              controllers.QuestionController.up
 POST        /admin/deleteQuestion              controllers.QuestionController.deleteQuestion
 GET         /admin/getQuestion/:n              controllers.QuestionController.getQuestionById(n)
 GET         /admin/getQuestions                controllers.QuestionController.getQuestions
+<<<<<<< HEAD
+=======
+
+>>>>>>> develop
 
 
 POST        /admin/insertQuestionOption        controllers.QuestionOptionController.insertQuestionOption
@@ -40,9 +44,14 @@ POST        /admin/getCategories               controllers.CategoryController.ge
 
 
 
+<<<<<<< HEAD
 GET         /admin/getSets                     controllers.QuestionSetController.get
 POST        /admin/insertSet                   controllers.QuestionSetController.insert
 
+=======
+POST         /admin/getSets                     controllers.QuestionSetController.get
+POST        /admin/insertSet                   controllers.QuestionSetController.insert
+>>>>>>> develop
 
 
 

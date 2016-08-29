@@ -7,7 +7,7 @@ import models._
 import play.api.libs.json.Json
 import play.api.mvc.Controller
 import play.api.mvc._
-
+import utils.Constants
 import pdi.jwt._
 /**
   * Created by who on 08.08.2016.
@@ -17,10 +17,13 @@ class QuestionController @Inject() extends Controller {
   def insertQuestion() = Action { implicit request =>
     try {
       val question: Question= request.body.asJson.get.as[Question]
-      if (Questions.insert(question)) Ok("1") else BadRequest("-1")
+
+
+      if (Questions.insert(question)) Ok(Json.toJson(ResponseMessage(Constants.OK,Constants.OK_MESSAGE)))
+      else BadRequest(Json.toJson(ResponseMessage(Constants.FAIL,"Soru eklenirken hata oluştu")))
     }
     catch {
-      case e: Exception => BadRequest(s"-1 $e")
+      case e: Exception => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL,"Sunucuda hata oluştu. Gönderdiğiniz verileri kontrol ediniz.")))
     }
   }
 
