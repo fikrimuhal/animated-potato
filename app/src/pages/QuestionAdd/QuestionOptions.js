@@ -1,10 +1,13 @@
-import React from 'react'
+import React        from 'react'
 import RaisedButton from 'material-ui/RaisedButton';
-import Slider from 'material-ui/Slider';
-import TextField from 'material-ui/TextField'
-import log2 from '../../utils/log2'
-import * as util from '../../utils/utils'
-import Immutable from  'immutable'
+import Slider       from 'material-ui/Slider';
+import TextField    from 'material-ui/TextField'
+import log2         from '../../utils/log2'
+import * as util    from '../../utils/utils'
+import Immutable    from  'immutable'
+import {Row,Col}    from 'react-flexbox-grid/lib/index';
+import * as s       from '../../layouts/style'
+import Option       from './QuestionOptionItem'
 const log = log2("QuestionOptions: ")
 const styles = {
     flexContainer:{
@@ -35,24 +38,28 @@ const styles = {
 export default class QuestionOptions extends React.Component {
     constructor(props){
         super(props);
-        util.bindFunctions.call(this,['handleSliderValueChange','handleOptionTextChanged','removeOptionFromModel','createContent']);
+        util.bindFunctions.call(this,['handleSliderValueChange','handleOptionTextChanged','removeOptionFromModel','createContent','getContent']);
     }
 
-    handleSliderValueChange = function (key,value){
+    handleSliderValueChange = function (id,value){
+        log("handleSliderValueChange",id,value);
+        var itemKey = this.props.optionList.findKey((x)=>{return x.get('id') == id});
         var oldOptions = this.props.optionList;
-        var newOptions = oldOptions.updateIn([key,"weight"],(v)=>{return value;});
+        var newOptions = oldOptions.updateIn([itemKey,"weight"],(v)=>{return value;});
         this.props.onQuestionOptionsChange(newOptions);
     }
-    removeOptionFromModel = function (key){
+    removeOptionFromModel = function (id){
+        var itemKey = this.props.optionList.findKey((x)=>{return x.get('id') == id});
         var oldOptions = this.props.optionList;
-        var newOptions = oldOptions.remove(key);
+        var newOptions = oldOptions.remove(itemKey);
         this.props.onQuestionOptionsChange(newOptions);
     }
-    handleOptionTextChanged = function (key){
-        log("key",this.refs)
-        var input = this.refs["txtOptionText-" + key].input;
+    handleOptionTextChanged = function (id,value){
+        log("handleOptionTextChanged",id,value);
+        //var input = this.refs["txtOptionText-" + key].input;
+        var itemKey = this.props.optionList.findKey((x)=>{return x.get('id') == id});
         var oldOptions = this.props.optionList;
-        var newOptions = oldOptions.updateIn([key,"text"],(v)=>{return input.value;});
+        var newOptions = oldOptions.updateIn([itemKey,"title"],(v)=>{return value;});
         this.props.onQuestionOptionsChange(newOptions);
 
     }
@@ -70,7 +77,7 @@ export default class QuestionOptions extends React.Component {
                     <div key={item.get('id')} style={styles.child}>
                         <p>Option Details</p>
                         <hr/>
-                        <TextField ref={"txtOptionText-" + itemKey } hintText="Seçenek" value={item.get('text')}
+                        <TextField ref={"txtOptionText-" + itemKey } hintText="Seçenek" value={item.get('title')}
                                    onChange={()=>_this.handleOptionTextChanged(itemKey)}/><br />
                         <Slider onChange={(event,value)=> _this.handleSliderValueChange(itemKey,value)}
                                 defaultValue={item.get('weight')} value={item.get('weight')} min={0.05}
@@ -84,14 +91,37 @@ export default class QuestionOptions extends React.Component {
 
         }
         return content;
+    };
+    getContent = function (){
+        var content = <div></div>;
+        var optionList = util.obj2Array(this.props.optionList.toJS());
+        if(optionList.length > 0) {
+            optionList.forEach(option=>{
+                React.render(<Option {...option}></Option>)
+            });
+        }
     }
     render = ()=>{
         log("rendered");
+        var optionList = util.obj2Array(this.props.optionList.toJS());
         return (
-            <div style={styles.flexContainer}>
-                {
-                    this.createContent()
-                }
+            <div style={s.questionAddPage.dottedContainer}>
+                <label style={s.questionAddPage.sectionTitle}>Options of Question:</label><br/>
+
+                <Row>
+                    {
+                        optionList.map(optionItem=>{
+                            return (
+                                <Col lg={2} md={3}>
+                                    <Option {...optionItem}
+                                            onTitleChange={this.handleOptionTextChanged}
+                                            onSliderChange={this.handleSliderValueChange}
+                                            onDeleteOption={this.removeOptionFromModel}></Option>
+                                </Col>)
+                        })
+
+                    }
+                </Row>
             </div>
         )
     }

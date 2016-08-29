@@ -7,7 +7,8 @@ import * as Immutable from 'immutable'
 import {Link,browserHistory} from 'react-router';
 import Mousetrap from 'mousetrap';
 import _lodash from 'lodash';
-
+import * as s              from '../../layouts/style'
+import LinearProgress from 'material-ui/LinearProgress';
 var catMap = [];
 
 const log = log2("CategoryWeights: ")
@@ -23,6 +24,7 @@ const styles = {
         backgroundColor:"#f1f1f1",
         padding:"5px 5px 5px 5px",
         marginTop:"5px",
+        border:"dotted 1px teal"
 
     },
     child:{
@@ -70,13 +72,14 @@ export default class CategoryWeights extends React.Component {
         log("selected cat->",selectedCategory);
         let oldCategoryWeights = this.props.categoryWeights;
         var newCategoryWeights;
-        var foundKey = oldCategoryWeights.findKey(x =>{return x.get("category") == selectedCategory});
+        var foundKey = oldCategoryWeights.findKey(x =>{return x.get("id") == selectedCategory});
         log("foundkey->",foundKey);
+        log("size->", oldCategoryWeights.size);
         if(foundKey == undefined) {
             newCategoryWeights = oldCategoryWeights.set(
-                util.guid(),
+                oldCategoryWeights.size,
                 Immutable.fromJS({
-                        category:selectedCategory,
+                        id:selectedCategory,
                         weight:0
                     },
                     (key,value)=>{return value.toOrderedMap()}
@@ -109,23 +112,26 @@ export default class CategoryWeights extends React.Component {
         var isEqualState = newCategoryWeights.equals(oldCategoryWeights);
         var isEqualProps = nextCategoryList.equals(currentCategoryList);
 
-        log("scu",isEqualState,isEqualProps);
+        //log("scu",isEqualState,isEqualProps);
         return !isEqualState || !isEqualProps;
     }
     render = ()=>{
-        log("rendered",this.props.categoryList);
-        let kategoriList = this.props.categoryWeights;
+        log("categoryList ",this.props.categoryList);
+        log("categoryWeights ",this.props.categoryWeights);
+        let categoryWeights = this.props.categoryWeights;
         var i = 0;
         return (
             <div style={styles.container}>
-                <label>Category weights of question: </label>
+                <label style={s.questionAddPage.sectionTitle}>Category weights of question</label>
+                <LinearProgress mode="indeterminate" color="red"
+                                style={{display:this.props.categoriesWaiting ? "" : "none"}}/>
                 <div style={styles.flexContainer}>
                     {
                         this.props.categoryList.map((item) =>{
 
-                            let foundKey = kategoriList.findKey(x=>{return x.toJS().category == item.id;});
+                            let foundKey = categoryWeights.findKey(x=>{return x.toJS().id == item.id;});
                             let checked = foundKey != undefined;
-                            let weight = (checked) ? kategoriList.get(foundKey).toJS().weight : 0;
+                            let weight = (checked) ? categoryWeights.get(foundKey).toJS().weight : 0;
                             catMap[i++] = item.id;
                             return (
                                 <div style={styles.child} key={item.id}>

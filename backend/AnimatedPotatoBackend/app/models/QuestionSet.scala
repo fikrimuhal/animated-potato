@@ -32,7 +32,7 @@ object QuestionSets  {
   }
   def updateBySetList(ids : List[Int]): Boolean = DB{ implicit session =>
     val setss: List[QuestionSet] = sets.filter(_.id inSet ids).list
-    setss.foreach{ s => sets.update(s.copy(count = Some(s.count.get +1)))}
+    setss.foreach{ s => sets.filter(x => x.id === s.id).update(s.copy(count = Some(s.count.get +1)))}
     true
   }
 
