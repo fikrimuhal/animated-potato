@@ -8,7 +8,7 @@ import AnswerTypes from './AnswerTypes';
 import QuestionSets from './QuestionSets'
 import CategoryWeights from './CategoryWeights'
 import QuestionOptions from './QuestionOptions'
-import Immutable from 'immutable'
+import * as Immutable from 'immutable'
 import Mousetrap from 'mousetrap';
 
 const log = log2("QuestionAdd: ")
@@ -65,10 +65,11 @@ export default class QuestionAdd extends React.Component {
     };
     handleQuestionTextChange = function (event,value){
         //Sorunun başlığı değiştiği zaman tetiklenen fonksiyon
-
+        var oldStateData = this.props.data;
         value = value.trim();
+        var title;
         if(value.indexOf('//') != -1) {
-            var title = value.split('//')[0];
+            title = value.split('//')[0];
             var titleScript = value.split('//')[1].trim().toLowerCase();
             if(titleScript.length > 2) {
                 var scriptCommands = titleScript.split(' ');
@@ -87,6 +88,10 @@ export default class QuestionAdd extends React.Component {
                 });
             }
         }
+        //title = value;
+        var newStateData = oldStateData.updateIn(['title'],(v)=>{return value;});
+        this.props.onChange(newStateData,oldStateData);
+
     }
     handleCategoryCommandText = function (commandText){
         var categoryProps = this.props.categoryList;
@@ -130,7 +135,7 @@ export default class QuestionAdd extends React.Component {
             //log("index,isNumeric,isNull",index,util.isNumeric(index),index=="");
             if(util.isNumeric(index) && index != "" && !processedIndexes.includes(index)) {
                 index = parseInt(index);
-                if(index <= this.props.allSet.length ) {
+                if(index <= this.props.allSet.length) {
                     selectedSets.push(this.props.allSet[index - 1].id)
                 }
             }

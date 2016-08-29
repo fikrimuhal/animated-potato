@@ -1,12 +1,14 @@
 import React            from 'react'
 import {browserHistory} from 'react-router'
-import {log2,db,util}   from '../../utils/'
 import {Toast}          from '../../components/MyComponents'
 import RaisedButton     from 'material-ui/RaisedButton';
 import QuestionAdd      from './QuestionAdd'
 import * as api         from '../../utils/api';
 import * as Cache       from '../../utils/cache'
-var Immutable = require('immutable');
+import * as util        from '../../utils/utils'
+import * as db          from  '../../utils/data'
+import log2             from '../../utils/log2'
+import * as Immutable from 'immutable'
 
 const log = log2("QuestionAdd Index: ");
 var showToast = null;
@@ -120,18 +122,29 @@ export default class QuestionAddContainer extends React.Component {
     onSave = function (){
         //TODO API kullanılarak sunucuya gönderilecek.
         var questionObj = this.state.data.toJS();
-        log(questionObj)
+        log(questionObj);
         if(questionObj.qType == "radio" || questionObj.qType == "checkbox") {
             questionObj = this.normalizeOptionWeight(questionObj);
         }
         questionObj = this.normalizeCategoryWeight(questionObj);
-
-        log("questionObj: ",questionObj);
-        questionObj.id = util.guid();
-        db.setQuestionToStorage(questionObj);
+        questionObj.title = this.normalizeTitle(questionObj.title);
+        //db.setQuestionToStorage(questionObj);
+        var questionModel = this.createQuestionModel(questionObj);
+        log("questionObj: ",questionModel);
         this.showMessage("Question saved!!",2000);
-        log(questionObj)
-    }
+
+    };
+    createQuestionModel = function (questionObj){
+        questionObj.setList = util.obj2Array(questionObj.setList);
+        questionObj.categoryWeights = util.obj2Array(questionObj.categoryWeights);
+        questionObj.options = util.obj2Array(questionObj.options);
+        return questionObj;
+    };
+    normalizeTitle = function (title){
+        var result = title.split('//')[0].trim();
+        //log("normalizeTitle x->y",title,result);
+        return result;
+    };
     normalizeOptionWeight = function (questionObj){
         var keys = Object.keys(questionObj.options);
         if(keys.length > 0) {

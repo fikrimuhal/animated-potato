@@ -72,9 +72,10 @@ export default class CategoryWeights extends React.Component {
         var newCategoryWeights;
         var foundKey = oldCategoryWeights.findKey(x =>{return x.get("category") == selectedCategory});
         log("foundkey->",foundKey);
+        log("size->", oldCategoryWeights.size);
         if(foundKey == undefined) {
             newCategoryWeights = oldCategoryWeights.set(
-                util.guid(),
+                oldCategoryWeights.size,
                 Immutable.fromJS({
                         category:selectedCategory,
                         weight:0
