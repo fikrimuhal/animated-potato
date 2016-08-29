@@ -14,13 +14,13 @@ import * as db from './data.js'
      *              faultCode:string
      *              message:string
      */
-    export const authenticate = db.getApiPromise("login");
+    export const authenticate = db.getApiPromise("login","POST");
 //endregion
 
-export const questionList = db.getApiPromise("questionList");
-export const getCategoryList = db.getApiPromise("admin/getCategories");
-export const getAllQuestionSet = db.getApiPromise("admin/getSets");
-export const setQuestionSet = db.getApiPromise("admin/insertSet");
+export const questionList = db.getApiPromise("questionList","POST");
+export const getCategoryList = db.getApiPromise("admin/getCategories","POST");
+export const getAllQuestionSet = db.getApiPromise("admin/getSets","POST");
+export const setQuestionSet = db.getApiPromise("admin/insertSet","POST");
 
 //region Save Question
     /**
@@ -34,7 +34,18 @@ export const setQuestionSet = db.getApiPromise("admin/insertSet");
      *              faultCode:string
      *              message:string
      */
-    export const insertQuestion = db.getApiPromise("admin/insertQuestion");
+    export const insertQuestion = db.getApiPromise("admin/insertQuestion","POST");
 //endregion
 
-export const signUp = db.getApiPromise("signUp");
+export const signUp = db.getApiPromise("signUp","POST");
+
+//region Get Questions
+/**
+ *  request:    {}
+ *
+ *  response-success:
+ *              List of question
+ *  response-fail
+ */
+export const getAllQuestion = db.getApiPromise("admin/getQuestions","GET");
+//endregion

@@ -229,9 +229,9 @@ export const auth2=(username, password) => {
     });
 }
 
-export const getApiPromise=method => data => {
-    return fetch('http://localhost:9000/' + method, {
-        method: 'POST',
+export const getApiPromise= (url,method) => data => {
+    return fetch('http://localhost:9000/' + url, {
+        method: method,
         body: JSON.stringify(data),
         headers: new Headers({
             'Content-Type': 'application/json',

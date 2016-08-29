@@ -177,3 +177,31 @@ export const checkQuestionSetsFromCache  = ()=>{
     return diff.minute <= 1;
 };
 //endregion
+
+
+//region All Question Caching
+export const cacheAllQuestion = data =>{
+    var cacheData = {
+        data:data,
+        createdTime:Date.now()
+    };
+    localStorage.setItem("allQuestionCache",JSON.stringify(cacheData));
+};
+export const getAllQuestionFromCache = ()=>{
+    var allQuestionCache = localStorage.getItem("allQuestionCache");
+    var list = [];
+    if(allQuestionCache != null) {
+        list = JSON.parse(allQuestionCache).data;
+    }
+    return list;
+};
+export const checkAllQuestionFromCache  = ()=>{
+    var allQuestionCache = localStorage.getItem("allQuestionCache");
+    if(allQuestionCache == null)return false;
+    var cache = JSON.parse(allQuestionCache);
+    var cacheTime = cache.createdTime;
+    var now = Date.now();
+    var diff = time.timeDiff(now,cacheTime);
+    return diff.minute <= 1;
+};
+//endregion

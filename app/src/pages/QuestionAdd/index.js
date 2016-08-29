@@ -119,7 +119,6 @@ export default class QuestionAddContainer extends React.Component {
         this.setState({data:newData});
     }
     onSave = function (){
-        //TODO API kullanılarak sunucuya gönderilecek.
         var questionObj = this.state.data.toJS();
         if(this.checkModelValid(this.state.data)) {
             this.setState({
