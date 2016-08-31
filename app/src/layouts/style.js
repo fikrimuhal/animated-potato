@@ -1,7 +1,8 @@
 /**
  * Created by MYigit on 9.8.2016.
  */
-var image = require("../assets/images/bg1.jpg")
+var image = require("!file!../assets/images/bg1.jpg");
+console.log("****image",image);
 export const userLayoutStyles = {
     paperStyle:{
         margin:"0 auto",
@@ -158,5 +159,26 @@ export const questionAddPage = {
         borderRadius:"10px",
         backgroundColor:"white",
 
+    }
+}
+
+export const AdminLayoutStyle = {
+    main:{
+        backgroundImage:"url("+image+")",
+        height:"auto !important"
+    },
+    mainPaper:{
+        //margin:"0 auto",
+        border:"1px teal solid",
+        borderRadius:"10px",
+        minHeight:"300px",
+        height:"auto !important",
+        width:"75%",
+        padding:"15px",
+        marginTop:"10px"
+    },
+    adminMenuContainer:{
+        margin:'0 auto',
+        marginTop:'10px'
     }
 }

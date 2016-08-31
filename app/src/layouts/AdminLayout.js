@@ -4,7 +4,7 @@
 import React                  from 'react'
 import AdminMenu              from './AdminMenu'
 import MuiThemeProvider       from 'material-ui/styles/MuiThemeProvider';
-import {Link,browserHistory} from 'react-router'
+import {Link,browserHistory}  from 'react-router'
 import Paper                  from 'material-ui/Paper';
 import Drawer                 from 'material-ui/Drawer';
 import log2                   from '../utils/log2'
@@ -13,30 +13,15 @@ import * as db                from '../utils/data'
 import AdminAppBar            from './AdminAppBar'
 import Mousetrap              from 'mousetrap'
 import Toast                  from '../components/MyComponents/Toast'
+import {Row,Col}              from 'react-flexbox-grid/lib/index';
+import * as s                 from './style'
+
 var context = {title:'React in patterns'};
 var userInfo = null;
 const log = log2("AdminLayout.js:")
-var image = require("../assets/images/bg1.jpg")
 var showToast = null;
 var loggedIn = false;
 
-//Styles
-const styles = {
-    paperStyle:{
-        margin:"0 auto",
-        border:"1px teal solid",
-        borderRadius:"10px",
-        minHeight:"300px",
-        height:"auto !important",
-        width:"75%",
-        padding:"15px",
-        marginTop:"10px"
-    },
-    main:{
-        backgroundImage:"url(" + image + ")",
-        height:"100%"
-    }
-};
 
 export default class AdminLayout extends React.Component {
     constructor(props){
@@ -119,15 +104,28 @@ export default class AdminLayout extends React.Component {
 
         return (
             <MuiThemeProvider>
-                <div id="page_container" style={styles.main}>
+                <div id="page_container" style={s.AdminLayoutStyle.main}>
                     <AdminAppBar toogleMenu={this.toogleMenu} userInfo={userInfo}/>
-                    <Drawer width={200} openPrimary={true} open={this.state.open} docked={false}
-                            onRequestChange={(open) => this.setState({open})}>
-                        <AdminMenu menuClick={this.menuClick}/>
-                    </Drawer>
-                    <Paper style={styles.paperStyle} zDepth={5} rounded={false}>
-                        {this.props.children}
-                    </Paper>
+                    <Row>
+                        <Col lg={2}>
+                            <Paper zDepth={1} rounded={false} style={s.AdminLayoutStyle.adminMenuContainer}>
+                                <AdminMenu menuClick={this.menuClick}/>
+                            </Paper>
+                        </Col>
+                        <Col lg={10}>
+                            <Paper style={s.AdminLayoutStyle.mainPaper} zDepth={5} rounded={false}>
+                                {this.props.children}
+                            </Paper>
+                        </Col>
+                    </Row>
+
+                    {/*<Drawer width={200} openPrimary={true} open={this.state.open} docked={false}*/}
+                    {/*onRequestChange={(open) => this.setState({open})}>*/}
+                    {/*<AdminMenu menuClick={this.menuClick}/>*/}
+                    {/*</Drawer>*/}
+                    {/*<Paper style={styles.paperStyle} zDepth={5} rounded={false}>*/}
+                    {/*{this.props.children}*/}
+                    {/*</Paper>*/}
                     <Toast settings={this.state.toastSettings}/>
                 </div>
 
