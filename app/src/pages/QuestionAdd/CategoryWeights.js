@@ -138,7 +138,7 @@ export default class CategoryWeights extends React.Component {
                                     <Checkbox ref="cbKategori" checked={checked} key={item.id} value={item.id}
                                               label={item.category + " (" + i + ")"}
                                               onClick={() => this.categorySelected(item.id)}/>
-                                    <span>Weight: {weight}</span>
+                                    <span>Weight: {weight.toFixed(2)}</span>
                                     <Slider min={0} max={10} step={1} value={weight} disabled={!checked}
                                             onChange={(event,value)=>this.sliderChange(item.id,foundKey,value)}/>
                                 </div>

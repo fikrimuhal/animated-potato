@@ -123,7 +123,7 @@ export const getCategoriesFromCache = ()=>{
     return list;
 };
 
-export const checkCategoriesFromCache  = ()=>{
+export const checkCategoriesFromCache = ()=>{
     var categoriesCache = localStorage.getItem("categoriesCache");
     if(categoriesCache == null)return false;
     var cache = JSON.parse(categoriesCache);
@@ -167,7 +167,7 @@ export const getQuestionSetsFromCache = ()=>{
     return list;
 };
 
-export const checkQuestionSetsFromCache  = ()=>{
+export const checkQuestionSetsFromCache = ()=>{
     var questionSetsCache = localStorage.getItem("questionSetsCache");
     if(questionSetsCache == null)return false;
     var cache = JSON.parse(questionSetsCache);
@@ -177,7 +177,6 @@ export const checkQuestionSetsFromCache  = ()=>{
     return diff.minute <= 1;
 };
 //endregion
-
 
 //region All Question Caching
 export const cacheAllQuestion = data =>{
@@ -195,13 +194,35 @@ export const getAllQuestionFromCache = ()=>{
     }
     return list;
 };
-export const checkAllQuestionFromCache  = ()=>{
+export const checkAllQuestionFromCache = ()=>{
     var allQuestionCache = localStorage.getItem("allQuestionCache");
     if(allQuestionCache == null)return false;
     var cache = JSON.parse(allQuestionCache);
     var cacheTime = cache.createdTime;
     var now = Date.now();
     var diff = time.timeDiff(now,cacheTime);
-    return diff.minute <= 1;
+    return diff.minute <= 5;
+};
+export const checkQuestionFromCache = (questionId)=>{
+    var allQuestionCache = localStorage.getItem("allQuestionCache");
+    var result;
+    if(allQuestionCache == null)return false;
+    var cache = JSON.parse(allQuestionCache);
+    var cacheTime = cache.createdTime;
+    var now = Date.now();
+    var diff = time.timeDiff(now,cacheTime);
+    if(diff.minute > 5) result = false;
+    else {
+        var questions = _.filter(cache.data,(q)=>{return q.id == questionId});
+        result = questions.length > 0;
+    }
+
+    return result;
+};
+export const getQuestionFromCache = (questionId)=>{
+    var allQuestionCache = localStorage.getItem("allQuestionCache");
+    var cache = JSON.parse(allQuestionCache).data;
+    var question = _.filter(cache,(q)=>{return q.id == questionId})[0];
+    return question;
 };
 //endregion

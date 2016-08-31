@@ -1,27 +1,21 @@
+//region İmports
 import React                                from 'react'
 import RaisedButton                         from 'material-ui/RaisedButton';
-import {db,log2,util}                       from '../../utils/'
-import {Table}                              from 'material-ui/Table';
 import ReactDataGrid                        from 'react-data-grid';
 import {Toolbar,Data}                       from 'react-data-grid/addons';
-import IconMenu                             from 'material-ui/IconMenu';
-import FontIcon                             from 'material-ui/FontIcon';
-import IconButton                           from 'material-ui/IconButton';
-import NavigationExpandMoreIcon             from 'material-ui/svg-icons/navigation/expand-more';
-import MenuItem                             from 'material-ui/MenuItem';
-import _                                    from 'lodash'
-import TextField                            from 'material-ui/TextField';
-import FlatButton       from 'material-ui/FlatButton';
-import DeleteIcon       from 'material-ui/svg-icons/action/delete';
-import ViewIcon         from 'material-ui/svg-icons/action/visibility';
-import {Link,browserHistory}                from 'react-router'
-import Checkbox                             from 'material-ui/Checkbox';
+import FlatButton                           from 'material-ui/FlatButton';
+import DeleteIcon                           from 'material-ui/svg-icons/action/delete';
+import ViewIcon                             from 'material-ui/svg-icons/action/visibility';
+import {browserHistory}                     from 'react-router'
 import * as api                             from '../../utils/api'
 import * as Cache                           from '../../utils/cache'
+import * as util                            from '../../utils/utils'
+import  log2                                from '../../utils/log2'
+import * as db                              from '../../utils/data'
 require("!style!css!react-data-grid/themes/react-data-grid.css")
+//endregion
 const Selectors = Data.Selectors;
-const log = log2("Question List")
-
+const log = log2("Question List");
 var columns = [
     {
         key:'id',
@@ -61,11 +55,13 @@ export default class QuestionList extends React.Component {
         super(props);
         this.state = {
             rows:[],
-            filters:{},
+            filters:{
+                qType:"fre"
+            },
             originalRows:[]
         };
         util.bindFunctions.call(this,['getRows','getSize',
-            'rowGetter','handleFilterChange',
+            'rowGetter','handleFilterChange','handleClearFilters',
             'handleGridSort','handleRowUpdated','createNew']);
 
         this.initializeData();
@@ -73,26 +69,30 @@ export default class QuestionList extends React.Component {
 
     initializeData = function (){
         if(Cache.checkAllQuestionFromCache()) {
+            log("**********From CACHE************");
             var rows = Cache.getAllQuestionFromCache();
-            rows  = this.convertTableRawData(rows);
+            rows = this.convertTableRawData(rows);
             this.state = {
                 rows:rows,
-                originalRows:rows
+                originalRows:rows,
+                filters:{ qType:"fre"},
             };
         }
         else {
             this.initializeFromAPI();
         }
     };
-    initializeFromAPI= function (){
+    initializeFromAPI = function (){
+        log("**********From API************");
         api.getAllQuestion().then(response=>response.json()).then(json=>{
             var rows = json;
             Cache.cacheAllQuestion(rows);
-            rows  = this.convertTableRawData(rows);
+            rows = this.convertTableRawData(rows);
 
             this.setState({
                 rows:rows,
-                originalRows:rows
+                originalRows:rows,
+                filters:{ qType:"fre"}
             });
         });
     };
@@ -120,12 +120,17 @@ export default class QuestionList extends React.Component {
         browserHistory.push('/adminpanel/questionadd')
     };
     deleteQuestion = id => ()=>{
-        log("deleting-> ", id);
+        log("deleting-> ",id);
+        //TODO soru silme yapılacak
     };
     viewQuestion = id => ()=>{
-        log("viewing-> ", id);
+        log("viewing-> ",id);
+        browserHistory.push("/adminpanel/questiondetail/" + id);
+        //TODO soru detay sayfası yapılacak
     };
     getRows = function (){
+        //log("get rows state",this.state );
+        //log("get rows",Selectors.getRows(this.state));
         return Selectors.getRows(this.state);
     }
     handleRowUpdated = function (e){
@@ -137,23 +142,24 @@ export default class QuestionList extends React.Component {
 
     getSize = function (){
         return this.getRows().length;
-    }
-
+    };
     rowGetter = function (rowIdx){
         var rows = this.getRows();
         return rows[rowIdx];
-    }
+    };
 
     handleFilterChange = function (filter){
+        log("handleFilterChange",filter)
         let newFilters = Object.assign({},this.state.filters);
         if(filter.filterTerm) {
-            newFilters[filter.columnKey] = filter.filterTerm;
+            newFilters[filter.column.key] = filter.filterTerm;
         }
         else {
-            delete newFilters[filter.columnKey];
+            delete newFilters[filter.column.key];
         }
+        log("handleFilterChange",newFilters)
         this.setState({filters:newFilters});
-    }
+    };
     handleGridSort = function (sortColumn,sortDirection){
         var comparer = function (a,b){
             if(sortDirection === 'ASC') {
@@ -162,11 +168,14 @@ export default class QuestionList extends React.Component {
             else if(sortDirection === 'DESC') {
                 return (a[sortColumn] < b[sortColumn]) ? 1 : -1;
             }
-        }
+        };
         var rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
         this.setState({rows:rows});
-    }
-
+    };
+    handleClearFilters= function(){
+        //all filters removed
+        this.setState({filters: {} });
+    };
     render(){
         return (
 
@@ -189,7 +198,8 @@ export default class QuestionList extends React.Component {
                         toolbar={<Toolbar enableFilter={true}/>}
                         onAddFilter={this.handleFilterChange}
                         onGridSort={this.handleGridSort}
-                        onRowUpdated={this.handleRowUpdated}/>
+                        onRowUpdated={this.handleRowUpdated}
+                        onClearFilters={this.handleClearFilters}/>
                 </div>
             </div>
         );

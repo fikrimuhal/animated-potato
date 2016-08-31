@@ -23,7 +23,15 @@ const questionModel = {
 export default class QuestionAddContainer extends React.Component {
     constructor(props){
         super(props);
-        var immutableData = Immutable.fromJS(questionModel,(key,value)=>{return value.toOrderedMap();});
+        var immutableData;
+        if(this.props.editMode) {
+            var question = this.unNormalizeCategoryWeights(this.props.question);
+            immutableData = Immutable.fromJS(question,(key,value)=>{return value.toOrderedMap();});
+        }
+        else {
+            immutableData = Immutable.fromJS(questionModel,(key,value)=>{return value.toOrderedMap();});
+        }
+
         this.state = {
             data:immutableData,
             toastSettings:{
@@ -35,11 +43,13 @@ export default class QuestionAddContainer extends React.Component {
             allQuestionSets:[],
             loadingShow:false,
             categoriesWaiting:true,
-            setListWaiting:true
+            setListWaiting:true,
+            editMode:this.props.editMode || false
         };
         showToast = util.myToast("toastSettings",this.setState,this.state);
         util.bindFunctions.call(this,['modelChanged','showMessage','onSave','initialize']);
     }
+
     componentDidMount = function (){
         log("componentDidMount");
         this.initialize();
@@ -226,6 +236,13 @@ export default class QuestionAddContainer extends React.Component {
         }
         return questionObj;
     }
+    unNormalizeCategoryWeights = function (question){
+        log("unNormalizeCategoryWeights",question);
+        question.categoryWeights.forEach(item=>{
+            item.weight *= 10;
+        })
+        return question;
+    };
     showMessage = function (message,duration){
         var toastSettings = {
             open:true,
@@ -246,16 +263,27 @@ export default class QuestionAddContainer extends React.Component {
     }
 
     render(){
+        var editMode = this.props.editMode || false;
         return (
             <div>
                 <LinearProgress mode="indeterminate" color="red"
                                 style={{display:this.state.loadingShow ? "" : "none"}}/><br/>
                 <RaisedButton label="<- Back to list" secondary={true} onClick={this.backToList}/>
-                <QuestionAdd onChange={this.modelChanged} onSave={this.onSave} data={this.state.data}
+                <QuestionAdd onChange={this.modelChanged}
+                             onSave={this.onSave}
+                             data={this.state.data}
                              allSet={this.state.allQuestionSets}
-                             categoryList={this.state.categoryList} setListWaiting={this.state.setListWaiting} categoriesWaiting={this.state.categoriesWaiting}/>
+                             categoryList={this.state.categoryList}
+                             setListWaiting={this.state.setListWaiting}
+                             categoriesWaiting={this.state.categoriesWaiting}
+                             editMode={editMode}/>
                 <Toast settings={this.state.toastSettings}/>
             </div>
         );
     }
+}
+
+QuestionAddContainer.propTypes = {
+    editMode:React.PropTypes.bool,
+    question:React.PropTypes.object
 }

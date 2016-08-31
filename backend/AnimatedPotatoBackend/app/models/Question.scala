@@ -91,11 +91,13 @@ object Questions {
     val questionList = questions.list
     for (qt <- questionList) yield
       Question(qt.id, qt.title, qt.qType,
-        questionOptions.filter(qopt => qopt.id inSet qt.options).list,
+        questionOptions.filter(qopt => qopt.questionId === qt.id).list,
         for (q <- questionCategories.filter(qct => qct.questionId === qt.id).list)
           yield QuestionCategoryRequest(q.categoryId, q.weight),
         qt.setList
       )
+
+
 
   }
 

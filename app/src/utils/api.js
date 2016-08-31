@@ -49,3 +49,6 @@ export const signUp = db.getApiPromise("signUp","POST");
  */
 export const getAllQuestion = db.getApiPromise("admin/getQuestions","GET");
 //endregion
+
+
+export const getQuestion = questionId => db.getApiPromise("admin/getQuestion/"+questionId,"GET");
