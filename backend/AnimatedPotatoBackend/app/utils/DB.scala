@@ -6,7 +6,7 @@ import slick.driver.PostgresDriver.simple._
 object DB {
 
 //  val URL: String = "jdbc:postgresql://localhost:5432/deneme"
-  val URL: String = "jdbc:postgresql://192.168.1.61:5434/postgres"
+  val URL: String = "jdbc:postgresql://localhost:5434/postgres"
   val USER_NAME: String = "postgres"
   val PASSWORD: String = "password"
   val DRIVER: String = "org.postgresql.Driver"

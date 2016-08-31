@@ -5,51 +5,40 @@ import javax.inject.{Inject, Named}
 import akka.pattern._
 import akka.actor.{ActorRef, ActorSelection}
 import akka.util.Timeout
-import animatedPotato.protocol.protocol.TestStart
+import animatedPotato.protocol.protocol.{InterviewId, NextQuestion, QuestionId, TestStart}
 import com.google.inject.Singleton
+import play.api.libs.json.Json
 import models._
 import play.api.mvc.{Action, Controller, Result}
-import play.libs.Json
-
 import scala.concurrent.duration._
 import scala.concurrent.Future
+import utils.Constants
+import utils.Formatter._
 
 /**
   * Created by who on 10.08.2016.
   */
+case class Email(email: String)
+
+case class InterviewStartResponse(valid: Boolean, firstQuestion: Option[Question], remainingQuestion: Option[Int])
+
+case class YesNoAnswer(questionId: QuestionId, value: Boolean)
+
+case class GetNextQuestion(answer: YesNoAnswer, interviewId: InterviewId)
+
 @Singleton
 class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends Controller {
-
-  import scala.concurrent.ExecutionContext.Implicits.global
-
+  import play.api.libs.concurrent.Execution.Implicits.defaultContext
   implicit val defaultTimeOut = Timeout(2 seconds)
 
-  def startTest() : Result = {
+  def startTestNonRegistered() = Action.async {
 
+    println("interview controllera geldi ve rootActor'e soruyor.")
+    val futureResponse = (rootActor ? ("interview", TestStart(1, 1, None))).mapTo[NextQuestion]
+    futureResponse.map(response =>  Ok(Json.toJson(Questions.getQuestionById(response.questionId))))
 
-    Ok("123")
   }
+
 }
-
-
-
-
-//  def answer() = ??? // Action.async(parse.json) {
-//    _.body.
-//      validate[Answer].asOpt.
-//      map {
-//        case answer: Answer => (root ? answer).map {
-//          case true => (root ? ("interview",GetNextQuestion(YesNoAnswer(answer.questionId, value = true)))).mapTo[NextQuestion]
-//              .map(x => Ok(Json.toJson(Questions.getQuestionById(x.id))))
-//          case _ => Ok("Failure: Answer could not saved ")
-//
-//        }.recover { case _ => Ok("Failure: Answer could not saved!") }
-//        case _ => Ok("Failure")
-//      }.
-//      getOrElse(Ok("Failure: Request can not converted to Question"))
-
-//    Ok("1")
-//  }
-
 
 

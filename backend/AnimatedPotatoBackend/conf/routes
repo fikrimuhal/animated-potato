@@ -37,11 +37,12 @@ GET         /admin/getCategory/:n              controllers.CategoryController.ge
 POST        /admin/getCategories               controllers.CategoryController.getCategories
 
 
+GET         /admin/startTestNonRegistered              controllers.InterviewController.startTestNonRegistered
 
 
 
-GET         /admin/getSets                     controllers.QuestionSetController.get
-POST        /admin/insertSet                   controllers.QuestionSetController.insert
+GET         /admin/getSets                     controllers.SetsController.get
+POST        /admin/insertSet                   controllers.SetsController.insert
 
 
 

@@ -21,7 +21,7 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
 
     case x: GetNextQuestion =>
       println("RandomInterview'e GetNextQuestion geldi ")
-      sender ! getNextQuestionId.map(NextQuestion).getOrElse {
+      sender ! getNextQuestionId.map(NextQuestion(_,initMessage.interviewId)).getOrElse {
         println("RandomInterview TestFinish yollayacak")
         sender ! TestFinish(initMessage.interviewId, initMessage.userId)
         unstashAll()
@@ -53,6 +53,8 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
   override def preStart = {
 
     println("RandomInterview: preStart")
+//    context.parent ! getNextQuestionId.map(NextQuestion(_,initMessage.interviewId)).get
+
 
   }
 
