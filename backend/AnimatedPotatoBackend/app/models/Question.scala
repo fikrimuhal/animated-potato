@@ -1,6 +1,6 @@
 package models
 
-import animatedPotato.protocol.protocol.{CategoryId, IdType}
+import animatedPotato.protocol.protocol.{CategoryId, IdType, QuestionId}
 import com.sun.xml.internal.bind.v2.TODO
 import utils.{Constants, DB}
 
@@ -11,41 +11,57 @@ import pdi.jwt._
 /**
   * Created by who on 08.08.2016.
   */
-case class QuestionCategoryRequest(id: CategoryId, weight: Double)
+
+case class QuestionCategoryResponse(id: IdType, weight: Double, text: String)
 
 case class Question(id: Option[IdType],
                     title: String,
                     qType: String,
                     options: List[QuestionOption],
                     categoryWeights: List[QuestionCategoryRequest],
-                    setList: List[Int])
+                    setList: List[IdType])
+
+case class QuestionResponse(id: IdType,
+                            title: String,
+                            qType: String,
+                            options: List[QuestionOption],
+                            categoryWeights: List[QuestionCategoryResponse],
+                            setList: List[IdType])
 
 case class QuestionTable(id: Option[IdType],
                          title: String,
-                         qType: String,
-                         options: List[IdType],
-                         setList: List[Int])
+                         qType: String)
 
 object Questions {
   lazy val questions = TableQuery[Questions]
   lazy val questionOptions = TableQuery[QuestionOptions]
   lazy val questionCategories = TableQuery[QuestionCategories]
-  lazy val sets = TableQuery[QuestionSets]
+  lazy val categories = TableQuery[Categories]
+  lazy val questionSets = TableQuery[QuestionSetDAO]
 
   def insert(question: Question): Boolean = DB { implicit session =>
 
-    val id = (questions returning questions.map(_.id)) += QuestionTable(question.id,
-      question.title,
-      question.qType,
-      question.options.flatMap(_.id),
-      question.setList)
+    val questionId = (questions returning questions.map(_.id)) +=
+      QuestionTable(question.id, question.title, question.qType)
 
+    question.options.foreach {
+      option => QuestionOptions.insert(
+        QuestionOption(Some(questionId), None, option.title, option.weight)
+      )
+    }
 
-    question.options.foreach{ opt => QuestionOptions.insert(QuestionOption(Some(id),None,opt.title,opt.weight)) }
+    question.categoryWeights.foreach {
+      category => QuestionCategories.insert(
+        QuestionCategory(questionId, category.id, category.weight)
+      )
+    }
 
-    question.categoryWeights.foreach { c => QuestionCategories.insert(QuestionCategory(id, c.id, c.weight)) }
+    question.setList.foreach {
+      setId => QuestionSetDAO.insert(
+        QuestionSet(questionId, setId)
+      )
 
-    QuestionSets.updateBySetList(question.setList)
+    }
 
     true
 
@@ -53,28 +69,28 @@ object Questions {
 
   def update(question: Question): Boolean = DB { implicit session =>
     try {
-//      val questionTable = QuestionTable(question.id,
-//        question.title,
-//        question.qType,
-//        question.options.flatMap(_.id),
-//        question.setList)
-//
-//      val options: List[QuestionOption] = questionOptions.filter(_.questionId inSet question.options.map(_.questionId)).list
-//      val willbedeletedOptions: List[IdType] = options.flatMap(_.id).filterNot(question.options.flatMap(_.id).toSet)
-//      question.options.foreach { x => questionOptions.insertOrUpdate(x) }
-//      willbedeletedOptions.foreach { id => questionOptions.filter(x => (x.questionId === question.id) && (x.id === id)).delete }
-//
-//      val currentCategories: List[QuestionCategory] = questionCategories.filter(_.questionId === question.id).list
-//      val willbedeletedquestionCategories = currentCategories.map(_.categoryId).filterNot(question.categoryWeights.map(_.id).toSet)
-//      question.categoryWeights.foreach { c => questionCategories.insertOrUpdate(QuestionCategory(question.id, c.id, c.weight)) }
-//      willbedeletedquestionCategories.foreach { id => questionCategories.filter(x => (x.questionId === question.id) && x.categoryId == id).delete }
-//
-//      val currentQuestion = questions.filter(_.id === question.id).list.head
-//      val willdecreasedIDs = currentQuestion.setList.toSet.diff(question.setList.toSet)
-//      val willincreasedIDs = question.setList.toSet.diff(currentQuestion.setList.toSet)
-//
-//      willbedeletedOptions.foreach(id => QuestionSets.decreaseCount(id.toInt))
-//      willincreasedIDs.foreach(id => QuestionSets.increaseCount(id))
+      //      val questionTable = QuestionTable(question.id,
+      //        question.title,
+      //        question.qType,
+      //        question.options.flatMap(_.id),
+      //        question.setList)
+      //
+      //      val options: List[QuestionOption] = questionOptions.filter(_.questionId inSet question.options.map(_.questionId)).list
+      //      val willbedeletedOptions: List[IdType] = options.flatMap(_.id).filterNot(question.options.flatMap(_.id).toSet)
+      //      question.options.foreach { x => questionOptions.insertOrUpdate(x) }
+      //      willbedeletedOptions.foreach { id => questionOptions.filter(x => (x.questionId === question.id) && (x.id === id)).delete }
+      //
+      //      val currentCategories: List[QuestionCategory] = questionCategories.filter(_.questionId === question.id).list
+      //      val willbedeletedquestionCategories = currentCategories.map(_.categoryId).filterNot(question.categoryWeights.map(_.id).toSet)
+      //      question.categoryWeights.foreach { c => questionCategories.insertOrUpdate(QuestionCategory(question.id, c.id, c.weight)) }
+      //      willbedeletedquestionCategories.foreach { id => questionCategories.filter(x => (x.questionId === question.id) && x.categoryId == id).delete }
+      //
+      //      val currentQuestion = questions.filter(_.id === question.id).list.head
+      //      val willdecreasedIDs = currentQuestion.setList.toSet.diff(question.setList.toSet)
+      //      val willincreasedIDs = question.setList.toSet.diff(currentQuestion.setList.toSet)
+      //
+      //      willbedeletedOptions.foreach(id => QuestionSets.decreaseCount(id.toInt))
+      //      willincreasedIDs.foreach(id => QuestionSets.increaseCount(id))
       true
     }
     catch {
@@ -82,35 +98,45 @@ object Questions {
     }
   }
 
-  def delete(question: Question): Boolean = DB { implicit session =>
-    val deletedRowCount: Int = questions.filter(_.id === question.id).delete
+  def delete(questionId: QuestionId): Boolean = DB { implicit session =>
+    val deletedRowCount: Int = questions.filter(_.id === questionId).delete
     if (deletedRowCount > 0) true else false
   }
 
   def getAll = DB { implicit session =>
-    val questionList = questions.list
-    for (qt <- questionList) yield
-      Question(qt.id, qt.title, qt.qType,
-        questionOptions.filter(qopt => qopt.questionId === qt.id).list,
-        for (q <- questionCategories.filter(qct => qct.questionId === qt.id).list)
-          yield QuestionCategoryRequest(q.categoryId, q.weight),
-        qt.setList
-      )
 
-
+    for (question <- questions.list)
+      yield
+        QuestionResponse(
+          question.id.get,
+          question.title,
+          question.qType,
+          question.id.map(questionId => questionOptions.filter(option => option.questionId === questionId).list).get,
+          question.id.map(questionId => questionCategories.filter(questionCategory => questionCategory.questionId === questionId).list.
+            map(a => QuestionCategoryResponse(a.categoryId, a.weight, categories.filter(_.id === a.categoryId).list.head.category))).get,
+          question.id.map(questionId => questionSets.filter(questionSet => questionSet.questionId === questionId).list.map(_.setId)).get
+        )
 
   }
 
-  def getQuestionById(id: Long): Question = DB { implicit session =>
-    val qt: QuestionTable = questions.filter(_.id === id.toLong).list.head
-    Question(qt.id,qt.title,qt.qType,
-      questionOptions.filter(qopt => qopt.id inSet qt.options).list,
-      for (q<- questionCategories.filter(qct => qct.questionId === qt.id ).list)
-        yield QuestionCategoryRequest(q.categoryId,q.weight),
-      qt.setList
-    )
+  def getQuestionById(id: Long): Option[QuestionResponse] = DB { implicit session =>
 
-}
+    questions.filter(_.id === id).list.headOption match {
+
+      case Some(question) =>
+        Some(QuestionResponse(
+          question.id.get,
+          question.title,
+          question.qType,
+          question.id.map(questionId => questionOptions.filter(option => option.questionId === questionId).list).get,
+          question.id.map(questionId => questionCategories.filter(questionCategory => questionCategory.questionId === questionId).list.
+            map(a => QuestionCategoryResponse(a.categoryId, a.weight, categories.filter(_.id === a.categoryId).list.head.category))).get,
+          question.id.map(questionId => questionSets.filter(questionSet => questionSet.questionId === questionId).list.map(_.setId)).get
+        ))
+
+      case _ => None
+    }
+  }
 
 }
 
@@ -122,11 +148,8 @@ class Questions(tag: Tag) extends Table[QuestionTable](tag, "question") {
 
   def qType = column[String]("qtype")
 
-  def options = column[List[IdType]]("opts")
 
-  def setList = column[List[Int]]("setlist")
-
-  def * = (id.?, title, qType, options, setList) <> (QuestionTable.tupled, QuestionTable.unapply)
+  def * = (id.?, title, qType) <> (QuestionTable.tupled, QuestionTable.unapply)
 }
 
 

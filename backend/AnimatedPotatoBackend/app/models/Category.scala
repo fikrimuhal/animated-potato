@@ -10,7 +10,6 @@ import utils.Formatter._
 case class Category(id: Option[IdType],category : String)
 object Categories {
 
-
   lazy val categories = TableQuery[Categories]
   
   def insert(category: Category): Boolean = DB { implicit session =>

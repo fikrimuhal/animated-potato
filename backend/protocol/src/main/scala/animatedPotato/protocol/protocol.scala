@@ -9,14 +9,15 @@ object protocol {
     * ilk soru için answer = None olarak gönderilecek
     * @param answer : kullanıcıdan gelen cevap,
     */
-  case class GetNextQuestion(answer: Option[YesNoAnswer]= None)
+  case class GetNextQuestion(answer: Option[YesNoAnswer]= None,interviewId: InterviewId)
 
   /**
     * getNextQuestion'a response olarak bunun dönmesi gerek
     *
-    * @param id
+    * @param questionId
+    * @param interviewId
     */
-  case class NextQuestion(id: QuestionId)
+  case class NextQuestion(questionId: QuestionId, interviewId: InterviewId)
 
   /**
     *

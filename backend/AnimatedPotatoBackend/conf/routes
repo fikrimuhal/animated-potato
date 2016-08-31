@@ -24,7 +24,6 @@ GET         /admin/getQuestion/:n              controllers.QuestionController.ge
 GET         /admin/getQuestions                controllers.QuestionController.getQuestions
 
 
-
 POST        /admin/insertQuestionOption        controllers.QuestionOptionController.insertQuestionOption
 POST        /admin/updateQuestionOption        controllers.QuestionOptionController.updateQuestionOption
 POST        /admin/deleteQuestionOption        controllers.QuestionOptionController.deleteQuestionOption
@@ -38,11 +37,13 @@ GET         /admin/getCategory/:n              controllers.CategoryController.ge
 POST        /admin/getCategories               controllers.CategoryController.getCategories
 
 
+GET         /admin/startTestNonRegistered              controllers.InterviewController.startTestNonRegistered
 
 
 
-POST         /admin/getSets                     controllers.QuestionSetController.get
-POST        /admin/insertSet                   controllers.QuestionSetController.insert
+GET         /admin/getSets                     controllers.SetsController.get
+POST        /admin/insertSet                   controllers.SetsController.insert
+
 
 
 

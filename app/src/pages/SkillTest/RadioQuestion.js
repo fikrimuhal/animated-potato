@@ -77,9 +77,8 @@ export default class RadioQuestion extends React.Component {
         }
     }
     render=function () {
-        log("rendered",s.userLayoutStyles.questionBadgeBlue);
+        log("rendered",);
         var options=util.obj2Array(this.props.question.options);
-       // log(s.userLayoutStyles.questionBadgeBlue)
         return (
             <div>
                 {/*<FontIcon color={pink500} className="material-icons md-dark md-inactive">flag</FontIcon>*/}

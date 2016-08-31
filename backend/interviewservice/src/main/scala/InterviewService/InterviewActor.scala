@@ -23,7 +23,7 @@ class InterviewActor (initMessage: InitMessage) extends Actor with Stash {
 
     case x: GetNextQuestion =>
       println("interviewActor'e GetNextQuestion geldi ")
-      sender ! getNextQuestionId.map(NextQuestion).getOrElse {
+      sender ! getNextQuestionId.map(NextQuestion(_,initMessage.interviewId)).getOrElse {
         println("interviewActor TestFinish yollayacak")
         sender ! TestFinish(initMessage.interviewId, initMessage.userId)
         unstashAll()

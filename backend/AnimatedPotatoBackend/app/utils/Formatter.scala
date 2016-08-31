@@ -13,13 +13,16 @@ object Formatter {
   implicit val participantResponseFormat = Json.format[ParticipantResponse]
   implicit val questionCategoryFormat = Json.format[QuestionCategory]
   implicit val questionCategoryRequestFormat = Json.format[QuestionCategoryRequest]
+  implicit val questionCategoryResponseFormat = Json.format[QuestionCategoryResponse]
+  implicit  val questionResponseFormat = Json.format[QuestionResponse]
   implicit val questionFormat = Json.format[Question]
   implicit val categoryFormat = Json.format[Category]
   implicit val userFormat = Json.format[User]
   implicit val signUpFormat = Json.format[SignUp]
   implicit val answerFormat = Json.format[Answer]
-  implicit val setFormat = Json.format[QuestionSet]
+  implicit val setFormat = Json.format[Sets]
   implicit val responseMessageFormat = Json.format[ResponseMessage]
+  implicit val questionSetFormatter = Json.format[QuestionSet]
 
 
   implicit def longListToString = MappedColumnType.base[List[IdType], String](

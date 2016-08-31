@@ -1,14 +1,14 @@
 import './assets/css/base';
-import {Router,Route,browserHistory,IndexRoute} from 'react-router';
+import {Router, Route, browserHistory, IndexRoute} from 'react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {log2} from './utils/'
 import * as pages from './pages/'
-import {AdminLayout,DefaultLayout,UserLayout,InterviewLayout}   from './layouts/'
+import {AdminLayout, DefaultLayout, UserLayout, InterviewLayout}   from './layouts/'
 import perf from "react-addons-perf";
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
-const log = log2("app");
+const log=log2("app");
 //const perflog=log2("performance");
 // setTimeout(function () {
 //   perflog("started");
@@ -29,19 +29,18 @@ const log = log2("app");
 ReactDOM.render((
 
     <Router history={browserHistory}>
+        <Route path="/" component={UserLayout}>
+            <IndexRoute component={pages.UserHome}/>
+            <Route path="home" component={pages.UserHome}/>
+        </Route>
+
         <Route path="/" component={DefaultLayout}>
-            <IndexRoute component={pages.UserSignIn}/>
             <Route path="interview" component={pages.InterView}/>
             <Route path="skilltest" component={pages.SkillTest}/>
             <Route path="signin" component={pages.UserSignIn}/>
             <Route path="signup" component={pages.UserSignUp}/>
             <Route path="deneme" component={pages.Deneme}/>
         </Route>
-        <Route path="/" component={UserLayout}>
-            <IndexRoute component={pages.UserHome}/>
-            <Route path="home" component={pages.UserHome}/>
-        </Route>
-
         <Route path="/" component={AdminLayout}>
             <Route path="adminpanel" component={pages.AdminPanel}>
                 <Route path="listofparticipants" component={pages.ListOfParticipants}/>
@@ -57,7 +56,7 @@ ReactDOM.render((
         </Route>
 
     </Router>
-),document.getElementById('app'))
+), document.getElementById('app'))
 //perflog(perf);
 if(module.hot) {
     module.hot.accept();
