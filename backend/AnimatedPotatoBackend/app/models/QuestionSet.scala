@@ -25,7 +25,7 @@ object QuestionSetDAO {
     }
   }
 
-  def getAllQuestionSet(): List[QuestionSet] = DB { implicit session =>
+  def getAll(): List[QuestionSet] = DB { implicit session =>
     questionSets.list
   }
 
