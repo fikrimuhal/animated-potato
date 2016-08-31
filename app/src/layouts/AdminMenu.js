@@ -26,11 +26,15 @@ export default class AdminMenu extends React.Component {
                 </Link>
                 <Divider/>
                 <Link to='/adminpanel/questionsetdetails'>
-                    <MenuItem primaryText="Soru Set Bilgileri" leftIcon={<DescriptionIcon/>}/>
+                    <MenuItem primaryText="Question Sets" leftIcon={<DescriptionIcon/>}/>
                 </Link>
                 <Divider/>
-                <Link to='/adminpanel/usersprofile'>
-                    <MenuItem primaryText="All User" leftIcon={<PersonIcon/>}/>
+                <Link to='/adminpanel/listofuser'>
+                    <MenuItem primaryText="Users List" leftIcon={<PersonIcon/>}/>
+                </Link>
+                <Divider/>
+                <Link to='/adminpanel/listofstuff'>
+                    <MenuItem primaryText="Stuff List" leftIcon={<PersonIcon/>}/>
                 </Link>
                 <Divider/>
                 <Link to='/adminpanel/adminprofile'>

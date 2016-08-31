@@ -45,9 +45,9 @@ ReactDOM.render((
         <Route path="/" component={AdminLayout}>
             <Route path="adminpanel" component={pages.AdminPanel}>
                 <Route path="listofparticipants" component={pages.ListOfParticipants}/>
-                <Route path="usersprofile" component={pages.UserProfile}/>
+                <Route path="listofuser" component={pages.UserList}/>
+                <Route path="listofstuff" component={pages.StuffList}/>
                 <Route path="adminprofile" component={pages.AdminProfile}/>
-                <Route path="questionsee" component={pages.ViewQuestion}/>
                 <Route path="questionadd" component={pages.QuestionAdd}/>
                 <Route path="questionsetdetails" component={pages.QuestionSetDetails}/>
                 <Route path="questionlist" component={pages.QuestionList}/>
