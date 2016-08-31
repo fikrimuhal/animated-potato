@@ -101,7 +101,7 @@ export default class QuestionAddContainer extends React.Component {
         }
         else {
             log("question sets from API");
-            api.getAllQuestionSet({}).then(response=>{
+            api.getAllQuestionSet().then(response=>{
                 log("getAllQuestionSet api response",response);
                 return response.json();
             }).then(json=>{

@@ -19,7 +19,7 @@ import * as db from './data.js'
 
 export const questionList = db.getApiPromise("questionList","POST");
 export const getCategoryList = db.getApiPromise("admin/getCategories","POST");
-export const getAllQuestionSet = db.getApiPromise("admin/getSets","POST");
+export const getAllQuestionSet = db.getApiPromise("admin/getSets","GET");
 export const setQuestionSet = db.getApiPromise("admin/insertSet","POST");
 
 //region Save Question
@@ -52,3 +52,5 @@ export const getAllQuestion = db.getApiPromise("admin/getQuestions","GET");
 
 
 export const getQuestion = questionId => db.getApiPromise("admin/getQuestion/"+questionId,"GET");
+
+export const getParticipants = db.getApiPromise("admin/getParticipants","GET");

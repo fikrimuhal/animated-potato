@@ -1,65 +1,83 @@
 import React            from 'react';
-import {log2, util}     from '../../utils/';
+import {log2,util}      from '../../utils/';
 import * as db          from '../../utils/data';
 import ReactDataGrid    from 'react-data-grid';
-import {Toolbar, Data}  from 'react-data-grid/addons';
+import {Toolbar,Data}   from 'react-data-grid/addons';
 import FlatButton       from 'material-ui/FlatButton';
 import DeleteIcon       from 'material-ui/svg-icons/action/delete';
 import ViewIcon         from 'material-ui/svg-icons/action/visibility';
 import {browserHistory} from 'react-router'
 import CircularProgress from 'material-ui/CircularProgress';
 import * as Cache       from  '../../utils/cache'
+import * as api         from '../../utils/api'
+import  moment          from 'moment'
 require("!style!css!react-data-grid/themes/react-data-grid.css");
 
-const Selectors=Data.Selectors;
-const log=log2("ParticipantList");
-var columns=[
+const Selectors = Data.Selectors;
+const log = log2("ParticipantList");
+var columns = [
     {
-        key: 'id',
-        name: 'NO',
-        width: 70,
-        resizable: false
+        key:'id',
+        name:'NO',
+        width:50,
+        resizable:false
     },
     {
-        key: 'fullName',
-        name: 'Full Name',
-        filterable: true,
-        sortable: true,
-        width: 200,
-        resizable: true
+        key:'fullName',
+        name:'Full Name',
+        filterable:true,
+        sortable:true,
+        width:200,
+        resizable:true
     },
     {
-        key: 'date',
-        name: 'Apply Date',
-        filterable: true,
-        sortable: true,
-        width: 300,
-        resizable: true
+        key:'email',
+        name:'Email',
+        filterable:true,
+        sortable:true,
+        width:200,
+        resizable:false
     },
     {
-        key: 'score',
-        name: 'Score',
-        sortable: true,
-        width: 100,
-        resizable: false
+        key:'phone',
+        name:'Phone',
+        filterable:true,
+        sortable:true,
+        width:150,
+        resizable:false
     },
     {
-        key: 'options',
-        name: 'Options',
-        width: 200
+        key:'date',
+        name:'Apply Date',
+        filterable:true,
+        sortable:true,
+        width:200,
+        resizable:true
+    },
+    {
+        key:'score',
+        name:'Score',
+        sortable:true,
+        width:75,
+        resizable:false
+    },
+    {
+        key:'options',
+        name:'Options',
+        width:250
     }
 ]
 export default class ParticipantList extends React.Component {
 
-    constructor(props) {
+    constructor(props){
         super(props);
-        util.bindFunctions.call(this, ['getRows', 'getSize',
-            'rowGetter', 'handleFilterChange',
-            'handleGridSort', 'getOptionCell',
+        util.bindFunctions.call(this,['getRows','getSize',
+            'rowGetter','handleFilterChange',
+            'handleGridSort','getOptionCell',
             'initializeDataFromCache','initializeDataFromApi']);
-        this.state={
-            dataLoaded: false,
-            filters: {}
+        this.state = {
+            dataLoaded:false,
+            filters:{}
         };
         if(Cache.checkParticipantListFromCache())
             this.initializeDataFromCache();
@@ -68,75 +86,91 @@ export default class ParticipantList extends React.Component {
 
     };
 
-    initializeDataFromCache=function () {
+    initializeDataFromCache = function (){
         log("Data from CACHE");
-        var rows=Cache.getParticipantListFromCache();
-        var tableData=this.convertTableRawData(rows);
-        this.state={
-            rows: tableData,
-            originalRows: tableData,
-            dataLoaded: true
+        var rows = Cache.getParticipantListFromCache();
+        var tableData = this.convertTableRawData(rows);
+        this.state = {
+            rows:tableData,
+            originalRows:tableData,
+            dataLoaded:true
         };
     };
-    initializeDataFromApi=function () {
+    initializeDataFromApi = function (){
         log("Data from SERVER");
-        db.getApplicantListFromAPI().then((rows)=> {
-            rows = JSON.parse(rows);
+        api.getParticipants().then(response=>{
+            return response.json();
+        }).then(json=>{
+            var rows = json;
             Cache.cacheParticipantList(rows);
-            var tableData=this.convertTableRawData(rows);
-
+            var tableData = this.convertTableRawData(rows);
             this.setState({
-                rows: tableData,
-                originalRows: tableData,
-                dataLoaded: true
+                rows:tableData,
+                originalRows:tableData,
+                dataLoaded:true
             });
-        })
+        });
+
+        // db.getApplicantListFromAPI().then((rows)=>{
+        //         originalRows:tableData,
+        //         dataLoaded:true
+        //     });
+        // })
+        //     rows = JSON.parse(rows);
+        //     Cache.cacheParticipantList(rows);
+        //     var tableData = this.convertTableRawData(rows);
+        //     this.setState({
+        //         rows:tableData,
     };
-    convertTableRawData=(rows)=> {
-        var tableData=rows.map(r => {
-            r.options=this.getOptionCell(r);
+    convertTableRawData = (rows)=>{
+        var tableData = rows.map(r =>{
+            r.options = this.getOptionCell(r);
+            r.date = moment().format('LLL')
+            r.fullName = r.name  + ' ' + r.lastname;
+            r.score = Math.floor(Math.random()*100);
+
             return r;
         });
         return tableData;
     };
-    getOptionCell=(rowData) => {
+    getOptionCell = (rowData) =>{
         return (<div>
             <FlatButton icon={<DeleteIcon/>} onClick={this.deleteRow(rowData.id)}></FlatButton>
             <FlatButton icon={<ViewIcon/>} onClick={this.viewRow(rowData.id)}></FlatButton>
         </div>);
     };
-    deleteRow=index => ()=> {
-        log("deleting row ->", index);
+    deleteRow = index => ()=>{
+        log("deleting row ->",index);
     };
-    viewRow=index => ()=> {
-        log("viewing row ->", index);
+    viewRow = index => ()=>{
+        log("viewing row ->",index);
         browserHistory.push("/adminpanel/skilltestreport/" + index)
     };
-    getRows=function () {
+    getRows = function (){
         return Selectors.getRows(this.state);
     }
 
-    getSize=function () {
+    getSize = function (){
         return this.getRows().length;
     }
 
-    rowGetter=function (rowIdx) {
-        var rows=this.getRows();
+    rowGetter = function (rowIdx){
+        var rows = this.getRows();
         return rows[rowIdx];
     }
 
-    handleFilterChange=function (filter) {
-        let newFilters=Object.assign({}, this.state.filters);
+    handleFilterChange = function (filter){
+        let newFilters = Object.assign({},this.state.filters);
         if(filter.filterTerm) {
-            newFilters[filter.columnKey]=filter.filterTerm;
+            newFilters[filter.columnKey] = filter.filterTerm;
         }
         else {
             delete newFilters[filter.columnKey];
         }
-        this.setState({filters: newFilters});
+        this.setState({filters:newFilters});
     }
-    handleGridSort=function (sortColumn, sortDirection) {
-        var comparer=function (a, b) {
+    handleGridSort = function (sortColumn,sortDirection){
+        var comparer = function (a,b){
             if(sortDirection === 'ASC') {
                 return (a[sortColumn] > b[sortColumn]) ? 1 : -1;
             }
@@ -144,11 +178,11 @@ export default class ParticipantList extends React.Component {
                 return (a[sortColumn] < b[sortColumn]) ? 1 : -1;
             }
         }
-        var rows=sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
-        this.setState({rows: rows});
+        var rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
+        this.setState({rows:rows});
     }
 
-    render() {
+    render(){
         log("rendered");
         return (
             <div>
@@ -157,10 +191,10 @@ export default class ParticipantList extends React.Component {
                 <div>
 
                     {
-                        (()=> {
+                        (()=>{
                             var content;
                             if(this.state.dataLoaded) {
-                                content=<ReactDataGrid
+                                content = <ReactDataGrid
                                     columns={columns}
                                     rowGetter={this.rowGetter}
                                     enableCellSelect={true}
@@ -173,7 +207,7 @@ export default class ParticipantList extends React.Component {
                                 />
                             }
                             else {
-                                content=<div><CircularProgress size={1.5}/></div>
+                                content = <div><CircularProgress size={1.5}/></div>
                             }
 
                             return content;

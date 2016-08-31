@@ -1,145 +1,154 @@
-import React from 'react'
-require("!style!css!react-data-grid/themes/react-data-grid.css")
-import RaisedButton from 'material-ui/RaisedButton';
-import {log2,util} from '../../utils/'
-import * as db from '../../utils/data'
-import ReactDataGrid from 'react-data-grid';
-import {Toolbar,Data} from 'react-data-grid/addons';
-var userProfileInstance;
-class ButtonsColFormatter extends React.Component {
-    constructor(props){
-        super(props);
+import React            from 'react';
+import {log2,util}      from '../../utils/';
+import * as db          from '../../utils/data';
+import ReactDataGrid    from 'react-data-grid';
+import {Toolbar,Data}   from 'react-data-grid/addons';
+import FlatButton       from 'material-ui/FlatButton';
+import DeleteIcon       from 'material-ui/svg-icons/action/delete';
+import ViewIcon         from 'material-ui/svg-icons/action/visibility';
+import {browserHistory} from 'react-router'
+import CircularProgress from 'material-ui/CircularProgress';
+import * as Cache       from  '../../utils/cache'
+import * as api         from '../../utils/api'
+import  moment          from 'moment'
+require("!style!css!react-data-grid/themes/react-data-grid.css");
 
-        util.bindFunctions.call(this,['onClick'])
-    }
-
-    onClick = function (){
-        console.dir(userProfileInstance);
-        var rows = userProfileInstance.state.rows;
-        var news = _.filter(rows,(o)=>{return o.id != this.props.value});
-        userProfileInstance.state = {
-            rows:news,
-            originalRows:news,
-            filters:{}
-        };
-        userProfileInstance.forceUpdate();
-
-    }
-    render = function (){
-        console.log("ButtonsColFormatter");
-        return (<div>
-            <RaisedButton primary={true} onClick={this.onClick}>Sil</RaisedButton>
-        </div>)
-    }
-}
-
-class ImageDisplayer extends React.Component {
-    constructor(props){
-        super(props)
-    }
-
-    render = function (){
-        return (
-
-            <img src={this.props.value} width={50} height={30}/>
-        )
-    }
-}
 const Selectors = Data.Selectors;
 const log = log2("User Profile")
-log("ReactDataGrid",Data)
-
-const styles = {
-    customWidth:{
-        width:150,
-    },
-};
 
 var columns = [
     {
         key:'id',
-        name:'ID',
-        width:80,
-        filterable:true
+        name:'NO',
+        width:50,
+        resizable:false
     },
     {
-        key:'name',
-        name:'Name',
+        key:'fullName',
+        name:'Full Name',
         filterable:true,
         sortable:true,
-        editable:true
-    },
-    {
-        key:'lastname',
-        name:'Lastname',
-        filterable:true,
-        sortable:true
+        width:200,
+        resizable:true
     },
     {
         key:'email',
         name:'Email',
         filterable:true,
-        sortable:true
+        sortable:true,
+        width:200,
+        resizable:false
     },
     {
         key:'phone',
         name:'Phone',
-        filterable:true
-    },
-    {
-        key:'photo',
-        name:'Photo',
         filterable:true,
-        formatter:ImageDisplayer
+        sortable:true,
+        width:150,
+        resizable:false
     },
     {
-        key:'website',
-        name:'Web Site',
+        key:'date',
+        name:'Apply Date',
         filterable:true,
-        sortable:true
+        sortable:true,
+        width:200,
+        resizable:true
     },
     {
-        key:'notes',
-        name:'Your Notes',
-        filterable:true,
-        sortable:true
+        key:'score',
+        name:'Score',
+        sortable:true,
+        width:75,
+        resizable:false
     },
     {
-        key:'id',
-        name:'İşlemler',
-        formatter:ButtonsColFormatter
+        key:'options',
+        name:'Options',
+        width:250
     }
 ]
-export default class UserProfile extends React.Component {
+export default class UserList extends React.Component {
     constructor(props){
         super(props);
-
+        util.bindFunctions.call(this,['getRows','getSize',
+            'rowGetter','handleFilterChange',
+            'handleGridSort','getOptionCell',
+            'initializeDataFromCache','initializeDataFromApi']);
         this.state = {
             filters:{},
             dataLoaded:false
         };
 
-        util.bindFunctions.call(this,['getRows','getSize',
-            'rowGetter','handleFilterChange',
-            'handleGridSort','handleRowUpdated']);
-        db.getUsersFromAPI().then((message)=>{
-            this.setState({
-                rows:message,
-                dataLoaded:true,
-                originalRows:message
-            })
-        })
-        userProfileInstance = this;
+        if(Cache.checkParticipantListFromCache())
+            this.initializeDataFromCache();
+        else
+            this.initializeDataFromApi();
+
     }
 
+    initializeDataFromCache = function (){
+        log("Data from CACHE");
+        var rows = Cache.getParticipantListFromCache();
+        var tableData = this.convertTableRawData(rows);
+        this.state = {
+            rows:tableData,
+            originalRows:tableData,
+            dataLoaded:true
+        };
+    };
+    initializeDataFromApi = function (){
+        log("Data from SERVER");
+        api.getParticipants().then(response=>{
+            return response.json();
+        }).then(json=>{
+            var rows = json;
+            Cache.cacheParticipantList(rows);
+            var tableData = this.convertTableRawData(rows);
+            this.setState({
+                rows:tableData,
+                originalRows:tableData,
+                dataLoaded:true
+            });
+        });
+
+        // db.getApplicantListFromAPI().then((rows)=>{
+        //         originalRows:tableData,
+        //         dataLoaded:true
+        //     });
+        // })
+        //     rows = JSON.parse(rows);
+        //     Cache.cacheParticipantList(rows);
+        //     var tableData = this.convertTableRawData(rows);
+        //     this.setState({
+        //         rows:tableData,
+    };
+    convertTableRawData = (rows)=>{
+        var tableData = rows.map(r =>{
+            r.options = this.getOptionCell(r);
+            r.date = moment().format('LLL')
+            r.fullName = r.name + ' ' + r.lastname;
+            r.score = Math.floor(Math.random() * 100);
+
+            return r;
+        });
+        return tableData;
+    };
+    getOptionCell = (rowData) =>{
+        return (<div>
+            <FlatButton icon={<DeleteIcon/>} onClick={this.deleteRow(rowData.id)}></FlatButton>
+            <FlatButton icon={<ViewIcon/>} onClick={this.viewRow(rowData.id)}></FlatButton>
+        </div>);
+    };
+    deleteRow = index => ()=>{
+        log("deleting row ->",index);
+    };
+    viewRow = index => ()=>{
+        log("viewing row ->",index);
+        browserHistory.push("/adminpanel/skilltestreport/" + index)
+    };
     getRows = function (){
         return Selectors.getRows(this.state);
-    }
-    handleRowUpdated = function (e){
-        //merge updated row with current row and rerender by setting state
-        var rows = this.state.rows;
-        Object.assign(rows[e.rowIdx],e.updated);
-        this.setState({rows:rows});
     }
 
     getSize = function (){
@@ -175,7 +184,6 @@ export default class UserProfile extends React.Component {
     }
 
     render(){
-        log("User Profile rendered");
         return (
             <div>
                 <div>
@@ -194,15 +202,16 @@ export default class UserProfile extends React.Component {
                                     enableCellSelect={true}
                                     rowsCount={this.getSize()}
                                     minHeight={500}
-                                    rowHeight={45}
                                     toolbar={<Toolbar enableFilter={true}/>}
                                     onAddFilter={this.handleFilterChange}
                                     onGridSort={this.handleGridSort}
-                                    onRowUpdated={this.handleRowUpdated}/>
+
+                                />
                             }
                             else {
-                                content = <p>Data Loading.... !!!</p>
+                                content = <div><CircularProgress size={1.5}/></div>
                             }
+
                             return content;
                         })()
                     }
