@@ -1,6 +1,6 @@
 package controllers
 
-import models.{QuestionSet, QuestionSetDAO, QuestionSets, ResponseMessage}
+import models.{QuestionSet, QuestionSetDAO, ResponseMessage}
 import play.api.libs.json.{Json, Writes}
 import play.api.mvc.{Action, Controller}
 import utils.Formatter._
