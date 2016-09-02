@@ -159,12 +159,12 @@ export default class ListOfQuestionSet extends React.Component {
         var _this = this;
         log("makeDefaultSet",setId);
         var originalData = this.state.originalData;
-        var markingDefaultSetIndex = _.findIndex(originalData,(q=>q.isDefaultSet))[0];
-        var willBeMarkingSetIndex = _.findIndex(originalData,(q=>q.id == setId))[0];
+        var markingDefaultSetIndex = _.findIndex(originalData,(q=>q.isDefaultSet));
+        var willBeMarkingSetIndex = _.findIndex(originalData,(q=>q.id == setId));
         QuestionSetAPI.makeDefaultSet(setId).then(response=>{
             return response.json()
         }).then(json=>{
-            if(json.status == "ok") {
+            if(json.status == "OK") {
                 _this.context.showMessage("Question set mark as default.",1000);
                 originalData[markingDefaultSetIndex].isDefaultSet = false;
                 originalData[willBeMarkingSetIndex].isDefultSet = true;
