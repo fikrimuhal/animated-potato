@@ -16,6 +16,11 @@ POST        /admin/updateUser                  controllers.UserController.update
 POST        /admin/deleteUser                  controllers.UserController.deleteUser
 GET         /admin/getUsers                    controllers.UserController.getUsers
 GET         /admin/getUser/:n                  controllers.UserController.getUser(n)
+GET         /admin/getPersonnels               controllers.UserController.getPersonnels
+GET         /admin/getAdmins                   controllers.UserController.getAdmins
+
+POST        /admin/makeAdmin                   controllers.UserController.makeAdmin
+POST        /admin/makePersonnel               controllers.UserController.makePersonnel
 
 POST        /admin/insertQuestion              controllers.QuestionController.insertQuestion
 POST        /admin/updateQuestion              controllers.QuestionController.updateQuestion
@@ -23,14 +28,12 @@ POST        /admin/deleteQuestion              controllers.QuestionController.de
 GET         /admin/getQuestion/:n              controllers.QuestionController.getQuestionById(n)
 GET         /admin/getQuestions                controllers.QuestionController.getQuestions
 
-
 POST        /admin/insertQuestionOption        controllers.QuestionOptionController.insertQuestionOption
 POST        /admin/updateQuestionOption        controllers.QuestionOptionController.updateQuestionOption
 POST        /admin/deleteQuestionOption        controllers.QuestionOptionController.deleteQuestionOption
 GET         /admin/getQuestionOptions          controllers.QuestionOptionController.getQuestionOptions
 
-GET         /getQuestionSets                    controllers.QuestionSetController.get
-
+GET         /getQuestionSets                   controllers.QuestionSetController.get
 
 POST        /admin/insertCategory              controllers.CategoryController.insertCategory
 POST        /admin/updateCategory              controllers.CategoryController.updateCategory
@@ -38,29 +41,23 @@ POST        /admin/deleteCategory              controllers.CategoryController.de
 GET         /admin/getCategory/:n              controllers.CategoryController.getCategory(n)
 POST        /admin/getCategories               controllers.CategoryController.getCategories
 
-
 POST        /admin/startTest                   controllers.InterviewController.startTest
 POST        /admin/testReport                  controllers.InterviewController.testReport
 POST        /admin/nextQuestion                controllers.InterviewController.nextQuestion
 POST        /interview                         controllers.InterviewController.listAll
 
-
-
 GET         /admin/getSets                     controllers.SetsController.getAll
 POST        /admin/insertSet                   controllers.SetsController.insert
-POST        /admin/updateSet                  controllers.SetsController.update
+POST        /admin/updateSet                   controllers.SetsController.update
 POST        /admin/deleteSet                   controllers.SetsController.delete
+POST        /admin/makeDefaultSet              controllers.SetsController.setDefaultQuestionSet
 
 
-
-
-POST        /signUp                            controllers.LoginSignUpController.signUp()
-POST        /login                             controllers.LoginSignUpController.login()
+POST        /signUp                            controllers.LoginSignUpController.signUp
+POST        /login                             controllers.LoginSignUpController.login
 
 POST        /answer                            controllers.AnswerController.insertAnswer
-GET        /getAnswers                        controllers.AnswerController.getAnswers
+GET         /getAnswers                        controllers.AnswerController.getAnswers
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                      controllers.Assets.at(path="/public", file)
-
-    
