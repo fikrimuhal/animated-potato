@@ -91,22 +91,22 @@ export default class QuestionAddContainer extends React.Component {
 
     }
     initQuestionSets = function (){
-        if(Cache.checkQuestionSetsFromCache()) {
+        if(Cache.QuestionSetCaching.check()) {
             log("question sets from CACHE");
             this.setState({
-                allQuestionSets:Cache.getQuestionSetsFromCache(),
+                allQuestionSets:Cache.QuestionSetCaching.get(),
                 setListWaiting:false
             });
             //this.state.allQuestionSets = Cache.getQuestionSetsFromCache();
         }
         else {
             log("question sets from API");
-            api.getAllQuestionSet().then(response=>{
+            api.QuestionSetAPI.getAllQuestionSet().then(response=>{
                 log("getAllQuestionSet api response",response);
                 return response.json();
             }).then(json=>{
                 log("getAllQuestionSet api json",json);
-                Cache.cacheQuestionSets(json);
+                Cache.QuestionSetCaching.cache(json);
                 this.setState({
                     allQuestionSets:json,
                     setListWaiting:false

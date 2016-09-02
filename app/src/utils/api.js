@@ -25,7 +25,8 @@ export const QuestionSetAPI = {
     getAllQuestionSet:db.getApiPromise("admin/getSets","GET"),
     setQuestionSet:db.getApiPromise("admin/insertSet","POST"),
     deleteQuestionSet: db.getApiPromise("admin/deleteSet","POST"),
-    makeDefaultSet:db.getApiPromise("admin/makeDefaultSet","POST")
+    makeDefaultSet:db.getApiPromise("admin/makeDefaultSet","POST"),
+    updateQuestionSet:db.getApiPromise("admin/updateSet","POST")
 };
 // export const getAllQuestionSet = db.getApiPromise("admin/getSets","GET");
 // export const setQuestionSet = db.getApiPromise("admin/insertSet","POST");

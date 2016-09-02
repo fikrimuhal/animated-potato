@@ -125,7 +125,7 @@ export default class UserSignIn extends React.Component {
                 if(db.isUser())
                     browserHistory.push("/home");
                 else
-                    browserHistory.push("/adminpanel");
+                    browserHistory.push("/dashboard");
             }
             else {
                 toastHelper("Authentication failed. Try again",1000);
