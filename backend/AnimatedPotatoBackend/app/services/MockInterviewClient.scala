@@ -24,7 +24,7 @@ class MockInterviewClient extends Actor {
 
     case m: TestFinish =>
       println(s"Client'a test finish geldi : $m")
-      sender ! TestReportRequest(Left(1))
+//      sender ! TestReportRequest(Left(1))
 
     case x =>
       println(s"Client: Unexpected message : $x")
@@ -34,7 +34,7 @@ class MockInterviewClient extends Actor {
   override def preStart = {
 
     println("Client Started!")
-    context.parent ! ("interview", TestStart(1, 1))
+//    context.parent ! ("interview", TestStart(1, 1))
 //    context.parent ! ("interview", GetNextQuestion())
 
   }

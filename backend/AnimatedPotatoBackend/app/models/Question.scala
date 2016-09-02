@@ -105,7 +105,7 @@ object Questions {
 
   def getAll = DB { implicit session =>
 
-    for (question <- questions.list)
+    for (question <- questions.list  if question != None )
       yield
         QuestionResponse(
           question.id.get,
@@ -128,10 +128,10 @@ object Questions {
           question.id.get,
           question.title,
           question.qType,
-          question.id.map(questionId => questionOptions.filter(option => option.questionId === questionId).list).get,
+          question.id.map(questionId => questionOptions.filter(option => option.questionId === questionId).list).orNull,
           question.id.map(questionId => questionCategories.filter(questionCategory => questionCategory.questionId === questionId).list.
-            map(a => QuestionCategoryResponse(a.categoryId, a.weight, categories.filter(_.id === a.categoryId).list.head.category))).get,
-          question.id.map(questionId => questionSets.filter(questionSet => questionSet.questionId === questionId).list.map(_.setId)).get
+            map(ctg => QuestionCategoryResponse(ctg.categoryId, ctg.weight, categories.filter(_.id === ctg.categoryId).list.headOption.map(_.category).getOrElse("")))).orNull,
+          question.id.map(questionId => questionSets.filter(questionSet => questionSet.questionId === questionId).list.map(_.setId)).orNull
         ))
 
       case _ => None

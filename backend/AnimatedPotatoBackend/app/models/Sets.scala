@@ -7,59 +7,71 @@ import utils.{Constants, DB}
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
 
+case class Sets(id: Option[IdType] = None, title: String, isDefaultSet: Boolean)
 
-case class Sets(id: Option[Int], title: String, isDefaultSet : Boolean)
+case class SetsResponse(id: IdType, title: String, questionCount: Int, isDefaultSet: Boolean)
 
-object SetsDAO  {
+object SetsDAO {
 
   lazy val setsDAO = TableQuery[SetsDAO]
+  lazy val questionSetDAO = TableQuery[QuestionSetDAO]
 
-  def insert(set: Sets): Boolean = DB { implicit session =>
-    try {
-      setsDAO += set; true
+  def insert(set: Sets): IdType = DB { implicit session =>
+    (setsDAO returning setsDAO.map(_.id)) += set
+  }
+
+  def update(set: Sets): IdType = DB { implicit session =>
+    setsDAO.filter(_.id === set.id).update(set)
+
+  }
+
+  def delete(set: Sets): IdType = DB { implicit session =>
+    setsDAO.filter(_.id === set.id).delete
+  }
+
+  def get(id: IdType): Either[Boolean, Sets] = DB { implicit session =>
+
+    setsDAO.filter(_.id === id).list.headOption match {
+
+      case Some(sets) => Right(sets)
+      case _ => Left(false)
+
     }
-    catch {
-      case e: Exception =>
-        println(e)
-        false
+  }
+
+  def getAll: List[SetsResponse] = DB { implicit session =>
+
+    setsDAO.list match {
+      case x: List[Sets] =>
+        x.map(set =>
+          SetsResponse(set.id.get,
+            set.title,
+            set.id.map { id =>
+              questionSetDAO.filter(_.setId === id).list.length
+            }.get,
+            set.isDefaultSet))
+
+      case Nil => Nil
     }
   }
 
-  def update(set: Sets): Boolean = DB { implicit session =>
-    val updatedRowCount: Int = setsDAO.filter(_.id === set.id).update(set)
-    if (updatedRowCount > 0) true else false
-  }
 
-  def delete(set: Sets): Boolean = DB { implicit session =>
-    val deletedRowCount: Int = setsDAO.filter(_.id === set.id).delete
-    if (deletedRowCount > 0) true else false
-  }
+  def changeDefaultSet(id: IdType) = DB { implicit session =>
 
-  def getAllSets(): List[Sets] = DB { implicit session =>
-      setsDAO.list
-  }
+    setsDAO.filter(_.isDefaultSet === true).map(_.isDefaultSet).update(true)
+    setsDAO.filter(_.id === id).map(_.isDefaultSet).update(false)
 
-  def getSet(n: Int): Sets = DB { implicit session =>
-    val setList = setsDAO.filter(_.id === n).list
-    if (setList.nonEmpty) setList.head
-    else Sets(Some(-1),"",false)
-  }
-
-  def getSets(n: List[Int]): Sets = DB { implicit session =>
-    val setList = setsDAO.filter(_.id inSet n).list
-    if (setList.nonEmpty) setList.head
-    else Sets(Some(-1),"",false)
   }
 
 }
 
 class SetsDAO(tag: Tag) extends Table[Sets](tag, "sets") {
 
-  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+  def id = column[IdType]("id", O.PrimaryKey, O.AutoInc)
 
   def title = column[String]("title")
 
-  def isdefaultset = column[Boolean]("isdefaultset")
+  def isDefaultSet = column[Boolean]("isdefaultset")
 
-  def * = (id.?, title,isdefaultset) <> (Sets.tupled, Sets.unapply)
+  def * = (id.?, title, isDefaultSet) <> (Sets.tupled, Sets.unapply)
 }

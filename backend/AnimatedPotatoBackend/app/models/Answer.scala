@@ -5,7 +5,8 @@ import utils.{Constants, DB}
 
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
-case class Answer(id : Option[IdType], questionId: QuestionId, userid: UserIdType, answer: Boolean)
+
+case class Answer(id : Option[IdType]=None, questionId: QuestionId, userId: Option[UserIdType], interviewId:IdType ,email: Option[String], answer: Boolean)
 
 object Answers {
   lazy val answers = TableQuery[Answers]
@@ -21,7 +22,7 @@ object Answers {
 
   def update(answer: Answer): Boolean = DB { implicit session =>
     try {
-      answers.filter(a => a.userid === answer.userid && a.questionid === answer.questionId).update(answer) > 0
+      answers.filter(a => a.userId === answer.userId && a.questionId === answer.questionId).update(answer) > 0
     }
     catch {
       case e: Exception => false
@@ -31,7 +32,7 @@ object Answers {
 
   def delete(answer: Answer): Boolean = DB { implicit session =>
     try {
-      answers.filter(a => a.userid === answer.userid && a.questionid === answer.questionId).delete > 0
+      answers.filter(a => a.userId === answer.userId && a.questionId === answer.questionId).delete > 0
     }
     catch {
       case e: Exception => false
@@ -40,12 +41,13 @@ object Answers {
   }
 
   def getAnswers(userid: UserIdType): List[Answer] = DB { implicit session =>
-        answers.filter( _.userid === userid).list
+        answers.filter( _.userId === userid).list
   }
 
   def getAnswer(userid : UserIdType, questionID : QuestionId): List[Answer] = DB{ implicit sesison =>
-    answers.filter(a => a.userid === userid && a.questionid === questionID).list
+    answers.filter(a => a.userId === userid && a.questionId === questionID).list
   }
+
   def getAll(): List[Answer] = DB{ implicit session =>
     answers.list
   }
@@ -55,12 +57,16 @@ class Answers(tag: Tag) extends Table[Answer](tag, "answer") {
 
   def id = column[IdType]("id",O.AutoInc,O.PrimaryKey)
 
-  def questionid = column[QuestionId]("questionid")
+  def questionId = column[QuestionId]("questionid")
 
-  def userid = column[UserIdType]("userid")
+  def userId = column[UserIdType]("userid")
+
+  def interviewId = column[IdType]("interviewid")
+
+  def email = column[String]("email")
 
   def answer = column[Boolean]("answer")
 
-  def * = (id.?, questionid, userid, answer) <> (Answer.tupled, Answer.unapply)
+  def * = (id.?, questionId, userId.?, interviewId,email.?, answer) <> (Answer.tupled, Answer.unapply)
 }
 

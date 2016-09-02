@@ -1,6 +1,7 @@
 package utils
 
-import animatedPotato.protocol.protocol.IdType
+import animatedPotato.protocol.protocol.{Answer => _, Category => _, Question => _, QuestionCategory => _, QuestionOption => _, _}
+import controllers.{NextQuestionRequest, TestRequest}
 import models._
 import play.api.libs.json.Json
 
@@ -15,6 +16,9 @@ object Formatter {
   implicit val questionCategoryRequestFormat = Json.format[QuestionCategoryRequest]
   implicit val questionCategoryResponseFormat = Json.format[QuestionCategoryResponse]
   implicit  val questionResponseFormat = Json.format[QuestionResponse]
+  implicit  val testRequestFormat = Json.format[TestRequest]
+  implicit  val yesNoAnswerFormat = Json.format[YesNoAnswer]
+  implicit  val getNextQuestionFormat = Json.format[NextQuestionRequest]
   implicit val questionFormat = Json.format[Question]
   implicit val categoryFormat = Json.format[Category]
   implicit val userFormat = Json.format[User]
@@ -23,8 +27,9 @@ object Formatter {
   implicit val setFormat = Json.format[Sets]
   implicit val responseMessageFormat = Json.format[ResponseMessage]
   implicit val questionSetFormatter = Json.format[QuestionSet]
-
-
+  implicit  val interviewformatter =  Json.format[Interview]
+  implicit  val testReportRequestFormat =  Json.format[TestReportRequest]
+  implicit val setsResponseFormat = Json.format[SetsResponse]
   implicit def longListToString = MappedColumnType.base[List[IdType], String](
     list => list mkString ",",
     str =>

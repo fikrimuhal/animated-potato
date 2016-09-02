@@ -29,6 +29,8 @@ POST        /admin/updateQuestionOption        controllers.QuestionOptionControl
 POST        /admin/deleteQuestionOption        controllers.QuestionOptionController.deleteQuestionOption
 GET         /admin/getQuestionOptions          controllers.QuestionOptionController.getQuestionOptions
 
+GET         /getQuestionSets                    controllers.QuestionSetController.get
+
 
 POST        /admin/insertCategory              controllers.CategoryController.insertCategory
 POST        /admin/updateCategory              controllers.CategoryController.updateCategory
@@ -37,12 +39,17 @@ GET         /admin/getCategory/:n              controllers.CategoryController.ge
 POST        /admin/getCategories               controllers.CategoryController.getCategories
 
 
-GET         /admin/startTestNonRegistered              controllers.InterviewController.startTestNonRegistered
+POST        /admin/startTest                   controllers.InterviewController.startTest
+POST        /admin/testReport                  controllers.InterviewController.testReport
+POST        /admin/nextQuestion                controllers.InterviewController.nextQuestion
+POST        /interview                         controllers.InterviewController.listAll
 
 
 
-GET         /admin/getSets                     controllers.SetsController.get
+GET         /admin/getSets                     controllers.SetsController.getAll
 POST        /admin/insertSet                   controllers.SetsController.insert
+POST        /admin/updateSet                  controllers.SetsController.update
+POST        /admin/deleteSet                   controllers.SetsController.delete
 
 
 
@@ -51,6 +58,7 @@ POST        /signUp                            controllers.LoginSignUpController
 POST        /login                             controllers.LoginSignUpController.login()
 
 POST        /answer                            controllers.AnswerController.insertAnswer
+GET        /getAnswers                        controllers.AnswerController.getAnswers
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                      controllers.Assets.at(path="/public", file)
