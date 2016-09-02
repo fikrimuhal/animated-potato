@@ -40,7 +40,7 @@ class SetsController extends Controller {
     Ok(Json.toJson(SetsDAO.getAll))
   }
 
-  def setDefaultQuestionSet(id: ID) = Action { implicit request =>
+  def setDefaultQuestionSet = Action { implicit request =>
 
     request.body.asJson.flatMap(_.validate[ID].asOpt) match {
 
