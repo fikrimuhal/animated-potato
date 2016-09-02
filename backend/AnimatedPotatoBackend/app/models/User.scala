@@ -72,35 +72,31 @@ object Users {
   }
 
   def isAdmin(user: User): Boolean = DB { implicit session =>
-    users.filter(_.username === user.username).map(u => u.isadmin).list.head
+    users.filter(_.username === user.username).map(u => u.isAdmin).list.head
   }
 
   def makePersonnel(id: UserIdType) = DB { implicit session =>
-    val filtered = users.filter(_.id === id)
-    val user = filtered.list.head
-    filtered.update(user.copy(ispersonnel = Some(true)))
+    users.filter(_.id === id).map(_.isPersonnel).update(true)  == 1
   }
 
-  def makeAdmin(id: UserIdType) = DB { implicit session =>
-    val filtered = users.filter(_.id === id)
-    val user = filtered.list.head
-    filtered.update(user.copy(isadmin = Some(true)))
+  def makeAdmin(id: UserIdType): Boolean = DB { implicit session =>
+    users.filter(_.id === id).map(_.isAdmin).update(true)  == 1
   }
 
   def getPersonnelList = DB { implicit session =>
 
-      users.filter(_.ispersonnel === true).list
-        .map(user =>
-          Participants.participants.filter(_.username === user.username).list.head)
+    users.filter(_.isPersonnel === true).list
+      .map(user =>
+        Participants.participants.filter(_.username === user.username).list.head)
   }
 
   def getAdminList: List[Participant] = DB { implicit session =>
 
-    users.filter(_.isadmin === true).list
+    users.filter(_.isAdmin === true).list
       .map(user =>
         Participants.participants.filter(_.username === user.username).list.head)
-
   }
+
 }
 
 class Users(tag: Tag) extends Table[User](tag, "users") {
@@ -112,9 +108,9 @@ class Users(tag: Tag) extends Table[User](tag, "users") {
 
   def email = column[String]("email")
 
-  def isadmin = column[Boolean]("isadmin")
+  def isAdmin = column[Boolean]("isadmin")
 
-  def ispersonnel = column[Boolean]("ispersonnel")
+  def isPersonnel = column[Boolean]("ispersonnel")
 
-  def * = (id.?, username, password, email.?, isadmin.?, ispersonnel.?) <> (User.tupled, User.unapply)
+  def * = (id.?, username, password, email.?, isAdmin.?, isPersonnel.?) <> (User.tupled, User.unapply)
 }
