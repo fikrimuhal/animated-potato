@@ -258,7 +258,7 @@ export default class QuestionAddContainer extends React.Component {
     }
 
     backToList = function (){
-        browserHistory.push("/adminpanel/questionlist");
+        browserHistory.push("/dashboard/QuestionList");
 
     }
 

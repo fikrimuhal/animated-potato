@@ -12,8 +12,8 @@ import * as util            from '../../utils/utils'
 import log2                 from '../../utils/log2'
 const log = log2("SetCreateToolbar");
 
-
 export default  class SetCreateToolbar extends React.Component {
+    //TODO create new set
     constructor(props){
         super(props)
         this.state = {
@@ -25,7 +25,7 @@ export default  class SetCreateToolbar extends React.Component {
 
     toogleMode = function (){
         log("toogleMode",this.refs);
-        if(this.refs.txtSetNam != null) {
+        if(this.refs.txtSetName != null) {
             this.refs.txtSetName.input.value = "";
         }
         this.setState({
@@ -33,9 +33,20 @@ export default  class SetCreateToolbar extends React.Component {
         });
     };
     saveQuestionSet = function (){
+
         var setName = this.refs.txtSetName.input.value;
+        log("saveQuestionSet",this.refs,setName);
+        var _this = this;
         if(setName != null && setName != "") {
-            this.props.saveQuestionSet(setName);
+            this.props.saveQuestionSet(setName).then(result=>{
+                if(result.status=="ok"){
+                    this.refs.txtSetName.input.value = "";
+                    _this.toogleMode();
+                }
+            })
+        }
+        else{
+            _this.context.showMessage("Question set title required.",1000);
         }
 
     };
@@ -54,9 +65,6 @@ export default  class SetCreateToolbar extends React.Component {
     };
 
     render = ()=>{
-        var title = this.context.title;
-        log(title);
-
         return (
             <div style={s.questionSetDetailPage.setCreateToolbar}>
                 {this.iconButtons()}
@@ -70,5 +78,5 @@ SetCreateToolbar.contextTypes = {
     showMessage:React.PropTypes.func
 };
 SetCreateToolbar.propTypes = {
-    saveQuestionSet: React.PropTypes.func.isRequired
+    saveQuestionSet:React.PropTypes.func.isRequired
 }

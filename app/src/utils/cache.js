@@ -150,32 +150,36 @@ export const checkCategoriesFromCache = ()=>{
  *      }
  */
 
-export const cacheQuestionSets = data =>{
-    var cacheData = {
-        data:data,
-        createdTime:Date.now()
-    };
-    localStorage.setItem("questionSetsCache",JSON.stringify(cacheData));
-};
-
-export const getQuestionSetsFromCache = ()=>{
-    var questionSetsCache = localStorage.getItem("questionSetsCache");
-    var list = [];
-    if(questionSetsCache != null) {
-        list = JSON.parse(questionSetsCache).data;
+export const QuestionSetCaching = {
+    cache:(data)=>{
+        var cacheData = {
+            data:data,
+            createdTime:Date.now()
+        };
+        localStorage.setItem("questionSetsCache",JSON.stringify(cacheData));
+    },
+    get:()=>{
+        var questionSetsCache = localStorage.getItem("questionSetsCache");
+        var list = [];
+        if(questionSetsCache != null) {
+            list = JSON.parse(questionSetsCache).data;
+        }
+        return list;
+    },
+    check:()=>{
+        var questionSetsCache = localStorage.getItem("questionSetsCache");
+        if(questionSetsCache == null)return false;
+        var cache = JSON.parse(questionSetsCache);
+        var cacheTime = cache.createdTime;
+        var now = Date.now();
+        var diff = time.timeDiff(now,cacheTime);
+        return diff.minute <= 1;
+    },
+    clear:()=>{
+        localStorage.removeItem("questionSetsCache");
     }
-    return list;
 };
 
-export const checkQuestionSetsFromCache = ()=>{
-    var questionSetsCache = localStorage.getItem("questionSetsCache");
-    if(questionSetsCache == null)return false;
-    var cache = JSON.parse(questionSetsCache);
-    var cacheTime = cache.createdTime;
-    var now = Date.now();
-    var diff = time.timeDiff(now,cacheTime);
-    return diff.minute <= 1;
-};
 //endregion
 
 //region All Question Caching

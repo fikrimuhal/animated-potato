@@ -36,22 +36,22 @@ ReactDOM.render((
 
         <Route path="/" component={DefaultLayout}>
             <Route path="interview" component={pages.InterView}/>
-            <Route path="skilltest" component={pages.SkillTest}/>
-            <Route path="signin" component={pages.UserSignIn}/>
-            <Route path="signup" component={pages.UserSignUp}/>
-            <Route path="deneme" component={pages.Deneme}/>
+            <Route path="Skilltest" component={pages.SkillTest}/>
+            <Route path="Signin" component={pages.UserSignIn}/>
+            <Route path="Signup" component={pages.UserSignUp}/>
+            <Route path="Deneme" component={pages.Deneme}/>
         </Route>
         <Route path="/" component={AdminLayout}>
-            <Route path="adminpanel" component={pages.AdminPanel}>
-                <Route path="listofparticipants" component={pages.ListOfParticipants}/>
-                <Route path="listofuser" component={pages.UserList}/>
-                <Route path="listofstuff" component={pages.StuffList}/>
-                <Route path="adminprofile" component={pages.AdminProfile}/>
-                <Route path="questionadd" component={pages.QuestionAdd}/>
-                <Route path="questionsetdetails" component={pages.QuestionSetDetails}/>
-                <Route path="questionlist" component={pages.QuestionList}/>
-                <Route path="skilltestreport/:userId" component={pages.SkillTestReport}/>
-                <Route path="questiondetail/:questionId" component={pages.QuestionDetail}/>
+            <Route path="dashboard" component={pages.AdminPanel}>
+                <Route path="ListofParticipants" component={pages.ListOfParticipants}/>
+                <Route path="ListOfUser" component={pages.UserList}/>
+                <Route path="ListofStaff" component={pages.StuffList}/>
+                <Route path="AdminProfile" component={pages.AdminProfile}/>
+                <Route path="QuestionAdd" component={pages.QuestionAdd}/>
+                <Route path="ListofQuestionSet" component={pages.ListOfQuestionSet}/>
+                <Route path="QuestionList" component={pages.QuestionList}/>
+                <Route path="SkillTestReport/:userId" component={pages.SkillTestReport}/>
+                <Route path="QuestionDetail/:questionId" component={pages.QuestionDetail}/>
             </Route>
         </Route>
 

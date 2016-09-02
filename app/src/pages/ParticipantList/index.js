@@ -11,6 +11,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import * as Cache       from  '../../utils/cache'
 import * as api         from '../../utils/api'
 import  moment          from 'moment'
+import {Row,Col}        from 'react-flexbox-grid'
 require("!style!css!react-data-grid/themes/react-data-grid.css");
 
 const Selectors = Data.Selectors;
@@ -19,7 +20,7 @@ var columns = [
     {
         key:'id',
         name:'NO',
-        width:50,
+        width:40,
         resizable:false
     },
     {
@@ -27,7 +28,7 @@ var columns = [
         name:'Full Name',
         filterable:true,
         sortable:true,
-        width:200,
+        width:150,
         resizable:true
     },
     {
@@ -35,7 +36,7 @@ var columns = [
         name:'Email',
         filterable:true,
         sortable:true,
-        width:200,
+        width:160,
         resizable:false
     },
     {
@@ -43,7 +44,7 @@ var columns = [
         name:'Phone',
         filterable:true,
         sortable:true,
-        width:150,
+        width:100,
         resizable:false
     },
     {
@@ -51,20 +52,20 @@ var columns = [
         name:'Apply Date',
         filterable:true,
         sortable:true,
-        width:200,
+        width:120,
         resizable:true
     },
     {
         key:'score',
         name:'Score',
         sortable:true,
-        width:75,
+        width:50,
         resizable:false
     },
     {
         key:'options',
-        name:'Options',
-        width:250
+        name:'Options'
+
     }
 ]
 export default class ParticipantList extends React.Component {
@@ -125,19 +126,23 @@ export default class ParticipantList extends React.Component {
     convertTableRawData = (rows)=>{
         var tableData = rows.map(r =>{
             r.options = this.getOptionCell(r);
-            r.date = moment().format('LLL')
-            r.fullName = r.name  + ' ' + r.lastname;
-            r.score = Math.floor(Math.random()*100);
+            r.date = moment().format('ll')
+            r.fullName = r.name + ' ' + r.lastname;
+            r.score = Math.floor(Math.random() * 100);
 
             return r;
         });
         return tableData;
     };
     getOptionCell = (rowData) =>{
-        return (<div>
-            <FlatButton icon={<DeleteIcon/>} onClick={this.deleteRow(rowData.id)}></FlatButton>
-            <FlatButton icon={<ViewIcon/>} onClick={this.viewRow(rowData.id)}></FlatButton>
-        </div>);
+        return (<Row>
+            <Col lg={3}>
+                <FlatButton icon={<DeleteIcon/>} onClick={this.deleteRow(rowData.id)} style={{minWidth:"50px"}}></FlatButton>
+            </Col>
+            <Col lg={3}>
+                <FlatButton icon={<ViewIcon/>} onClick={this.viewRow(rowData.id)} style={{minWidth:"50px"}}></FlatButton>
+            </Col>
+        </Row>);
     };
     deleteRow = index => ()=>{
         log("deleting row ->",index);

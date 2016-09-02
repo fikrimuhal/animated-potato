@@ -16,7 +16,7 @@ import Toast                  from '../components/MyComponents/Toast'
 import {Row,Col}              from 'react-flexbox-grid/lib/index';
 import * as s                 from './style'
 
-var context = {title:'React in patterns'};
+var context = {};
 var userInfo = null;
 const log = log2("AdminLayout.js:")
 var showToast = null;
@@ -134,6 +134,5 @@ export default class AdminLayout extends React.Component {
     }
 }
 AdminLayout.childContextTypes = {
-    title:React.PropTypes.string,
     showMessage:React.PropTypes.func
 };

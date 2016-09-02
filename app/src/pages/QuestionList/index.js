@@ -117,7 +117,7 @@ export default class QuestionList extends React.Component {
         </div>);
     };
     createNew = function (){
-        browserHistory.push('/adminpanel/questionadd')
+        browserHistory.push('/dashboard/QuestionAdd')
     };
     deleteQuestion = id => ()=>{
         log("deleting-> ",id);
@@ -125,7 +125,7 @@ export default class QuestionList extends React.Component {
     };
     viewQuestion = id => ()=>{
         log("viewing-> ",id);
-        browserHistory.push("/adminpanel/questiondetail/" + id);
+        browserHistory.push("/dashboard/QuestionDetail/" + id);
         //TODO soru detay sayfası yapılacak
     };
     getRows = function (){

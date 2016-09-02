@@ -17,27 +17,27 @@ export default class AdminMenu extends React.Component {
         return (
 
             <Menu onItemTouchTap={this.props.menuClick}>
-                <Link to='/adminpanel/listofparticipants'>
+                <Link to='/dashboard/ListofParticipants'>
                     <MenuItem primaryText="Participants" leftIcon={<GroupIcon />}/>
                 </Link>
                 <Divider/>
-                <Link to='/adminpanel/questionlist'>
+                <Link to='/dashboard/QuestionList'>
                     <MenuItem primaryText="Questions" leftIcon={<LabelIcon />}/>
                 </Link>
                 <Divider/>
-                <Link to='/adminpanel/questionsetdetails'>
+                <Link to='/dashboard/ListOfQuestionSet'>
                     <MenuItem primaryText="Question Sets" leftIcon={<DescriptionIcon/>}/>
                 </Link>
                 <Divider/>
-                <Link to='/adminpanel/listofuser'>
+                <Link to='/dashboard/ListofUser'>
                     <MenuItem primaryText="Users List" leftIcon={<PersonIcon/>}/>
                 </Link>
                 <Divider/>
-                <Link to='/adminpanel/listofstuff'>
+                <Link to='/dashboard/ListofStaff'>
                     <MenuItem primaryText="Stuff List" leftIcon={<PersonIcon/>}/>
                 </Link>
                 <Divider/>
-                <Link to='/adminpanel/adminprofile'>
+                <Link to='/dashboard/AdminProfile'>
                     <MenuItem primaryText="Admin Info" leftIcon={<AdminIcon/>}/>
                 </Link>
             </Menu>
