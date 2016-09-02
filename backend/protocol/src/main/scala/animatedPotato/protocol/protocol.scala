@@ -6,10 +6,9 @@ object protocol {
   /**
     * Interview servise yollanacak, bu komuttan sonra interview
     * servisinin sonraki soruyu göndermesi gerek
-    * ilk soru için answer = None olarak gönderilecek
     * @param answer : kullanıcıdan gelen cevap,
     */
-  case class GetNextQuestion(answer: Option[YesNoAnswer]= None,interviewId: InterviewId)
+  case class GetNextQuestion(answer: Option[YesNoAnswer] = None,interviewId: InterviewId)
 
   /**
     * getNextQuestion'a response olarak bunun dönmesi gerek
@@ -22,20 +21,19 @@ object protocol {
   /**
     *
     * @param interviewId
-    * @param userId
+    * @param userIdentifier
     * @param restrictedCategoryList : None ise tüm kategoriler için hesaplanacak
     *                               Some(_) ise içindeki tüm parametreler için hesaplanacak
     */
-  case class TestStart(interviewId: InterviewId, userId: UserIdType, restrictedCategoryList: Option[List[CategoryId]] = None)
-
+  case class TestStart(interviewId: InterviewId, userIdentifier: UserIdentifier, restrictedCategoryList: Option[List[CategoryId]] = None)
   /**
     *
     * @param interviewId
-    * @param userId
+    * @param userIdentifier
     */
-  case class TestFinish(interviewId: InterviewId, userId: UserIdType)
+  case class TestFinish(interviewId: InterviewId, userIdentifier: UserIdentifier)
 
-  case class TestReport(interviewId: InterviewId, userId: UserIdType, scores: Map[CategoryId, Score])
+  case class TestReport(interviewId: InterviewId, userIdentifier: UserIdentifier, scores: Map[CategoryId, Score])
 
   /**
     * backend interview servise yollar
@@ -43,9 +41,9 @@ object protocol {
     *
     * @param id
     */
-  case class TestReportRequest(id: Either[InterviewId, UserIdType])
+  case class TestReportRequest(id: InterviewId)
 
-  case class UserQuestionAnswerTuple(userId: UserIdType, questionId: QuestionId, value: Boolean)
+  case class UserQuestionAnswerTuple(userIdentifier: UserIdentifier, questionId: QuestionId, value: Boolean)
 
 
   /**
@@ -109,7 +107,12 @@ object protocol {
   type CategoryId = Long
   type QuestionOptionId = IdType
   type QuestionId = IdType
-
+  type Email = String
+  /**
+    * Non registered people can be tested with their email adress
+    * so interviewIdentifier can be either email or userID
+    */
+  type UserIdentifier = Either[Email,UserIdType]
   /**
     *
     * @param questionId

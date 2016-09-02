@@ -5,6 +5,7 @@ import InterviewService.{InterviewActor, InterviewManager}
 import akka.actor.{Actor, ActorRef}
 import akka.util.Timeout
 import animatedPotato.protocol.protocol.{NextQuestion, UserIdType}
+import controllers.{Interview, TestRequest}
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -16,7 +17,6 @@ import scala.reflect.internal.FatalError
 class RootActor extends Actor {
 
   println("Root actor başladı..")
-  var database: ActorRef = _
   var interviewManager: ActorRef = _
   implicit val timeout = Timeout(5 seconds)
 
@@ -24,10 +24,10 @@ class RootActor extends Actor {
 
   override def receive: Receive = {
 
-    case ("interview", x) =>
+    case (Interview, x) =>
       println(s"root actore gelen $x")
-      val senderActor = sender()
-      (interviewManager ? x).map(response => senderActor ! response)
+      val _sender = sender()
+      (interviewManager ? x).map(_sender ! _)
 
     case x =>
       println(s"root hepsini alan $x")

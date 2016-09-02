@@ -6,7 +6,7 @@ import utils.{Constants, DB}
 import slick.driver.PostgresDriver.simple._
 
 
-case class Participant(id: Option[UserIdType],
+case class Participant(id: Option[UserIdType] = None,
                        username: String,
                        name: String,
                        lastname: String,

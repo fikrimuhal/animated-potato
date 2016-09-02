@@ -13,25 +13,28 @@ import scala.reflect.ClassTag
   */
 class QuestionSetController extends Controller {
 
-  def insert() = evalOperation(QuestionSetDAO.insert)
 
-  def get() = Action{
-
-    Ok(Json.toJson(QuestionSetDAO.getAll()))
-
-  }
-  def evalOperation[T](crud : QuestionSet => Boolean) = Action { implicit request =>
+  def insert(questionSet: QuestionSet) = Action { implicit request =>
 
     request.body.asJson.flatMap(_.validate[QuestionSet].asOpt) match {
 
-      case Some(obj) if crud(obj) =>
-        Ok(Json.toJson(ResponseMessage(Constants.OK,Constants.OK_MESSAGE)))
+      case Some(obj) =>
 
-      case Some(_) =>
-        InternalServerError(Json.toJson(ResponseMessage(Constants.FAIL,Constants.SERVER_ERROR_MESSAGE)))
+        if (QuestionSetDAO.insert(obj)) {
+          Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
+        }
+        else {
+          InternalServerError(Json.toJson(ResponseMessage(Constants.FAIL, Constants.SERVER_ERROR_MESSAGE)))
+        }
 
       case _ =>
-        BadRequest(Json.toJson(ResponseMessage(Constants.FAIL,Constants.UNEXPECTED_ERROR_MESSAGE)))
+        BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
+  }
+
+  def get() = Action {
+
+    Ok(Json.toJson(QuestionSetDAO.getAll))
+
   }
 }

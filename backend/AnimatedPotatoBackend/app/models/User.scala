@@ -58,7 +58,7 @@ object Users {
 
   def get(usernameOrEmail: String): Option[User] = DB { implicit session =>
     users.filter(u => (u.username === usernameOrEmail) || (u.email === usernameOrEmail)).list.distinct match {
-      case x :: xs=> Some(x)
+      case x :: xs => Some(x)
       case _ => None
     }
   }
@@ -80,10 +80,26 @@ object Users {
     val user = filtered.list.head
     filtered.update(user.copy(ispersonnel = Some(true)))
   }
+
   def makeAdmin(id: UserIdType) = DB { implicit session =>
     val filtered = users.filter(_.id === id)
     val user = filtered.list.head
     filtered.update(user.copy(isadmin = Some(true)))
+  }
+
+  def getPersonnelList = DB { implicit session =>
+
+      users.filter(_.ispersonnel === true).list
+        .map(user =>
+          Participants.participants.filter(_.username === user.username).list.head)
+  }
+
+  def getAdminList: List[Participant] = DB { implicit session =>
+
+    users.filter(_.isadmin === true).list
+      .map(user =>
+        Participants.participants.filter(_.username === user.username).list.head)
+
   }
 }
 

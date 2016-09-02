@@ -15,18 +15,14 @@ object QuestionSetDAO {
   lazy val questionSets = TableQuery[QuestionSetDAO]
 
   def insert(questionSet: QuestionSet): Boolean = DB { implicit session =>
-    try {
-      questionSets += questionSet; true
-    }
-    catch {
-      case e: Exception =>
-        println(e)
-        false
-    }
+      (questionSets += questionSet) > 0
   }
 
   def getAll(): List[QuestionSet] = DB { implicit session =>
     questionSets.list
+  }
+  def delete( questionID : IdType, setId : IdType) = DB { implicit session =>
+    questionSets.filter(qs => qs.setId === setId && qs.questionId === questionID).delete == 1
   }
 
 }

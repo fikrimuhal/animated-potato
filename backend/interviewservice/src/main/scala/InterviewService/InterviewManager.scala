@@ -1,5 +1,6 @@
 package InterviewService
 
+
 import akka.actor.{Actor, ActorRef, Props, Stash}
 import animatedPotato.protocol.protocol._
 import akka.pattern.ask
@@ -8,7 +9,7 @@ import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 import akka.util.Timeout._
 
-case class InitMessage(interviewId: InterviewId, userId: UserIdType, restrictedCategoryList: Option[List[CategoryId]],
+case class InitMessage(interviewId: InterviewId, userIdentifier: UserIdentifier, restrictedCategoryList: Option[List[CategoryId]],
                        questionCategoryWeightTuple: QuestionCategoryWeightTupleList,
                        categoryList: CategoryList,
                        userQuestionAnswerTuple: AllAnswerEvents)
@@ -16,20 +17,21 @@ case class InitMessage(interviewId: InterviewId, userId: UserIdType, restrictedC
 class InterviewManager(database: ActorRef) extends Actor with Stash {
   implicit val timeout = Timeout(5 seconds)
   println("Interview Manager: Constructor")
-  var interviewActors = Map[UserIdType, ActorRef]()
+  var interviewActors = Map[InterviewId, ActorRef]()
 
+  /**
+    * is called by RootActor
+    * calls the intended Interview implementation Actor( RandomInterview, OrderedInterview etc.)
+    * returns first question of the interview
+    *
+    */
 
   override def receive: Receive = {
-    /**
-      * is called by RootActor
-      * calls the intended Interview implementation Actor( RandomInterview, OrderedInterview etc.)
-      * returns first question of the interview
-      *
-      */
+    // returns first question of the test
     case (TestStart(interviewId, userId, restrictedCategoryList)) =>
       println("InterviewManager: TestStart")
 
-      val senderActor = sender() // RootActor
+      val _sender = sender // RootActor
 
       val qcwtFuture = (database ? RequestAllQuestionCategoryWeight).mapTo[QuestionCategoryWeightTupleList]
       val categoryListFuture = (database ? RequestAllCategories).mapTo[CategoryList]
@@ -44,50 +46,44 @@ class InterviewManager(database: ActorRef) extends Actor with Stash {
 
         println(s"InterviewManager : initmessage : $initMessage")
 
-        val interviewActor = interviewActors.getOrElse(initMessage.userId, {
+        val interviewActor = interviewActors.getOrElse(initMessage.interviewId, {
           val newInterviewActor = context.actorOf(RandomInterview.props(initMessage))
-          interviewActors += (initMessage.userId -> newInterviewActor)
+          interviewActors += (initMessage.interviewId -> newInterviewActor)
           newInterviewActor
         })
 
-        val firstQuestionFuture = (interviewActor ? GetNextQuestion(None,initMessage.interviewId)).mapTo[NextQuestion]
+        (interviewActor ? GetNextQuestion(interviewId = initMessage.interviewId))
+          .mapTo[NextQuestion]
+          .map(question => _sender ! question)
 
-        for {firstQuestion <- firstQuestionFuture} {
-          println(s"InterviewManager : firstQuestion :  $firstQuestion")
-          senderActor ! firstQuestion
+      }
+
+
+    case x@GetNextQuestion(_, interviewId) =>
+      val _sender = sender
+      println("InterviewManager'a GetNextQuestion geldi")
+      (interviewActors(interviewId) ? x)
+        .map {
+          // Interview Actor'unden TestFinish gelirse TestReportRequest requesti gönder
+          case TestFinish(interviewId,_) =>
+            interviewActors(interviewId) ! TestReportRequest(interviewId)
+          case x =>
+            _sender ! x
         }
 
-      }
+    case x@TestReportRequest(interviewId) =>
+      val _sender = sender
+      (interviewActors(interviewId) ? x).
+        map { testReport =>
+          //TODO : TestReport'u bir yere uygun formatta kaydet
+          _sender ! testReport
+        }
 
-    case (nextQuestion: NextQuestion) =>
-      println("InterviewManager'a nextQuestion geldi")
-      context.parent ! nextQuestion
-
-    case x@GetNextQuestion(answer, interviewId) =>
-      println("InterviewManager'a GetNextQuestion geldi")
-      interviewActors(interviewId) ? x
-
-
-    case x@TestFinish(interviewId, userId) =>
-      interviewActors(interviewId)
-
-
-    case TestReportRequest(id) =>
-      //Test Report burada hesaplanabilir :m
-
-      id match {
-        case Left(id) =>
-          interviewActors(id) forward TestReport(1, 1, Map(1.toLong -> 1.5))
-
-        case Right(id) =>
-          interviewActors(id) forward TestReport(1, 1, Map(1.toLong -> 1.5))
-
-      }
+    case IAmDone(id) =>
+      interviewActors -= id
 
     case x =>
       println(s"InterviewManager : unexpected arg : $x")
-
-
   }
 
   override def preStart() = {

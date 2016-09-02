@@ -4,6 +4,7 @@ import models._
 import play.api.mvc.{Action, Controller}
 import utils.Formatter._
 import pdi.jwt._
+import play.api.libs.json.Json
 
 class AnswerController extends Controller with Secured {
 
@@ -15,6 +16,11 @@ class AnswerController extends Controller with Secured {
     catch {
       case e: Exception => BadRequest("-1")
     }
+  }
+
+  def getAnswers = Action{implicit request =>
+
+    Ok(Json.toJson(Answers.getAll()))
   }
 
 }
