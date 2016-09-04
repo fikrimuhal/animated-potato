@@ -1,16 +1,11 @@
-2016-09-02 10:16:06,099 [INFO] from play.core.server.NettyServer in pool-8-thread-1 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
-2016-09-02 10:16:26,991 [ERROR] from application in netty-event-loop-3 - 
+2016-09-04 20:11:52,442 [INFO] from play.core.server.NettyServer in pool-8-thread-6 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+2016-09-04 20:12:19,797 [ERROR] from application in netty-event-loop-3 - 
 
-! @719gjgoeb - Internal server error, for (GET) [/] ->
+! @71a880j18 - Internal server error, for (GET) [/] ->
  
-play.sbt.PlayExceptions$CompilationException: Compilation error[No matching Shape found.
-Slick does not know how to map the given types.
-Possible causes: T in Table[T] does not match your * projection. Or you use an unsupported type in a Query (e.g. scala List).
-  Required level: scala.slick.lifted.FlatShapeLevel
-     Source type: (scala.slick.lifted.Column[Option[Long]], scala.slick.lifted.Column[Long], scala.slick.lifted.Column[Option[Long]], scala.slick.lifted.Column[String], scala.slick.lifted.Column[Boolean])
-   Unpacked type: (Option[Long], Long, Option[Long], Option[String], Boolean)
-     Packed type: Any
-]
+play.sbt.PlayExceptions$CompilationException: Compilation error[type mismatch;
+ found   : Long
+ required: E]
 	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
 	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
 	at scala.Option.map(Option.scala:145)
@@ -39,15 +34,13 @@ Possible causes: T in Table[T] does not match your * projection. Or you use an u
 	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
 	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
 	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
-2016-09-02 10:17:22,413 [ERROR] from application in netty-event-loop-3 - 
+2016-09-04 20:12:27,754 [ERROR] from application in netty-event-loop-3 - 
 
-! @719gjk348 - Internal server error, for (GET) [/] ->
+! @71a881509 - Internal server error, for (GET) [/] ->
  
 play.sbt.PlayExceptions$CompilationException: Compilation error[type mismatch;
- found   : Option[animatedPotato.protocol.protocol.UserIdType]
-    (which expands to)  Option[Long]
- required: animatedPotato.protocol.protocol.UserIdType
-    (which expands to)  Long]
+ found   : Long
+ required: E]
 	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
 	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
 	at scala.Option.map(Option.scala:145)
