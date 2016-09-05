@@ -46,11 +46,11 @@ POST        /admin/testReport                  controllers.InterviewController.t
 POST        /admin/nextQuestion                controllers.InterviewController.nextQuestion
 POST        /interview                         controllers.InterviewController.listAll
 
-GET         /admin/getSets                     controllers.SetsController.getAll
-POST        /admin/insertSet                   controllers.SetsController.insert
-POST        /admin/updateSet                   controllers.SetsController.update
-POST        /admin/deleteSet                   controllers.SetsController.delete
-POST        /admin/makeDefaultSet              controllers.SetsController.setDefaultQuestionSet
+GET         /admin/getSets                     controllers.CollectionController.getAll
+POST        /admin/insertSet                   controllers.CollectionController.insert
+POST        /admin/updateSet                   controllers.CollectionController.update
+POST        /admin/deleteSet                   controllers.CollectionController.delete
+POST        /admin/makeDefaultSet              controllers.CollectionController.setDefaultQuestionSet
 
 
 POST        /signUp                            controllers.LoginSignUpController.signUp
