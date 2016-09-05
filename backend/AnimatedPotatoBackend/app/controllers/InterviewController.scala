@@ -58,7 +58,7 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
         }
 
       case _ =>
-        Future {}.map(x => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
+        Future.successful(BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
 
     }
   }
@@ -80,7 +80,7 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
               Ok(s"test finiş ${testFinish.interviewId}, ${testFinish.userIdentifier}")
           }
 
-      case _ => Future {}.map(x => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
+      case _ => Future.successful(BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
 
     }
   }
@@ -97,7 +97,7 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
         (rootActor ? (Interview, testReportRequest))
           .mapTo[TestReport]
           .map(x => Ok(s"TestReport : ${x.interviewId} : ${x.scores} : ${x.userIdentifier}"))
-      case _ => Future {}.map(x => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
+      case _ => Future.successful(BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
 
     }
   }

@@ -15,7 +15,7 @@ class CollectionDAO extends BaseDAO[CollectionTable, Collection](TableQuery[Coll
   lazy val collectionDAO = TableQuery[CollectionTable]
   lazy val questionSetDAO = TableQuery[QuestionSetDAO]
 
-  def makeDefaultCollection(id: IdType): Boolean = DB.DB.withTransaction { implicit session =>
+  def setDefaultCollection(id: IdType): Boolean = DB.DB.withTransaction { implicit session =>
     collectionDAO.filter(c => c.isDefaultSet === true && c.isDeleted === false).map(_.isDefaultSet).update(false)
     val isChanged = collectionDAO.filter(_.id === id).map(_.isDefaultSet).update(true) == 1
     if (!isChanged) session.rollback
