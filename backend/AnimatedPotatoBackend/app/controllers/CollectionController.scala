@@ -44,7 +44,7 @@ class CollectionController extends Controller {
     request.body.asJson.flatMap(_.validate[ID].asOpt) match {
 
       case Some(id) =>
-        if (collectionDAO.makeDefaultCollection(id.id))
+        if (collectionDAO.setDefaultCollection(id.id))
         Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
         else {
           InternalServerError(Json.toJson(ResponseMessage(Constants.FAIL, Constants.SERVER_ERROR_MESSAGE)))

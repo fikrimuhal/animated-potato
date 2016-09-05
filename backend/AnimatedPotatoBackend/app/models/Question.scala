@@ -1,16 +1,10 @@
 package models
 
 import animatedPotato.protocol.protocol.{CategoryId, IdType, QuestionId}
-import com.sun.xml.internal.bind.v2.TODO
-import utils.{Constants, DB}
-
+import utils.DB
 import slick.driver.PostgresDriver.simple._
-import utils.Formatter._
-import pdi.jwt._
 
-/**
-  * Created by who on 08.08.2016.
-  */
+//case class QuestionId(value : Long) extends AnyVal
 
 case class QuestionCategoryResponse(id: IdType, weight: Double, text: String)
 
@@ -39,7 +33,7 @@ object Questions {
   lazy val categories = TableQuery[Categories]
   lazy val questionSets = TableQuery[QuestionSetDAO]
 
-  def insert(question: Question): Boolean = DB { implicit session =>
+  def insert(question: Question): IdType = DB { implicit session =>
 
     val questionId = (questions returning questions.map(_.id)) +=
       QuestionTable(question.id, question.title, question.qType)
@@ -63,11 +57,11 @@ object Questions {
 
     }
 
-    true
+    questionId
 
   }
 
-  def update(question: Question): Boolean = DB { implicit session =>
+  def update(question: Question): IdType = DB { implicit session =>
     try {
       //      val questionTable = QuestionTable(question.id,
       //        question.title,
@@ -91,21 +85,23 @@ object Questions {
       //
       //      willbedeletedOptions.foreach(id => QuestionSets.decreaseCount(id.toInt))
       //      willincreasedIDs.foreach(id => QuestionSets.increaseCount(id))
-      true
+      1
     }
     catch {
-      case e: Exception => false
+      case e: Exception => -1
     }
   }
 
-  def delete(questionId: QuestionId): Boolean = DB { implicit session =>
-    val deletedRowCount: Int = questions.filter(_.id === questionId).delete
-    if (deletedRowCount > 0) true else false
+  def deleteById(questionId: QuestionId): Int = DB { implicit session =>
+    questions.filter(_.id === questionId).delete
+  }
+  def delete(question: Question): Int = DB { implicit session =>
+    questions.filter(_.id === question.id).delete
   }
 
   def getAll = DB { implicit session =>
 
-    for (question <- questions.list  if question != None )
+    for (question <- questions.list if question != None)
       yield
         QuestionResponse(
           question.id.get,
