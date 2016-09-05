@@ -68,9 +68,9 @@ export default class QuestionList extends React.Component {
     }
 
     initializeData = function (){
-        if(Cache.checkAllQuestionFromCache()) {
+        if(Cache.QuestionCaching.checkAll()) {
             log("**********From CACHE************");
-            var rows = Cache.getAllQuestionFromCache();
+            var rows = Cache.QuestionCaching.getAll();
             rows = this.convertTableRawData(rows);
             this.state = {
                 rows:rows,
@@ -86,7 +86,7 @@ export default class QuestionList extends React.Component {
         log("**********From API************");
         api.getAllQuestion().then(response=>response.json()).then(json=>{
             var rows = json;
-            Cache.cacheAllQuestion(rows);
+            Cache.QuestionCaching.cacheAll(rows);
             rows = this.convertTableRawData(rows);
 
             this.setState({

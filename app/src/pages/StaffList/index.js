@@ -1,4 +1,4 @@
-import React            from 'react';
+import React from 'react'
 import {log2,util}      from '../../utils/';
 import * as db          from '../../utils/data';
 import ReactDataGrid    from 'react-data-grid';
@@ -12,10 +12,8 @@ import * as Cache       from  '../../utils/cache'
 import * as api         from '../../utils/api'
 import  moment          from 'moment'
 require("!style!css!react-data-grid/themes/react-data-grid.css");
-
 const Selectors = Data.Selectors;
-const log = log2("User List")
-
+const log = log2("Staff List");
 var columns = [
     {
         key:'id',
@@ -25,7 +23,7 @@ var columns = [
     },
     {
         key:'fullName',
-        name:'Full Name',
+        name:'Staff Name',
         filterable:true,
         sortable:true,
         width:200,
@@ -48,28 +46,15 @@ var columns = [
         resizable:false
     },
     {
-        key:'date',
-        name:'Apply Date',
-        filterable:true,
-        sortable:true,
-        width:200,
-        resizable:true
-    },
-    {
-        key:'score',
-        name:'Score',
-        sortable:true,
-        width:75,
-        resizable:false
-    },
-    {
         key:'options',
         name:'Options'
+
     }
 ]
-export default class UserList extends React.Component {
+export default  class StaffList extends React.Component {
+    //TODO staff list implementation
     constructor(props){
-        super(props);
+        super(props)
         util.bindFunctions.call(this,['getRows','getSize',
             'rowGetter','handleFilterChange',
             'handleGridSort','getOptionCell',
@@ -83,9 +68,7 @@ export default class UserList extends React.Component {
             this.initializeDataFromCache();
         else
             this.initializeDataFromApi();
-
     }
-
     initializeDataFromCache = function (){
         log("Data from CACHE");
         var rows = Cache.ParticipantsCache.get();
@@ -125,10 +108,7 @@ export default class UserList extends React.Component {
     convertTableRawData = (rows)=>{
         var tableData = rows.map(r =>{
             r.options = this.getOptionCell(r);
-            r.date = moment().format('LLL')
             r.fullName = r.name + ' ' + r.lastname;
-            r.score = Math.floor(Math.random() * 100);
-
             return r;
         });
         return tableData;
@@ -144,7 +124,7 @@ export default class UserList extends React.Component {
     };
     viewRow = index => ()=>{
         log("viewing row ->",index);
-        browserHistory.push("/dashboard/skilltestreport/" + index)
+        browserHistory.push("/adminpanel/skilltestreport/" + index)
     };
     getRows = function (){
         return Selectors.getRows(this.state);
@@ -181,13 +161,12 @@ export default class UserList extends React.Component {
         var rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
         this.setState({rows:rows});
     }
-
-    render(){
+    render = ()=>{
         return (
             <div>
                 <div>
                     <br/>
-                    <h4>List of User</h4>
+                    <h4>List of Staff</h4>
                 </div>
                 <br/>
                 <div>
@@ -218,6 +197,6 @@ export default class UserList extends React.Component {
 
                 </div>
             </div>
-        );
+        )
     }
 }

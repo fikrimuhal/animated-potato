@@ -149,6 +149,7 @@ export default class QuestionAddContainer extends React.Component {
             }).then(json=>{
                 if(json.status == "OK") {
                     this.showMessage("Question saved!!",2000);
+                    Cache.QuestionCaching.clear();
                 }
                 else if(json.status == "FAIL") {
                     this.showMessage("An error encountered!! Question hasn't saved.",2000);

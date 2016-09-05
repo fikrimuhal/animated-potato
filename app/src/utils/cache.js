@@ -13,36 +13,66 @@ const log = log2("Cache.js->");
  * }
  * */
 //katılımcı listesi cache'de varmı yokmu onu kontrol eder.(olumlu sonuc döndürmesi için cachelenmiş ve 2 dk' bekleme süresini geçmemiş olmaması lazım)
-export const checkParticipantListFromCache = ()=>{
-    var participantListCache = localStorage.getItem("participantListCache");
-    if(participantListCache == null)return false;
-    var cache = JSON.parse(participantListCache);
-    var cacheTime = cache.createdTime;
-    if(participantListCache == null)return false;
-    var now = Date.now();
-    var diff = time.timeDiff(now,cacheTime);
-    return diff.minute <= 2;
-
-};
-
-//cache'den katılımcı  listesini  getirir
-export const getParticipantListFromCache = ()=>{
-    var participantListCache = localStorage.getItem("participantListCache");
-    var list = [];
-    if(participantListCache != null) {
-        list = JSON.parse(participantListCache).data;
+export const ParticipantsCache = {
+    cache:data=>{
+        var cacheData = {
+            data:data,
+            createdTime:Date.now()
+        };
+        localStorage.setItem("participantListCache",JSON.stringify(cacheData));
+    },
+    check: ()=>{
+        var participantListCache = localStorage.getItem("participantListCache");
+        if(participantListCache == null)return false;
+        var cache = JSON.parse(participantListCache);
+        var cacheTime = cache.createdTime;
+        if(participantListCache == null)return false;
+        var now = Date.now();
+        var diff = time.timeDiff(now,cacheTime);
+        return diff.minute <= 2;
+    },
+    get: ()=>{
+        var participantListCache = localStorage.getItem("participantListCache");
+        var list = [];
+        if(participantListCache != null) {
+            list = JSON.parse(participantListCache).data;
+        }
+        return list;
+    },
+    clear:()=>{
+        localStorage.removeItem("participantListCache");
     }
-    return list;
-};
-
-export const cacheParticipantList = list =>{
-    var cacheData = {
-        data:list,
-        createdTime:Date.now()
-    };
-    localStorage.setItem("participantListCache",JSON.stringify(cacheData));
-};
-// ************Katılımcısı Listesi cache kontrol**********end
+}
+// export const checkParticipantListFromCache = ()=>{
+//     var participantListCache = localStorage.getItem("participantListCache");
+//     if(participantListCache == null)return false;
+//     var cache = JSON.parse(participantListCache);
+//     var cacheTime = cache.createdTime;
+//     if(participantListCache == null)return false;
+//     var now = Date.now();
+//     var diff = time.timeDiff(now,cacheTime);
+//     return diff.minute <= 2;
+//
+// };
+//
+// //cache'den katılımcı  listesini  getirir
+// export const getParticipantListFromCache = ()=>{
+//     var participantListCache = localStorage.getItem("participantListCache");
+//     var list = [];
+//     if(participantListCache != null) {
+//         list = JSON.parse(participantListCache).data;
+//     }
+//     return list;
+// };
+//
+// export const cacheParticipantList = list =>{
+//     var cacheData = {
+//         data:list,
+//         createdTime:Date.now()
+//     };
+//     localStorage.setItem("participantListCache",JSON.stringify(cacheData));
+// };
+// // ************Katılımcısı Listesi cache kontrol**********end
 //endregion
 //region Katılımcı Test Sonuç Raporu Cache Kontrol
 // ************Katılımcı Test Sonuç Raporu Cache Kontrol***************start
@@ -183,50 +213,55 @@ export const QuestionSetCaching = {
 //endregion
 
 //region All Question Caching
-export const cacheAllQuestion = data =>{
-    var cacheData = {
-        data:data,
-        createdTime:Date.now()
-    };
-    localStorage.setItem("allQuestionCache",JSON.stringify(cacheData));
-};
-export const getAllQuestionFromCache = ()=>{
-    var allQuestionCache = localStorage.getItem("allQuestionCache");
-    var list = [];
-    if(allQuestionCache != null) {
-        list = JSON.parse(allQuestionCache).data;
-    }
-    return list;
-};
-export const checkAllQuestionFromCache = ()=>{
-    var allQuestionCache = localStorage.getItem("allQuestionCache");
-    if(allQuestionCache == null)return false;
-    var cache = JSON.parse(allQuestionCache);
-    var cacheTime = cache.createdTime;
-    var now = Date.now();
-    var diff = time.timeDiff(now,cacheTime);
-    return diff.minute <= 5;
-};
-export const checkQuestionFromCache = (questionId)=>{
-    var allQuestionCache = localStorage.getItem("allQuestionCache");
-    var result;
-    if(allQuestionCache == null)return false;
-    var cache = JSON.parse(allQuestionCache);
-    var cacheTime = cache.createdTime;
-    var now = Date.now();
-    var diff = time.timeDiff(now,cacheTime);
-    if(diff.minute > 5) result = false;
-    else {
-        var questions = _.filter(cache.data,(q)=>{return q.id == questionId});
-        result = questions.length > 0;
-    }
+export const QuestionCaching = {
+    cacheAll:data=>{
+        var cacheData = {
+            data:data,
+            createdTime:Date.now()
+        };
+        localStorage.setItem("allQuestionCache",JSON.stringify(cacheData));
+    },
+    getAll:()=>{
+        var allQuestionCache = localStorage.getItem("allQuestionCache");
+        var list = [];
+        if(allQuestionCache != null) {
+            list = JSON.parse(allQuestionCache).data;
+        }
+        return list;
+    },
+    checkAll:()=>{
+        var allQuestionCache = localStorage.getItem("allQuestionCache");
+        if(allQuestionCache == null)return false;
+        var cache = JSON.parse(allQuestionCache);
+        var cacheTime = cache.createdTime;
+        var now = Date.now();
+        var diff = time.timeDiff(now,cacheTime);
+        return diff.minute <= 5;
+    },
+    check:(questionId)=>{
+        var allQuestionCache = localStorage.getItem("allQuestionCache");
+        var result;
+        if(allQuestionCache == null)return false;
+        var cache = JSON.parse(allQuestionCache);
+        var cacheTime = cache.createdTime;
+        var now = Date.now();
+        var diff = time.timeDiff(now,cacheTime);
+        if(diff.minute > 5) result = false;
+        else {
+            var questions = _.filter(cache.data,(q)=>{return q.id == questionId});
+            result = questions.length > 0;
+        }
 
-    return result;
-};
-export const getQuestionFromCache = (questionId)=>{
-    var allQuestionCache = localStorage.getItem("allQuestionCache");
-    var cache = JSON.parse(allQuestionCache).data;
-    var question = _.filter(cache,(q)=>{return q.id == questionId})[0];
-    return question;
-};
+        return result;
+    },
+    get:(questionId)=>{
+        var allQuestionCache = localStorage.getItem("allQuestionCache");
+        var cache = JSON.parse(allQuestionCache).data;
+        var question = _.filter(cache,(q)=>{return q.id == questionId})[0];
+        return question;
+    },
+    clear:()=>{
+        localStorage.removeItem("allQuestionCache");
+    }
+}
 //endregion

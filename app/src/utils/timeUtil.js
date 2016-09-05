@@ -2,7 +2,7 @@ import moment from 'moment'
 import log2   from './log2'
 const log = log2("timeUtil.js->");
 export const timeDiff=(startTime, endTime) => {
-    log(startTime,endTime);
+    //log(startTime,endTime);
     startTime = moment(startTime);
     endTime = moment(endTime);
     var duration=moment.duration(startTime.diff(endTime));

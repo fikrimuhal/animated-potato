@@ -45,7 +45,7 @@ ReactDOM.render((
             <Route path="dashboard" component={pages.AdminPanel}>
                 <Route path="ListofParticipants" component={pages.ListOfParticipants}/>
                 <Route path="ListOfUser" component={pages.UserList}/>
-                <Route path="ListofStaff" component={pages.StuffList}/>
+                <Route path="ListofStaff" component={pages.StaffList}/>
                 <Route path="AdminProfile" component={pages.AdminProfile}/>
                 <Route path="QuestionAdd" component={pages.QuestionAdd}/>
                 <Route path="ListofQuestionSet" component={pages.ListOfQuestionSet}/>

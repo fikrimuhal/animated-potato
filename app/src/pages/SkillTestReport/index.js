@@ -49,7 +49,7 @@ export default  class SkillTestReportContainer extends React.Component {
         }
     };
     goToList=function () {
-        browserHistory.push("/adminpanel/listofparticipants");
+        browserHistory.push("/dashboard/listofparticipants");
     };
     createWaitingContent=()=> {
         return (<div>

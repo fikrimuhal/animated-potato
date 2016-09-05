@@ -165,7 +165,8 @@ export const questionAddPage = {
 export const AdminLayoutStyle = {
     main:{
         backgroundImage:"url("+image+")",
-        height:"auto !important"
+        height:"auto !important",
+        minHeight:"100%"
     },
     mainPaper:{
         //margin:"0 auto",
@@ -180,5 +181,9 @@ export const AdminLayoutStyle = {
     adminMenuContainer:{
         margin:'0 auto',
         marginTop:'10px'
+    },
+    adminMenuBar:{
+        width:"100% important",
+        maxWidth:"100%"
     }
 }

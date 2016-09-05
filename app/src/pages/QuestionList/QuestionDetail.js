@@ -19,15 +19,16 @@ export default  class QuestionDetail extends React.Component {
             question:{},
             dataWaiting:true
         };
+        //log(this.props);
         var questionId = this.props.params.questionId;
         this.initializeData(questionId);
 
     }
 
     initializeData = function (questionId){
-        log("initializeData",Cache.checkQuestionFromCache(questionId))
-        if(Cache.checkQuestionFromCache(questionId)) {
-            var question = Cache.getQuestionFromCache(questionId);
+        log("initializeData",Cache.QuestionCaching.check(questionId))
+        if(Cache.QuestionCaching.check(questionId)) {
+            var question = Cache.QuestionCaching.get(questionId);
             this.state = {
                 question:question,
                 dataWaiting:false

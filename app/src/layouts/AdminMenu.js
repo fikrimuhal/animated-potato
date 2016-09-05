@@ -8,7 +8,7 @@ import DescriptionIcon from 'material-ui/svg-icons/action/description';
 import PersonIcon      from 'material-ui/svg-icons/social/person';
 import AdminIcon       from 'material-ui/svg-icons/action/assignment-ind';
 import Divider         from  'material-ui/Divider'
-
+import * as  s         from '../layouts/style'
 export default class AdminMenu extends React.Component {
     shouldComponentUpdate = function (nextProps,nextState){
         return false;
@@ -16,7 +16,7 @@ export default class AdminMenu extends React.Component {
     render = function (){
         return (
 
-            <Menu onItemTouchTap={this.props.menuClick}>
+            <Menu onItemTouchTap={this.props.menuClick} style={s.AdminLayoutStyle.adminMenuBar}>
                 <Link to='/dashboard/ListofParticipants'>
                     <MenuItem primaryText="Participants" leftIcon={<GroupIcon />}/>
                 </Link>

@@ -80,7 +80,7 @@ export default class ParticipantList extends React.Component {
             dataLoaded:false,
             filters:{}
         };
-        if(Cache.checkParticipantListFromCache())
+        if(Cache.ParticipantsCache.check())
             this.initializeDataFromCache();
         else
             this.initializeDataFromApi();
@@ -89,7 +89,7 @@ export default class ParticipantList extends React.Component {
 
     initializeDataFromCache = function (){
         log("Data from CACHE");
-        var rows = Cache.getParticipantListFromCache();
+        var rows = Cache.ParticipantsCache.get();
         var tableData = this.convertTableRawData(rows);
         this.state = {
             rows:tableData,
@@ -103,7 +103,7 @@ export default class ParticipantList extends React.Component {
             return response.json();
         }).then(json=>{
             var rows = json;
-            Cache.cacheParticipantList(rows);
+            Cache.ParticipantsCache.cache(rows);
             var tableData = this.convertTableRawData(rows);
             this.setState({
                 rows:tableData,
