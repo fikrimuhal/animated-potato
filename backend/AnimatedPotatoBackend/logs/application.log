@@ -1,11 +1,9 @@
-2016-09-04 20:11:52,442 [INFO] from play.core.server.NettyServer in pool-8-thread-6 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
-2016-09-04 20:12:19,797 [ERROR] from application in netty-event-loop-3 - 
+2016-09-05 16:35:01,678 [INFO] from play.core.server.NettyServer in pool-8-thread-6 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+2016-09-05 16:35:22,616 [ERROR] from application in netty-event-loop-3 - 
 
-! @71a880j18 - Internal server error, for (GET) [/] ->
+! @71aecfn3k - Internal server error, for (GET) [/] ->
  
-play.sbt.PlayExceptions$CompilationException: Compilation error[type mismatch;
- found   : Long
- required: E]
+play.sbt.PlayExceptions$CompilationException: Compilation error[No Json deserializer found for type T. Try to implement an implicit Reads or Format for this type.]
 	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
 	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
 	at scala.Option.map(Option.scala:145)
@@ -34,13 +32,11 @@ play.sbt.PlayExceptions$CompilationException: Compilation error[type mismatch;
 	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
 	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
 	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
-2016-09-04 20:12:27,754 [ERROR] from application in netty-event-loop-3 - 
+2016-09-05 16:39:12,235 [ERROR] from application in netty-event-loop-3 - 
 
-! @71a881509 - Internal server error, for (GET) [/] ->
+! @71aed2pa3 - Internal server error, for (GET) [/] ->
  
-play.sbt.PlayExceptions$CompilationException: Compilation error[type mismatch;
- found   : Long
- required: E]
+play.sbt.PlayExceptions$CompilationException: Compilation error[object BaseController is not a member of package core]
 	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
 	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
 	at scala.Option.map(Option.scala:145)
