@@ -31,7 +31,7 @@ var columns = [
     {
         key:'id',
         name:'Set ID',
-        width:0,
+        width:50,
         filterable:false,
         resizable:false
     },
@@ -47,11 +47,12 @@ var columns = [
         key:'questionCount',
         name:'Question Count',
         sortable:true,
-        width:100,
+        width:120,
     },
     {
         key:'isDefaultSetCell',
-        name:'Default Set?'
+        name:'Default Set?',
+        width:100
     },
     {
         key:"options",
@@ -149,8 +150,10 @@ export default class ListOfQuestionSet extends React.Component {
     };
     getOptionCell = (rowData) =>{
         return (<div>
-            <FlatButton icon={<DeleteIcon/>} onClick={this.deleteQuestionSet(rowData.id)} label={"Delete"}></FlatButton>
-            <FlatButton icon={<BookmarkIcon/>} onClick={this.makeDefaultSet(rowData.id)} style={{display:rowData.isDefaultSet?"none":""}}></FlatButton>
+            <FlatButton icon={<DeleteIcon/>} onClick={this.deleteQuestionSet(rowData.id)} ></FlatButton>
+            <FlatButton icon={<BookmarkIcon/>} onClick={this.makeDefaultSet(rowData.id)}
+                        style={{display:rowData.isDefaultSet?"none":""}}
+                        label={"Mark as Default"}></FlatButton>
             
 
         </div>);
@@ -161,20 +164,24 @@ export default class ListOfQuestionSet extends React.Component {
         var originalData = this.state.originalData;
         var markingDefaultSetIndex = _.findIndex(originalData,(q=>q.isDefaultSet));
         var willBeMarkingSetIndex = _.findIndex(originalData,(q=>q.id == setId));
-        QuestionSetAPI.makeDefaultSet(setId).then(response=>{
+
+        QuestionSetAPI.makeDefaultSet({id:setId}).then(response=>{
             return response.json()
         }).then(json=>{
             if(json.status == "OK") {
                 _this.context.showMessage("Question set mark as default.",1000);
+
                 originalData[markingDefaultSetIndex].isDefaultSet = false;
-                originalData[willBeMarkingSetIndex].isDefultSet = true;
+                originalData[willBeMarkingSetIndex].isDefaultSet = true;
+                log(originalData,markingDefaultSetIndex,willBeMarkingSetIndex);
                 _this.createTable(originalData);
             }
             else {
-                _this.context.showMessage("Question set cannot mark as default.",1000);
+                _this.context.showMessage("Question set marking default has     failed..",1000);
             }
         }).catch(err=>{
             _this.context.showMessage("An error occured.",1000);
+            log("err",err);
         });
     };
     deleteQuestionSet = setId => ()=>{

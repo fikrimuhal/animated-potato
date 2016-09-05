@@ -135,33 +135,61 @@ export const getTestResultReportFromCache = (userId)=>{
  *
  *      }
  */
-
-export const cacheCategories = data =>{
-    var cacheData = {
-        data:data,
-        createdTime:Date.now()
-    };
-    localStorage.setItem("categoriesCache",JSON.stringify(cacheData));
-};
-
-export const getCategoriesFromCache = ()=>{
-    var categoriesCache = localStorage.getItem("categoriesCache");
-    var list = [];
-    if(categoriesCache != null) {
-        list = JSON.parse(categoriesCache).data;
+export const CategoryCaching = {
+    cache: data=>{
+        var cacheData = {
+            data:data,
+            createdTime:Date.now()
+        };
+        localStorage.setItem("categoriesCache",JSON.stringify(cacheData));
+    },
+    get: ()=>{
+        var categoriesCache = localStorage.getItem("categoriesCache");
+        var list = [];
+        if(categoriesCache != null) {
+            list = JSON.parse(categoriesCache).data;
+        }
+        return list;
+    },
+    check:()=>{
+        var categoriesCache = localStorage.getItem("categoriesCache");
+        if(categoriesCache == null)return false;
+        var cache = JSON.parse(categoriesCache);
+        var cacheTime = cache.createdTime;
+        var now = Date.now();
+        var diff = time.timeDiff(now,cacheTime);
+        return diff.minute <= 1;
+    },
+    clear:()=>{
+        localStorage.removeItem("categoriesCache");
     }
-    return list;
-};
-
-export const checkCategoriesFromCache = ()=>{
-    var categoriesCache = localStorage.getItem("categoriesCache");
-    if(categoriesCache == null)return false;
-    var cache = JSON.parse(categoriesCache);
-    var cacheTime = cache.createdTime;
-    var now = Date.now();
-    var diff = time.timeDiff(now,cacheTime);
-    return diff.minute <= 1;
-};
+}
+// export const cacheCategories = data =>{
+//     var cacheData = {
+//         data:data,
+//         createdTime:Date.now()
+//     };
+//     localStorage.setItem("categoriesCache",JSON.stringify(cacheData));
+// };
+//
+// export const getCategoriesFromCache = ()=>{
+//     var categoriesCache = localStorage.getItem("categoriesCache");
+//     var list = [];
+//     if(categoriesCache != null) {
+//         list = JSON.parse(categoriesCache).data;
+//     }
+//     return list;
+// };
+//
+// export const checkCategoriesFromCache = ()=>{
+//     var categoriesCache = localStorage.getItem("categoriesCache");
+//     if(categoriesCache == null)return false;
+//     var cache = JSON.parse(categoriesCache);
+//     var cacheTime = cache.createdTime;
+//     var now = Date.now();
+//     var diff = time.timeDiff(now,cacheTime);
+//     return diff.minute <= 1;
+// };
 //endregion
 //region Soru Setlerini Cacheleme
 /**

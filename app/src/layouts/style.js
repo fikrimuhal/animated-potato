@@ -2,7 +2,6 @@
  * Created by MYigit on 9.8.2016.
  */
 var image = require("!file!../assets/images/bg1.jpg");
-console.log("****image",image);
 export const userLayoutStyles = {
     paperStyle:{
         margin:"0 auto",

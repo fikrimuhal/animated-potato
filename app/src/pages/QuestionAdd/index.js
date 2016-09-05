@@ -63,10 +63,10 @@ export default class QuestionAddContainer extends React.Component {
         this.initQuestionSets();
     };
     initCategories = function (){
-        if(Cache.checkCategoriesFromCache()) {
+        if(Cache.CategoryCaching.check()) {
             log("categories from CACHE");
             this.setState({
-                categoryList:Cache.getCategoriesFromCache(),
+                categoryList:Cache.CategoryCaching.get(),
                 categoriesWaiting:false
             });
             //this.state.categoryList = Cache.getCategoriesFromCache();
@@ -79,7 +79,7 @@ export default class QuestionAddContainer extends React.Component {
             }).then(json=>{
                 log("json",json);
                 //categoryList = json;
-                Cache.cacheCategories(json);
+                Cache.CategoryCaching.cache(json);
                 this.setState({
                     categoryList:json,
                     categoriesWaiting:false
