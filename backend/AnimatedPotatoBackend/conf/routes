@@ -41,9 +41,9 @@ POST        /admin/deleteCategory              controllers.CategoryController.de
 GET         /admin/getCategory/:n              controllers.CategoryController.getCategory(n)
 POST        /admin/getCategories               controllers.CategoryController.getCategories
 
-POST        /startTest                   controllers.InterviewController.startTest
-POST        /testReport                  controllers.InterviewController.testReport
-POST        /nextQuestion                controllers.InterviewController.nextQuestion
+POST        /startTest                         controllers.InterviewController.startTest
+POST        /testReport                        controllers.InterviewController.testReport
+POST        /nextQuestion                      controllers.InterviewController.nextQuestion
 POST        /interview                         controllers.InterviewController.listAll
 
 GET         /admin/getSets                     controllers.CollectionController.getAll
