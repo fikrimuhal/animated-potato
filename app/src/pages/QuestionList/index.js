@@ -7,11 +7,13 @@ import FlatButton                           from 'material-ui/FlatButton';
 import DeleteIcon                           from 'material-ui/svg-icons/action/delete';
 import ViewIcon                             from 'material-ui/svg-icons/action/visibility';
 import {browserHistory}                     from 'react-router'
-import * as api                             from '../../utils/api'
+import  {QuestionAPI}                       from '../../utils/api'
 import * as Cache                           from '../../utils/cache'
 import * as util                            from '../../utils/utils'
 import  log2                                from '../../utils/log2'
 import * as db                              from '../../utils/data'
+import * as _                               from 'lodash'
+import  Immutable                           from 'immutable'
 require("!style!css!react-data-grid/themes/react-data-grid.css")
 //endregion
 const Selectors = Data.Selectors;
@@ -41,10 +43,6 @@ var columns = [
     },
 
     {
-        key:'categoryWeightsCell',
-        name:'Categories & Weights'
-    },
-    {
         key:'options',
         name:'Options'
     },
@@ -58,13 +56,26 @@ export default class QuestionList extends React.Component {
             filters:{
                 qType:"fre"
             },
-            originalRows:[]
+            originalRows:[],
+            originalData:[]
         };
         util.bindFunctions.call(this,['getRows','getSize',
             'rowGetter','handleFilterChange','handleClearFilters',
             'handleGridSort','handleRowUpdated','createNew']);
 
         this.initializeData();
+    }
+
+    shouldComponentUpdate = (nextProps,nextState)=>{
+        var im_currentProp = Immutable.fromJS(this.props,(k,v)=>{return v.toOrderedMap()});
+        var im_nextProp = Immutable.fromJS(nextProps,(k,v)=>{return v.toOrderedMap()});
+        var im_currentState = Immutable.fromJS(this.state,(k,v)=>{return v.toOrderedMap()});
+        var im_nextState = Immutable.fromJS(nextState,(k,v)=>{return v.toOrderedMap()});
+
+        var propEquality = im_currentProp.equals(im_nextProp);
+        var stateEquality = im_currentState.equals(im_nextState);
+        log("shouldComponentUpdate",propEquality,stateEquality,(!propEquality || !stateEquality));
+        return (!propEquality || !stateEquality);
     }
 
     initializeData = function (){
@@ -75,7 +86,8 @@ export default class QuestionList extends React.Component {
             this.state = {
                 rows:rows,
                 originalRows:rows,
-                filters:{ qType:"fre"},
+                filters:{qType:"fre"},
+                originalData:rows,
             };
         }
         else {
@@ -84,7 +96,7 @@ export default class QuestionList extends React.Component {
     };
     initializeFromAPI = function (){
         log("**********From API************");
-        api.getAllQuestion().then(response=>response.json()).then(json=>{
+        QuestionAPI.getAll().then(response=>response.json()).then(json=>{
             var rows = json;
             Cache.QuestionCaching.cacheAll(rows);
             rows = this.convertTableRawData(rows);
@@ -92,20 +104,14 @@ export default class QuestionList extends React.Component {
             this.setState({
                 rows:rows,
                 originalRows:rows,
-                filters:{ qType:"fre"}
+                originalData:rows,
+                filters:{qType:"fre"}
             });
         });
     };
     convertTableRawData = function (rows){
         var tableData = rows.map(r =>{
-            r.options = this.getOptionCell(r);
-            r.categoryWeightsCell = <div>
-                {
-                    r.categoryWeights.map(category=>{
-                        return <span> c:{category.id} , w:{category.weight.toFixed(2)} <br/></span>
-                    })
-                }
-            </div>;
+            r.options = this.getOptionCell(r)
             return r;
         });
         return tableData;
@@ -121,7 +127,23 @@ export default class QuestionList extends React.Component {
     };
     deleteQuestion = id => ()=>{
         log("deleting-> ",id);
-        //TODO soru silme yapılacak
+        QuestionAPI.deleteById({id:id}).then(repsonse=>{
+            return response.json()
+        }).then(json=>{
+            if(json.statu == "OK") {
+                this.context.showMessage("Question deleted",2000);
+                var rows = this.state.originalData;
+                rows = _.filter(rows,q =>{return q.id != id});
+                this.setState({
+                    rows:rows
+                });
+            }
+            else if(statu == "FAIL") {
+                this.context.showMessage("Deleting Fail!",2000);
+            }
+        }).catch(err=>{
+            this.context.showMessage("An error occured",2000);
+        });
     };
     viewQuestion = id => ()=>{
         log("viewing-> ",id);
@@ -172,10 +194,11 @@ export default class QuestionList extends React.Component {
         var rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
         this.setState({rows:rows});
     };
-    handleClearFilters= function(){
+    handleClearFilters = function (){
         //all filters removed
-        this.setState({filters: {} });
+        this.setState({filters:{}});
     };
+
     render(){
         return (
 
@@ -205,3 +228,7 @@ export default class QuestionList extends React.Component {
         );
     }
 }
+
+QuestionList.contextTypes = {
+    showMessage:React.PropTypes.func
+};

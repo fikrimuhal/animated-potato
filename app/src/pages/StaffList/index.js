@@ -124,7 +124,7 @@ export default  class StaffList extends React.Component {
     };
     viewRow = index => ()=>{
         log("viewing row ->",index);
-        browserHistory.push("/adminpanel/skilltestreport/" + index)
+        browserHistory.push("/dashboard/skilltestreport/" + index)
     };
     getRows = function (){
         return Selectors.getRows(this.state);

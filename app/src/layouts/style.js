@@ -165,7 +165,8 @@ export const AdminLayoutStyle = {
     main:{
         backgroundImage:"url("+image+")",
         height:"auto !important",
-        minHeight:"100%"
+        minHeight:"100%",
+        backgroundSize:"cover"
     },
     mainPaper:{
         //margin:"0 auto",

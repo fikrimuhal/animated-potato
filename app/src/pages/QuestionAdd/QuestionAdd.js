@@ -206,7 +206,7 @@ export default class QuestionAdd extends React.Component {
         var showOptions = ["radio","checkbox","yesno"].includes(answerType);
         //console.log("bu ağırlık", categoryWeights)
         var editMode = this.props.editMode || false;
-        log("edit mode",this.props,editMode);
+        //log("edit mode",this.props,editMode);
         return (
 
             <div>
@@ -214,7 +214,7 @@ export default class QuestionAdd extends React.Component {
                 <Row>
                     <Col xs={9} sm={9} md={9} lg={9}>
                         <TextField hintText="Question Title" floatingLabelText="Question Title"
-                                   onChange={this.handleQuestionTextChange} style={{width:"100%"}} value={title}/></Col>
+                                   onChange={this.handleQuestionTextChange} style={{width:"100%"}} value={title} /></Col>
                     <Col xs={3} sm={3} md={3} lg={3}>
                         <RaisedButton label="Save Question" secondary={true}
                                       onClick={()=>this.handleSaveQuestion()}/></Col>

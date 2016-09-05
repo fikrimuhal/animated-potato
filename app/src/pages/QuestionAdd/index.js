@@ -1,6 +1,5 @@
 import React            from 'react'
 import {browserHistory} from 'react-router'
-import {Toast}          from '../../components/MyComponents'
 import RaisedButton     from 'material-ui/RaisedButton';
 import QuestionAdd      from './QuestionAdd'
 import * as api         from '../../utils/api';
@@ -11,9 +10,8 @@ import log2             from '../../utils/log2'
 import * as Immutable from 'immutable'
 import LinearProgress from 'material-ui/LinearProgress';
 const log = log2("QuestionAdd Index: ");
-var showToast = null;
 const questionModel = {
-    title:"Başlıksız soru ?",
+    title:"",
     qType:"radio",
     categoryWeights:[],
     options:[],
@@ -34,11 +32,6 @@ export default class QuestionAddContainer extends React.Component {
 
         this.state = {
             data:immutableData,
-            toastSettings:{
-                open:false,
-                message:"",
-                duration:2000
-            },
             categoryList:[],
             allQuestionSets:[],
             loadingShow:false,
@@ -46,8 +39,7 @@ export default class QuestionAddContainer extends React.Component {
             setListWaiting:true,
             editMode:this.props.editMode || false
         };
-        showToast = util.myToast("toastSettings",this.setState,this.state);
-        util.bindFunctions.call(this,['modelChanged','showMessage','onSave','initialize']);
+        util.bindFunctions.call(this,['modelChanged','onSave','initialize']);
     }
 
     componentDidMount = function (){
@@ -124,12 +116,13 @@ export default class QuestionAddContainer extends React.Component {
             }
         }
 
-    }
+    };
     modelChanged = function changed(newData,oldData){
         this.setState({data:newData});
-    }
+    };
     onSave = function (){
         var questionObj = this.state.data.toJS();
+        var _this = this;
         if(this.checkModelValid(this.state.data)) {
             this.setState({
                 loadingShow:true
@@ -144,15 +137,17 @@ export default class QuestionAddContainer extends React.Component {
             //db.setQuestionToStorage(questionObj);
             var questionModel = this.createQuestionModel(questionObj);
             log("questionObj: ",questionModel);
-            api.insertQuestion(questionModel).then(response=>{
+            api.QuestionAPI.create(questionModel).then(response=>{
                 return response.json();
             }).then(json=>{
+                log("jsonnnn",json);
+                _this.context.showMessage("Question saved!!__",2000);
                 if(json.status == "OK") {
-                    this.showMessage("Question saved!!",2000);
+                    _this.context.showMessage("Question saved!!",2000);
                     Cache.QuestionCaching.clear();
                 }
                 else if(json.status == "FAIL") {
-                    this.showMessage("An error encountered!! Question hasn't saved.",2000);
+                    _this.context.showMessage("An error encountered!! Question hasn't saved.",2000);
                     log(json.message);
                 }
                 this.setState({
@@ -170,19 +165,19 @@ export default class QuestionAddContainer extends React.Component {
         var setList = immutableQuestion.get("setList");
         var result = true;
         if((qType == "radio" || qType == "checkbox" || qType == "yesno") && options.size == 0) {
-            this.showMessage("You must add option",1000);
+            this.context.showMessage("You must add option",1000);
             result = false;
         }
         if(title.length == 0) {
-            this.showMessage("Title required",1000);
+            this.context.showMessage("Title required",1000);
             result = false;
         }
         if(cWeights.size == 0) {
-            this.showMessage("You must add category&weights",1000);
+            this.context.showMessage("You must add category&weights",1000);
             result = false;
         }
         if(setList.size == 0) {
-            this.showMessage("You must add question set",1000);
+            this.context.showMessage("You must add question set",1000);
             result = false;
         }
 
@@ -241,22 +236,9 @@ export default class QuestionAddContainer extends React.Component {
         log("unNormalizeCategoryWeights",question);
         question.categoryWeights.forEach(item=>{
             item.weight *= 10;
-        })
+        });
         return question;
     };
-    showMessage = function (message,duration){
-        var toastSettings = {
-            open:true,
-            message:message,
-            duration:duration
-        }
-        this.setState({toastSettings:toastSettings});
-        var _this = this;
-        setTimeout(() =>{
-            toastSettings.open = false;
-            this.setState({toastSettings:toastSettings});
-        },duration);
-    }
 
     backToList = function (){
         browserHistory.push("/dashboard/QuestionList");
@@ -278,7 +260,6 @@ export default class QuestionAddContainer extends React.Component {
                              setListWaiting={this.state.setListWaiting}
                              categoriesWaiting={this.state.categoriesWaiting}
                              editMode={editMode}/>
-                <Toast settings={this.state.toastSettings}/>
             </div>
         );
     }
@@ -287,4 +268,7 @@ export default class QuestionAddContainer extends React.Component {
 QuestionAddContainer.propTypes = {
     editMode:React.PropTypes.bool,
     question:React.PropTypes.object
-}
+};
+QuestionAddContainer.contextTypes = {
+    showMessage : React.PropTypes.func
+};

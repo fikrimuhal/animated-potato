@@ -34,12 +34,12 @@ export default class AdminMenu extends React.Component {
                 </Link>
                 <Divider/>
                 <Link to='/dashboard/ListofStaff'>
-                    <MenuItem primaryText="Stuff List" leftIcon={<PersonIcon/>}/>
+                    <MenuItem primaryText="Staff List" leftIcon={<PersonIcon/>}/>
                 </Link>
-                <Divider/>
-                <Link to='/dashboard/AdminProfile'>
-                    <MenuItem primaryText="Admin Info" leftIcon={<AdminIcon/>}/>
-                </Link>
+                {/*<Divider/>*/}
+                {/*<Link to='/dashboard/AdminProfile'>*/}
+                    {/*<MenuItem primaryText="Admin Info" leftIcon={<AdminIcon/>}/>*/}
+                {/*</Link>*/}
             </Menu>
 
         );
