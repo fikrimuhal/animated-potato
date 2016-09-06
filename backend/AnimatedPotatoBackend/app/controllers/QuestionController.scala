@@ -15,7 +15,21 @@ class QuestionController @Inject() extends Controller {
 
   def update() = evalOperation(Questions.update)
 
-  def delete() = evalOperation(Questions.delete)
+  def delete() =Action { implicit request =>
+
+    request.body.asJson.flatMap(_.validate[ID].asOpt) match {
+
+      case Some(id) =>
+        if (Questions.deleteById(id.id) > 0) {
+          Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
+        }
+        else {
+          InternalServerError(Json.toJson(ResponseMessage(Constants.FAIL, Constants.SERVER_ERROR_MESSAGE)))
+        }
+      case _ =>
+        BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
+    }
+  }
 
   def getById(id: String) = Action {
 
