@@ -4,7 +4,7 @@ var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-
+var DashboardPlugin = require('webpack-dashboard/plugin');
 function extractForProduction(loaders){
     return ExtractTextPlugin.extract('style',loaders.substr(loaders.indexOf('!')));
 }
@@ -121,6 +121,7 @@ module.exports = function (options){
             unsafeCache:true
         },
         plugins:options.production ? [
+            new DashboardPlugin(),
             // Important to keep React file size down
             new webpack.DefinePlugin({
                 'process.env':{

@@ -1,41 +1,73 @@
-import React from 'react'
+import React            from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
-import Paper from  'material-ui/Paper'
-import {log2} from '../utils/'
+import AppBar           from 'material-ui/AppBar';
+import Paper            from  'material-ui/Paper'
+import Toast            from '../components/MyComponents/Toast'
+import {log2}           from '../utils/'
+import * as util        from '../utils/utils'
+import * as db          from '../utils/data'
+import UserAppBar       from './UserAppBar'
 const log = log2("DefaultLayout.js:")
-
+var showToast = null;
+var context = {};
 //Styles
 const styles = {
-  paperStyle: {
-    margin: "0 auto",
-    border: "1px teal solid",
-    borderRadius: "10px",
-    minHeight: "300px",
-    height: "auto !important",
-    width:"500px",
-    //width: "300px",
-    padding: "15px",
-    marginTop: "10px"
-  }
+    paperStyle:{
+        margin:"0 auto",
+        border:"1px teal solid",
+        borderRadius:"10px",
+        minHeight:"300px",
+        height:"auto !important",
+        width:"500px",
+        //width: "300px",
+        padding:"15px",
+        marginTop:"10px"
+    }
 };
 export default class DefaultLayout extends React.Component {
-  constructor(props){
-    super(props);
-  }
-  render= function () {
-    log("rendered")
-    return  (
-    <MuiThemeProvider>
-      <div id="page_container">
-         <header>
-              <AppBar title="Fikrimuhal Teknoloji - HR" showMenuIconButton={false}/>
-          </header>
-          {/*<Paper style={styles.paperStyle} zDepth={4}>*/}
-            {this.props.children}
-          {/*</Paper>*/}
-      </div>
-    </MuiThemeProvider>
-    )
-  }
+    constructor(props){
+        super(props);
+        this.state = {
+            toastSettings:{
+                open:false,
+                message:"",
+                duration:0
+            }
+        };
+        showToast = util.myToast("toastSettings",this);
+    }
+
+    getChildContext(){
+        context.showMessage = this.showMessage;
+        return context;
+    };
+
+    showMessage = function (message,duration){
+        showToast(message,duration);
+    };
+    getAppBar = function (){
+        if(db.isLoggedIn()) {
+            return <UserAppBar userInfo={db.getUserInfo()}/>
+        }
+        else {
+            <header>
+                <AppBar title="Fikrimuhal Teknoloji - HR" showMenuIconButton={false}/>
+            </header>
+        }
+    }
+    render = function (){
+        log("rendered")
+        return (
+            <MuiThemeProvider>
+                <div id="page_container">
+                    {this.getAppBar()}
+                    {this.props.children}
+                    <Toast settings={this.state.toastSettings}/>
+                </div>
+            </MuiThemeProvider>
+        )
+    }
 }
+DefaultLayout.childContextTypes = {
+    showMessage:React.PropTypes.func
+};

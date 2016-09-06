@@ -129,6 +129,7 @@ export default class UserSignIn extends React.Component {
             }
             else {
                 toastHelper("Authentication failed. Try again",1000);
+                this.displayProgress("none");
             }
 
         });

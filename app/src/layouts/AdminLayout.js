@@ -15,7 +15,7 @@ import Mousetrap              from 'mousetrap'
 import Toast                  from '../components/MyComponents/Toast'
 import {Row,Col}              from 'react-flexbox-grid/lib/index';
 import * as s                 from './style'
-
+import Immutable              from 'immutable'
 var context = {};
 var userInfo = null;
 const log = log2("AdminLayout.js:")
@@ -39,7 +39,17 @@ export default class AdminLayout extends React.Component {
         util.bindFunctions.call(this,['toogleMenu']);
         showToast = util.myToast("toastSettings",this);
     };
+    shouldComponentUpdate = (nextProps,nextState)=>{
+        var im_currentProp = Immutable.fromJS(this.props,(k,v)=>{return v.toOrderedMap()});
+        var im_nextProp = Immutable.fromJS(nextProps,(k,v)=>{return v.toOrderedMap()});
+        var im_currentState = Immutable.fromJS(this.state,(k,v)=>{return v.toOrderedMap()});
+        var im_nextState = Immutable.fromJS(nextState,(k,v)=>{return v.toOrderedMap()});
 
+        var propEquality = im_currentProp.equals(im_nextProp);
+        var stateEquality = im_currentState.equals(im_nextState);
+        log("shouldComponentUpdate",propEquality,stateEquality,(!propEquality || !stateEquality));
+        return (!propEquality || !stateEquality);
+    };
     getChildContext(){
         context.showMessage = this.showMessage;
         return context;
@@ -47,8 +57,6 @@ export default class AdminLayout extends React.Component {
 
     v = (e,combo)=>{
         log(combo);
-        console.log("deneme")
-
         switch(combo) {
             case "shift+m+1":
                 browserHistory.push("/adminpanel/listofparticipants");

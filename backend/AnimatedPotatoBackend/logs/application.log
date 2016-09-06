@@ -1,3 +1,1 @@
-2016-09-05 09:01:16,977 [INFO] from play.core.server.NettyServer in pool-8-thread-2 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
-2016-09-05 09:30:19,986 [INFO] from play.core.server.NettyServer in pool-8-thread-2 - Stopping server...
-2016-09-05 09:30:27,121 [INFO] from play.core.server.NettyServer in pool-10-thread-9 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+2016-09-05 16:57:50,096 [INFO] from play.core.server.NettyServer in pool-82-thread-2 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000

@@ -140,7 +140,7 @@ export default class QuestionAddContainer extends React.Component {
             api.QuestionAPI.create(questionModel).then(response=>{
                 return response.json();
             }).then(json=>{
-                log("jsonnnn",json);
+                //log("jsonnnn",json);
                 _this.context.showMessage("Question saved!!__",2000);
                 if(json.status == "OK") {
                     _this.context.showMessage("Question saved!!",2000);

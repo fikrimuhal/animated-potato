@@ -76,7 +76,7 @@ export default class QuestionList extends React.Component {
         var stateEquality = im_currentState.equals(im_nextState);
         log("shouldComponentUpdate",propEquality,stateEquality,(!propEquality || !stateEquality));
         return (!propEquality || !stateEquality);
-    }
+    };
 
     initializeData = function (){
         if(Cache.QuestionCaching.checkAll()) {
