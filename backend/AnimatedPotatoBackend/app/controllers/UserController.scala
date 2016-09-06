@@ -69,12 +69,12 @@ class UserController extends Controller {
 
   }
 
-  def getPersonnels = Action {
-    Ok(Json.toJson(Users.getPersonnelList))
+  def getPersonnelsDetailed = Action {
+    Ok(Json.toJson(Users.getPersonnelsDetailed))
   }
 
-  def getAdmins = Action {
-    Ok(Json.toJson(Users.getAdminList))
+  def getAdminsDetailed = Action {
+    Ok(Json.toJson(Users.getAdminsDetailed))
   }
 
   def makeAdmin = Action { implicit request =>

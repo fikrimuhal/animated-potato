@@ -64,44 +64,41 @@ object Questions {
   }
 
   def update(question: Question): IdType = DB { implicit session =>
-    try {
-      //      val questionTable = QuestionTable(question.id,
-      //        question.title,
-      //        question.qType,
-      //        question.options.flatMap(_.id),
-      //        question.setList)
-      //
-      //      val options: List[QuestionOption] = questionOptions.filter(_.questionId inSet question.options.map(_.questionId)).list
-      //      val willbedeletedOptions: List[IdType] = options.flatMap(_.id).filterNot(question.options.flatMap(_.id).toSet)
-      //      question.options.foreach { x => questionOptions.insertOrUpdate(x) }
-      //      willbedeletedOptions.foreach { id => questionOptions.filter(x => (x.questionId === question.id) && (x.id === id)).delete }
-      //
-      //      val currentCategories: List[QuestionCategory] = questionCategories.filter(_.questionId === question.id).list
-      //      val willbedeletedquestionCategories = currentCategories.map(_.categoryId).filterNot(question.categoryWeights.map(_.id).toSet)
-      //      question.categoryWeights.foreach { c => questionCategories.insertOrUpdate(QuestionCategory(question.id, c.id, c.weight)) }
-      //      willbedeletedquestionCategories.foreach { id => questionCategories.filter(x => (x.questionId === question.id) && x.categoryId == id).delete }
-      //
-      //      val currentQuestion = questions.filter(_.id === question.id).list.head
-      //      val willdecreasedIDs = currentQuestion.setList.toSet.diff(question.setList.toSet)
-      //      val willincreasedIDs = question.setList.toSet.diff(currentQuestion.setList.toSet)
-      //
-      //      willbedeletedOptions.foreach(id => QuestionSets.decreaseCount(id.toInt))
-      //      willincreasedIDs.foreach(id => QuestionSets.increaseCount(id))
-      1
-    }
-    catch {
-      case e: Exception => -1
-    }
+
+    lazy val questions = TableQuery[Questions]
+    lazy val questionOptions = TableQuery[QuestionOptions]
+    lazy val questionCategories = TableQuery[QuestionCategories]
+    lazy val questionSets = TableQuery[QuestionSetDAO]
+
+    // question update
+    questions.filter(_.id === question.id).update(QuestionTable(question.id, question.title, question.qType))
+    // questionOptions update
+    questionOptions.filter(qopt => qopt.questionId === question.id).delete
+    question.options.foreach { qopt => questionOptions += qopt }
+    //questionCategory Update
+    questionCategories.filter(qct => qct.questionId === question.id).delete
+    question.categoryWeights.foreach(qct => questionCategories += QuestionCategory(question.id.get, qct.id, qct.weight))
+    //questionSets update
+    questionSets.filter(qs => qs.questionId === question.id).delete
+    question.setList.foreach(qs => QuestionSetDAO.insert(QuestionSet(question.id.get, qs)))
+
+    question.id.get
   }
 
   def deleteById(questionId: QuestionId): Int = DB { implicit session =>
+
+    lazy val questionOptions = TableQuery[QuestionOptions]
+    lazy val questionCategories = TableQuery[QuestionCategories]
+    lazy val questionSets = TableQuery[QuestionSetDAO]
+
     questions.filter(_.id === questionId).delete
-  }
-  def delete(question: Question): Int = DB { implicit session =>
-    questions.filter(_.id === question.id).delete
+    questionOptions.filter(qopt => qopt.questionId === questionId).delete
+    questionCategories.filter(qct => qct.questionId === questionId).delete
+    questionSets.filter(qs => qs.questionId === questionId).delete
+
   }
 
-  def getAll = DB { implicit session =>
+  def getAll: List[QuestionResponse] = DB { implicit session =>
 
     for (question <- questions.list if question != null)
       yield
@@ -147,5 +144,3 @@ class Questions(tag: Tag) extends Table[QuestionTable](tag, "question") {
 
   def * = (id.?, title, qType) <> (QuestionTable.tupled, QuestionTable.unapply)
 }
-
-
