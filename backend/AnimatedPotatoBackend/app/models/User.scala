@@ -17,7 +17,7 @@ case class User(id: Option[UserIdType] = None,
                 isadmin: Option[Boolean] = Some(false),
                 ispersonnel: Option[Boolean] = Some(false))
 
-case class UserDetails(id : UserIdType,name : String, lastName : String, email : String, phone : String, photo : Option[String] )
+case class UserDetails(id : UserIdType,name : String, lastName : String, email : String, phone : String, photo : Option[String],isAdmin : Option[Boolean] = None )
 
 object Users {
   lazy val users = TableQuery[Users]
@@ -108,7 +108,7 @@ object Users {
 
   def getPersonnelsDetailed: List[UserDetails] = DB { implicit session =>
     users.filter(_.isPersonnel === true).list.flatMap(usr => participants.filter(_.username === usr.username).list
-      .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
+      .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo,usr.isadmin)))
   }
 
   def getAdminsDetailed: List[UserDetails] = DB { implicit session =>
