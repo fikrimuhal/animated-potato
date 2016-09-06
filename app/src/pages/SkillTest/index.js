@@ -33,7 +33,8 @@ export default class SkillTestContainer extends React.Component {
             answeredQuestionCount:0,
             questionCount:0,
             progressValue:0,
-            screenWidth:0
+            screenWidth:0,
+            isRegistered:false
         };
         util.bindFunctions.call(this,['getQuestionContainer','answerAndNextQuestion','saveAnswer','startTest','nextQuestion']);
 
@@ -91,22 +92,14 @@ export default class SkillTestContainer extends React.Component {
         }).then(response=>{
             return response.json();
         }).then(json=>{
-            log("json1",json);
-            var status = json.status == undefined ? "OK" : json.status;
-            json = {
-                status:status,
-                testOver:false,
-                questionCount:Math.floor(Math.random() * 10),
-                firstQuestion:json
-            };
-            log("json2",json);
+            log("json",json);
             if(json.status == "OK") {
                 this.setState({
-                    currentQuestion:json.firstQuestion,
+                    currentQuestion:json.question,
                     questionReady:true,
-                    testOver:json.testOver,
-                    questionCount:json.questionCount,
-                    interviewId:53,
+                    testOver:!json.testOver,
+                    questionCount:json.remainingQuestion,
+                    interviewId:json.interviewId,
                     email:email
                 });
             }
@@ -114,49 +107,14 @@ export default class SkillTestContainer extends React.Component {
                 _this.context.showMessage("Question fetching fail.",5000);
             }
         });
-        // db.startTest().then((response)=> {
-        //     if(response.valid) {
-        //         var question=response.firstQuestion;
-        //         this.setState({
-        //             currentQuestion: question,
-        //             questionReady: true,
-        //             testOver: false,
-        //             questionCount: response.questionCount
-        //         });
-        //     }
-        //     else {
-        //         this.setState({
-        //             status: "fail"
-        //         })
-        //     }
-        // });
 
-        // }
-        // else {
-        //     db.startTestWithoutAuthentication(reqQuery.email).then((response)=>{
-        //         if(response.valid) {
-        //             var question = response.firstQuestion;
-        //             this.setState({
-        //                 currentQuestion:question,
-        //                 questionReady:true,
-        //                 testOver:false,
-        //                 questionCount:response.questionCount
-        //             });
-        //         }
-        //         else {
-        //             this.setState({
-        //                 status:"fail"
-        //             })
-        //         }
-        //     });
-        // }
     };
 
     getQuestionContainer = function (){
         var content;
         if(this.state.status == "ok") {
             if(this.state.testOver) {
-                content = <TestOverPanel validUser={this.state.isValidUser} query={this.props.location.query}/>
+                content = <TestOverPanel validUser={this.state.isRegistered} query={this.props.location.query}/>
             }
             else {
                 if(this.state.questionReady) {
@@ -191,7 +149,10 @@ export default class SkillTestContainer extends React.Component {
             this.context.showMessage("Bu soruyu cevaplamadan bir sonraki soruya geçemezseniz",2200)
             return;
         }
-
+        this.setState({
+            questionReady:false,
+            answeredQuestionCount:(this.state.answeredQuestionCount + 1)
+        });
         var request = {
             answer:{
                 questionId:this.state.currentQuestion.id,
@@ -205,23 +166,27 @@ export default class SkillTestContainer extends React.Component {
             return response.json()
         }).then(json=>{
             log("json",json);
-            var status = (json.status == undefined) ? "OK" : json.status;
-            var response = {
-                status:status,
-                testOver:false,
-                questionCount:Math.floor(Math.random() * 10),
-                nextQuestion:json,
-                isValidUser:true
-            };
-            log("nextQuestion json",json);
-            this.setState({
-                currentQuestion:response.testOver ? null : response.nextQuestion,
-                questionReady:!response.testOver,
-                testOver:response.testOver,
-                answer:"",
-                questionCount:!response.testOver ? response.questionCount : 0,
-                isValidUser:response.isValidUser
-            });
+            if(json.status == "OK") {
+                if(!json.testOver) {
+                    this.setState({
+                        currentQuestion:json.question,
+                        questionReady:true,
+                        testOver:false,
+                        answer:"",
+                        questionCount:json.remainingQuestion
+                    });
+                }
+                {
+                    this.setState({
+                        questionReady:true,
+                        testOver:true,
+                        answer:"",
+                        questionCount:0,
+                        isRegistered:json.isRegistered
+                    });
+                }
+            }
+
         });
     };
     answerAndNextQuestion = function (){
