@@ -52,13 +52,13 @@ export default  class SetCreateToolbar extends React.Component {
     };
     iconButtons = ()=>{
         if(this.state.mode == "create") {
-            return (<FloatingActionButton onClick={this.toogleMode}><ContentAdd /></FloatingActionButton>);
+            return (<FloatingActionButton onClick={this.toogleMode} mini={true}><ContentAdd  /></FloatingActionButton>);
         }
         else {
             return (<div>
                     <TextField hintText={"Soru seti adınını giriniz"} ref="txtSetName"></TextField>
-                    <FloatingActionButton onClick={this.toogleMode}> <IconClose /> </FloatingActionButton>
-                    <FloatingActionButton secondary={true} onClick={this.saveQuestionSet}>
+                    <FloatingActionButton onClick={this.toogleMode} mini={true}> <IconClose /> </FloatingActionButton>
+                    <FloatingActionButton secondary={true} onClick={this.saveQuestionSet} mini={true}>
                         <IconDone/></ FloatingActionButton ></div>
             );
         }

@@ -123,7 +123,7 @@ export default class StaffList extends React.Component {
     getOptionCell = (rowData) =>{
         return (<div>
             <FlatButton icon={<DeleteIcon/>} onClick={this.deleteUser(rowData.id)}></FlatButton>
-            <FlatButton icon={<GavelIcon/>} onClick={this.makeAdmin(rowData.id)} label={"Make Admin"}></FlatButton>
+            <FlatButton icon={<GavelIcon/>} onClick={this.makeAdmin(rowData.id)} label={"Make Admin"} style={{display:rowData.isAdmin?"none":""}}></FlatButton>
 
         </div>);
     };
@@ -165,7 +165,7 @@ export default class StaffList extends React.Component {
                 _this.context.showMessage("This staff has been admin.",2000);
                 var rows = _this.state.originalData;
                 var index = _.findIndex(rows,q => q.id == id);
-                rows[index].isadmin = true;
+                rows[index].isAdmin = true;
                 _this.initTable(rows);
                 Cache.UserCaching.clear();
                 Cache.StaffCaching.clear();
@@ -224,6 +224,7 @@ export default class StaffList extends React.Component {
         });
     }
     handleGridSort = function (sortColumn,sortDirection){
+        log("rows-1",this.state.rows)
         var comparer = function (a,b){
             if(sortDirection === 'ASC') {
                 return (a[sortColumn] > b[sortColumn]) ? 1 : -1;
@@ -233,7 +234,9 @@ export default class StaffList extends React.Component {
             }
         }
         var rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
-        this.setState({rows:rows});
+        rows = rows.map(r=>{delete r.options; return r;});
+        this.initTable(rows);
+        //this.setState({rows:rows});
     }
 
     render(){

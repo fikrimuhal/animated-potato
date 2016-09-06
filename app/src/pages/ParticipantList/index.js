@@ -165,6 +165,7 @@ export default class ParticipantList extends React.Component {
     }
 
     handleFilterChange = function (filter){
+        //TODO filtering calışmıyor
         let newFilters = Object.assign({},this.state.filters);
         if(filter.filterTerm) {
             newFilters[filter.columnKey] = filter.filterTerm;
@@ -175,6 +176,7 @@ export default class ParticipantList extends React.Component {
         this.setState({filters:newFilters});
     }
     handleGridSort = function (sortColumn,sortDirection){
+        log("rows-1",this.state.rows)
         var comparer = function (a,b){
             if(sortDirection === 'ASC') {
                 return (a[sortColumn] > b[sortColumn]) ? 1 : -1;
@@ -183,8 +185,11 @@ export default class ParticipantList extends React.Component {
                 return (a[sortColumn] < b[sortColumn]) ? 1 : -1;
             }
         }
-        var rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
-        this.setState({rows:rows});
+        //var rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
+        if(sortDirection != 'NONE'){
+            log("rows-2",this.state.rows.sort(comparer))
+        }
+        //this.setState({rows:rows});
     }
 
     render(){
