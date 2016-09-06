@@ -33,53 +33,20 @@ export default class RadioQuestion extends React.Component {
     shouldComponentUpdate=function (nextProps, nextState) {
         return true;
     };
-    handleHotkey=function (e, combo) {
-        log("combo", combo);
-        var options=util.obj2Array(this.props.question.options);
-        if(combo == "e") {
-            var yesOption=_.filter(options, (q)=> {
-                return q.text.trim().toLowerCase() == "yes"
-                    || q.text.trim().toLowerCase() == "evet"
-            });
-            yesOption=yesOption[0];
-            log("yesOption", yesOption)
-            this.radioChange(yesOption.id);
-        }
-        else if(combo == "h") {
-            var noOption=_.filter(options, (q)=> {
-                return q.text.trim().toLowerCase() == "no"
-                    || q.text.trim().toLowerCase() == "hayır"
-            });
-            noOption=noOption[0];
-            log("yesOption", noOption);
-            this.radioChange(noOption.id);
 
-        }
 
-    };
-    componentDidMount=()=> {
-        if(this.props.question.type == "yesno") {
-            Mousetrap.bind([`e`, `h`], this.handleHotkey);
-        }
-    };
-    componentWillUnmount=function () {
-        if(this.props.question.type == "yesno") {
-            Mousetrap.unbind([`e`, `h`], this.handleHotkey);
-        }
-    };
     radioQuestionText=(option)=> {
         if(this.props.question.type == "yesno") {
-            var buttonText=(["yes", "evet"].includes(option.text.toLowerCase().trim())) ? "E" : "H";
-            return <span>{option.text}<i style={s.userLayoutStyles.tusStili}>{buttonText}</i></span>
+            var buttonText=(["yes", "evet"].includes(option.title.toLowerCase().trim())) ? "E" : "H";
+            return <span>{option.title}<i style={s.userLayoutStyles.tusStili}>{buttonText}</i></span>
         }
         else {
-            return <span>{option.text}</span>
+            return <span>{option.title}</span>
         }
     }
     render=function () {
-        log("rendered",s.userLayoutStyles.questionBadgeBlue);
+        log("rendered",);
         var options=util.obj2Array(this.props.question.options);
-       // log(s.userLayoutStyles.questionBadgeBlue)
         return (
             <div>
                 {/*<FontIcon color={pink500} className="material-icons md-dark md-inactive">flag</FontIcon>*/}

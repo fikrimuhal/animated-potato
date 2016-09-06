@@ -40,8 +40,8 @@ export default  class  AdminAppBar extends  React.Component{
     render = ()=>{
     return(
         <header>
-            <AppBar title="Fikrimuhal Teknoloji - HR Admin Paneli"
-                    onLeftIconButtonTouchTap={this.props.toogleMenu}
+            <AppBar title="Fikrimuhal Fast Interview - Dashboard"
+                    showMenuIconButton={false}
                     iconElementRight={
 
                         <IconMenu

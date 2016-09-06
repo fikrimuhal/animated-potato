@@ -1,51 +1,36 @@
 import * as db from './data.js'
-//region Authentication
-    /**
-     *  request:    username:string, required
-     *              password:string, required
-     *
-     *  response-success:
-     *              status:"ok"
-     *              userInfo: {}
-     *              isAdmin=:booelan
-     *              Authorization token in header
-     *  response-fail
-     *              status:"fail",
-     *              faultCode:string
-     *              message:string
-     */
-    export const authenticate = db.getApiPromise("login","POST");
-//endregion
 
-export const questionList = db.getApiPromise("questionList","POST");
-export const getCategoryList = db.getApiPromise("admin/getCategories","POST");
-export const getAllQuestionSet = db.getApiPromise("admin/getSets","POST");
-export const setQuestionSet = db.getApiPromise("admin/insertSet","POST");
-
-//region Save Question
-    /**
-     *  request:    {questionModel}
-     *
-     *  response-success:
-     *              status:"OK"
-     *              message: ""
-     *  response-fail
-     *              status:"FAIL"
-     *              faultCode:string
-     *              message:string
-     */
-    export const insertQuestion = db.getApiPromise("admin/insertQuestion","POST");
-//endregion
-
+export const authenticate = db.getApiPromise("login","POST");
 export const signUp = db.getApiPromise("signUp","POST");
+export const getParticipants = db.getApiPromise("admin/getParticipants","GET");
+export const getCategoryList = db.getApiPromise("admin/getCategories","POST");
 
-//region Get Questions
-/**
- *  request:    {}
- *
- *  response-success:
- *              List of question
- *  response-fail
- */
-export const getAllQuestion = db.getApiPromise("admin/getQuestions","GET");
-//endregion
+export const QuestionSetAPI = {
+    getAllQuestionSet:db.getApiPromise("admin/getSets","GET"),
+    setQuestionSet:db.getApiPromise("admin/insertSet","POST"),
+    deleteQuestionSet:db.getApiPromise("admin/deleteSet","POST"),
+    makeDefaultSet:db.getApiPromise("admin/makeDefaultSet","POST"),
+    updateQuestionSet:db.getApiPromise("admin/updateSet","POST")
+};
+
+export const QuestionAPI = {
+    getAll:db.getApiPromise("admin/getQuestions","GET"),
+    getById:questionId => db.getApiPromise("admin/getQuestion/" + questionId,"GET"),
+    create:db.getApiPromise("admin/insertQuestion","POST"),
+    update:db.getApiPromise("admin/updateQuestion","POST"),
+    deleteById:db.getApiPromise("admin/deleteQuestion","POST")
+};
+
+export const InterviewAPI = {
+    startTest:db.getApiPromise("startTest","POST"),
+    startTestWithoutAuthentication:(email)=> db.getApiPromise("startTest","POST"),
+    nextQuestion:db.getApiPromise("nextQuestion","POST")
+};
+
+export const UserAPI = {
+    getUsers:db.getApiPromise("admin/getUsers","GET"),
+    getStaffs:db.getApiPromise("admin/getPersonnels","GET"),
+    makeStaff:db.getApiPromise("admin/makePersonnel","POST"),
+    deleteUser:db.getApiPromise("admin/deleteUser","POST"),
+    makeAdmin:db.getApiPromise("admin/makeAdmin","POST")
+};

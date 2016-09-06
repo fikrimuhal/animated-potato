@@ -1,19 +1,24 @@
 package InterviewService
 
-import akka.actor.{Actor, ActorRef, Props, Stash, SupervisorStrategy}
+import akka.actor.{Actor, ActorRef, PoisonPill, Props, Stash, SupervisorStrategy}
 import animatedPotato.protocol.protocol._
 import akka.pattern.ask
+
 import scala.concurrent.Future
 
+case class IAmDone(actorId: InterviewId)
+
 /**
-  * İlk n veya tüm soruları getiren implementasyon
-  *
+  * İlk n veya tüm soruları rastgele getiren implementasyon
   *
   */
 
+
 class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
   println("RandomInterview : Constructor")
-  var shuffledQuestionIds: List[IdType] = scala.util.Random.shuffle(initMessage.questionCategoryWeightTuple.value.map(_.questionId).distinct)
+  final val MAX_NUMBER_OF_QUESTIONS = 20
+
+  var shuffledQuestionIds: List[IdType] = scala.util.Random.shuffle(initMessage.questionCategoryWeightTuple.value.map(_.questionId).distinct.take(MAX_NUMBER_OF_QUESTIONS))
 
   override def receive: Receive = ready
 
@@ -21,9 +26,10 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
 
     case x: GetNextQuestion =>
       println("RandomInterview'e GetNextQuestion geldi ")
-      sender ! getNextQuestionId.map(NextQuestion).getOrElse {
+      sender ! getNextQuestionId.map(NextQuestion(_, initMessage.interviewId,shuffledQuestionIds.length)).getOrElse {
         println("RandomInterview TestFinish yollayacak")
-        sender ! TestFinish(initMessage.interviewId, initMessage.userId)
+        sender! TestFinish(x.interviewId, initMessage.userIdentifier)
+
         unstashAll()
         context become testFinished
       }
@@ -37,12 +43,12 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
 
   def testFinished: Receive = {
 
-    case x: TestReportRequest =>
-      context.parent ! x
-
-    case x: TestReport =>
-      println(s"RandomInterview TestReport geldi : $x")
-    // sender ! x
+    case TestReportRequest(id) =>
+      // TODO : scores will be calculated here
+      println("randoma testreportrequest geldi")
+      sender ! TestReport(initMessage.interviewId
+        ,initMessage.userIdentifier
+        ,Map(1.toLong -> 1.5 , 2.toLong -> 2.4))
 
     case x =>
       println(s"RandomInterview TestFinished garip bir mesaj: $x")
@@ -51,7 +57,6 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
   }
 
   override def preStart = {
-
     println("RandomInterview: preStart")
 
   }

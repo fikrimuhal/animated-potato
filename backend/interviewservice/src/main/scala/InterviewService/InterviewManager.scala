@@ -1,14 +1,16 @@
 package InterviewService
 
-import akka.actor.{Actor, ActorRef, Props, Stash}
-import animatedPotato.protocol.protocol._
+
+import akka.actor.{Actor, ActorRef, PoisonPill, Props, Stash}
+import animatedPotato.protocol.protocol.{TestFinish, _}
 import akka.pattern.ask
 import akka.util.Timeout
+
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 import akka.util.Timeout._
 
-case class InitMessage(interviewId: InterviewId, userId: UserIdType, restrictedCategoryList: Option[List[CategoryId]],
+case class InitMessage(interviewId: InterviewId, userIdentifier: UserIdentifier, restrictedCategoryList: Option[List[CategoryId]],
                        questionCategoryWeightTuple: QuestionCategoryWeightTupleList,
                        categoryList: CategoryList,
                        userQuestionAnswerTuple: AllAnswerEvents)
@@ -16,15 +18,22 @@ case class InitMessage(interviewId: InterviewId, userId: UserIdType, restrictedC
 class InterviewManager(database: ActorRef) extends Actor with Stash {
   implicit val timeout = Timeout(5 seconds)
   println("Interview Manager: Constructor")
-  var interviewActors = Map[UserIdType, ActorRef]()
+  var interviewActors = Map[InterviewId, ActorRef]()
 
-  override def receive: Receive = init
+  /**
+    * is called by RootActor
+    * calls the intended Interview implementation Actor( RandomInterview, OrderedInterview etc.)
+    * returns first question of the interview
+    *
+    */
 
-  def init: Receive = {
-
+  override def receive: Receive = {
+    // returns first question of the test
     case (TestStart(interviewId, userId, restrictedCategoryList)) =>
+      println("InterviewManager: TestStart")
 
-      println("Interview Manager: TestStart")
+      val _sender = sender // RootActor
+
       val qcwtFuture = (database ? RequestAllQuestionCategoryWeight).mapTo[QuestionCategoryWeightTupleList]
       val categoryListFuture = (database ? RequestAllCategories).mapTo[CategoryList]
       val userQuestionAnswerTupleFuture = (database ? RequestAllAnswerEvents).mapTo[AllAnswerEvents]
@@ -35,33 +44,42 @@ class InterviewManager(database: ActorRef) extends Actor with Stash {
         allAnswerEvents <- userQuestionAnswerTupleFuture
       } {
         val initMessage = InitMessage(interviewId, userId, restrictedCategoryList, questionCategoryWeightTupleList, categoryList, allAnswerEvents)
-        self ! initMessage
+
+        println(s"InterviewManager : initmessage : $initMessage")
+
+        val interviewActor = interviewActors.getOrElse(initMessage.interviewId,context.actorOf(RandomInterview.props(initMessage)))
+        interviewActors += (initMessage.interviewId -> interviewActor)
+
+//        interviewActor forward GetNextQuestion(interviewId = initMessage.interviewId)
+
+        (interviewActor ? GetNextQuestion(interviewId = initMessage.interviewId))
+          .mapTo[NextQuestion]
+          .map(question => _sender ! question)
+
       }
-    case (initMessage: InitMessage) =>
 
-      val interviewActor = interviewActors.getOrElse(initMessage.userId, {
-        val newInterviewActor = context.actorOf(RandomInterview.props(initMessage))
-        interviewActors = interviewActors + (initMessage.userId -> newInterviewActor)
-        newInterviewActor
-      })
 
-      context become ready(interviewActor)
-      unstashAll()
+    case x@GetNextQuestion(_, interviewId) =>
+      val _sender = sender
+      println("InterviewManager'a GetNextQuestion geldi")
+      (interviewActors(interviewId) ? x)
+        .map {
+          // Interview Actor'den TestFinish gelirse TestReportRequest requesti gönder
+          case TestFinish(interviewId,userIdentifier) =>
+            _sender ! TestFinish(interviewId,userIdentifier)
+            println("interview manager'e test finish geldi")
+            interviewActors(interviewId) ! TestReportRequest(interviewId)
+          case x =>
+            _sender ! x
+        }
+
+    case TestReport(interviewId,userIdentifier,scores) =>
+      sender ! PoisonPill
+      interviewActors -= interviewId
+      //  TODO : burada database actorü ile database e kaydet
 
     case x =>
-      stash
-
-  }
-
-  def ready(interview: ActorRef): Receive = {
-
-    case TestReportRequest(id) =>
-      //Test Report burada hesaplanabilir :m
-      interview forward TestReport(1, 1, Map(1.toLong -> 1.5))
-
-    case x =>
-      println(s"InterviewManager : Ready : Bunu interview halletsin : $x")
-      interview forward x
+      println(s"InterviewManager : unexpected arg : $x")
   }
 
   override def preStart() = {

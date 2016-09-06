@@ -1,6 +1,5 @@
 import React            from 'react'
 import {browserHistory} from 'react-router'
-import {Toast}          from '../../components/MyComponents'
 import RaisedButton     from 'material-ui/RaisedButton';
 import QuestionAdd      from './QuestionAdd'
 import * as api         from '../../utils/api';
@@ -11,9 +10,8 @@ import log2             from '../../utils/log2'
 import * as Immutable from 'immutable'
 import LinearProgress from 'material-ui/LinearProgress';
 const log = log2("QuestionAdd Index: ");
-var showToast = null;
 const questionModel = {
-    title:"Başlıksız soru ?",
+    title:"",
     qType:"radio",
     categoryWeights:[],
     options:[],
@@ -23,23 +21,27 @@ const questionModel = {
 export default class QuestionAddContainer extends React.Component {
     constructor(props){
         super(props);
-        var immutableData = Immutable.fromJS(questionModel,(key,value)=>{return value.toOrderedMap();});
+        var immutableData;
+        if(this.props.editMode) {
+            var question = this.unNormalizeCategoryWeights(this.props.question);
+            immutableData = Immutable.fromJS(question,(key,value)=>{return value.toOrderedMap();});
+        }
+        else {
+            immutableData = Immutable.fromJS(questionModel,(key,value)=>{return value.toOrderedMap();});
+        }
+
         this.state = {
             data:immutableData,
-            toastSettings:{
-                open:false,
-                message:"",
-                duration:2000
-            },
             categoryList:[],
             allQuestionSets:[],
             loadingShow:false,
             categoriesWaiting:true,
-            setListWaiting:true
+            setListWaiting:true,
+            editMode:this.props.editMode || false
         };
-        showToast = util.myToast("toastSettings",this.setState,this.state);
-        util.bindFunctions.call(this,['modelChanged','showMessage','onSave','initialize']);
+        util.bindFunctions.call(this,['modelChanged','onSave','initialize']);
     }
+
     componentDidMount = function (){
         log("componentDidMount");
         this.initialize();
@@ -53,10 +55,10 @@ export default class QuestionAddContainer extends React.Component {
         this.initQuestionSets();
     };
     initCategories = function (){
-        if(Cache.checkCategoriesFromCache()) {
+        if(Cache.CategoryCaching.check()) {
             log("categories from CACHE");
             this.setState({
-                categoryList:Cache.getCategoriesFromCache(),
+                categoryList:Cache.CategoryCaching.get(),
                 categoriesWaiting:false
             });
             //this.state.categoryList = Cache.getCategoriesFromCache();
@@ -69,7 +71,7 @@ export default class QuestionAddContainer extends React.Component {
             }).then(json=>{
                 log("json",json);
                 //categoryList = json;
-                Cache.cacheCategories(json);
+                Cache.CategoryCaching.cache(json);
                 this.setState({
                     categoryList:json,
                     categoriesWaiting:false
@@ -81,22 +83,22 @@ export default class QuestionAddContainer extends React.Component {
 
     }
     initQuestionSets = function (){
-        if(Cache.checkQuestionSetsFromCache()) {
+        if(Cache.QuestionSetCaching.check()) {
             log("question sets from CACHE");
             this.setState({
-                allQuestionSets:Cache.getQuestionSetsFromCache(),
+                allQuestionSets:Cache.QuestionSetCaching.get(),
                 setListWaiting:false
             });
             //this.state.allQuestionSets = Cache.getQuestionSetsFromCache();
         }
         else {
             log("question sets from API");
-            api.getAllQuestionSet({}).then(response=>{
+            api.QuestionSetAPI.getAllQuestionSet().then(response=>{
                 log("getAllQuestionSet api response",response);
                 return response.json();
             }).then(json=>{
                 log("getAllQuestionSet api json",json);
-                Cache.cacheQuestionSets(json);
+                Cache.QuestionSetCaching.cache(json);
                 this.setState({
                     allQuestionSets:json,
                     setListWaiting:false
@@ -114,12 +116,13 @@ export default class QuestionAddContainer extends React.Component {
             }
         }
 
-    }
+    };
     modelChanged = function changed(newData,oldData){
         this.setState({data:newData});
-    }
+    };
     onSave = function (){
         var questionObj = this.state.data.toJS();
+        var _this = this;
         if(this.checkModelValid(this.state.data)) {
             this.setState({
                 loadingShow:true
@@ -134,14 +137,17 @@ export default class QuestionAddContainer extends React.Component {
             //db.setQuestionToStorage(questionObj);
             var questionModel = this.createQuestionModel(questionObj);
             log("questionObj: ",questionModel);
-            api.insertQuestion(questionModel).then(response=>{
+            api.QuestionAPI.create(questionModel).then(response=>{
                 return response.json();
             }).then(json=>{
+                //log("jsonnnn",json);
+                _this.context.showMessage("Question saved!!__",2000);
                 if(json.status == "OK") {
-                    this.showMessage("Question saved!!",2000);
+                    _this.context.showMessage("Question saved!!",2000);
+                    Cache.QuestionCaching.clear();
                 }
                 else if(json.status == "FAIL") {
-                    this.showMessage("An error encountered!! Question hasn't saved.",2000);
+                    _this.context.showMessage("An error encountered!! Question hasn't saved.",2000);
                     log(json.message);
                 }
                 this.setState({
@@ -159,19 +165,19 @@ export default class QuestionAddContainer extends React.Component {
         var setList = immutableQuestion.get("setList");
         var result = true;
         if((qType == "radio" || qType == "checkbox" || qType == "yesno") && options.size == 0) {
-            this.showMessage("You must add option",1000);
+            this.context.showMessage("You must add option",1000);
             result = false;
         }
         if(title.length == 0) {
-            this.showMessage("Title required",1000);
+            this.context.showMessage("Title required",1000);
             result = false;
         }
         if(cWeights.size == 0) {
-            this.showMessage("You must add category&weights",1000);
+            this.context.showMessage("You must add category&weights",1000);
             result = false;
         }
         if(setList.size == 0) {
-            this.showMessage("You must add question set",1000);
+            this.context.showMessage("You must add question set",1000);
             result = false;
         }
 
@@ -226,36 +232,43 @@ export default class QuestionAddContainer extends React.Component {
         }
         return questionObj;
     }
-    showMessage = function (message,duration){
-        var toastSettings = {
-            open:true,
-            message:message,
-            duration:duration
-        }
-        this.setState({toastSettings:toastSettings});
-        var _this = this;
-        setTimeout(() =>{
-            toastSettings.open = false;
-            this.setState({toastSettings:toastSettings});
-        },duration);
-    }
+    unNormalizeCategoryWeights = function (question){
+        log("unNormalizeCategoryWeights",question);
+        question.categoryWeights.forEach(item=>{
+            item.weight *= 10;
+        });
+        return question;
+    };
 
     backToList = function (){
-        browserHistory.push("/adminpanel/questionlist");
+        browserHistory.push("/dashboard/QuestionList");
 
     }
 
     render(){
+        var editMode = this.props.editMode || false;
         return (
             <div>
                 <LinearProgress mode="indeterminate" color="red"
                                 style={{display:this.state.loadingShow ? "" : "none"}}/><br/>
                 <RaisedButton label="<- Back to list" secondary={true} onClick={this.backToList}/>
-                <QuestionAdd onChange={this.modelChanged} onSave={this.onSave} data={this.state.data}
+                <QuestionAdd onChange={this.modelChanged}
+                             onSave={this.onSave}
+                             data={this.state.data}
                              allSet={this.state.allQuestionSets}
-                             categoryList={this.state.categoryList} setListWaiting={this.state.setListWaiting} categoriesWaiting={this.state.categoriesWaiting}/>
-                <Toast settings={this.state.toastSettings}/>
+                             categoryList={this.state.categoryList}
+                             setListWaiting={this.state.setListWaiting}
+                             categoriesWaiting={this.state.categoriesWaiting}
+                             editMode={editMode}/>
             </div>
         );
     }
 }
+
+QuestionAddContainer.propTypes = {
+    editMode:React.PropTypes.bool,
+    question:React.PropTypes.object
+};
+QuestionAddContainer.contextTypes = {
+    showMessage : React.PropTypes.func
+};

@@ -3,6 +3,7 @@ import akka.actor.{Actor, Props}
 import akka.actor.Actor.Receive
 import animatedPotato.protocol.protocol
 import animatedPotato.protocol.protocol._
+import dao.CategoryDAO
 import models._
 
 import scala.slick.lifted.TableQuery
@@ -20,8 +21,9 @@ class Database extends Actor  {
         QuestionCategories.getAll().map(qc => QuestionCategoryWeightTuple(qc.questionId,qc.categoryId,qc.weight))
       )
     case RequestAllCategories =>
+      val CategoryDAO = new CategoryDAO
       println("Database: RequestAllCategories geldi")
-      sender ! CategoryList(Categories.getAll().map(c => protocol.Category(c.id,c.category)))
+      sender ! CategoryList(CategoryDAO.getAll.map(c => protocol.Category(c.id,c.category)))
 
     case RequestQuestion(id) =>
       println(s"Database: RequestQuestion($id) geldi")
@@ -30,18 +32,13 @@ class Database extends Actor  {
     case RequestAllAnswerEvents =>
       println("Database: RequestAllAnswerEvents geldi")
       sender ! AllAnswerEvents(
-        Answers.getAll().map(answer => UserQuestionAnswerTuple(answer.userid,answer.questionId,answer.answer))
+        Answers.getAll().map(answer => UserQuestionAnswerTuple(
+          answer.userId match {
+            case Some(id) => Right(id)
+            case _ => Left(answer.email.get)
+          }
+          ,answer.questionId,answer.answer))
       )
-//    case RequestAllQuestions =>
-//      println("Database : RequestAllQuestions geldi")
-//    sender ! AllQuestions(Questions.getAll.map(q=>protocol.Question(q.id,q.title,q.qType,
-//      for(opt <- q.opts) yield protocol.QuestionOption(opt.questionId,opt.id,opt.title,opt.weight),
-//      for(cat <- q.categories) yield protocol.QuestionCategory(cat.categoryid,cat.weight),
-//      q.setList)))
-
-//        case RequestQuestionSet =>
-//      println("Database: RequestQuestionSet geldi")
-//      sender ! Sets.getAllSets()
   }
 
   override def preStart = {

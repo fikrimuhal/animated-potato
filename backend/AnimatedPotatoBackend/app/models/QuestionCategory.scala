@@ -5,7 +5,7 @@ import utils.{Constants, DB}
 
 import slick.driver.PostgresDriver.simple._
 import utils.Formatter._
-
+case class QuestionCategoryRequest(id: CategoryId, weight: Double)
 case class QuestionCategory(questionId: QuestionId, categoryId: CategoryId, weight: Double)
 
 object QuestionCategories {

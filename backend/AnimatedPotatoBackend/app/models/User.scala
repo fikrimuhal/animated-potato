@@ -17,8 +17,11 @@ case class User(id: Option[UserIdType] = None,
                 isadmin: Option[Boolean] = Some(false),
                 ispersonnel: Option[Boolean] = Some(false))
 
+case class UserDetails(id : UserIdType,name : String, lastName : String, email : String, phone : String, photo : Option[String],isAdmin : Option[Boolean] = None )
+
 object Users {
   lazy val users = TableQuery[Users]
+  lazy val participants = TableQuery[Participants]
 
   def insert(user: User) = DB { implicit session =>
     users += user.copy(password = user.password.bcrypt)
@@ -58,7 +61,7 @@ object Users {
 
   def get(usernameOrEmail: String): Option[User] = DB { implicit session =>
     users.filter(u => (u.username === usernameOrEmail) || (u.email === usernameOrEmail)).list.distinct match {
-      case x :: xs=> Some(x)
+      case x :: xs => Some(x)
       case _ => None
     }
   }
@@ -72,19 +75,47 @@ object Users {
   }
 
   def isAdmin(user: User): Boolean = DB { implicit session =>
-    users.filter(_.username === user.username).map(u => u.isadmin).list.head
+    users.filter(_.username === user.username).map(u => u.isAdmin).list.head
   }
 
   def makePersonnel(id: UserIdType) = DB { implicit session =>
-    val filtered = users.filter(_.id === id)
-    val user = filtered.list.head
-    filtered.update(user.copy(ispersonnel = Some(true)))
+    users.filter(_.id === id).map(_.isPersonnel).update(true)  == 1
   }
-  def makeAdmin(id: UserIdType) = DB { implicit session =>
-    val filtered = users.filter(_.id === id)
-    val user = filtered.list.head
-    filtered.update(user.copy(isadmin = Some(true)))
+
+  def makeAdmin(id: UserIdType): Boolean = DB { implicit session =>
+    users.filter(_.id === id).map(_.isAdmin).update(true)  == 1
   }
+
+  def getPersonnelList = DB { implicit session =>
+
+    users.filter(_.isPersonnel === true).list
+      .map(user =>
+        Participants.participants.filter(_.username === user.username).list.head)
+  }
+
+  def getAdminList: List[Participant] = DB { implicit session =>
+
+    users.filter(_.isAdmin === true).list
+      .map(user =>
+        Participants.participants.filter(_.username === user.username).list.head)
+  }
+
+  def getUsersDetailed: List[UserDetails] = DB { implicit session =>
+    users.filter(u=> u.isAdmin === false && u.isPersonnel === false).list.
+      flatMap(usr => participants.filter(u => u.username === usr.username).list
+      .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
+  }
+
+  def getPersonnelsDetailed: List[UserDetails] = DB { implicit session =>
+    users.filter(_.isPersonnel === true).list.flatMap(usr => participants.filter(_.username === usr.username).list
+      .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo,usr.isadmin)))
+  }
+
+  def getAdminsDetailed: List[UserDetails] = DB { implicit session =>
+    users.filter(_.isAdmin === true).list.flatMap(usr => participants.filter(_.username === usr.username).list
+      .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
+  }
+
 }
 
 class Users(tag: Tag) extends Table[User](tag, "users") {
@@ -96,9 +127,9 @@ class Users(tag: Tag) extends Table[User](tag, "users") {
 
   def email = column[String]("email")
 
-  def isadmin = column[Boolean]("isadmin")
+  def isAdmin = column[Boolean]("isadmin")
 
-  def ispersonnel = column[Boolean]("ispersonnel")
+  def isPersonnel = column[Boolean]("ispersonnel")
 
-  def * = (id.?, username, password, email.?, isadmin.?, ispersonnel.?) <> (User.tupled, User.unapply)
+  def * = (id.?, username, password, email.?, isAdmin.?, isPersonnel.?) <> (User.tupled, User.unapply)
 }

@@ -1,66 +1,45 @@
 package controllers
 
-import models.{Categories, Category}
+import animatedPotato.protocol.protocol._
+import dao.CategoryDAO
+import models.{Category, ResponseMessage}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
+import utils.Constants
 import utils.Formatter._
 
-/**
-  * Created by who on 09.08.2016.
-  */
 class CategoryController extends Controller {
+  val categoryDAO = new CategoryDAO
 
+  def insert = evalOperation(categoryDAO.insert)
 
-  def insertCategory() = Action { implicit request =>
-    try {
-      val category: Category = request.body.asJson.get.as[Category]
-      if (Categories.insert(category)) Ok("1") else BadRequest("-1")
-    }
-    catch {
-      case e: Exception => BadRequest("-1")
-    }
+  def update = evalOperation(categoryDAO.update)
+
+  def delete = evalOperation(categoryDAO.delete)
+
+  def get(id: Long) = Action {
+    Ok(Json.toJson(categoryDAO.getById(id)))
   }
 
-
-  def updateCategory() = Action { implicit request =>
-    try {
-      val category: Category = request.body.asJson.get.as[Category]
-      if (Categories.update(category)) Ok("1") else BadRequest("-1")
-    }
-    catch {
-      case e: Exception => BadRequest("-1")
-    }
+  def getAll = Action {
+    Ok(Json.toJson(categoryDAO.getAll))
   }
 
-  def deleteCategory() = Action { implicit request =>
-    try {
-      val category: Category = request.body.asJson.get.as[Category]
-      if (Categories.delete(category)) Ok("1") else BadRequest("-1")
-    }
-    catch {
-      case e: Exception => BadRequest("-1")
+  def evalOperation(function: Category => IdType) = Action { implicit request =>
+
+    request.body.asJson.flatMap(_.validate[Category].asOpt) match {
+
+      case Some(category) =>
+        val id = function(category)
+        if (id > 0) {
+          Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE, Some(id))))
+        }
+        else {
+          InternalServerError(Json.toJson(ResponseMessage(Constants.FAIL, Constants.SERVER_ERROR_MESSAGE)))
+        }
+      case _ =>
+        BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
   }
-
-  def getCategory(n: String) = Action {
-    try {
-      val category = Categories.get(n.toInt)
-      if (category.id == Some(-1)) BadRequest("-1")
-      else Ok(Json.toJson(category))
-    }
-    catch {
-      case e: Exception => BadRequest("-1")
-    }
-  }
-
-  def getCategories() = Action {
-    try {
-      Ok(Json.toJson(Categories.getAll()))
-    }
-    catch {
-      case e: Exception => BadRequest("-1")
-    }
-  }
-
 
 }

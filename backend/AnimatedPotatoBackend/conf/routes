@@ -11,47 +11,53 @@ POST        /admin/deleteParticipant           controllers.ParticipantController
 GET         /admin/getParticipants             controllers.ParticipantController.getParticipants
 #GET         /admin/getParticipants             controllers.ParticipantController.getParticipants()
 
-POST        /admin/insertUser                  controllers.UserController.insertUser
-POST        /admin/updateUser                  controllers.UserController.updateUser
-POST        /admin/deleteUser                  controllers.UserController.deleteUser
-GET         /admin/getUsers                    controllers.UserController.getUsers
+POST        /admin/insertUser                  controllers.UserController.insert
+POST        /admin/updateUser                  controllers.UserController.update
+POST        /admin/deleteUser                  controllers.UserController.delete
+GET         /admin/getUsers                    controllers.UserController.getUsersDetailed
 GET         /admin/getUser/:n                  controllers.UserController.getUser(n)
+GET         /admin/getPersonnels               controllers.UserController.getPersonnelsDetailed
+GET         /admin/getAdmins                   controllers.UserController.getAdminsDetailed
 
-POST        /admin/insertQuestion              controllers.QuestionController.insertQuestion
-POST        /admin/updateQuestion              controllers.QuestionController.updateQuestion
-POST        /admin/deleteQuestion              controllers.QuestionController.deleteQuestion
-GET         /admin/getQuestion/:n              controllers.QuestionController.getQuestionById(n)
-GET         /admin/getQuestions                controllers.QuestionController.getQuestions
+POST        /admin/makeAdmin                   controllers.UserController.makeAdmin
+POST        /admin/makePersonnel               controllers.UserController.makePersonnel
 
-
+POST        /admin/insertQuestion              controllers.QuestionController.insert
+POST        /admin/updateQuestion              controllers.QuestionController.update
+POST        /admin/deleteQuestion              controllers.QuestionController.delete
+GET         /admin/getQuestion/:n              controllers.QuestionController.getById(n)
+GET         /admin/getQuestions                controllers.QuestionController.getAll
 
 POST        /admin/insertQuestionOption        controllers.QuestionOptionController.insertQuestionOption
 POST        /admin/updateQuestionOption        controllers.QuestionOptionController.updateQuestionOption
 POST        /admin/deleteQuestionOption        controllers.QuestionOptionController.deleteQuestionOption
 GET         /admin/getQuestionOptions          controllers.QuestionOptionController.getQuestionOptions
 
+GET         /getQuestionSets                   controllers.QuestionSetController.get
 
-POST        /admin/insertCategory              controllers.CategoryController.insertCategory
-POST        /admin/updateCategory              controllers.CategoryController.updateCategory
-POST        /admin/deleteCategory              controllers.CategoryController.deleteCategory
-GET         /admin/getCategory/:n              controllers.CategoryController.getCategory(n)
-POST        /admin/getCategories               controllers.CategoryController.getCategories
+POST        /admin/insertCategory              controllers.CategoryController.insert
+POST        /admin/updateCategory              controllers.CategoryController.update
+POST        /admin/deleteCategory              controllers.CategoryController.delete
+GET         /admin/getCategory/:id              controllers.CategoryController.get(id : Long)
+POST        /admin/getCategories               controllers.CategoryController.getAll
+
+POST        /startTest                         controllers.InterviewController.startTest
+POST        /testReport                        controllers.InterviewController.testReport
+POST        /nextQuestion                      controllers.InterviewController.nextQuestion
+POST        /interview                         controllers.InterviewController.listAll
+
+GET         /admin/getSets                     controllers.CollectionController.getAll
+POST        /admin/insertSet                   controllers.CollectionController.insert
+POST        /admin/updateSet                   controllers.CollectionController.update
+POST        /admin/deleteSet                   controllers.CollectionController.delete
+POST        /admin/makeDefaultSet              controllers.CollectionController.setDefaultQuestionSet
 
 
-
-
-
-POST         /admin/getSets                     controllers.QuestionSetController.get
-POST        /admin/insertSet                   controllers.QuestionSetController.insert
-
-
-
-POST        /signUp                            controllers.LoginSignUpController.signUp()
-POST        /login                             controllers.LoginSignUpController.login()
+POST        /signUp                            controllers.LoginSignUpController.signUp
+POST        /login                             controllers.LoginSignUpController.login
 
 POST        /answer                            controllers.AnswerController.insertAnswer
+GET         /getAnswers                        controllers.AnswerController.getAnswers
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                      controllers.Assets.at(path="/public", file)
-
-    

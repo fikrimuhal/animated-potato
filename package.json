@@ -12,6 +12,7 @@
     "test:ci": "npm run karma conf/karma.ci.conf.js -- --single-run",
     "start": "webpack-dev-server --history-api-fallback --config conf/webpack.config.js --port 8081 --host 0.0.0.0 --hot --progress --colors --content-base ./build",
     "start_mesut": "webpack-dev-server --history-api-fallback --config conf/webpack.config.mesut.js --port 8081 --host 0.0.0.0 --hot --progress --colors --content-base ./build",
+    "start_mesut2":"webpack-dashboard --  webpack-dev-server --history-api-fallback --config conf/webpack.config.mesut.js --port 8081 --host 0.0.0.0 --hot --progress --colors --content-base ./build",
     "build": "cross-env NODE_ENV=production webpack --config conf/webpack.production.js",
     "build:gh": "npm run build && node ./build-gh-pages.js && rm -r ./dist",
     "deploy:surge": "npm build && surge -p build --domain animatedpotato.surge.sh"
@@ -45,7 +46,6 @@
     "react-tap-event-plugin": "^1.0.0"
   },
   "devDependencies": {
-    "Faker": "^0.7.2",
     "autoprefixer": "^6.3.1",
     "babel-core": "^6.4.5",
     "babel-eslint": "^4.1.8",
@@ -108,6 +108,7 @@
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.13",
+    "webpack-dashboard": "^0.1.8",
     "webpack-dev-server": "^1.14.1"
   }
 }

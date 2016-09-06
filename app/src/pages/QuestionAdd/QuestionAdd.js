@@ -55,7 +55,7 @@ export default class QuestionAdd extends React.Component {
     handleQuestionTextChange = function (event,value){
         //Sorunun başlığı değiştiği zaman tetiklenen fonksiyon
         var oldStateData = this.props.data;
-        value = value.trim();
+        //value = value.trim();
         var title;
         if(value.indexOf('//') != -1) {
             title = value.split('//')[0];
@@ -189,7 +189,7 @@ export default class QuestionAdd extends React.Component {
     handleSaveQuestion = function (){
         //Soruyu kaydet butonuna basınca sorunun storage'ye eklenmesi
         this.props.onSave();
-    }
+    };
 
     render(){
 
@@ -199,18 +199,22 @@ export default class QuestionAdd extends React.Component {
         var answerType = this.props.data.get("qType");//sorunun cevap tipi
         var optionList = this.props.data.get("options");//sorunun seçenek listesi
         var addOptionDisabled = true; //yeni seçenek ekle butonunun gözükürlüğü
+        var title = this.props.data.get("title");
         if(answerType == "radio" || answerType == "checkbox") {
             addOptionDisabled = false;
         }
         var showOptions = ["radio","checkbox","yesno"].includes(answerType);
         //console.log("bu ağırlık", categoryWeights)
+        var editMode = this.props.editMode || false;
+        //log("edit mode",this.props,editMode);
         return (
+
             <div>
-                <Row><h3>New Question</h3></Row>
+                <Row><h3>{editMode ? "Edit Question" : "New Question"}</h3></Row>
                 <Row>
                     <Col xs={9} sm={9} md={9} lg={9}>
                         <TextField hintText="Question Title" floatingLabelText="Question Title"
-                                   onChange={this.handleQuestionTextChange} style={{width:"100%"}}/></Col>
+                                   onChange={this.handleQuestionTextChange} style={{width:"100%"}} value={title} /></Col>
                     <Col xs={3} sm={3} md={3} lg={3}>
                         <RaisedButton label="Save Question" secondary={true}
                                       onClick={()=>this.handleSaveQuestion()}/></Col>
@@ -219,11 +223,13 @@ export default class QuestionAdd extends React.Component {
                     <Col xs={12} sm={12} md={12} lg={12}>
                         <CategoryWeights style={styles.w100} categoryList={this.props.categoryList}
                                          categoryWeights={categoryWeights}
-                                         categoryWeightsChanged={this.categoryWeightsChanged} categoriesWaiting={this.props.categoriesWaiting}/>
+                                         categoryWeightsChanged={this.categoryWeightsChanged}
+                                         categoriesWaiting={this.props.categoriesWaiting}/>
                     </Col>
                     <Col xs={12} sm={12} md={12} lg={12}>
                         <QuestionSets style={styles.w100} allSet={this.props.allSet} setsOfQuestion={setsOfQuestion}
-                                      onChangeSetsOfQuestion={this.handleOnChangeSetsOfQuestion} setListWaiting={this.props.setListWaiting}/>
+                                      onChangeSetsOfQuestion={this.handleOnChangeSetsOfQuestion}
+                                      setListWaiting={this.props.setListWaiting}/>
                     </Col>
                     <Col xs={12} sm={12} md={12} lg={12}>
                         <AnswerTypes onChangeAnswerType={this.handleOnChangeAnswerType} answerType={answerType}/><br/>
@@ -232,7 +238,7 @@ export default class QuestionAdd extends React.Component {
                         <RaisedButton label="+Add Option" secondary={true} onClick={()=> this.addNewOption()}
                                       style={{float:"right"} } disabled={addOptionDisabled}/>
                     </Col>
-                    <Col xs={12} sm={12} md={12} lg={12} style={{display:(showOptions?"":"noe")}}>
+                    <Col xs={12} sm={12} md={12} lg={12} style={{display:(showOptions ? "" : "noe")}}>
                         <QuestionOptions optionList={optionList}
                                          onQuestionOptionsChange={this.handleOnQuestionOptionsChange}/><br/>
                     </Col>

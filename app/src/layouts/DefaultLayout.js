@@ -1,11 +1,15 @@
-import React from 'react'
+import React            from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
-import * as db from '../utils/data'
-import {log2} from '../utils/'
-import {browserHistory} from 'react-router'
+import AppBar           from 'material-ui/AppBar';
+import Paper            from  'material-ui/Paper'
+import Toast            from '../components/MyComponents/Toast'
+import {log2}           from '../utils/'
+import * as util        from '../utils/utils'
+import * as db          from '../utils/data'
+import UserAppBar       from './UserAppBar'
 const log = log2("DefaultLayout.js:")
-
+var showToast = null;
+var context = {};
 //Styles
 const styles = {
     paperStyle:{
@@ -23,34 +27,47 @@ const styles = {
 export default class DefaultLayout extends React.Component {
     constructor(props){
         super(props);
+        this.state = {
+            toastSettings:{
+                open:false,
+                message:"",
+                duration:0
+            }
+        };
+        showToast = util.myToast("toastSettings",this);
     }
 
-    componentWillMount = function (){
-        // if(db.isLoggedIn()) {
-        //     if(db.isUser()) {
-        //         browserHistory.push("/home")
-        //     }
-        //     else if(db.isAdmin()) {
-        //         browserHistory.push("/adminpanel")
-        //     }
-        // }
-        // else{
-        //     browserHistory.push("/signin")
-        // }
+    getChildContext(){
+        context.showMessage = this.showMessage;
+        return context;
     };
+
+    showMessage = function (message,duration){
+        showToast(message,duration);
+    };
+    getAppBar = function (){
+        if(db.isLoggedIn()) {
+            return <UserAppBar userInfo={db.getUserInfo()}/>
+        }
+        else {
+            return (<header>
+                <AppBar title="Fikrimuhal Teknoloji - HR" showMenuIconButton={false}/>
+            </header>)
+        }
+    }
     render = function (){
         log("rendered")
         return (
             <MuiThemeProvider>
                 <div id="page_container">
-                    <header>
-                        <AppBar title="Fikrimuhal Teknoloji - HR" showMenuIconButton={false}/>
-                    </header>
-                    {/*<Paper style={styles.paperStyle} zDepth={4}>*/}
+                    {this.getAppBar()}
                     {this.props.children}
-                    {/*</Paper>*/}
+                    <Toast settings={this.state.toastSettings}/>
                 </div>
             </MuiThemeProvider>
         )
     }
 }
+DefaultLayout.childContextTypes = {
+    showMessage:React.PropTypes.func
+};

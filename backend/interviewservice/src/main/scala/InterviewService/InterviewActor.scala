@@ -1,58 +1,65 @@
 package InterviewService
 
-import akka.actor.{Actor, ActorRef, Props, Stash, SupervisorStrategy}
-import animatedPotato.protocol.protocol.{UserQuestionAnswerTuple, _}
-import akka.pattern.ask
-import scala.concurrent.Future
-
-case class NonEx(message: String) extends Throwable
+import akka.actor.{Actor, PoisonPill, Props, Stash}
+import animatedPotato.protocol.protocol._
 
 /**
-  * İlk n veya tüm soruları getiren implementasyon
-  *
+  * İlk n veya tüm soruları rastgele getiren implementasyon
   *
   */
 
-class InterviewActor (initMessage: InitMessage) extends Actor with Stash {
+
+class InterviewActor(initMessage: InitMessage) extends Actor with Stash {
   println("InterviewActor : Constructor")
-  var allQuestionIds: List[IdType] = initMessage.questionCategoryWeightTuple.value.filter(q => q.weight > 0 && initMessage.restrictedCategoryList.contains(Some(q.categoryId))).map(_.questionId).distinct
+  val MAX_NUMBER_OF_QUESTIONS = 20
+
+  var questionIdList: List[IdType] = initMessage.questionCategoryWeightTuple.value.map(_.questionId).distinct.take(MAX_NUMBER_OF_QUESTIONS)
 
   override def receive: Receive = ready
 
   def ready: Receive = {
 
     case x: GetNextQuestion =>
-      println("interviewActor'e GetNextQuestion geldi ")
-      sender ! getNextQuestionId.map(NextQuestion).getOrElse {
-        println("interviewActor TestFinish yollayacak")
-        sender ! TestFinish(initMessage.interviewId, initMessage.userId)
+      println("InterviewActor'e GetNextQuestion geldi ")
+      sender ! getNextQuestionId.map(NextQuestion(_, initMessage.interviewId,questionIdList.length)).getOrElse {
+        println("InterviewActor TestFinish yollayacak")
+        sender ! TestFinish(x.interviewId, initMessage.userIdentifier)
+
         unstashAll()
         context become testFinished
       }
-      println("interviewActor getNextQuestion'a cevap verdi")
+      println("InterviewActor getNextQuestion'a cevap verdi")
 
-    case x => stash
+    case x =>
+      println(s"random interview ready'de stashe atıyor : $x")
+      stash
 
   }
 
   def testFinished: Receive = {
 
-    case x: TestReport =>
-      println(s"Interview Actore TestReport geldi : $x")
-      sender ! x
+    case x: TestReportRequest =>
+      // TODO : scores will be calculated here
+      sender ! TestReport(initMessage.interviewId
+        ,initMessage.userIdentifier
+        ,Map(1.toLong -> 1.5 , 2.toLong -> 2.4))
+      context.parent ! IAmDone(x.id)
+      self ! PoisonPill
 
-    case x => sender ! new IllegalStateException(s"unsopperted operation: $x")
+    case x =>
+      println(s"InterviewActor TestFinished garip bir mesaj: $x")
+      sender ! new IllegalStateException(s"unsopperted operation: $x")
 
   }
 
-  override def preStart() = {
+  override def preStart = {
     println("InterviewActor: preStart")
 
   }
 
   def getNextQuestionId = {
-    val maybeQuestionId = allQuestionIds.headOption
-    if (maybeQuestionId.isDefined) allQuestionIds = allQuestionIds.tail
+    val maybeQuestionId = questionIdList.headOption
+    if (maybeQuestionId.isDefined) questionIdList = questionIdList.tail
     maybeQuestionId
 
   }
