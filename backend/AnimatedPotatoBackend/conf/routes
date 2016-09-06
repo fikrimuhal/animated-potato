@@ -11,10 +11,10 @@ POST        /admin/deleteParticipant           controllers.ParticipantController
 GET         /admin/getParticipants             controllers.ParticipantController.getParticipants
 #GET         /admin/getParticipants             controllers.ParticipantController.getParticipants()
 
-POST        /admin/insertUser                  controllers.UserController.insertUser
-POST        /admin/updateUser                  controllers.UserController.updateUser
-POST        /admin/deleteUser                  controllers.UserController.deleteUser
-GET         /admin/getUsers                    controllers.UserController.getUsers
+POST        /admin/insertUser                  controllers.UserController.insert
+POST        /admin/updateUser                  controllers.UserController.update
+POST        /admin/deleteUser                  controllers.UserController.delete
+GET         /admin/getUsers                    controllers.UserController.getUsersDetailed
 GET         /admin/getUser/:n                  controllers.UserController.getUser(n)
 GET         /admin/getPersonnels               controllers.UserController.getPersonnels
 GET         /admin/getAdmins                   controllers.UserController.getAdmins
@@ -35,15 +35,15 @@ GET         /admin/getQuestionOptions          controllers.QuestionOptionControl
 
 GET         /getQuestionSets                   controllers.QuestionSetController.get
 
-POST        /admin/insertCategory              controllers.CategoryController.insertCategory
-POST        /admin/updateCategory              controllers.CategoryController.updateCategory
-POST        /admin/deleteCategory              controllers.CategoryController.deleteCategory
-GET         /admin/getCategory/:n              controllers.CategoryController.getCategory(n)
-POST        /admin/getCategories               controllers.CategoryController.getCategories
+POST        /admin/insertCategory              controllers.CategoryController.insert
+POST        /admin/updateCategory              controllers.CategoryController.update
+POST        /admin/deleteCategory              controllers.CategoryController.delete
+GET         /admin/getCategory/:id              controllers.CategoryController.get(id : Long)
+POST        /admin/getCategories               controllers.CategoryController.getAll
 
-POST        /startTest                   controllers.InterviewController.startTest
-POST        /testReport                  controllers.InterviewController.testReport
-POST        /nextQuestion                controllers.InterviewController.nextQuestion
+POST        /startTest                         controllers.InterviewController.startTest
+POST        /testReport                        controllers.InterviewController.testReport
+POST        /nextQuestion                      controllers.InterviewController.nextQuestion
 POST        /interview                         controllers.InterviewController.listAll
 
 GET         /admin/getSets                     controllers.CollectionController.getAll

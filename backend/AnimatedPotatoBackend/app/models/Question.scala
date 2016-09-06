@@ -1,7 +1,9 @@
 package models
 
 import animatedPotato.protocol.protocol.{CategoryId, IdType, QuestionId}
+import table.CategoryTable
 import utils.DB
+
 import slick.driver.PostgresDriver.simple._
 
 //case class QuestionId(value : Long) extends AnyVal
@@ -30,7 +32,7 @@ object Questions {
   lazy val questions = TableQuery[Questions]
   lazy val questionOptions = TableQuery[QuestionOptions]
   lazy val questionCategories = TableQuery[QuestionCategories]
-  lazy val categories = TableQuery[Categories]
+  lazy val categories = TableQuery[CategoryTable]
   lazy val questionSets = TableQuery[QuestionSetDAO]
 
   def insert(question: Question): IdType = DB { implicit session =>
@@ -101,7 +103,7 @@ object Questions {
 
   def getAll = DB { implicit session =>
 
-    for (question <- questions.list if question != None)
+    for (question <- questions.list if question != null)
       yield
         QuestionResponse(
           question.id.get,
@@ -133,7 +135,6 @@ object Questions {
       case _ => None
     }
   }
-
 }
 
 class Questions(tag: Tag) extends Table[QuestionTable](tag, "question") {
@@ -143,7 +144,6 @@ class Questions(tag: Tag) extends Table[QuestionTable](tag, "question") {
   def title = column[String]("title")
 
   def qType = column[String]("qtype")
-
 
   def * = (id.?, title, qType) <> (QuestionTable.tupled, QuestionTable.unapply)
 }

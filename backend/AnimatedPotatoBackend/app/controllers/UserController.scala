@@ -12,7 +12,7 @@ import utils.Formatter._
 class UserController extends Controller {
 
 
-  def insertUser() = Action { implicit request =>
+  def insert() = Action { implicit request =>
     try {
       val user: User = request.body.asJson.get.as[User]
       Users.insert(User(username = user.username, password = user.password, email = user.email))
@@ -23,7 +23,7 @@ class UserController extends Controller {
     }
   }
 
-  def updateUser() = Action { implicit request =>
+  def update() = Action { implicit request =>
     try {
       val user: User = request.body.asJson.get.as[User]
       if (Users.update(user)) Ok("1") else BadRequest("-1")
@@ -33,7 +33,7 @@ class UserController extends Controller {
     }
   }
 
-  def deleteUser() = Action { implicit request =>
+  def delete() = Action { implicit request =>
     try {
       val user: User = request.body.asJson.get.as[User]
       if (Users.delete(user)) Ok("1") else BadRequest("-1")
@@ -45,7 +45,7 @@ class UserController extends Controller {
 
   def getUser(n: String) = Action {
     try {
-      val user = Users.getById(n.toInt)
+      val user = Users.getById(n.toLong)
       if (user.id == Some(-1)) BadRequest("-1")
       else Ok(Json.toJson(user))
     }
@@ -61,6 +61,12 @@ class UserController extends Controller {
     catch {
       case e: Exception => BadRequest("-1")
     }
+  }
+
+  def getUsersDetailed = Action {
+
+    Ok(Json.toJson(Users.getUsersDetailed))
+
   }
 
   def getPersonnels = Action {

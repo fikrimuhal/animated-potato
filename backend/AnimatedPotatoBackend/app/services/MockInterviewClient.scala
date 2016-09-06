@@ -15,7 +15,7 @@ class MockInterviewClient extends Actor {
 
   override def receive: Receive = {
 
-    case NextQuestion(questionId,interviewId) =>
+    case NextQuestion(questionId,interviewId,counter) =>
 //      sender ! GetNextQuestion(answer = Some(YesNoAnswer(questionId, scala.util.Random.nextBoolean())))
       println(s"Client'a next question geldi $questionId")
 

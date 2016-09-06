@@ -23,7 +23,7 @@ class QuestionController @Inject() extends Controller {
 
       case Some(question) => Ok(Json.toJson(question))
 
-      case None => Ok("-1")
+      case None => Ok(Json.toJson(ResponseMessage(Constants.FAIL,"Bu ID ile kayıtlı soru bulunmamaktadır")))
 
     }
   }

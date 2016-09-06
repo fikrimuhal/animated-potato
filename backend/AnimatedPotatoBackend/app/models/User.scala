@@ -17,8 +17,11 @@ case class User(id: Option[UserIdType] = None,
                 isadmin: Option[Boolean] = Some(false),
                 ispersonnel: Option[Boolean] = Some(false))
 
+case class UserDetails(id : UserIdType,name : String, lastName : String, email : String, phone : String, photo : Option[String] )
+
 object Users {
   lazy val users = TableQuery[Users]
+  lazy val participants = TableQuery[Participants]
 
   def insert(user: User) = DB { implicit session =>
     users += user.copy(password = user.password.bcrypt)
@@ -97,6 +100,10 @@ object Users {
         Participants.participants.filter(_.username === user.username).list.head)
   }
 
+  def getUsersDetailed: List[UserDetails] = DB { implicit session =>
+    users.list.flatMap(usr => participants.filter(_.username === usr.username).list
+      .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
+  }
 }
 
 class Users(tag: Tag) extends Table[User](tag, "users") {

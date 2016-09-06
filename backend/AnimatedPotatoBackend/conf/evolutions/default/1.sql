@@ -3,7 +3,8 @@ DROP TABLE IF EXISTS category;
 CREATE TABLE category
 (
   id bigserial NOT NULL,
-  category character varying(255) NOT NULL,
+  name character varying(255) NOT NULL,
+  isdeleted BOOLEAN NOT NULL DEFAULT false,
   CONSTRAINT category_pkey PRIMARY KEY (id)
 )
 WITH (
