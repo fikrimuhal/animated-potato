@@ -104,6 +104,17 @@ object Users {
     users.list.flatMap(usr => participants.filter(_.username === usr.username).list
       .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
   }
+
+  def getPersonnelsDetailed: List[UserDetails] = DB { implicit session =>
+    users.filter(_.isPersonnel === true).list.flatMap(usr => participants.filter(_.username === usr.username).list
+      .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
+  }
+
+  def getAdminsDetailed: List[UserDetails] = DB { implicit session =>
+    users.filter(_.isAdmin === true).list.flatMap(usr => participants.filter(_.username === usr.username).list
+      .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
+  }
+
 }
 
 class Users(tag: Tag) extends Table[User](tag, "users") {

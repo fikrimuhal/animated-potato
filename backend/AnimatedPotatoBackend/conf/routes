@@ -16,8 +16,8 @@ POST        /admin/updateUser                  controllers.UserController.update
 POST        /admin/deleteUser                  controllers.UserController.delete
 GET         /admin/getUsers                    controllers.UserController.getUsersDetailed
 GET         /admin/getUser/:n                  controllers.UserController.getUser(n)
-GET         /admin/getPersonnels               controllers.UserController.getPersonnels
-GET         /admin/getAdmins                   controllers.UserController.getAdmins
+GET         /admin/getPersonnels               controllers.UserController.getPersonnelsDetailed
+GET         /admin/getAdmins                   controllers.UserController.getAdminsDetailed
 
 POST        /admin/makeAdmin                   controllers.UserController.makeAdmin
 POST        /admin/makePersonnel               controllers.UserController.makePersonnel
