@@ -101,7 +101,8 @@ object Users {
   }
 
   def getUsersDetailed: List[UserDetails] = DB { implicit session =>
-    users.list.flatMap(usr => participants.filter(_.username === usr.username).list
+    users.filter(u=> u.isAdmin === false && u.isPersonnel === false).list.
+      flatMap(usr => participants.filter(u => u.username === usr.username).list
       .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
   }
 
