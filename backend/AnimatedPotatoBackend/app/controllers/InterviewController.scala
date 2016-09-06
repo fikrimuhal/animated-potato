@@ -60,7 +60,7 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
                   interviewId,
                   response.remainingQuestions,
                   Questions.getQuestionById(response.questionId),
-                  true,
+                  false,
                   Users.get(testRequest.email).isDefined)))
               }
         }
