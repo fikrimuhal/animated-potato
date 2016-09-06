@@ -11,6 +11,7 @@ import TestOverPanel    from './TestOver'
 import LinearProgress   from 'material-ui/LinearProgress';
 import {browserHistory} from 'react-router'
 import * as api         from '../../utils/api'
+import  Immutable        from 'immutable'
 //variables and const definitions
 const log = log2("SkillTestContainer");
 var context = {};
@@ -36,7 +37,7 @@ export default class SkillTestContainer extends React.Component {
             screenWidth:0,
             isRegistered:false
         };
-        util.bindFunctions.call(this,['getQuestionContainer','answerAndNextQuestion','saveAnswer','startTest','nextQuestion']);
+        util.bindFunctions.call(this,['getQuestionContainer','saveAnswer','startTest','nextQuestion']);
 
         this.startTest();
         var clientW = document.documentElement.clientWidth;
@@ -57,6 +58,18 @@ export default class SkillTestContainer extends React.Component {
 
     }
 
+    shouldComponentUpdate = (nextProps,nextState)=>{
+        var im_currentProp = Immutable.fromJS(this.props,(k,v)=>{return v.toOrderedMap()});
+        var im_nextProp = Immutable.fromJS(nextProps,(k,v)=>{return v.toOrderedMap()});
+        var im_currentState = Immutable.fromJS(this.state,(k,v)=>{return v.toOrderedMap()});
+        var im_nextState = Immutable.fromJS(nextState,(k,v)=>{return v.toOrderedMap()});
+
+        var propEquality = im_currentProp.equals(im_nextProp);
+        var stateEquality = im_currentState.equals(im_nextState);
+        log("shouldComponentUpdate",propEquality,stateEquality,(!propEquality || !stateEquality));
+        return (!propEquality || !stateEquality);
+        return true;
+    }
     componentWillMount = function (){
 
         var reqQuery = this.props.location.query;
@@ -73,7 +86,7 @@ export default class SkillTestContainer extends React.Component {
     };
 
     getChildContext(){
-        log("**getChildContext");
+        // log("**getChildContext");
         context.nextQuestion = this.nextQuestion;
         context.currentQuestion = this.state.currentQuestion;
         context.saveAnswer = this.saveAnswer;
@@ -92,19 +105,19 @@ export default class SkillTestContainer extends React.Component {
         }).then(response=>{
             return response.json();
         }).then(json=>{
-            log("json",json);
+            //log("json",json);
             if(json.status == "OK") {
                 this.setState({
                     currentQuestion:json.question,
                     questionReady:true,
-                    testOver:!json.testOver,
+                    testOver:json.testOver,
                     questionCount:json.remainingQuestion,
                     interviewId:json.interviewId,
                     email:email
                 });
             }
             else {
-                _this.context.showMessage("Question fetching fail.",5000);
+                _this.context.showMessage(json.message,5000);
             }
         });
 
@@ -144,7 +157,7 @@ export default class SkillTestContainer extends React.Component {
     };
 
     nextQuestion = function (){
-        log("nextQuestion",this.state);
+        //log("nextQuestion",this.state);
         if(this.state.answer == "") {
             this.context.showMessage("Bu soruyu cevaplamadan bir sonraki soruya geçemezseniz",2200)
             return;
@@ -161,13 +174,14 @@ export default class SkillTestContainer extends React.Component {
             interviewId:this.state.interviewId,
             email:this.state.email
         };
-        log("request",request);
+        // log("request",request);
         api.InterviewAPI.nextQuestion(request).then(response=>{
             return response.json()
         }).then(json=>{
-            log("json",json);
+            log("json_nextquestion",json);
             if(json.status == "OK") {
                 if(!json.testOver) {
+                    log("json_nextquestion if",json);
                     this.setState({
                         currentQuestion:json.question,
                         questionReady:true,
@@ -176,7 +190,8 @@ export default class SkillTestContainer extends React.Component {
                         questionCount:json.remainingQuestion
                     });
                 }
-                {
+                else {
+                    log("json_nextquestion else",json);
                     this.setState({
                         questionReady:true,
                         testOver:true,
@@ -189,35 +204,11 @@ export default class SkillTestContainer extends React.Component {
 
         });
     };
-    answerAndNextQuestion = function (){
-        if(this.state.answer.length == 0) {
-            this.context.showMessage("Bu soruyu cevaplamadan bir sonraki soruya geçemezseniz",2200)
-            //showToast("Soruya cevaplamadan geçemezseniz", 1200);
-        }
-        else {
-            this.setState({
-                questionReady:false,
-                answeredQuestionCount:(this.state.answeredQuestionCount + 1)
-            });
 
-            db.answerQuestion(this.state.currentQuestion.id,this.state.answer).then((response)=>{
-
-                this.setState({
-                    currentQuestion:response.testOver ? null : response.nextQuestion,
-                    questionReady:!response.testOver,
-                    testOver:response.testOver,
-                    answer:[],
-                    questionCount:!response.testOver ? response.questionCount : 0,
-                    isValidUser:response.isValidUser
-                });
-            });
-        }
-    };
     getProgressValue = function (){
         var answeredQuestionCount = this.state.answeredQuestionCount;
         var waitingQuestionCount = this.state.questionCount;
         var progressValue = (parseFloat(answeredQuestionCount) / (answeredQuestionCount + waitingQuestionCount)) * 100;
-        //log("answeredQuestionCount,waitingQuestionCount,progressValue",answeredQuestionCount,waitingQuestionCount,progressValue)
         return progressValue;
     };
     render = function (){

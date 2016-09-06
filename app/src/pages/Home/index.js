@@ -6,26 +6,26 @@ import {log2}                  from '../../utils/log2'
 import * as s                  from '../../layouts/style'
 import * as util               from '../../utils/utils'
 import * as db                 from '../../utils/data'
-const log=log2("StartTest");
-export default class StartTest extends React.Component {
-    constructor(props) {
+const log = log2("StartInterview");
+export default class StartInterview extends React.Component {
+    constructor(props){
         super(props);
-        util.bindFunctions.call(this, ['onClick'])
+        util.bindFunctions.call(this,['onClick'])
     }
 
-    onClick=function () {
-        log(this.refs.txtEmail);
-        var email=this.refs.txtEmail.input.value;
-        log(this.props, this.props.location.search);
-        var query="";
-        if(this.props.location.search.length >0){
-            query="?"+this.props.location.search + "&email=" + email;
+    onClick = function (){
+        //log(this.refs.txtEmail);
+        var email = this.refs.txtEmail.input.value;
+        //log(this.props,this.props.location.search);
+        var query = "";
+        if(this.props.location.search.length > 0) {
+            query = this.props.location.search + "&email=" + email;
         }
         //var query=this.props.location.search + "&email=" + email;
-        log(query);
+        log("query",query);
         browserHistory.push("/skilltest/?" + query)
     };
-    componentWillMount=function () {
+    componentWillMount = function (){
         if(db.isLoggedIn()) {
             browserHistory.push("/")
         }
@@ -33,7 +33,7 @@ export default class StartTest extends React.Component {
             //browserHistory.push("/interview")
         }
     };
-    render=function () {
+    render = function (){
         log("rendered");
         return (
 
@@ -41,7 +41,7 @@ export default class StartTest extends React.Component {
                 <h4>Fikrimuhal Mülakat Testi</h4>
                 Eposta Adresiniz: <TextField ref="txtEmail" hintText={"Eposta"} floatingLabelText={"Eposta"}
                                              type={"email"} required="required"></TextField><br/>
-                <RaisedButton label={"Test başla"} style={{float: "right"}} onClick={this.onClick}></RaisedButton>
+                <RaisedButton label={"Test başla"} style={{float:"right"}} onClick={this.onClick}></RaisedButton>
             </div>
         )
     }
