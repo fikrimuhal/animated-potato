@@ -11,9 +11,9 @@ import animatedPotato.protocol.protocol._
 
 class InterviewActor(initMessage: InitMessage) extends Actor with Stash {
   println("InterviewActor : Constructor")
-  val NUMBER_OF_QUESTIONS = 20
+  val MAX_NUMBER_OF_QUESTIONS = 20
 
-  var shuffledQuestionIds: List[IdType] = initMessage.questionCategoryWeightTuple.value.map(_.questionId).distinct.take(NUMBER_OF_QUESTIONS)
+  var questionIdList: List[IdType] = initMessage.questionCategoryWeightTuple.value.map(_.questionId).distinct.take(MAX_NUMBER_OF_QUESTIONS)
 
   override def receive: Receive = ready
 
@@ -21,7 +21,7 @@ class InterviewActor(initMessage: InitMessage) extends Actor with Stash {
 
     case x: GetNextQuestion =>
       println("InterviewActor'e GetNextQuestion geldi ")
-      sender ! getNextQuestionId.map(NextQuestion(_, initMessage.interviewId)).getOrElse {
+      sender ! getNextQuestionId.map(NextQuestion(_, initMessage.interviewId,questionIdList.length)).getOrElse {
         println("InterviewActor TestFinish yollayacak")
         sender ! TestFinish(x.interviewId, initMessage.userIdentifier)
 
@@ -58,8 +58,8 @@ class InterviewActor(initMessage: InitMessage) extends Actor with Stash {
   }
 
   def getNextQuestionId = {
-    val maybeQuestionId = shuffledQuestionIds.headOption
-    if (maybeQuestionId.isDefined) shuffledQuestionIds = shuffledQuestionIds.tail
+    val maybeQuestionId = questionIdList.headOption
+    if (maybeQuestionId.isDefined) questionIdList = questionIdList.tail
     maybeQuestionId
 
   }

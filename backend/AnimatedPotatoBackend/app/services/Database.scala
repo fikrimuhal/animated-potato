@@ -3,6 +3,7 @@ import akka.actor.{Actor, Props}
 import akka.actor.Actor.Receive
 import animatedPotato.protocol.protocol
 import animatedPotato.protocol.protocol._
+import dao.CategoryDAO
 import models._
 
 import scala.slick.lifted.TableQuery
@@ -20,8 +21,9 @@ class Database extends Actor  {
         QuestionCategories.getAll().map(qc => QuestionCategoryWeightTuple(qc.questionId,qc.categoryId,qc.weight))
       )
     case RequestAllCategories =>
+      val CategoryDAO = new CategoryDAO
       println("Database: RequestAllCategories geldi")
-      sender ! CategoryList(Categories.getAll().map(c => protocol.Category(c.id,c.category)))
+      sender ! CategoryList(CategoryDAO.getAll.map(c => protocol.Category(c.id,c.category)))
 
     case RequestQuestion(id) =>
       println(s"Database: RequestQuestion($id) geldi")

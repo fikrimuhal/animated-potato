@@ -16,7 +16,7 @@ object protocol {
     * @param questionId
     * @param interviewId
     */
-  case class NextQuestion(questionId: QuestionId, interviewId: InterviewId)
+  case class NextQuestion(questionId: QuestionId, interviewId: InterviewId,remainingQuestions: Int)
 
   /**
     *

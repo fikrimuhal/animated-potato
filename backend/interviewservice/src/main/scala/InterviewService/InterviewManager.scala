@@ -1,10 +1,11 @@
 package InterviewService
 
 
-import akka.actor.{Actor, ActorRef, Props, Stash}
-import animatedPotato.protocol.protocol._
+import akka.actor.{Actor, ActorRef, PoisonPill, Props, Stash}
+import animatedPotato.protocol.protocol.{TestFinish, _}
 import akka.pattern.ask
 import akka.util.Timeout
+
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 import akka.util.Timeout._
@@ -46,11 +47,10 @@ class InterviewManager(database: ActorRef) extends Actor with Stash {
 
         println(s"InterviewManager : initmessage : $initMessage")
 
-        val interviewActor = interviewActors.getOrElse(initMessage.interviewId, {
-          val newInterviewActor = context.actorOf(RandomInterview.props(initMessage))
-          interviewActors += (initMessage.interviewId -> newInterviewActor)
-          newInterviewActor
-        })
+        val interviewActor = interviewActors.getOrElse(initMessage.interviewId,context.actorOf(RandomInterview.props(initMessage)))
+        interviewActors += (initMessage.interviewId -> interviewActor)
+
+//        interviewActor forward GetNextQuestion(interviewId = initMessage.interviewId)
 
         (interviewActor ? GetNextQuestion(interviewId = initMessage.interviewId))
           .mapTo[NextQuestion]
@@ -64,23 +64,19 @@ class InterviewManager(database: ActorRef) extends Actor with Stash {
       println("InterviewManager'a GetNextQuestion geldi")
       (interviewActors(interviewId) ? x)
         .map {
-          // Interview Actor'unden TestFinish gelirse TestReportRequest requesti gönder
-          case TestFinish(interviewId,_) =>
+          // Interview Actor'den TestFinish gelirse TestReportRequest requesti gönder
+          case TestFinish(interviewId,userIdentifier) =>
+            _sender ! TestFinish(interviewId,userIdentifier)
+            println("interview manager'e test finish geldi")
             interviewActors(interviewId) ! TestReportRequest(interviewId)
           case x =>
             _sender ! x
         }
 
-    case x@TestReportRequest(interviewId) =>
-      val _sender = sender
-      (interviewActors(interviewId) ? x).
-        map { testReport =>
-          //TODO : TestReport'u bir yere uygun formatta kaydet
-          _sender ! testReport
-        }
-
-    case IAmDone(id) =>
-      interviewActors -= id
+    case TestReport(interviewId,userIdentifier,scores) =>
+      sender ! PoisonPill
+      interviewActors -= interviewId
+      //  TODO : burada database actorü ile database e kaydet
 
     case x =>
       println(s"InterviewManager : unexpected arg : $x")

@@ -1,6 +1,8 @@
 package core
 
+import animatedPotato.protocol.protocol.IdType
 import utils.DB
+
 import scala.reflect.ClassTag
 import scala.slick.lifted.TableQuery
 import slick.driver.PostgresDriver.simple._
@@ -17,6 +19,14 @@ abstract class BaseDAO[T <: BaseTable[E], E <: BaseModel : ClassTag](tableDAO: T
 
   def delete(row: E) = DB { implicit session =>
     tableDAO.filter(_.id === row.id).map(_.isDeleted).update(true)
+  }
+
+  def deleteById(id: IdType) = DB { implicit session =>
+    tableDAO.filter(_.id === id).map(_.isDeleted).update(true)
+  }
+
+  def getById(id: IdType) = DB { implicit session =>
+    tableDAO.filter(_.id === id).list
   }
 
   def getAll = DB { implicit session =>

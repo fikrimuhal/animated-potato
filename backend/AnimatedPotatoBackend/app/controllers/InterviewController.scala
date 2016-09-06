@@ -25,14 +25,17 @@ case class TestRequest(email: String, restrictedCategoryList: Option[List[Catego
 
 case class InterviewStartResponse(valid: Boolean, firstQuestion: Option[Question], remainingQuestion: Option[Int])
 
-case class NextQuestionRequest(answer: YesNoAnswer, interviewId: InterviewId,email : Option[String] = None, userId : Option[UserIdType])
+case class NextQuestionRequest(answer: YesNoAnswer, interviewId: InterviewId, email: Option[String] = None, userId: Option[UserIdType])
 
-case object Interview
+case class NextQuestionResponse(status: String, interviewId: InterviewId, remainingQuestion: Int, question: Option[QuestionResponse], testOver: Boolean, isRegistered: Boolean)
+
+case object RandomInterviewImpl
 
 case class KillActor(interviewId: InterviewId)
 
 @Singleton
 class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends Controller {
+  final val INTERVIEW_IMPL = RandomInterviewImpl
 
   import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
@@ -47,14 +50,19 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
         InterviewDAO.insert(testRequest.email) match {
 
           case Left(_) =>
-            Future {}.map(response => Ok(Json.toJson(ResponseMessage(Constants.FAIL, "Daha önceden testi çözmüşsün"))))
+            Future.successful(Ok(Json.toJson(ResponseMessage(Constants.FAIL, "Daha önceden testi çözmüşsün"))))
 
           case Right(interviewId) =>
-            (rootActor ? (Interview, TestStart(interviewId, Left(testRequest.email))))
+            (rootActor ? (INTERVIEW_IMPL, TestStart(interviewId, Left(testRequest.email))))
               .mapTo[NextQuestion]
-              .map(response =>
-                Ok(Json.toJson(Questions.getQuestionById(response.questionId)))
-              )
+              .map { response =>
+                Ok(Json.toJson(NextQuestionResponse(Constants.OK,
+                  interviewId,
+                  response.remainingQuestions,
+                  Questions.getQuestionById(response.questionId),
+                  true,
+                  Users.get(testRequest.email).isDefined)))
+              }
         }
 
       case _ =>
@@ -69,15 +77,22 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
 
       case Some(data) =>
 
-       Answers.insert(Answer(None,data.answer.questionId, data.userId,data.interviewId,data.email,data.answer.value))
+        Answers.insert(Answer(None, data.answer.questionId, data.userId, data.interviewId, data.email, data.answer.value))
 
-        (rootActor ? (Interview, GetNextQuestion(Some(data.answer), data.interviewId)))
+        (rootActor ? (RandomInterviewImpl, GetNextQuestion(Some(data.answer), data.interviewId)))
           .map {
-            case NextQuestion(questionId, _) =>
-              Ok(Json.toJson(Questions.getQuestionById(questionId)))
+
+            case NextQuestion(questionId, interviewId, remainingQuestions) =>
+              Ok(Json.toJson(NextQuestionResponse(Constants.OK,
+                interviewId,
+                remainingQuestions,
+                Questions.getQuestionById(questionId),
+                false,
+                Users.get(data.email.get).isDefined)))
+
             case testFinish: TestFinish =>
               InterviewDAO.finishTest(Right(testFinish.interviewId))
-              Ok(s"test finiş ${testFinish.interviewId}, ${testFinish.userIdentifier}")
+              Ok(Json.toJson(NextQuestionResponse(Constants.OK, testFinish.interviewId, 0, None, true, Users.get(data.email.get).isDefined)))
           }
 
       case _ => Future.successful(BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
@@ -92,11 +107,14 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
 
       case Some(testReportRequest) =>
 
+        Future.successful(Ok("Temsili Test Raporu"))
+
         //TODO : Test Report requesti geldiğinde, daha önceden test finish olduğunda hesaplanıp değeri girilen tablodan çek
 
-        (rootActor ? (Interview, testReportRequest))
-          .mapTo[TestReport]
-          .map(x => Ok(s"TestReport : ${x.interviewId} : ${x.scores} : ${x.userIdentifier}"))
+//        (rootActor ? (RandomInterviewImpl, testReportRequest))
+//          .mapTo[TestReport]
+//          .map(x => Ok(s"TestReport : ${x.interviewId} : ${x.scores} : ${x.userIdentifier}"))
+
       case _ => Future.successful(BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
 
     }

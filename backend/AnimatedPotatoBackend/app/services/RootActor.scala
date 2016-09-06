@@ -5,7 +5,7 @@ import InterviewService.{InterviewActor, InterviewManager}
 import akka.actor.{Actor, ActorRef}
 import akka.util.Timeout
 import animatedPotato.protocol.protocol.{NextQuestion, UserIdType}
-import controllers.{Interview, TestRequest}
+import controllers.{RandomInterviewImpl, TestRequest}
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -24,10 +24,12 @@ class RootActor extends Actor {
 
   override def receive: Receive = {
 
-    case (Interview, x) =>
+    case (RandomInterviewImpl, x) =>
       println(s"root actore gelen $x")
       val _sender = sender()
       (interviewManager ? x).map(_sender ! _)
+
+//      interviewManager forward x
 
     case x =>
       println(s"root hepsini alan $x")

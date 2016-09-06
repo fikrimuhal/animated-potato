@@ -16,9 +16,9 @@ case class IAmDone(actorId: InterviewId)
 
 class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
   println("RandomInterview : Constructor")
-  val NUMBER_OF_QUESTIONS = 20
+  final val MAX_NUMBER_OF_QUESTIONS = 20
 
-  var shuffledQuestionIds: List[IdType] = scala.util.Random.shuffle(initMessage.questionCategoryWeightTuple.value.map(_.questionId).distinct.take(NUMBER_OF_QUESTIONS))
+  var shuffledQuestionIds: List[IdType] = scala.util.Random.shuffle(initMessage.questionCategoryWeightTuple.value.map(_.questionId).distinct.take(MAX_NUMBER_OF_QUESTIONS))
 
   override def receive: Receive = ready
 
@@ -26,9 +26,9 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
 
     case x: GetNextQuestion =>
       println("RandomInterview'e GetNextQuestion geldi ")
-      sender ! getNextQuestionId.map(NextQuestion(_, initMessage.interviewId)).getOrElse {
+      sender ! getNextQuestionId.map(NextQuestion(_, initMessage.interviewId,shuffledQuestionIds.length)).getOrElse {
         println("RandomInterview TestFinish yollayacak")
-        sender ! TestFinish(x.interviewId, initMessage.userIdentifier)
+        sender! TestFinish(x.interviewId, initMessage.userIdentifier)
 
         unstashAll()
         context become testFinished
@@ -43,13 +43,12 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
 
   def testFinished: Receive = {
 
-    case x: TestReportRequest =>
+    case TestReportRequest(id) =>
       // TODO : scores will be calculated here
+      println("randoma testreportrequest geldi")
       sender ! TestReport(initMessage.interviewId
         ,initMessage.userIdentifier
         ,Map(1.toLong -> 1.5 , 2.toLong -> 2.4))
-      context.parent ! IAmDone(x.id)
-      self ! PoisonPill
 
     case x =>
       println(s"RandomInterview TestFinished garip bir mesaj: $x")
