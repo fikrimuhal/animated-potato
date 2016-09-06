@@ -2,9 +2,6 @@ import * as time    from './timeUtil';
 import * as _       from 'lodash'
 import log2         from './log2'
 const log = log2("Cache.js->");
-
-//region Katılımcısı Listesi cache kontrol
-// ************Katılımcısı Listesi cache kontrol**********start
 /*
  * katılımcı listesi cache verisi formatı
  * {
@@ -21,7 +18,7 @@ export const ParticipantsCache = {
         };
         localStorage.setItem("participantListCache",JSON.stringify(cacheData));
     },
-    check: ()=>{
+    check:()=>{
         var participantListCache = localStorage.getItem("participantListCache");
         if(participantListCache == null)return false;
         var cache = JSON.parse(participantListCache);
@@ -31,7 +28,7 @@ export const ParticipantsCache = {
         var diff = time.timeDiff(now,cacheTime);
         return diff.minute <= 2;
     },
-    get: ()=>{
+    get:()=>{
         var participantListCache = localStorage.getItem("participantListCache");
         var list = [];
         if(participantListCache != null) {
@@ -42,48 +39,8 @@ export const ParticipantsCache = {
     clear:()=>{
         localStorage.removeItem("participantListCache");
     }
-}
-// export const checkParticipantListFromCache = ()=>{
-//     var participantListCache = localStorage.getItem("participantListCache");
-//     if(participantListCache == null)return false;
-//     var cache = JSON.parse(participantListCache);
-//     var cacheTime = cache.createdTime;
-//     if(participantListCache == null)return false;
-//     var now = Date.now();
-//     var diff = time.timeDiff(now,cacheTime);
-//     return diff.minute <= 2;
-//
-// };
-//
-// //cache'den katılımcı  listesini  getirir
-// export const getParticipantListFromCache = ()=>{
-//     var participantListCache = localStorage.getItem("participantListCache");
-//     var list = [];
-//     if(participantListCache != null) {
-//         list = JSON.parse(participantListCache).data;
-//     }
-//     return list;
-// };
-//
-// export const cacheParticipantList = list =>{
-//     var cacheData = {
-//         data:list,
-//         createdTime:Date.now()
-//     };
-//     localStorage.setItem("participantListCache",JSON.stringify(cacheData));
-// };
-// // ************Katılımcısı Listesi cache kontrol**********end
-//endregion
-//region Katılımcı Test Sonuç Raporu Cache Kontrol
-// ************Katılımcı Test Sonuç Raporu Cache Kontrol***************start
-/**
- * veri yapısı :
- * {
- *    userInfo -> obj,
- *    reportHtml   -> html string,
- *    createdTime -> cache time
- * }
- */
+};
+
 export const checkTestResultReportCache = userId=>{
     var info = getTestResultReportFromCache(userId);
     log("info",info)
@@ -107,7 +64,6 @@ export const cacheTestResultReport = (userInfo,report)=>{
     data.push(cacheData);
     localStorage.setItem("testResults",JSON.stringify(data));
 };
-
 export const getTestResultReportFromCache = (userId)=>{
     var testResults = localStorage.getItem("testResults") || "[]";
     testResults = JSON.parse(testResults);
@@ -118,32 +74,16 @@ export const getTestResultReportFromCache = (userId)=>{
     //log("result,newResult",testResults,newResult);
     return (newResult.length > 0) ? newResult[0] : null;
 };
-// ************Katılımcı Test Sonuç Raporu Cache Kontrol***************end
-//endregion
-//region Soru Kategorileri Cacheleme
-/**
- * veri yapısı :
- * kategori listesi cache veri yapısı :
- * {
- *      data : Array of categoryInfo
- *      createdTime   -> cache time
- * }
- *      categoryInfo ->
- *      {
- *         id               -> int
- *         category         -> string,
- *
- *      }
- */
+
 export const CategoryCaching = {
-    cache: data=>{
+    cache:data=>{
         var cacheData = {
             data:data,
             createdTime:Date.now()
         };
         localStorage.setItem("categoriesCache",JSON.stringify(cacheData));
     },
-    get: ()=>{
+    get:()=>{
         var categoriesCache = localStorage.getItem("categoriesCache");
         var list = [];
         if(categoriesCache != null) {
@@ -164,49 +104,6 @@ export const CategoryCaching = {
         localStorage.removeItem("categoriesCache");
     }
 }
-// export const cacheCategories = data =>{
-//     var cacheData = {
-//         data:data,
-//         createdTime:Date.now()
-//     };
-//     localStorage.setItem("categoriesCache",JSON.stringify(cacheData));
-// };
-//
-// export const getCategoriesFromCache = ()=>{
-//     var categoriesCache = localStorage.getItem("categoriesCache");
-//     var list = [];
-//     if(categoriesCache != null) {
-//         list = JSON.parse(categoriesCache).data;
-//     }
-//     return list;
-// };
-//
-// export const checkCategoriesFromCache = ()=>{
-//     var categoriesCache = localStorage.getItem("categoriesCache");
-//     if(categoriesCache == null)return false;
-//     var cache = JSON.parse(categoriesCache);
-//     var cacheTime = cache.createdTime;
-//     var now = Date.now();
-//     var diff = time.timeDiff(now,cacheTime);
-//     return diff.minute <= 1;
-// };
-//endregion
-//region Soru Setlerini Cacheleme
-/**
- * veri yapısı :
- * soru setleri listesi cache veri yapısı :
- * {
- *      data : Array of setInfo
- *      createdTime   -> cache time
- * }
- *      setInfo ->
- *      {
- *         id            -> int
- *         title        -> string,
- *         count:       -> int (setdeki soru sayısı)
- *         isdefaultset -> boolean (default soru setimi)
- *      }
- */
 
 export const QuestionSetCaching = {
     cache:(data)=>{
@@ -238,9 +135,6 @@ export const QuestionSetCaching = {
     }
 };
 
-//endregion
-
-//region All Question Caching
 export const QuestionCaching = {
     cacheAll:data=>{
         var cacheData = {
@@ -291,5 +185,64 @@ export const QuestionCaching = {
     clear:()=>{
         localStorage.removeItem("allQuestionCache");
     }
-}
-//endregion
+};
+
+export const UserCaching = {
+    cache:data =>{
+        var cacheData = {
+            data:data,
+            createdTime:Date.now()
+        };
+        localStorage.setItem("usersCache",JSON.stringify(cacheData));
+    },
+    getAll:()=>{
+        var cacheData = localStorage.getItem("usersCache");
+        var list = [];
+        if(cacheData != null) {
+            list = JSON.parse(cacheData).data;
+        }
+        return list;
+    },
+    check:()=>{
+        var cacheData = localStorage.getItem("usersCache");
+        if(cacheData == null)return false;
+        var cache = JSON.parse(cacheData);
+        var cacheTime = cache.createdTime;
+        var now = Date.now();
+        var diff = time.timeDiff(now,cacheTime);
+        return diff.minute <= 5;
+    },
+    clear:()=>{
+        localStorage.removeItem("usersCache");
+    }
+};
+
+export const StaffCaching = {
+    cache:data =>{
+        var cacheData = {
+            data:data,
+            createdTime:Date.now()
+        };
+        localStorage.setItem("staffsCache",JSON.stringify(cacheData));
+    },
+    getAll:()=>{
+        var cacheData = localStorage.getItem("staffsCache");
+        var list = [];
+        if(cacheData != null) {
+            list = JSON.parse(cacheData).data;
+        }
+        return list;
+    },
+    check:()=>{
+        var cacheData = localStorage.getItem("staffsCache");
+        if(cacheData == null)return false;
+        var cache = JSON.parse(cacheData);
+        var cacheTime = cache.createdTime;
+        var now = Date.now();
+        var diff = time.timeDiff(now,cacheTime);
+        return diff.minute <= 100;
+    },
+    clear:()=>{
+        localStorage.removeItem("staffsCache");
+    }
+};

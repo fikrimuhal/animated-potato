@@ -50,9 +50,9 @@ export default class DefaultLayout extends React.Component {
             return <UserAppBar userInfo={db.getUserInfo()}/>
         }
         else {
-            <header>
+            return (<header>
                 <AppBar title="Fikrimuhal Teknoloji - HR" showMenuIconButton={false}/>
-            </header>
+            </header>)
         }
     }
     render = function (){
