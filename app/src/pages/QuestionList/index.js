@@ -181,6 +181,7 @@ export default class QuestionList extends React.Component {
         }
         log("handleFilterChange",newFilters)
         this.setState({filters:newFilters});
+
     };
     handleGridSort = function (sortColumn,sortDirection){
         var comparer = function (a,b){

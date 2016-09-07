@@ -9,7 +9,7 @@ import play.api.mvc._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import pdi.jwt._
-
+import utils.Constants
 case class SignSuccessMessage(status: String, userInfo: Participant, isAdmin: Boolean)
 
 case class LoginForm(username: String, password: String)
@@ -27,13 +27,13 @@ class LoginSignUpController extends Controller {
     request.body.asJson.flatMap(_.validate[LoginForm].asOpt) match {
 
       case Some(loginForm) if Users.isValid(loginForm.username, loginForm.password) =>
-        Ok(Json.toJson(SignSuccessMessage("ok"
+        Ok(Json.toJson(SignSuccessMessage(Constants.OK
           , Participants.getParticipant(loginForm.username).get
           , Users.get(loginForm.username).get.isadmin.get))
         ).addingToJwtSession("user", loginForm)
 
       case Some(loginForm) =>
-        Ok(Json.toJson(SignFailMessage("fail", "-1", "kullanıcı adı veya şifre hatalı")))
+        Ok(Json.toJson(SignFailMessage(Constants.FAIL, "-1", "kullanıcı adı veya şifre hatalı")))
 
       case None =>
         BadRequest("-1")

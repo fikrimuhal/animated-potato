@@ -26,43 +26,45 @@ const styles = {
 
     }
 }
-export default  class  UserAppBar extends  React.Component{
+export default  class UserAppBar extends React.Component {
     constructor(props){
-    super(props)
+        super(props)
     }
-    singOut = function () {
+
+    singOut = function (){
         db.clearUserAuthenticationInfo();
         browserHistory.push("/signin");
     };
-    goToHome = function () {
+    goToHome = function (){
         browserHistory.push("/home");
     };
 
     render = ()=>{
-    return(
+        return (
 
-        <header>
-            <AppBar title="Fikrimuhal Teknoloji - HR" showMenuIconButton={false}                     iconElementRight={
+            <header>
+                <AppBar title="Fikrimuhal Teknoloji - Hızlı Mülakat" showMenuIconButton={false} iconElementRight={
 
-                <IconMenu
-                    iconButtonElement={
-                        <IconButton><AccountIcon /></IconButton>
-                    }
-                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                >
-                    <label style={styles.userLabel}>{this.props.userInfo.name} {this.props.userInfo.lastname}</label>
-                    <Divider />
-                    <MenuItem primaryText="Anasayfa" leftIcon={<HomeIcon />} onTouchTap={this.goToHome} />
-                    <MenuItem primaryText="Çıkış yap" leftIcon={<PowerOffIcon />} onTouchTap={this.singOut} />
-                </IconMenu>
+                    <IconMenu
+                        iconButtonElement={
+                            <IconButton><AccountIcon /></IconButton>
+                        }
+                        targetOrigin={{horizontal:'right',vertical:'top'}}
+                        anchorOrigin={{horizontal:'right',vertical:'top'}}
+                    >
+                        <label
+                            style={styles.userLabel}>{this.props.userInfo.name} {this.props.userInfo.lastname}</label>
+                        <Divider />
+                        <MenuItem primaryText="Anasayfa" leftIcon={<HomeIcon />} onTouchTap={this.goToHome}/>
+                        <MenuItem primaryText="Çıkış yap" leftIcon={<PowerOffIcon />} onTouchTap={this.singOut}/>
+                    </IconMenu>
 
-            }/>
-        </header>
+                }/>
+            </header>
 
-    )
+        )
     }
 }
-UserAppBar.propTypes ={
+UserAppBar.propTypes = {
     userInfo:React.PropTypes.object.isRequired
 }

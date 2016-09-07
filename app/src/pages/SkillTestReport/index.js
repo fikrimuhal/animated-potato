@@ -9,72 +9,75 @@ import CircularProgress from 'material-ui/CircularProgress';
 import log2             from '../../utils/log2'
 import * as Cache       from '../../utils/cache'
 import * as util        from '../../utils/utils'
+import  RadarWidget     from './RadarWidget'
+
 //consts and variables
-const log=log2("SkillTestReportContainer");
+const log = log2("SkillTestReportContainer");
 
 export default  class SkillTestReportContainer extends React.Component {
-    constructor(props) {
+    constructor(props){
         super(props);
         util.bindFunctions.call(this,['initializeFromAPI','initializeFromCache']);
-        this.state={
-            dataWaiting: true
+        this.state = {
+            dataWaiting:true
         };
         var userId = this.props.params.userId;
-        if(Cache.checkTestResultReportCache(userId))
-            this.initializeFromCache(userId)
-        else
-            this.initializeFromAPI(userId)
+        // if(Cache.checkTestResultReportCache(userId))
+        //     this.initializeFromCache(userId)
+        // else
+        //     this.initializeFromAPI(userId)
 
         //log(this.props);
 
     }
-    initializeFromAPI = function (userId) {
+
+    initializeFromAPI = function (userId){
         log("Data from SERVER");
-        mockApi.getUserSkillTestReport(userId).then(response=> {
-            var data=JSON.parse(response);
+        mockApi.getUserSkillTestReport(userId).then(response=>{
+            var data = JSON.parse(response);
             log("data",data);
             this.setState({
-                dataWaiting: false,
-                data: data
+                dataWaiting:false,
+                data:data
             });
         })
     };
-    initializeFromCache = function (userId) {
+    initializeFromCache = function (userId){
         log("Data from CACHE");
         var data = Cache.getTestResultReportFromCache(userId);
-        data.isValidUser=true;
+        data.isValidUser = true;
         this.state = {
-            dataWaiting: false,
-            data: data
+            dataWaiting:false,
+            data:data
         }
     };
-    goToList=function () {
+    goToList = function (){
         browserHistory.push("/dashboard/listofparticipants");
     };
-    createWaitingContent=()=> {
+    createWaitingContent = ()=>{
         return (<div>
             Kullanıcın test sonuçları hazırlanıyor,lütfen bekleyiniz.. <br/>
             <CircularProgress size={1}/>
         </div>);
     };
-    createUserInfoContent=()=> {
-        var user=this.state.data.userInfo;
-        var report=this.state.data.reportHtml;
+    createUserInfoContent = ()=>{
+        var user = this.state.data.userInfo;
+        var report = this.state.data.reportHtml;
 
-        if(this.state.data.isValidUser){
+        if(this.state.data.isValidUser) {
             return (<div>
-                {user.name}  {user.lastname} - kullanıcısının test sonuçları
-                <div dangerouslySetInnerHTML={{__html: report}}>
+                {user.name} {user.lastname} - kullanıcısının test sonuçları
+                <div dangerouslySetInnerHTML={{__html:report}}>
 
                 </div>
             </div>);
         }
-        else{
-          return  <div>Bu kullanıcı bulunamadı veya bu kullanıcıya ait test sonuç bilgisi yoktur..</div>
+        else {
+            return <div>Bu kullanıcı bulunamadı veya bu kullanıcıya ait test sonuç bilgisi yoktur..</div>
         }
 
     };
-    getContent=function () {
+    getContent = function (){
         var content;
         if(this.state.dataWaiting)
             return this.createWaitingContent();
@@ -82,15 +85,24 @@ export default  class SkillTestReportContainer extends React.Component {
             return this.createUserInfoContent()
 
     };
-    render=()=> {
+    createRadarGraph = function (){
+        var data = [];
+        mockApi.getRadarData().then(json=>{
+            ["score","companyScore","generalScore"].map(scoreType=>{
+                json[scoreType]
+            });
+        });
+    };
+    render = ()=>{
         log("rendered");
         return (
             <div>
+
                 <FlatButton label={"Back to list"} icon={<NavigateBefore/>} onClick={this.goToList}></FlatButton>
                 <hr/>
-
-                Participant Skill Test Report<br/>
-                {this.getContent()}
+                <h5>Participant Skill Test Report</h5>
+                {/*{this.getContent()}*/}
+                <RadarWidget/>
 
             </div>
         )

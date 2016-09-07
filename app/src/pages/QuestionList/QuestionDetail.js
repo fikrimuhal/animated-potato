@@ -26,8 +26,9 @@ export default  class QuestionDetail extends React.Component {
     }
 
     initializeData = function (questionId){
-        log("initializeData",Cache.QuestionCaching.check(questionId))
+        //log("initializeData",Cache.QuestionCaching.check(questionId));
         if(Cache.QuestionCaching.check(questionId)) {
+            log("**Question From CACHE");
             var question = Cache.QuestionCaching.get(questionId);
             this.state = {
                 question:question,
@@ -39,7 +40,9 @@ export default  class QuestionDetail extends React.Component {
         }
     };
     initializeFromAPI = function (questionId){
-        log("api",api.QuestionAPI.getById(questionId));
+        var _this=this;
+        log("**Question From API");
+        //log("api",api.QuestionAPI.getById(questionId));
         api.QuestionAPI.getById(questionId)().then(response=>{
             return response.json()
         }).then(json=>{
@@ -47,23 +50,10 @@ export default  class QuestionDetail extends React.Component {
                 question:json,
                 dataWaiting:false
             })
+        }).catch(err=>{
+            log("fetching error");
+            _this.context.showMessage("Fetching error.",5000);
         })
-    };
-    getQuestionSetInfo = function (question){
-        var content = question.setList.map(setInfo=>{
-            return (
-                <span> {setInfo} </span>
-            )
-        });
-        return content;
-    }
-    getQuestionCategoryInfo = function (question){
-        var content = question.categoryWeights.map(item=>{
-            return (
-                <span> {item.id} -> {item.weight} ; </span>
-            )
-        });
-        return content;
     };
     render = ()=>{
         var question = this.state.question;
@@ -80,55 +70,14 @@ export default  class QuestionDetail extends React.Component {
                         }
                     })()
                 }
-
-                {/*<FlatButton label={"<- Back to List"}*/}
-                {/*onClick={()=>{browserHistory.push("/adminpanel/questionlist")}}*/}
-                {/*style={{float:"right"}}*/}
-                {/*></FlatButton>*/}
-                {/*<h5>Question Detail</h5><br/>*/}
-                {/*<LinearProgress mode="indeterminate"*/}
-                {/*color="red"*/}
-                {/*style={{display:this.state.dataWaiting ? "" : "none"}}/>*/}
-                {/*{*/}
-                {/*(()=>{*/}
-                {/*if(!this.state.dataWaiting) {*/}
-                {/*return (*/}
-                {/*<Row>*/}
-                {/*<Col lg={12}>*/}
-                {/*Question ID : <b>{question.id}</b>*/}
-                {/*<Divider></Divider>*/}
-                {/*</Col>*/}
-                {/*<Col lg={12}>*/}
-                {/*Question Title : <b>{question.title}</b>*/}
-                {/*<Divider></Divider>*/}
-                {/*</Col>*/}
-
-                {/*<Col lg={12}>*/}
-                {/*Question Type : <b>{question.qType}</b>*/}
-                {/*<Divider></Divider>*/}
-                {/*</Col>*/}
-                {/*<Col lg={12}>*/}
-                {/*Question Sets : <b>{this.getQuestionSetInfo(question)}</b>*/}
-                {/*<Divider></Divider>*/}
-                {/*</Col>*/}
-                {/*<Col lg={12}>*/}
-                {/*Question Categories And Weigths :*/}
-                {/*<b>{this.getQuestionCategoryInfo(question)}</b>*/}
-                {/*<Divider></Divider>*/}
-                {/*</Col>*/}
-                {/*</Row>*/}
-                {/*)*/}
-
-                {/*}*/}
-                {/*})()*/}
-                {/*}*/}
-
-
             </div>
         )
     }
 }
 
-React.propTypes = {
+QuestionDetail.propTypes = {
     question:React.PropTypes.object.isRequired
+};
+QuestionDetail.contextTypes = {
+    showMessage:React.PropTypes.func
 }

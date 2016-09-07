@@ -11,3 +11,22 @@ export const questionSets = (count)=>{
     }
     return result;
 };
+
+export const TestResultMockDataCreator = {
+    createRadarData:()=>{
+        return ["Java","Backend","Frontend","XML","C#","Machine Learning"].map(category=>{
+            return {
+                category:category,
+                score:Math.random()
+            }
+        })
+    },
+    getRadarData:()=>{
+        return {
+            score:TestResultMockDataCreator.createRadarData(),
+            companyScore:TestResultMockDataCreator.createRadarData(),
+            generalScore:TestResultMockDataCreator.createRadarData()
+        };
+
+    }
+};
