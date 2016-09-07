@@ -39,6 +39,10 @@ class Database extends Actor  {
           }
           ,answer.questionId,answer.answer))
       )
+
+    case TestReport(interviewId,userIdentifier,scoreMap) =>
+      scoreMap.foreach{ category => ScoresDAO.insert(Scores(interviewId,category._1,category._2)) }
+
   }
 
   override def preStart = {

@@ -18,7 +18,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.slick" %% "slick"      % "2.1.0",
   "org.postgresql"     %  "postgresql" % "9.3-1102-jdbc41",
   "com.pauldijou" %% "jwt-play" % "0.8.0",
-  "com.github.t3hnar" %% "scala-bcrypt" % "2.6")
+  "org.mindrot" % "jbcrypt" % "0.3m"
+)
 
 libraryDependencies ++= Seq( "com.jason-goodwin" %% "authentikat-jwt" % "0.4.1")
 

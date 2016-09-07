@@ -73,7 +73,7 @@ object Questions {
     // question update
     questions.filter(_.id === question.id).update(QuestionTable(question.id, question.title, question.qType))
     // questionOptions update
-    questionOptions.filter(qopt => qopt.questionId === question.id).delete
+    questionOptions.filter(qopt => qopt.id inSet question.options.map(_.id.get).toSet).delete
     question.options.foreach { qopt => questionOptions += qopt }
     //questionCategory Update
     questionCategories.filter(qct => qct.questionId === question.id).delete

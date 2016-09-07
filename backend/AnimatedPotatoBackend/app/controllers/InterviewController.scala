@@ -100,22 +100,14 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
     }
   }
 
-  def testReport = Action.async { implicit request =>
+  def testReport = Action { implicit request =>
     println("InterviewController : received a testReport request")
 
     request.body.asJson.flatMap(_.validate[TestReportRequest].asOpt) match {
 
-      case Some(testReportRequest) =>
+      case Some(request) => Ok(Json.toJson(ScoresDAO.getAll))
 
-        Future.successful(Ok("Temsili Test Raporu"))
-
-        //TODO : Test Report requesti geldiğinde, daha önceden test finish olduğunda hesaplanıp değeri girilen tablodan çek
-
-//        (rootActor ? (RandomInterviewImpl, testReportRequest))
-//          .mapTo[TestReport]
-//          .map(x => Ok(s"TestReport : ${x.interviewId} : ${x.scores} : ${x.userIdentifier}"))
-
-      case _ => Future.successful(BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
+      case _ => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
 
     }
   }
