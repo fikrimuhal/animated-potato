@@ -39,8 +39,8 @@ export default  class QuestionDetail extends React.Component {
         }
     };
     initializeFromAPI = function (questionId){
-        log("api",api.getQuestion(questionId));
-        api.getQuestion(questionId)().then(response=>{
+        log("api",api.QuestionAPI.getById(questionId));
+        api.QuestionAPI.getById(questionId)().then(response=>{
             return response.json()
         }).then(json=>{
             this.setState({

@@ -42,7 +42,7 @@ export default class QuestionAdd extends React.Component {
     addNewOption = function (){
         var newKey = util.guid();
         var oldStateData = this.props.data;
-        var newOption = Immutable.fromJS({id:newKey,title:"ootion title",weight:0.5},
+        var newOption = Immutable.fromJS({id:newKey,title:"option title",weight:0.5},
             (k,v)=>{return v.toOrderedMap()}
         )
         var oldOptionsMap = oldStateData.get("options");
