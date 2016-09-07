@@ -73,7 +73,8 @@ class InterviewManager(database: ActorRef) extends Actor with Stash {
             _sender ! x
         }
 
-    case TestReport(interviewId,userIdentifier,scores) =>
+    case x@TestReport(interviewId,userIdentifier,scores) =>
+      database ! x
       sender ! PoisonPill
       interviewActors -= interviewId
       //  TODO : burada database actorü ile database e kaydet

@@ -1,7 +1,7 @@
 package models
 
 import animatedPotato.protocol.protocol.UserIdType
-import com.github.t3hnar.bcrypt._
+import org.mindrot.jbcrypt.BCrypt
 import utils.{Constants, DB}
 
 import slick.driver.PostgresDriver.simple._
@@ -24,7 +24,7 @@ object Users {
   lazy val participants = TableQuery[Participants]
 
   def insert(user: User) = DB { implicit session =>
-    users += user.copy(password = user.password.bcrypt)
+    users += user
   }
 
   def exists(user: User): Boolean = DB { implicit session =>
@@ -47,16 +47,11 @@ object Users {
   }
 
   def isValid(userNameOrEmail: String, password: String): Boolean = DB { implicit session =>
-    try {
+
       val a = users.filter(u => (u.username === userNameOrEmail) || (u.email === userNameOrEmail)).list.distinct
-      if (a.nonEmpty) {
-        password.isBcrypted(a.head.password)
-      }
+      if (a.nonEmpty) BCrypt.checkpw(password, a.head.password)
       else false
-    }
-    catch {
-      case e: Exception => false
-    }
+
   }
 
   def get(usernameOrEmail: String): Option[User] = DB { implicit session =>

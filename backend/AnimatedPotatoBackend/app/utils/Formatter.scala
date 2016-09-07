@@ -32,7 +32,7 @@ object Formatter {
   implicit val collectionResponseFormat = Json.format[CollectionResponse]
   implicit val userDetailsFormat = Json.format[UserDetails]
   implicit val nextQuestionRepsonseFormat = Json.format[NextQuestionResponse]
-
+  implicit val scoresFormat = Json.format[Scores]
 
 
   implicit def longListToString = MappedColumnType.base[List[IdType], String](

@@ -43,7 +43,7 @@ class InterviewActor(initMessage: InitMessage) extends Actor with Stash {
       sender ! TestReport(initMessage.interviewId
         ,initMessage.userIdentifier
         ,Map(1.toLong -> 1.5 , 2.toLong -> 2.4))
-      context.parent ! IAmDone(x.id)
+//      context.parent ! IAmDone(x.id)
       self ! PoisonPill
 
     case x =>
