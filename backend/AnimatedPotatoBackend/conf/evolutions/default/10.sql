@@ -6,7 +6,8 @@ CREATE TABLE interview
   email character varying(255) NOT NULL,
   hasfinished boolean NOT NULL,
   start_date TIMESTAMP not null,
-  end_date  TIMESTAMP
+  end_date  TIMESTAMP,
+  average_score double PRECISION
 )
 WITH (
   OIDS=FALSE

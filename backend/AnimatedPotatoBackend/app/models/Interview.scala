@@ -1,15 +1,16 @@
 package models
 
 import java.sql.Timestamp
-import animatedPotato.protocol.protocol.{CategoryId, Email, IdType, QuestionId}
+
+import animatedPotato.protocol.protocol._
 import utils.DB
+
 import slick.driver.PostgresDriver.simple._
 
-case class Interview(id: Option[IdType], email: String, hasFinished: Boolean = false,startDate: Option[Timestamp] = None, endDate: Option[Timestamp] = None)
+case class Interview(id: Option[IdType], email: String, hasFinished: Boolean = false, startDate: Option[Timestamp] = None, endDate: Option[Timestamp] = None, averageScore: Option[Score] = None)
 
 object InterviewDAO {
   implicit def date2timestamp(date: java.util.Date): Timestamp = new java.sql.Timestamp(date.getTime)
-
 
   lazy val interviewDAO = TableQuery[InterviewDAO]
   type InterviewId = Long
@@ -86,6 +87,22 @@ object InterviewDAO {
     interviewDAO.filter(itw => itw.email === email && itw.hasFinished === true).map(_.id).list.headOption
   }
 
+  def insertAverageScore(interviewId: InterviewId, averageScore: Score) = DB { implicit session =>
+    interviewDAO.filter(_.id === interviewId).map(_.averageScore).update(averageScore)
+  }
+
+
+  def hasFinishedTest(email: Email): Boolean = DB { implicit session =>
+    interviewDAO.filter(i => i.email === email && i.hasFinished).list.nonEmpty
+  }
+
+  def hasFinishedTest(id: InterviewId): Boolean = DB { implicit session =>
+    interviewDAO.filter(i => i.id === id && i.hasFinished).list.nonEmpty
+  }
+
+
+
+
 }
 
 class InterviewDAO(tag: Tag) extends Table[Interview](tag, "interview") {
@@ -100,5 +117,7 @@ class InterviewDAO(tag: Tag) extends Table[Interview](tag, "interview") {
 
   def endDate = column[Timestamp]("end_date")
 
-  def * = (id.?, email, hasFinished, startDate.?, endDate.?) <> (Interview.tupled, Interview.unapply)
+  def averageScore = column[Score]("average_score")
+
+  def * = (id.?, email, hasFinished, startDate.?, endDate.?, averageScore.?) <> (Interview.tupled, Interview.unapply)
 }

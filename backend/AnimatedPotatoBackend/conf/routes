@@ -9,7 +9,7 @@ POST        /insertParticipant                 controllers.ParticipantController
 POST        /updateParticipant                 controllers.ParticipantController.updateParticipant
 POST        /admin/deleteParticipant           controllers.ParticipantController.deleteParticipant
 GET         /admin/getParticipants             controllers.ParticipantController.getParticipants
-#GET         /admin/getParticipants             controllers.ParticipantController.getParticipants()
+GET         /admin/getApplicants               controllers.ParticipantController.getApplicants
 
 POST        /admin/insertUser                  controllers.UserController.insert
 POST        /admin/updateUser                  controllers.UserController.update
@@ -58,7 +58,8 @@ POST        /login                             controllers.LoginSignUpController
 
 POST        /answer                            controllers.AnswerController.insertAnswer
 GET         /getAnswers                        controllers.AnswerController.getAnswers
-POST         /getComparativeReport              controllers.ScoresController.getComparativeReport
+POST        /getComparativeReport              controllers.ScoresController.getComparativeReport
+GET         /admin/getUsersResults             controllers.ScoresController.getUsersResults
 
 
 # Map static resources from the /public folder to the /assets URL path

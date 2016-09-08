@@ -9,6 +9,7 @@ import controllers._
 import models._
 import play.api.libs.json._
 import controllers.Email
+
 import slick.driver.PostgresDriver.simple._
 
 
@@ -42,7 +43,7 @@ object Formatter {
     }
     def writes(ts: Timestamp) = JsString(format.format(ts))
   }
-
+  implicit val applicantFormatter = Json.format[Applicant]
   implicit val interviewFormatter = Json.format[Interview]
   implicit val testReportRequestFormat = Json.format[TestReportRequest]
   implicit val collectionFormat = Json.format[Collection]
@@ -50,6 +51,8 @@ object Formatter {
   implicit val userDetailsFormat = Json.format[UserDetails]
   implicit val nextQuestionRepsonseFormat = Json.format[NextQuestionResponse]
   implicit val scoresFormat = Json.format[Scores]
+  implicit val userCategoryResultsFormatter = Json.format[UserCategoryScores]
+
 
 
   implicit def longListToString = MappedColumnType.base[List[IdType], String](

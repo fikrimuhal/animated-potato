@@ -1,6 +1,7 @@
 package controllers
 
-import models.{ResponseMessage, Scores, ScoresDAO}
+import animatedPotato.protocol.protocol.CategoryId
+import models.{ID, ResponseMessage, Scores, ScoresDAO}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 import utils.Constants
@@ -46,7 +47,11 @@ class ScoresController extends Controller {
       case _ =>
         BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
+  }
 
+  def getUsersResults = Action {
+
+    Ok(Json.toJson(ScoresDAO.getUserCategoryScores))
 
   }
 

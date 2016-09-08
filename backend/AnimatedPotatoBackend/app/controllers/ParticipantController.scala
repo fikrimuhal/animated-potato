@@ -64,8 +64,14 @@ class ParticipantController @Inject()(@Named("root") root: ActorRef) extends Con
     }
   }
 
-  def getParticipants() = Action {
-    Ok(Json.prettyPrint(Json.toJson(Participants.getParticipants)))
+  def getParticipants = Action {
+    Ok(Json.toJson(Participants.getAll))
+  }
+
+  def getApplicants = Action {
+
+    Ok(Json.toJson(Participants.getApplicants))
+
   }
 
 }
