@@ -1,6 +1,5 @@
 package services
 import akka.actor.{Actor, Props}
-import akka.actor.Actor.Receive
 import animatedPotato.protocol.protocol
 import animatedPotato.protocol.protocol._
 import dao.CategoryDAO
@@ -41,8 +40,7 @@ class Database extends Actor  {
       )
 
     case TestReport(interviewId,userIdentifier,scoreMap) =>
-      scoreMap.foreach{ category => ScoresDAO.insert(Scores(interviewId,category._1,category._2)) }
-
+      ScoresDAO.insertAll(scoreMap.map(category => Scores(interviewId,category._1,category._2)).toList)
   }
 
   override def preStart = {

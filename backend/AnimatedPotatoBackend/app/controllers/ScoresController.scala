@@ -33,4 +33,21 @@ class ScoresController extends Controller {
     Ok(Json.toJson(ScoresDAO.getAll))
 
   }
+
+  def getComparativeReport = Action { implicit request =>
+
+    request.body.asJson.flatMap(_.validate[Email].asOpt) match {
+
+      case Some(email) =>
+
+        Ok(Json.toJson(ScoresDAO.getComparativeReport(email.email)))
+
+
+      case _ =>
+        BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
+    }
+
+
+  }
+
 }

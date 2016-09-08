@@ -42,12 +42,11 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
   def testFinished: Receive = {
 
     case TestReportRequest(id) =>
-      // TODO : scores will be calculated here
-      implicit def bool2int(b: Boolean) = if (b) 1 else 0
+      implicit def bool2int(b: Boolean) : Double = if (b) 1 else 0
       val answers: List[YesNoAnswer] = answerList.toList
       val categoryList = initMessage.questionCategoryWeightTuple.value.map(_.categoryId).distinct
       val qcwt = initMessage.questionCategoryWeightTuple.value
-      val scoresList = categoryList.map(cat => (cat, qcwt.filter(_.categoryId == cat).map(q => q.weight * answers.filter(_.questionId == q.questionId).head.value).sum))
+      val scoresList = categoryList.map(cat => (cat, qcwt.filter(_.categoryId == cat).map(q => q.weight * answers.filter(_.questionId == q.questionId).head.value).sum / qcwt.filter(_.categoryId == cat).map(_.weight).sum))
       val scores = Map(scoresList map { x => (x._1, x._2) }: _*)
       println("randoma testreportrequest geldi")
       sender ! TestReport(initMessage.interviewId, initMessage.userIdentifier, scores)

@@ -100,7 +100,7 @@ object Questions {
 
   def getAll: List[QuestionResponse] = DB { implicit session =>
 
-    for (question <- questions.list if question != null)
+    for (question <- questions.sortBy(_.id).list if question != null)
       yield
         QuestionResponse(
           question.id.get,
