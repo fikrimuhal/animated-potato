@@ -13,6 +13,7 @@ import * as s           from '../../layouts/style'
 import  RadarWidget     from './RadarWidget'
 import  SpiderWidget    from './SpiderGraphWidget'
 import  BarWidget       from './BarChartsWidget'
+import  PieWidget       from './PieChartWidget'
 //consts and variables
 const log = log2("SkillTestReportContainer");
 
@@ -106,6 +107,7 @@ export default  class SkillTestReportContainer extends React.Component {
                 {/*{this.getContent()}*/}
                 <SpiderWidget style={s.GraphStyles.widgetContainer}/>
                 <BarWidget style={s.GraphStyles.widgetContainer}/>
+                <PieWidget style={s.GraphStyles.widgetContainer}/>
             </div>
         )
     }

@@ -56,12 +56,12 @@ export default  class BarChartsWidget extends React.Component {
                 dataset.push({
                     label:labelHash[scoreType],
                     data:values,
-                    backgroundColor:colorHash[scoreType].light,
-                    borderColor:colorHash[scoreType].dark,
-                    pointBackgroundColor:colorHash[scoreType].dark,
-                    pointBorderColor:'#fff',
-                    pointHoverBackgroundColor:'#fff',
-                    pointHoverBorderColor:colorHash[scoreType].dark
+                    backgroundColor: colorHash[scoreType].dark,
+                    borderColor: colorHash[scoreType].dark,
+                    borderWidth: 1,
+                    hoverBackgroundColor: colorHash[scoreType].light,
+                    hoverBorderColor: colorHash[scoreType].dark
+
                 })
             });
             data.datasets = dataset;
