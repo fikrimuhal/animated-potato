@@ -6,7 +6,7 @@ import Radar   from '../../components/GraphComponents/Radar'
 import * as mockApi from '../../utils/mock_api'
 import LinearProgress from 'material-ui/LinearProgress';
 import log2 from '../../utils/log2'
-const log = log2("RadarWidget");
+const log = log2("RadarWidget")
 export default  class RadarWidget extends React.Component {
     constructor(props){
         super(props)
@@ -18,9 +18,10 @@ export default  class RadarWidget extends React.Component {
 
     createGraph = function (){
         var _this=this;
-        var data = [];
+
         mockApi.getRadarData().then(json=>{
             log("received json=>",json);
+            var data = [];
             ["score","companyScore","generalScore"].forEach(scoreType=>{
                 var layerData = [];
                 layerData = json[scoreType].map(valueItem=>{
@@ -50,6 +51,7 @@ export default  class RadarWidget extends React.Component {
         return (
             <div>
                 {this.getContent()}
+
             </div>
         )
     }

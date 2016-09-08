@@ -9,8 +9,10 @@ import CircularProgress from 'material-ui/CircularProgress';
 import log2             from '../../utils/log2'
 import * as Cache       from '../../utils/cache'
 import * as util        from '../../utils/utils'
+import * as s           from '../../layouts/style'
 import  RadarWidget     from './RadarWidget'
-
+import  SpiderWidget    from './SpiderGraphWidget'
+import  BarWidget       from './BarChartsWidget'
 //consts and variables
 const log = log2("SkillTestReportContainer");
 
@@ -102,8 +104,8 @@ export default  class SkillTestReportContainer extends React.Component {
                 <hr/>
                 <h5>Participant Skill Test Report</h5>
                 {/*{this.getContent()}*/}
-                <RadarWidget/>
-
+                <SpiderWidget style={s.GraphStyles.widgetContainer}/>
+                <BarWidget style={s.GraphStyles.widgetContainer}/>
             </div>
         )
     }

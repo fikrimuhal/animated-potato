@@ -163,7 +163,7 @@ export const questionAddPage = {
 
 export const AdminLayoutStyle = {
     main:{
-        backgroundImage:"url("+image+")",
+        backgroundImage:"url(" + image + ")",
         height:"auto !important",
         minHeight:"100%",
         backgroundSize:"cover"
@@ -187,3 +187,14 @@ export const AdminLayoutStyle = {
         maxWidth:"100%"
     }
 }
+
+export  const GraphStyles = {
+  widgetContainer:{
+      border:"1px teal dotted",
+      borderRadius:"10px",
+      marginTop:"15px",
+      padding:"5px",
+      backgroundColor:"rgba(213, 224, 205, 0.1)"
+
+  }
+};
