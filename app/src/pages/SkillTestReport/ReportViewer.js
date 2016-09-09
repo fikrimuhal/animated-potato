@@ -12,20 +12,23 @@ import log2             from '../../utils/log2'
 import * as Cache       from '../../utils/cache'
 import * as util        from '../../utils/utils'
 import * as s           from '../../layouts/style'
-import  {Row,Col}       from 'react-flexbox-grid'
+import  {Row, Col}       from 'react-flexbox-grid'
 import  SpiderWidget    from './SpiderGraphWidget'
 import  BarWidget       from './BarChartsWidget'
 import  PieWidget       from './PieChartWidget'
 import  SummaryBar      from './SummaryBar'
+import  ScoreTable      from './CategoryScoreTable'
+import ColorMatrix      from './ColorMatrixChart'
 const log = log2("ReportViewer");
+
 export default  class ReportViewer extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
 
     }
 
-    render = ()=>{
-        log("rendered",this.props)
+    render = ()=> {
+        log("rendered", this.props)
         var scoreInfo = this.props.generalScoreInfo;
         var userInfo = this.props.userInfo;
         return (
@@ -39,27 +42,42 @@ export default  class ReportViewer extends React.Component {
                     />
                 </Row>
                 <hr/>
-                <Row>
+                <Row style={{height: "400px"}}>
                     <Col lg={6}>
                         <SpiderWidget data={this.props.categoryScoreInfo}/>
                     </Col>
                     <Col lg={6}>
                         <PieWidget data={this.props.categoryScoreInfo}/>
                     </Col>
-                </Row>
-                <Row>
+                </Row> <br/>
+                <hr/>
+
+                <Row style={{height: "480px"}}>
                     <Col lg>
                         <BarWidget data={this.props.categoryScoreInfo}/>
                     </Col>
+                </Row><br/> <hr/>
+                <Row style={{height: "480px"}}>
+                    <Col lg={6}>
+                        <ScoreTable data={this.props.scoreData}/>
+                    </Col>
+                    <Col lg={6}>
+                        <ScoreTable data={this.props.scoreData}/>
+                    </Col>
+                </Row><br/><hr/>
+                <Row>
+                    <Col lg>
+                        <ColorMatrix/>
+                    </Col>
                 </Row>
-
 
             </div>
         )
     }
 }
 ReportViewer.propTypes = {
-    categoryScoreInfo:React.PropTypes.object.isRequired,
-    generalScoreInfo:React.PropTypes.object.isRequired,
-    userInfo:React.PropTypes.object.isRequired
+    categoryScoreInfo: React.PropTypes.object.isRequired,
+    generalScoreInfo: React.PropTypes.object.isRequired,
+    userInfo: React.PropTypes.object.isRequired,
+    scoreData: React.PropTypes.array.isRequired
 };

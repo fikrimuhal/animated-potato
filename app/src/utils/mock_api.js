@@ -20,7 +20,7 @@ export const getUserSkillTestReport = userId =>{
                 Cache.cacheTestResultReport(response.userInfo,response.reportHtml);
             }
             resolve(JSON.stringify(response));
-        },Math.floor(Math.random() * 1500))
+        },Math.floor(Math.random() * 300))
     });
     return promise;
 };

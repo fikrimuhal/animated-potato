@@ -195,10 +195,9 @@ export  const GraphStyles = {
       marginTop:"15px",
       padding:"5px",
       backgroundColor:"rgba(213, 224, 205, 0.1)"
-
   },
     SummaryBarPaper:{
-        height: "90px",
+        height: "110px",
         width: "90%",
         margin: 20,
         textAlign: 'center',
@@ -207,11 +206,11 @@ export  const GraphStyles = {
     },
     SummaryBarLabel:{
         fontWeight: "bolder",
-        fontSize: "25px",
+        fontSize: "35px",
         color: "#9c475b",
         padding:"5px",
-        borderBottom:"5px inset #9c475b",
-        borderRadius:"50%",
+        //borderBottom:"5px inset #9c475b",
+        //borderRadius:"50%",
 
     },
     userInfoCol:{

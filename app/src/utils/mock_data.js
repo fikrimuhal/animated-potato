@@ -3,35 +3,62 @@ import {log2} from '../utils'
 import * as api from '../utils/api'
 const log = log2("MockData");
 
-export const questionSets = (count)=>{
+export const questionSets = (count)=> {
     var result = [];
-    for( var i = 0; i < count; i++ ) {
+    for (var i = 0; i < count; i++) {
         result.push({
-            id:i,
-            title:"Set-" + faker.Name.firstName(),
-            questionCount:Math.floor(Math.random() * 100),
-            isDefault:(i == 3)
+            id: i,
+            title: "Set-" + faker.Name.firstName(),
+            questionCount: Math.floor(Math.random() * 100),
+            isDefault: (i == 3)
         });
     }
     return result;
 };
 
 export const TestResultMockDataCreator = {
-    createRadarData:()=>{
-        return ["Java","Backend","Frontend","XML","C#","Machine Learning"].map(category=>{
+    createRadarData: ()=> {
+        return ["Java", "Backend", "Frontend", "XML", "C#", "Machine Learning","A","B","C","D","A","B","C","D","A","B","C","D","A","B","C","D","A","B","C","D"].map(category=> {
             return {
-                category:category,
-                score:Math.random()
+                category: category,
+                score: Math.random()
             }
         })
     },
-    getRadarData:()=>{
+    getRadarData: ()=> {
         return {
-            score:TestResultMockDataCreator.createRadarData(),
-            companyScore:TestResultMockDataCreator.createRadarData(),
-            generalScore:TestResultMockDataCreator.createRadarData()
+            score: TestResultMockDataCreator.createRadarData(),
+            companyScore: TestResultMockDataCreator.createRadarData(),
+            generalScore: TestResultMockDataCreator.createRadarData()
         };
 
+    },
+    createScoresData: (count)=> {
+        var data = [];
+        var categories = ["Java", "C#"];
+        for (var i = 0; i < count; i++) {
+            var item = {};
+            item.participantId = i;
+            item.inteviewId = i;
+            item.name = faker.Name.firstName();
+            item.lastName = faker.Name.firstName();
+            item.overallPercentage = Math.floor(Math.random() * 100);
+            item.overallScore = Math.floor(Math.random() * 100);
+            item.overAllConfidence = Math.floor(Math.random() * 10);
+            item.scores = (()=> {
+                return categories.map(cat=> {
+                    var score = {};
+                    score.category = {category: cat, id: Math.floor(Math.random() * 100)};
+                    score.score = Math.floor(Math.random() * 100);
+                    score.percentage = Math.floor(Math.random() * 100);
+                    score.confidence = Math.floor(Math.random() * 10);
+                    return score;
+                });
+            })();
+            data.push(item);
+        }
+        console.log("createScoresData", data);
+        return data;
     }
 };
 
@@ -39,33 +66,33 @@ import sorular from '../../../design/sorular';
 
 
 export const MockQuestionCreator = {
-    getCategoryWeights:(cw)=>{
-      return cw.map(item=>{
-         return {
-             id:parseInt(item.c),
-             weight:item.w
-         }
-      });
+    getCategoryWeights: (cw)=> {
+        return cw.map(item=> {
+            return {
+                id: parseInt(item.c),
+                weight: item.w
+            }
+        });
     },
-    initQuestions:()=>{
-        log("questionsJson",sorular);
+    initQuestions: ()=> {
+        log("questionsJson", sorular);
         var data;
-        data = sorular.map(soru=>{
+        data = sorular.map(soru=> {
             return {
                 title: soru.t,
-                qType:"yesno",
-                options:[
-                    {"title" : "Evet" ,  "weight" : 1.0},
-                    {"title" : "Hayır", "weight" : 0.0}
+                qType: "yesno",
+                options: [
+                    {"title": "Evet", "weight": 1.0},
+                    {"title": "Hayır", "weight": 0.0}
                 ],
-                "setList" : [1,2],
-                categoryWeights:MockQuestionCreator.getCategoryWeights(soru.cw)
+                "setList": [1, 2],
+                categoryWeights: MockQuestionCreator.getCategoryWeights(soru.cw)
             }
         });
         // api.QuestionAPI.create(data[0]);
-        data.forEach(soru=>{
+        data.forEach(soru=> {
             api.QuestionAPI.create(soru);
         });
-        log("data",data);
+        log("data", data);
     }
 };

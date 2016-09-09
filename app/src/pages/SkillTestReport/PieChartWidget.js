@@ -10,6 +10,18 @@ import * as util            from '../../utils/utils'
 import * as s               from '../../layouts/style'
 import * as _               from 'lodash'
 const log = log2("PieChartWidget");
+var options={
+    responsive: true,
+    maintainAspectRatio:false,
+    legend:{
+        position:'bottom',
+        fullWidth:true,
+        labels:{
+            fontSize:10,
+            boxWidth:20
+        }
+    }
+};
 export default  class PieChartWidget extends React.Component {
     constructor(props){
         super(props)
@@ -39,7 +51,7 @@ export default  class PieChartWidget extends React.Component {
             return item.value
         });
         var colors = labels.map(item=>{
-            return util.generateColor(0.5)
+            return util.generateColor()
         });
         var backColors = colors.map(color=>{return color.dark});
         var hoverColors = colors.map(color=>{return color.light});
@@ -61,7 +73,7 @@ export default  class PieChartWidget extends React.Component {
     };
     getContent = function (){
         if(this.state.dataLoaded) {
-            return <Pie data={this.state.chartData}/>
+            return <Pie data={this.state.chartData} options={options}/>
         }
         else {
             return <LinearProgress mode="indeterminate" color="red"/>

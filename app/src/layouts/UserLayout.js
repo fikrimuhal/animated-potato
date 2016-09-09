@@ -35,6 +35,11 @@ export default class UserLayout extends React.Component {
             return false;
             //browserHistory.push("/signin");
         }
+        else{
+            if(db.isAdmin()){
+                window.location.href="/dashboard";
+            }
+        }
         this.state={
             open: false
         };

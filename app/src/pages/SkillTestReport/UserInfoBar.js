@@ -4,6 +4,8 @@
 import React from 'react'
 import {Row,Col} from 'react-flexbox-grid'
 import * as s from '../../layouts/style'
+var avatar = require("!file!../../assets/images/test-report-avatar.png");
+
 export default  class UserInfoBar extends React.Component {
     constructor(props){
         super(props)
@@ -16,7 +18,7 @@ export default  class UserInfoBar extends React.Component {
                 <Row>
                     <Col lg={4}>
                         <img
-                            src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcR8Xp0Ea_kGjAIUzscs7OVlu2qIAwgIk9wJouMQpA_NZ5_rDRxKWJu6opc"
+                            src={avatar}
                             style={s.GraphStyles.avatar}/>
                     </Col>
                     <Col lg={8}>

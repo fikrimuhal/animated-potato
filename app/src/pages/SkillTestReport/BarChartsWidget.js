@@ -16,16 +16,16 @@ var labelHash = {
 };
 var colorHash = {
     "score":{
-        light:'rgba(147,54,77,0.2)',
-        dark:'rgba(147,54,77,1)'
+        light:'rgba(233, 30, 99,0.4)',
+        dark:'rgba(233, 30, 99,1.0)'
     },
     "companyScore":{
-        light:'rgba(84,102,43,0.2)',
-        dark:'rgba(84,102,43,1)'
+        light:'rgba(76, 175, 80,0.2)',
+        dark:'rgba(76, 175, 80,1.0)'
     },
     "generalScore":{
-        light:"rgba(115,162,201,0.2)",
-        dark:"rgba(115,162,201,1)"
+        light:"rgba(0, 188, 212,0.2)",
+        dark:"rgba(0, 188, 212,1.0)"
     }
 };
 export default  class BarChartsWidget extends React.Component {

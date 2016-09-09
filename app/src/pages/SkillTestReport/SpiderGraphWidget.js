@@ -8,91 +8,112 @@ import log2                 from '../../utils/log2'
 import {Radar}              from 'react-chartjs-2'
 import * as util            from '../../utils/utils'
 import * as s               from '../../layouts/style'
+import materialColors               from '../../utils/material-colors'
 const log = log2("SpiderGraphWidget");
 var colorHash = {
-    "score":{
-        light:'rgba(147,54,77,0.2)',
-        dark:'rgba(147,54,77,1)'
+    "score": {
+        light: 'rgba(233, 30, 99,0.4)',
+        dark: 'rgba(233, 30, 99,1.0)'
     },
-    "companyScore":{
-        light:'rgba(84,102,43,0.2)',
-        dark:'rgba(84,102,43,1)'
+    "companyScore": {
+        light: 'rgba(76, 175, 80,0.2)',
+        dark: 'rgba(76, 175, 80,1.0)'
     },
-    "generalScore":{
-        light:"rgba(115,162,201,0.2)",
-        dark:"rgba(115,162,201,1)"
+    "generalScore": {
+        light: "rgba(0, 188, 212,0.2)",
+        dark: "rgba(0, 188, 212,1.0)"
     }
 };
 var labelHash = {
-    "score":"This Person",
-    "companyScore":"Avarage of Fikrimuhal's Staffs",
-    "generalScore":"Avarage of All Person"
+    "score": "This Person",
+    "companyScore": "Avarage of Fikrimuhal's Staffs",
+    "generalScore": "Avarage of All Person"
 };
-const options= {
+const options = {
+    responsive: true,
+    maintainAspectRatio:false,
     scale: {
-        display:true,
-        gridLines:{
-            display:true
+        display: true,
+        gridLines: {
+            display: true
         },
-        ticks:{
-            display:false
+        ticks: {
+            display: false
+        },
+        pointLabels:{
+            fontSize:10,
+            fontColor:materialColors.darkText.primary
+        }
+    },
+    legend:{
+        position:'bottom',
+        fullWidth:true,
+        labels:{
+            fontSize:10,
+            boxWidth:20
         }
     }
-}
+
+};
+const styles={
+    chartContainer:{
+        height:"100%"
+    }
+};
 export default  class SpiderGraphWidget extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            dataLoaded:false
+            dataLoaded: false
         };
         this.createGraph();
     }
 
-    createGraph = function (){
+    createGraph = function () {
         var dataset = [];
         var data = {};
 
-        var labels = this.props.data["score"].map(item=>{
+        var labels = this.props.data["score"].map(item=> {
             return item.category
         });
 
-        log("labels",labels);
+        log("labels", labels);
         data.labels = labels;
 
-        ["score","companyScore","generalScore"].forEach(scoreType=>{
-            var values = this.props.data[scoreType].map(valueItem=>{
+        ["score", "companyScore", "generalScore"].forEach(scoreType=> {
+            var values = this.props.data[scoreType].map(valueItem=> {
                 return parseFloat(valueItem.score.toPrecision(2));
             });
             dataset.push({
-                label:labelHash[scoreType],
-                data:values,
-                backgroundColor:colorHash[scoreType].light,
-                borderColor:colorHash[scoreType].dark,
-                pointBackgroundColor:colorHash[scoreType].dark,
-                pointBorderColor:'#fff',
-                pointHoverBackgroundColor:'#fff',
-                pointHoverBorderColor:colorHash[scoreType].dark
+                label: labelHash[scoreType],
+                data: values,
+                backgroundColor: colorHash[scoreType].light,
+                borderColor: colorHash[scoreType].dark,
+                pointBackgroundColor: colorHash[scoreType].dark,
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: colorHash[scoreType].dark
             })
         });
         data.datasets = dataset;
-        log("data",data);
+        //log("data", data);
         this.state = {
-            graphData:data,
-            dataLoaded:true
+            graphData: data,
+            dataLoaded: true
         };
 
     };
-    getContent = function (){
-        if(this.state.dataLoaded) {
+    getContent = function () {
+        if (this.state.dataLoaded) {
             return <Radar data={this.state.graphData} options={options}/>
         }
         else {
             return <LinearProgress mode="indeterminate" color="red"/>
         }
     };
-    render = ()=>{
+    render = ()=> {
         return (
-            <div style={s.GraphStyles.widgetContainer}>
+            <div style={Object.assign(s.GraphStyles.widgetContainer,styles.chartContainer)}>
                 {this.getContent()}
             </div>
         )
@@ -100,5 +121,5 @@ export default  class SpiderGraphWidget extends React.Component {
 }
 
 SpiderGraphWidget.propTypes = {
-    data:React.PropTypes.object.isRequired
+    data: React.PropTypes.object.isRequired
 }

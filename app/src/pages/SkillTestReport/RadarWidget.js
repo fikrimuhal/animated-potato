@@ -47,7 +47,7 @@ export default  class RadarWidget extends React.Component {
             />
         }
     };
-    render = ()=>{
+    render = ()=>{æ
         return (
             <div>
                 {this.getContent()}
