@@ -3,6 +3,9 @@ package animatedPotato.protocol
 
 object protocol {
 
+  case class CategoryScoreConfidence(categoryId: CategoryId, score: Score, confidence: Confidence)
+
+
   /**
     * Interview servise yollanacak, bu komuttan sonra interview
     * servisinin sonraki soruyu göndermesi gerek
@@ -33,7 +36,7 @@ object protocol {
     */
   case class TestFinish(interviewId: InterviewId, userIdentifier: UserIdentifier)
 
-  case class TestReport(interviewId: InterviewId, userIdentifier: UserIdentifier, scores: Map[CategoryId, Score])
+  case class TestReport(interviewId: InterviewId, userIdentifier: UserIdentifier, categoryScores : List[CategoryScoreConfidence])
 
   /**
     * backend interview servise yollar
@@ -108,6 +111,8 @@ object protocol {
   type QuestionOptionId = IdType
   type QuestionId = IdType
   type Email = String
+  type Confidence = Ratio
+  type Ratio = Double
   /**
     * Non registered people can be tested with their email adress
     * so interviewIdentifier can be either email or userID

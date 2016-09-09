@@ -29,7 +29,7 @@ case class NextQuestionRequest(answer: YesNoAnswer, interviewId: InterviewId, em
 
 case class NextQuestionResponse(status: String, interviewId: InterviewId, remainingQuestion: Int, question: Option[QuestionResponse], testOver: Boolean, isRegistered: Boolean)
 
-case class CategoryScore(category: Category, score: Score)
+case class CategoryScore(category: Category, score: Score,percentage : Option[Score] = None, confidence :  Option[Confidence] = None)
 
 case class ComparativeReport(userScore: List[CategoryScore], personnelAverage: List[CategoryScore], overallAverage: List[CategoryScore])
 

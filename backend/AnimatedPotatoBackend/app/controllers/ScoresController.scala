@@ -1,7 +1,6 @@
 package controllers
 
-import animatedPotato.protocol.protocol.CategoryId
-import models.{ID, ResponseMessage, Scores, ScoresDAO}
+import models.{ResponseMessage, Scores, ScoresDAO}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 import utils.Constants
@@ -51,7 +50,7 @@ class ScoresController extends Controller {
 
   def getUsersResults = Action {
 
-    Ok(Json.toJson(ScoresDAO.getUserCategoryScores))
+    Ok(Json.toJson(ScoresDAO.getCategoryScores))
 
   }
 

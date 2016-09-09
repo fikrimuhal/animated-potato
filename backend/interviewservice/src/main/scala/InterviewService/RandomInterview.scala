@@ -3,6 +3,7 @@ package InterviewService
 import akka.actor.{Actor, Props, Stash}
 import animatedPotato.protocol.protocol._
 
+import scala.collection.immutable.Iterable
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -42,13 +43,12 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
   def testFinished: Receive = {
 
     case TestReportRequest(id) =>
+      println("randoma testreportrequest geldi")
       implicit def bool2int(b: Boolean) : Double = if (b) 1 else 0
       val answers: List[YesNoAnswer] = answerList.toList
       val categoryList = initMessage.questionCategoryWeightTuple.value.map(_.categoryId).distinct
       val qcwt = initMessage.questionCategoryWeightTuple.value
-      val scoresList = categoryList.map(cat => (cat, qcwt.filter(_.categoryId == cat).map(q => q.weight * answers.filter(_.questionId == q.questionId).head.value).sum / qcwt.filter(_.categoryId == cat).map(_.weight).sum))
-      val scores = Map(scoresList map { x => (x._1, x._2) }: _*)
-      println("randoma testreportrequest geldi")
+      val scores = categoryList.map(cat => CategoryScoreConfidence(cat, qcwt.filter(_.categoryId == cat).map(q => q.weight * answers.filter(_.questionId == q.questionId).head.value).sum / qcwt.filter(_.categoryId == cat).map(_.weight).sum,scala.util.Random.nextDouble))
       sender ! TestReport(initMessage.interviewId, initMessage.userIdentifier, scores)
 
     case x =>
