@@ -4,10 +4,7 @@ import models._
 import play.api.mvc.{Action, Controller}
 import org.mindrot.jbcrypt.BCrypt
 import utils.Formatter._
-import play.api._
-import play.api.mvc._
 import play.api.libs.json._
-import play.api.libs.functional.syntax._
 import pdi.jwt._
 import utils.Constants
 case class SignSuccessMessage(status: String, userInfo: Participant, isAdmin: Boolean)
@@ -30,7 +27,7 @@ class LoginSignUpController extends Controller {
         Ok(Json.toJson(SignSuccessMessage(Constants.OK
           , Participants.getParticipant(loginForm.username).get
           , Users.get(loginForm.username).get.isadmin.get))
-        ).addingToJwtSession("user", loginForm)
+        ).addingToJwtSession("user", Participants.getClaimData(loginForm.username))
 
       case Some(loginForm) =>
         Ok(Json.toJson(SignFailMessage(Constants.FAIL, "-1", "kullanıcı adı veya şifre hatalı")))
@@ -57,7 +54,7 @@ class LoginSignUpController extends Controller {
               Participants.getParticipant(user.username).get,
               Users.get(user.username).get.isadmin.get))
           )
-            .addingToJwtSession("user", user)
+            .addingToJwtSession("user", Participants.getClaimData(user.username))
 
         case UserNameExists =>
           Ok(Json.toJson(SignFailMessage("fail", "-2", "username kullanımda")))

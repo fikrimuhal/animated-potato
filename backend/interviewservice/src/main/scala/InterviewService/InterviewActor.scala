@@ -40,9 +40,9 @@ class InterviewActor(initMessage: InitMessage) extends Actor with Stash {
 
     case x: TestReportRequest =>
       // TODO : scores will be calculated here
-      sender ! TestReport(initMessage.interviewId
-        ,initMessage.userIdentifier
-        ,Map(1.toLong -> 1.5 , 2.toLong -> 2.4))
+//      sender ! TestReport(initMessage.interviewId
+//        ,initMessage.userIdentifier
+//        ,Map(1.toLong -> 1.5 , 2.toLong -> 2.4))
 //      context.parent ! IAmDone(x.id)
       self ! PoisonPill
 
