@@ -21,15 +21,17 @@ object InterviewDAO {
     *         else inserts into interview table and returns interviewId
     */
 
-  def insert(email: String): Either[Boolean, InterviewId] = DB { implicit session =>
-    if (hasTested(email)) {
-      Left(false)
-    }
-    else {
-      Right(
-        (interviewDAO returning interviewDAO.map(_.id)) += Interview(None, email, startDate = Some(new java.util.Date))
-      )
-    }
+  def insert(email: String): InterviewId = DB { implicit session =>
+    (interviewDAO returning interviewDAO.map(_.id)) += Interview(None, email, startDate = Some(new java.util.Date))
+
+    //    if (hasTested(email)) {
+    //      Left(false)
+    //    }
+    //    else {
+    //      Right(
+    //        (interviewDAO returning interviewDAO.map(_.id)) += Interview(None, email, startDate = Some(new java.util.Date))
+    //      )
+    //    }
 
   }
 
@@ -99,8 +101,6 @@ object InterviewDAO {
   def hasFinishedTest(id: InterviewId): Boolean = DB { implicit session =>
     interviewDAO.filter(i => i.id === id && i.hasFinished).list.nonEmpty
   }
-
-
 
 
 }

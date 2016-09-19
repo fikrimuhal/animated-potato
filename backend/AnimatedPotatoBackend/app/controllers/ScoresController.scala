@@ -1,6 +1,6 @@
 package controllers
 
-import models.{ResponseMessage, Scores, ScoresDAO}
+import models.{ID, ResponseMessage, Scores, ScoresDAO}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 import utils.Constants
@@ -36,11 +36,11 @@ class ScoresController extends Controller {
 
   def getComparativeReport = Action { implicit request =>
 
-    request.body.asJson.flatMap(_.validate[Email].asOpt) match {
+    request.body.asJson.flatMap(_.validate[ID].asOpt) match {
 
-      case Some(email) =>
+      case Some(id) =>
 
-        Ok(Json.toJson(ScoresDAO.getComparativeReport(email.email)))
+        Ok(Json.toJson(ScoresDAO.getComparativeReport(id.id)))
 
 
       case _ =>

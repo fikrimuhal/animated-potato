@@ -29,7 +29,7 @@ case class NextQuestionRequest(answer: YesNoAnswer, interviewId: InterviewId, em
 
 case class NextQuestionResponse(status: String, interviewId: InterviewId, remainingQuestion: Int, question: Option[QuestionResponse], testOver: Boolean, isRegistered: Boolean)
 
-case class CategoryScore(category: Category, score: Score,percentage : Option[Score] = None, confidence :  Option[Confidence] = None)
+case class CategoryScore(category: Category, score: Score, percentage: Option[Score] = None, confidence: Option[Confidence] = None)
 
 case class ComparativeReport(userScore: List[CategoryScore], personnelAverage: List[CategoryScore], overallAverage: List[CategoryScore])
 
@@ -52,24 +52,18 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
     request.body.asJson.flatMap(_.validate[TestRequest].asOpt) match {
 
       case Some(testRequest) =>
-        InterviewDAO.insert(testRequest.email) match {
-
-          case Left(_) =>
-            Future.successful(Ok(Json.toJson(ResponseMessage(Constants.FAIL, Constants.TEST_HAS_SOLVED_BEFORE))))
-
-          case Right(interviewId) =>
-            (rootActor ? (INTERVIEW_IMPL, TestStart(interviewId, Left(testRequest.email))))
-              .mapTo[NextQuestion]
-              .map { response =>
-                Ok(Json.toJson(NextQuestionResponse(Constants.OK,
-                  interviewId,
-                  response.remainingQuestions,
-                  Questions.getQuestionById(response.questionId),
-                  TEST_IS_NOT_OVER,
-                  Users.get(testRequest.email).isDefined)))
-              }
-        }
-
+        val interviewId = InterviewDAO.insert(testRequest.email)
+        (rootActor ? (INTERVIEW_IMPL, TestStart(interviewId, Left(testRequest.email))))
+          .mapTo[NextQuestion]
+          .map { response =>
+            Ok(Json.toJson(NextQuestionResponse(Constants.OK,
+              interviewId,
+              response.remainingQuestions,
+              Questions.getQuestionById(response.questionId),
+              TEST_IS_NOT_OVER,
+              Users.get(testRequest.email).isDefined)))
+            
+          }
       case _ =>
         Future.successful(BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
 
@@ -120,7 +114,4 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
   def listAll = Action {
     Ok(Json.toJson(InterviewDAO.getAll))
   }
-
 }
-
-
