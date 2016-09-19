@@ -69,8 +69,8 @@ object Users {
     users.list
   }
 
-  def isAdmin(user: User): Boolean = DB { implicit session =>
-    users.filter(_.username === user.username).map(u => u.isAdmin).list.head
+  def isAdmin(userName: String): Boolean = DB { implicit session =>
+    users.filter(_.username === userName).map(u => u.isAdmin).list.nonEmpty
   }
 
   def isPersonnel(email: Email): Boolean = DB { implicit session =>

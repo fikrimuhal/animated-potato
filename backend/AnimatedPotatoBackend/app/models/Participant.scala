@@ -30,9 +30,12 @@ case class Participant(id: Option[UserIdType] = None,
 
 case class ParticipantResponse(participantList: List[Participant], page: Int, numberOfPages: Int)
 
-case class Applicant(info: Participant, applyDate: Timestamp, averageScore: Score,interviewId: InterviewId)
+case class Applicant(info: Participant, applyDate: Timestamp, averageScore: Score, interviewId: InterviewId)
+
+case class ClaimData(userName: String, email: Email, isAdmin: Boolean, isPersonnel: Boolean)
 
 object Participants {
+
   lazy val participants = TableQuery[Participants]
 
   def insert(participant: Participant): Boolean = DB { implicit session =>
@@ -55,7 +58,7 @@ object Participants {
   def getApplicants: List[Applicant] = DB { implicit session =>
     InterviewDAO.interviewDAO.filter(_.hasFinished).list
       .map(itw =>
-        Applicant(getByEmail(itw.email).get, itw.startDate.get, itw.averageScore.get,itw.id.get))
+        Applicant(getByEmail(itw.email).get, itw.startDate.get, itw.averageScore.get, itw.id.get))
   }
 
   def getParticipantsWithPage(page: Int): ParticipantResponse = DB { implicit session =>
@@ -91,6 +94,18 @@ object Participants {
       case _ => None
     }
   }
+
+  def getClaimData(username: String): Option[ClaimData] = DB { implicit session =>
+
+    participants.filter(_.username === username).list.headOption match {
+
+      case Some(p) => Users.get(p.username).map(u => ClaimData(u.username, u.email.get, u.isadmin.get, u.ispersonnel.get))
+
+      case None => None
+
+    }
+  }
+
 }
 
 class Participants(tag: Tag) extends Table[Participant](tag, "participant") {

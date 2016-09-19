@@ -34,7 +34,7 @@ object Formatter {
   implicit val categoryScoreFormatter = Json.format[CategoryScore]
   implicit val comparativeReportFormatter = Json.format[ComparativeReport]
   implicit val emailFormatter = Json.format[Email]
-
+  implicit val claimDataFormatter = Json.format[ClaimData]
   implicit object timestampFormat extends Format[Timestamp] {
     val format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SS")
     def reads(json: JsValue) = {
