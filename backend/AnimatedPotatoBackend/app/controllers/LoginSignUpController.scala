@@ -54,7 +54,7 @@ class LoginSignUpController extends Controller {
               Participants.getParticipant(user.username).get,
               Users.get(user.username).get.isadmin.get))
           )
-            .addingToJwtSession("user", user)
+            .addingToJwtSession("user", Participants.getClaimData(user.username))
 
         case UserNameExists =>
           Ok(Json.toJson(SignFailMessage("fail", "-2", "username kullanımda")))
