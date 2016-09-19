@@ -3,7 +3,7 @@ package table
 
 import animatedPotato.protocol.protocol._
 import core.BaseTable
-import models.{Answer, Category}
+import models.Answer
 
 import slick.driver.PostgresDriver.simple._
 

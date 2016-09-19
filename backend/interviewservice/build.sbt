@@ -19,4 +19,3 @@ libraryDependencies ++= Seq(
 )
 
 lazy val akkaVersion = "2.4.2"
-scalaVersion := "2.11.8"

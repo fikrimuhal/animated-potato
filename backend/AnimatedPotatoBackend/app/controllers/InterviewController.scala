@@ -38,9 +38,7 @@ case class ComparativeReport(userScore: List[CategoryScore], personnelAverage: L
 
 case object RandomInterviewImpl
 
-case class KillActor(interviewId: InterviewId)
 
-@Singleton
 class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends Controller {
   final val INTERVIEW_IMPL = RandomInterviewImpl
   final val TEST_IS_NOT_OVER = false

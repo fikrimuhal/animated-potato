@@ -1,6 +1,5 @@
 package models
 
-import animatedPotato.protocol.protocol
 import animatedPotato.protocol.protocol.{Category, _}
 import controllers.{CategoryScore, ComparativeReport}
 import utils.DB
