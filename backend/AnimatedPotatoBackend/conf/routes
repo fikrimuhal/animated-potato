@@ -56,7 +56,8 @@ GET         /admin/scores                      controllers.ScoresController.getA
 POST        /signUp                            controllers.LoginSignUpController.signUp
 POST        /login                             controllers.LoginSignUpController.login
 
-POST        /answer                            controllers.AnswerController.insertAnswer
+POST        /answer                            controllers.AnswerController.insert
+
 GET         /getAnswers                        controllers.AnswerController.getAnswers
 POST        /getComparativeReport              controllers.ScoresController.getComparativeReport
 GET         /admin/getUsersResults             controllers.ScoresController.getUsersResults

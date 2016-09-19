@@ -39,8 +39,7 @@ object ScoresDAO {
       .filter(itw => Users.isPersonnel(itw.email))
       .map(_.id.get)
 
-    val categoryDAO = new CategoryDAO
-    val categories = categoryDAO.getAll
+    val categories = (new CategoryDAO).getAll
 
     val allScores: List[Scores] = scoresDAO.list
 
@@ -125,7 +124,7 @@ object ScoresDAO {
     }
   }
 
-  def getUserCategoryScores(interviewId: InterviewId) = DB { implicit session =>
+  def getUserCategoryScores(interviewId: InterviewId): List[UserCategoryScores] = DB { implicit session =>
 
     val categories = (new CategoryDAO).getAll
     val scores = scoresDAO.list

@@ -3,7 +3,7 @@ package services
 import akka.actor.{Actor, Props}
 import animatedPotato.protocol.protocol
 import animatedPotato.protocol.protocol._
-import dao.CategoryDAO
+import dao.{AnswerDAO, CategoryDAO}
 import models._
 
 import scala.slick.lifted.TableQuery
@@ -33,7 +33,7 @@ class Database extends Actor {
     case RequestAllAnswerEvents =>
       println("Database: RequestAllAnswerEvents geldi")
       sender ! AllAnswerEvents(
-        Answers.getAll().map(answer => UserQuestionAnswerTuple(
+        (new AnswerDAO).getAll.map(answer => UserQuestionAnswerTuple(
           answer.userId match {
             case Some(id) => Right(id)
             case _ => Left(answer.email.get)

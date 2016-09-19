@@ -1,16 +1,19 @@
 package controllers
 
 import javax.inject.{Inject, Named}
+
 import akka.pattern._
 import akka.actor.ActorRef
 import akka.util.Timeout
 import animatedPotato.protocol.protocol.{Question => _, _}
 import com.google.inject.Singleton
+import dao.AnswerDAO
 import play.api.libs.json.Json
 import models._
 import models.Category
 import play.api.mvc.{Action, Controller}
 import models.Answer
+
 import scala.concurrent.duration._
 import scala.concurrent.Future
 import utils.Constants
@@ -62,7 +65,7 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
               Questions.getQuestionById(response.questionId),
               TEST_IS_NOT_OVER,
               Users.get(testRequest.email).isDefined)))
-            
+
           }
       case _ =>
         Future.successful(BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
@@ -76,7 +79,7 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
 
       case Some(data) =>
 
-        Answers.insert(Answer(None, data.answer.questionId, data.userId, data.interviewId, data.email, data.answer.value))
+        (new AnswerDAO).insert(Answer(None, data.answer.questionId, data.userId, data.interviewId, data.email, data.answer.value))
 
         (rootActor ? (RandomInterviewImpl, GetNextQuestion(Some(data.answer), data.interviewId)))
           .map {
