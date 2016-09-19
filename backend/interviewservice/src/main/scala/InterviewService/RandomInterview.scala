@@ -48,7 +48,7 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
       val answers: List[YesNoAnswer] = answerList.toList
       val categoryList = initMessage.questionCategoryWeightTuple.value.map(_.categoryId).distinct
       val qcwt = initMessage.questionCategoryWeightTuple.value
-      val scores = categoryList.map(cat => CategoryScoreConfidence(cat, qcwt.filter(_.categoryId == cat).map(q => q.weight * answers.filter(_.questionId == q.questionId).head.value).sum / qcwt.filter(_.categoryId == cat).map(_.weight).sum,scala.util.Random.nextDouble))
+      val scores = categoryList.map(cat => CategoryScoreConfidence(cat, qcwt.filter(q => q.categoryId == cat && answers.map(_.questionId).contains(q.questionId)).map(q => q.weight * answers.filter(_.questionId == q.questionId).head.value).sum / qcwt.filter(_.categoryId == cat).map(_.weight).sum,scala.util.Random.nextDouble))
       sender ! TestReport(initMessage.interviewId, initMessage.userIdentifier, scores)
 
     case x =>
