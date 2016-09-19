@@ -84,7 +84,7 @@ export default  class SkillTestReportContainer extends React.Component {
                 categoryScoreInfo: json,
                 generalScoreInfo: generalScoreInfo,
                 userInfo: userInfo,
-                scoreData: mockData.TestResultMockDataCreator.createScoresData(40),
+                scoreData: mockData.TestResultMockDataCreator.createScoresData(10),
                 dataLoaded: true
             })
         });

@@ -19,6 +19,7 @@ import  PieWidget       from './PieChartWidget'
 import  SummaryBar      from './SummaryBar'
 import  ScoreTable      from './CategoryScoreTable'
 import ColorMatrix      from './ColorMatrixChart'
+import BoxPlot          from './BoxPlotWidget'
 const log = log2("ReportViewer");
 
 export default  class ReportViewer extends React.Component {
@@ -56,7 +57,8 @@ export default  class ReportViewer extends React.Component {
                     <Col lg>
                         <BarWidget data={this.props.categoryScoreInfo}/>
                     </Col>
-                </Row><br/> <hr/>
+                </Row><br/>
+                <hr/>
                 <Row style={{height: "480px"}}>
                     <Col lg={6}>
                         <ScoreTable data={this.props.scoreData}/>
@@ -64,10 +66,17 @@ export default  class ReportViewer extends React.Component {
                     <Col lg={6}>
                         <ScoreTable data={this.props.scoreData}/>
                     </Col>
-                </Row><br/><hr/>
+                </Row><br/>
+                <hr/>
                 <Row>
                     <Col lg>
-                        <ColorMatrix/>
+                        <BoxPlot/>
+                    </Col>
+                </Row><br/>
+                <hr/>
+                <Row>
+                    <Col lg>
+                        <ColorMatrix data={this.props.scoreData}/>
                     </Col>
                 </Row>
 

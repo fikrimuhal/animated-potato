@@ -18,7 +18,7 @@ export const questionSets = (count)=> {
 
 export const TestResultMockDataCreator = {
     createRadarData: ()=> {
-        return ["Java", "Backend", "Frontend", "XML", "C#", "Machine Learning","A","B","C","D","A","B","C","D","A","B","C","D","A","B","C","D","A","B","C","D"].map(category=> {
+        return ["Java", "Backend", "Frontend", "XML", "C#", "Machine Learning","A","B","C","D"].map(category=> {
             return {
                 category: category,
                 score: Math.random()
@@ -35,7 +35,7 @@ export const TestResultMockDataCreator = {
     },
     createScoresData: (count)=> {
         var data = [];
-        var categories = ["Java", "C#"];
+        var categories = ["Java", "C#","Backend","Frontend","ReactJS","BackboneJS","MeteorJs","Scala","PlayFW","Matlab","Webpack","Asp.NET","PHP","JS"];
         for (var i = 0; i < count; i++) {
             var item = {};
             item.participantId = i;
