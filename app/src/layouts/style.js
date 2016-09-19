@@ -206,7 +206,7 @@ export  const GraphStyles = {
     },
     SummaryBarLabel:{
         fontWeight: "bolder",
-        fontSize: "35px",
+        fontSize: "30px",
         color: "#9c475b",
         padding:"5px",
         //borderBottom:"5px inset #9c475b",

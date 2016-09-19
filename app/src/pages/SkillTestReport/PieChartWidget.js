@@ -63,8 +63,8 @@ export default  class PieChartWidget extends React.Component {
 
         data.datasets = dataset;
         data.labels = labels;
-        log("labels",labels);
-        log("data",data);
+        //log("labels",labels);
+       // log("data",data);
         this.state = {
             chartData:data,
             dataLoaded:true

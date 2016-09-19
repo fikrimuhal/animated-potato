@@ -18,7 +18,7 @@ export default  class SummaryBar extends React.Component {
     }
 
     getScoreColor = function () {
-        var score = this.props.score;
+        var score =this.props.data.overallScore * 100;
         var color = colors.grey.x800;
         switch (true) {
             case (score < 20):
@@ -40,7 +40,7 @@ export default  class SummaryBar extends React.Component {
         return color;
     };
     getPaperColor = function () {
-        var score = this.props.score;
+        var score = this.props.data.overallScore * 100;
         var color = colors.grey.x200;
         switch (true) {
             case (score < 20):
@@ -64,9 +64,9 @@ export default  class SummaryBar extends React.Component {
         };
     };
     getTrustRateChartData = function () {
-        var tRate = parseFloat(this.props.trustRate);
+        var tRate = parseFloat(85);
         var data = [tRate, (100 - tRate)];
-        var labels = ["Trust", "UnTrust"];
+        var labels = ["Trust Rate", ""];
         var dataset = [
             {
                 data: data,
@@ -89,8 +89,8 @@ export default  class SummaryBar extends React.Component {
         return chartData;
     };
     getPercentRateChartData = function () {
-        var pDegree = parseFloat(this.props.rate);
-        var data = [100 - pDegree, pDegree];
+        var pDegree = parseFloat(this.props.data.overallPercentage);
+        var data = [1 - pDegree, pDegree];
         var labels = ["Percent Degree", ""];
         var dataset = [
             {
@@ -114,13 +114,14 @@ export default  class SummaryBar extends React.Component {
         return chartData;
     };
     render = ()=> {
-        log("rendered", this.props);
+        log("rendered", this.props.data);
+        var info = this.props.data;
         return (
             <div>
-                <LinearProgress mode="determinate" color={this.getScoreColor()} value={this.props.score}
+                <LinearProgress mode="determinate" color={this.getScoreColor()} value={info.overallScore*100}
                                 style={{height: "20px"}}/>
                 <Row>
-                    <Col lg={5}> <UserInfoBar userInfo={this.props.userInfo}/></Col>
+                    <Col lg={5}> <UserInfoBar userInfo={info}/></Col>
                     <Col lg={7}>
                         <Row>
                             <Col lg={6}>
@@ -142,8 +143,7 @@ export default  class SummaryBar extends React.Component {
 
                                             </div>
                                         </Col>
-                                        <Col lg={4}><span style={s.GraphStyles.SummaryBarLabel}>{this.props.trustRate}
-                                            %</span></Col>
+                                        <Col lg={5}><span style={s.GraphStyles.SummaryBarLabel}>85%</span></Col>
                                     </Row>
                                 </Paper>
                             </Col>
@@ -151,14 +151,14 @@ export default  class SummaryBar extends React.Component {
                                 style={Object.assign(s.GraphStyles.SummaryBarPaper, this.getPaperColor())}
                                 rounded={false}>
                                 <b>Score</b><br/>
-                                <span style={s.GraphStyles.SummaryBarLabel}> {this.props.score} pt. </span>
+                                <span style={s.GraphStyles.SummaryBarLabel}> {(info.overallScore.toFixed(3) * 100).toFixed(2)}/<span style={{fontSize:"20px"}}>100</span></span>
                             </Paper>
                             </Col>
                             <Col lg={6}><Paper
                                 style={Object.assign(s.GraphStyles.SummaryBarPaper, this.getPaperColor())}
                                 rounded={false}>
                                 <b>Degree</b><br/>
-                                <span style={s.GraphStyles.SummaryBarLabel}>{this.props.degree}.</span>
+                                <span style={s.GraphStyles.SummaryBarLabel}>11.</span>
                             </Paper>
                             </Col>
                             <Col lg={6}><Paper
@@ -179,9 +179,9 @@ export default  class SummaryBar extends React.Component {
 
                                         </div>
                                     </Col>
-                                    <Col lg={4}>
-                                        <span style={s.GraphStyles.SummaryBarLabel}> %{this.props.rate} </span>
-                                    </Col>
+                                    {/*<Col lg={5}>*/}
+                                        {/*<span style={s.GraphStyles.SummaryBarLabel}> %{info.overallPercentage.toFixed(2)} </span>*/}
+                                    {/*</Col>*/}
                                 </Row>
 
                             </Paper>
@@ -195,9 +195,10 @@ export default  class SummaryBar extends React.Component {
 }
 
 SummaryBar.propTypes = {
-    trustRate: React.PropTypes.number.isRequired,
-    score: React.PropTypes.number.isRequired,
-    degree: React.PropTypes.number.isRequired,
-    rate: React.PropTypes.number.isRequired,
-    userInfo: React.PropTypes.object.isRequired
+    // trustRate: React.PropTypes.number.isRequired,
+    // score: React.PropTypes.number.isRequired,
+    // degree: React.PropTypes.number.isRequired,
+    // rate: React.PropTypes.number.isRequired,
+    // userInfo: React.PropTypes.object.isRequired,
+    data: React.PropTypes.object.isRequired
 };

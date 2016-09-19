@@ -42,7 +42,7 @@ export default  class BarChartsWidget extends React.Component {
         var data = {};
         var labels = this.props.data["score"].map(item=>{
             return item.category        });
-        log("labels",labels);
+        //log("labels",labels);
         data.labels = labels;
         ["score","companyScore","generalScore"].forEach(scoreType=>{
 
@@ -60,7 +60,7 @@ export default  class BarChartsWidget extends React.Component {
             })
         });
         data.datasets = dataset;
-        log("data",data);
+        //log("data",data);
         this.state={
             chartData:data,
             dataLoaded:true

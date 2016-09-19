@@ -3,6 +3,7 @@ import React            from 'react';
 import FlatButton       from 'material-ui/FlatButton';
 import NavigateBefore   from 'material-ui/svg-icons/navigation/arrow-back';
 import {browserHistory} from 'react-router'
+import * as api         from '../../utils/api'
 import * as mockApi     from '../../utils/mock_api'
 import * as mockData     from '../../utils/mock_data'
 import CircularProgress from 'material-ui/CircularProgress';
@@ -10,11 +11,11 @@ import log2             from '../../utils/log2'
 import * as Cache       from '../../utils/cache'
 import * as util        from '../../utils/utils'
 import * as s           from '../../layouts/style'
-
+import * as lodash      from 'lodash'
 import ReportView       from './ReportViewer'
 //consts and variables
 const log = log2("SkillTestReportContainer");
-var context ={};
+var context = {};
 export default  class SkillTestReportContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -33,10 +34,14 @@ export default  class SkillTestReportContainer extends React.Component {
         //log(this.props);
 
     }
-    getChildContext(){
+
+    getChildContext() {
+        log("**getChildContext**", this.props.params);
         context.userId = this.props.params.userId;
+        context.interviewId = this.props.params.userId;
         return context;
     };
+
     initializeFromAPI = function (userId) {
         log("Data from SERVER");
         mockApi.getUserSkillTestReport(userId).then(response=> {
@@ -62,33 +67,43 @@ export default  class SkillTestReportContainer extends React.Component {
     };
     initData = function () {
         var _this = this;
-        var dataset = [];
-        var categoryScoreInfo = {};
-        mockApi.getRadarData().then(json=> {
-
-            // log("received json=>", json);
-
-            var generalScoreInfo = {
-                trustRate: Math.floor(Math.random() * 50 + 50),
-                score: Math.floor(Math.random() * 80 + 20),
-                degree: Math.floor(Math.random() * 50),
-                rate: Math.floor(Math.random() * 100)
-            };
-            var userInfo = {
-                name: "Şükrü",
-                lastname: "Hasdemir",
-                email: "sukru@fikrimuhal.com",
-                tel: "+90 539 585 45 12"
-            };
+        var generalScoreInfo = {
+            trustRate: Math.floor(Math.random() * 50 + 50),
+            score: Math.floor(Math.random() * 80 + 20),
+            degree: Math.floor(Math.random() * 50),
+            rate: Math.floor(Math.random() * 100)
+        };
+        var userInfo = {
+            name: "Şükrü",
+            lastname: "Hasdemir",
+            email: "sukru@fikrimuhal.com",
+            tel: "+90 539 585 45 12"
+        };
+        // mockApi.getRadarData().then(json=> {
+        //     _this.setState({
+        //         categoryScoreInfo: json,
+        //         generalScoreInfo: generalScoreInfo,
+        //         userInfo: userInfo,
+        //         scoreData: mockData.TestResultMockDataCreator.createScoresData(10),
+        //         dataLoaded: true
+        //     })
+        // });
+        api.ReportAPI.getAllResult().then(response=> {
+            return response.json()
+        }).then(json=> {
             _this.setState({
-                categoryScoreInfo: json,
-                generalScoreInfo: generalScoreInfo,
+                categoryScoreInfo: mockData.TestResultMockDataCreator.getRadarData(),
+                generalInfo: _.filter(json, q=> {
+                    return q.interviewId == _this.props.params.userId
+                })[0], //TODO interviewId ile değişecek
                 userInfo: userInfo,
-                scoreData: mockData.TestResultMockDataCreator.createScoresData(10),
+                scoreData: json,
                 dataLoaded: true
             })
-        });
+        })
+
     };
+
     createWaitingContent = ()=> {
         return (<div>
             Test result is preparing, please wait...<br/>
@@ -97,7 +112,8 @@ export default  class SkillTestReportContainer extends React.Component {
     };
     createReport = ()=> {
         return <ReportView categoryScoreInfo={this.state.categoryScoreInfo}
-                           generalScoreInfo={this.state.generalScoreInfo} userInfo={this.state.userInfo}
+                           generalInfo={this.state.generalInfo}
+                           userInfo={this.state.userInfo}
                            scoreData={this.state.scoreData}/>
 
     };
@@ -125,5 +141,6 @@ export default  class SkillTestReportContainer extends React.Component {
 }
 
 SkillTestReportContainer.childContextTypes = {
-    userId: React.PropTypes.number
+    userId: React.PropTypes.number,
+    interviewId: React.PropTypes.number
 };

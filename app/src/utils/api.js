@@ -4,7 +4,7 @@ export const authenticate = db.getApiPromise("login","POST");
 export const signUp = db.getApiPromise("signUp","POST");
 export const getParticipants = db.getApiPromise("admin/getParticipants","GET");
 export const getCategoryList = db.getApiPromise("admin/getCategories","POST");
-
+export const getApplicants = db.getApiPromise("admin/getApplicants","GET")
 export const QuestionSetAPI = {
     getAllQuestionSet:db.getApiPromise("admin/getSets","GET"),
     setQuestionSet:db.getApiPromise("admin/insertSet","POST"),
@@ -34,3 +34,7 @@ export const UserAPI = {
     deleteUser:db.getApiPromise("admin/deleteUser","POST"),
     makeAdmin:db.getApiPromise("admin/makeAdmin","POST")
 };
+
+export const ReportAPI = {
+    getAllResult: db.getApiPromise("admin/getUsersResults","GET")
+}

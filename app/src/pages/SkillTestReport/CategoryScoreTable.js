@@ -42,6 +42,7 @@ export default  class CategoryScoreTable extends React.Component {
                 name: fullName,
                 score: score,
                 userId: item.participantId,
+                interviewId:item.interviewId,
                 visible: false
             };
         });
@@ -51,11 +52,12 @@ export default  class CategoryScoreTable extends React.Component {
         scoreList.reverse();
         for (var i = 0; i < scoreList.length; i++) {
             var item = scoreList[i];
+            //log("item.interviewId ->",item.interviewId,this.context.interviewId);
             if (scoreList.length <= 5) {
                 item.visible = true;
             }
             else {
-                if (item.userId == this.context.userId && i < 5) {
+                if (item.interviewId == this.context.interviewId && i < 5) {
                     for (var j = 0; j < 5; j++) {
                         scoreList[j].visible = true;
                     }
@@ -64,7 +66,7 @@ export default  class CategoryScoreTable extends React.Component {
                 else if (i == 0 || i == 1 || i == (scoreList.length - 1)) {
                     item.visible = true;
                 }
-                else if (item.userId == this.context.userId) {
+                else if (item.interviewId == this.context.interviewId) {
                     item.visible = true;
                     if (i > 0)scoreList[i - 1].visible = true;
                     if (i < (scoreList.length - 1))scoreList[i + 1].visible = true;
@@ -77,11 +79,11 @@ export default  class CategoryScoreTable extends React.Component {
         }
         ;
 
-        log("new scoreList", scoreList);
+       // log("new scoreList", scoreList);
 
         var content = scoreList.map((item, index)=> {
             //log("userIds", item.userId, this.context.userId);
-            var isCurrentUser = item.userId == this.context.userId;
+            var isCurrentUser = item.interviewId == this.context.interviewId;
             var backColor = isCurrentUser ? colors.yellow.x100 : colors.white.x100;
             var foreColor = isCurrentUser ? colors.orange.x500 : colors.blueGrey.x500;
             var border = isCurrentUser ? "2px dashed teal" : "none";
@@ -101,7 +103,7 @@ export default  class CategoryScoreTable extends React.Component {
             return <TableRow key={index + 1} style={style}>
                 <TableRowColumn>#{index + 1}</TableRowColumn>
                 <TableRowColumn>{item.name}</TableRowColumn>
-                <TableRowColumn>{item.score}</TableRowColumn>
+                <TableRowColumn>{item.score.toFixed(2)}</TableRowColumn>
             </TableRow>
         });
         return content;
@@ -151,5 +153,6 @@ CategoryScoreTable.propTypes = {
     data: React.PropTypes.array.isRequired
 };
 CategoryScoreTable.contextTypes = {
-    userId: React.PropTypes.number
+    userId: React.PropTypes.number,
+    interviewId: React.PropTypes.number
 }

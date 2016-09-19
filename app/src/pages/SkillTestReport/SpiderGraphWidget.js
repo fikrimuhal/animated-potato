@@ -77,7 +77,7 @@ export default  class SpiderGraphWidget extends React.Component {
             return item.category
         });
 
-        log("labels", labels);
+        //log("labels", labels);
         data.labels = labels;
 
         ["score", "companyScore", "generalScore"].forEach(scoreType=> {

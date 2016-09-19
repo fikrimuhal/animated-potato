@@ -29,8 +29,8 @@ export default  class ReportViewer extends React.Component {
     }
 
     render = ()=> {
-        log("rendered", this.props)
-        var scoreInfo = this.props.generalScoreInfo;
+        log("rendered")
+        var scoreInfo = this.props.generalInfo;
         var userInfo = this.props.userInfo;
         return (
             <div>
@@ -40,6 +40,7 @@ export default  class ReportViewer extends React.Component {
                                 score={scoreInfo.score}
                                 trustRate={scoreInfo.trustRate}
                                 userInfo={userInfo}
+                                data={this.props.generalInfo}
                     />
                 </Row>
                 <hr/>

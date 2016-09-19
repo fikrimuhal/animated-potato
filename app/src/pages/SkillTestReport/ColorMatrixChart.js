@@ -83,7 +83,7 @@ export default  class ColorMatrixChart extends React.Component {
         return <rect className="day" width={width} height={height} y={location} fill={color} data-score={score}></rect>;
     };
     getColor = function (score) {
-        var normalizedScore = score / 100;
+        var normalizedScore = score;
         var color = colors.grey.x400;
         if(normalizedScore==0)
             color = colors.grey.x400;

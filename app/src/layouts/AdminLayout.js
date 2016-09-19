@@ -104,7 +104,7 @@ export default class AdminLayout extends React.Component {
         showToast(message,duration);
     };
     render = function (){
-        log("userInfo",userInfo);
+        //log("userInfo",userInfo);
         if(!loggedIn) {
             browserHistory.push("/signin");
             return <div></div>
