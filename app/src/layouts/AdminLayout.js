@@ -104,7 +104,7 @@ export default class AdminLayout extends React.Component {
         showToast(message,duration);
     };
     render = function (){
-        log("userInfo",userInfo);
+        //log("userInfo",userInfo);
         if(!loggedIn) {
             browserHistory.push("/signin");
             return <div></div>
@@ -115,25 +115,18 @@ export default class AdminLayout extends React.Component {
                 <div id="page_container" style={s.AdminLayoutStyle.main}>
                     <AdminAppBar toogleMenu={this.toogleMenu} userInfo={userInfo}/>
                     <Row>
-                        <Col lg={2}>
+                        <Col lg={2} md={3}>
                             <Paper zDepth={1} rounded={false} style={s.AdminLayoutStyle.adminMenuContainer}>
                                 <AdminMenu menuClick={this.menuClick}/>
                             </Paper>
                         </Col>
-                        <Col lg={10}>
+                        <Col lg={10} md={9} >
                             <Paper style={s.AdminLayoutStyle.mainPaper} zDepth={5} rounded={false}>
                                 {this.props.children}
                             </Paper>
                         </Col>
                     </Row>
 
-                    {/*<Drawer width={200} openPrimary={true} open={this.state.open} docked={false}*/}
-                    {/*onRequestChange={(open) => this.setState({open})}>*/}
-                    {/*<AdminMenu menuClick={this.menuClick}/>*/}
-                    {/*</Drawer>*/}
-                    {/*<Paper style={styles.paperStyle} zDepth={5} rounded={false}>*/}
-                    {/*{this.props.children}*/}
-                    {/*</Paper>*/}
                     <Toast settings={this.state.toastSettings}/>
                 </div>
 

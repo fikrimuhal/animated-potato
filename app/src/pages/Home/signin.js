@@ -83,56 +83,56 @@ export default class UserSignIn extends React.Component {
             this.displayProgress("none");
             return;
         }
-        //api request type
-        // var loginRequest = {
-        //     "username":username,
-        //     "password":password
-        // };
-        //
-        // api.authenticate(loginRequest).then(response=>{
-        //     response.json().then(json=>{
-        //         log(json,response.headers.get("Authorization"));
-        //         if(json.status == "fail") {
-        //             toastHelper(json.message,2000);
-        //         }
-        //         else if(json.status == "ok") {
-        //             toastHelper("Kullanıcı adı şifre doğru.",2000);
-        //             util.setToken(response.headers.get("Authorization"));
-        //             json.userInfo.admin = json.isAdmin;
-        //             db.setUserInfo(json.userInfo);
-        //             if(json.isAdmin) browserHistory.push("/adminpanel");
-        //             else browserHistory.push("/home");
-        //         }
-        //         else {
-        //             log("error unexpected",json,response)
-        //             toastHelper("Sunucuda hata oluştu,tekrar deneyiniz.",1000);
-        //             this.displayProgress("none");
-        //         }
-        //     });
-        //     this.displayProgress("none");
-        // }).catch(err=>{
-        //     log("error",err);
-        //     toastHelper("Sunucuda hata oluştu,tekrar deneyiniz.",1000);
-        //     this.displayProgress("none");
-        // });
+
+        var loginRequest = {
+            "username":username,
+            "password":password
+        };
+
+        api.authenticate(loginRequest).then(response=>{
+            response.json().then(json=>{
+                log(json,response.headers.get("Authorization"));
+                if(json.status == "FAIL") {
+                    toastHelper(json.message,2000);
+                }
+                else if(json.status == "OK") {
+                    toastHelper("Kullanıcı adı şifre doğru.",2000);
+                    util.setToken(response.headers.get("Authorization"));
+                    json.userInfo.admin = json.isAdmin;
+                    db.setUserInfo(json.userInfo);
+                    if(json.isAdmin) browserHistory.push("/dashboard");
+                    else browserHistory.push("/home");
+                }
+                else {
+                    log("error unexpected",json,response)
+                    toastHelper("Sunucuda hata oluştu,tekrar deneyiniz.",1000);
+                    this.displayProgress("none");
+                }
+            });
+            this.displayProgress("none");
+        }).catch(err=>{
+            log("error",err);
+            toastHelper("Sunucuda hata oluştu,tekrar deneyiniz.",1000);
+            this.displayProgress("none");
+        });
 
         //api çalışmadığında buradan giriş yapınız - test amaçlı
-        db.authenticate(username,password).then((message)=>{
-            console.log("authenticate then",message);
-            if(message.status == "ok") {
-                util.setToken(message.token);
-                db.setUserInfo(message.userInfo);
-                if(db.isUser())
-                    browserHistory.push("/home");
-                else
-                    browserHistory.push("/dashboard");
-            }
-            else {
-                toastHelper("Authentication failed. Try again",1000);
-                this.displayProgress("none");
-            }
-
-        });
+        // db.authenticate(username,password).then((message)=>{
+        //     console.log("authenticate then",message);
+        //     if(message.status == "ok") {
+        //         util.setToken(message.token);
+        //         db.setUserInfo(message.userInfo);
+        //         if(db.isUser())
+        //             browserHistory.push("/home");
+        //         else
+        //             browserHistory.push("/dashboard");
+        //     }
+        //     else {
+        //         toastHelper("Authentication failed. Try again",1000);
+        //         this.displayProgress("none");
+        //     }
+        //
+        // });
     };
     signUp = function (){
         browserHistory.push("/signup");

@@ -47,10 +47,10 @@ class InterviewManager(database: ActorRef) extends Actor with Stash {
 
         println(s"InterviewManager : initmessage : $initMessage")
 
-        val interviewActor = interviewActors.getOrElse(initMessage.interviewId,context.actorOf(RandomInterview.props(initMessage)))
+        val interviewActor = interviewActors.getOrElse(initMessage.interviewId, context.actorOf(RandomInterview.props(initMessage)))
         interviewActors += (initMessage.interviewId -> interviewActor)
 
-//        interviewActor forward GetNextQuestion(interviewId = initMessage.interviewId)
+        //        interviewActor forward GetNextQuestion(interviewId = initMessage.interviewId)
 
         (interviewActor ? GetNextQuestion(interviewId = initMessage.interviewId))
           .mapTo[NextQuestion]
@@ -65,18 +65,18 @@ class InterviewManager(database: ActorRef) extends Actor with Stash {
       (interviewActors(interviewId) ? x)
         .map {
           // Interview Actor'den TestFinish gelirse TestReportRequest requesti gönder
-          case TestFinish(interviewId,userIdentifier) =>
-            _sender ! TestFinish(interviewId,userIdentifier)
+          case TestFinish(interviewId, userIdentifier) =>
+            _sender ! TestFinish(interviewId, userIdentifier)
             println("interview manager'e test finish geldi")
             interviewActors(interviewId) ! TestReportRequest(interviewId)
           case x =>
             _sender ! x
         }
 
-    case TestReport(interviewId,userIdentifier,scores) =>
+    case x@TestReport(interviewId, userIdentifier, scores) =>
+      database ! x
       sender ! PoisonPill
       interviewActors -= interviewId
-      //  TODO : burada database actorü ile database e kaydet
 
     case x =>
       println(s"InterviewManager : unexpected arg : $x")

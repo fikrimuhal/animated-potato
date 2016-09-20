@@ -1,6 +1,9 @@
 package models
 
-import animatedPotato.protocol.protocol.UserIdType
+import java.sql.Timestamp
+
+import animatedPotato.protocol.protocol.{Email, Score, UserIdType}
+import models.InterviewDAO.InterviewId
 import utils.{Constants, DB}
 
 import slick.driver.PostgresDriver.simple._
@@ -27,33 +30,35 @@ case class Participant(id: Option[UserIdType] = None,
 
 case class ParticipantResponse(participantList: List[Participant], page: Int, numberOfPages: Int)
 
+case class Applicant(info: Participant, applyDate: Timestamp, averageScore: Score, interviewId: InterviewId)
+
+case class ClaimData(userName: String, email: Email, isAdmin: Boolean, isPersonnel: Boolean)
 
 object Participants {
+
   lazy val participants = TableQuery[Participants]
 
   def insert(participant: Participant): Boolean = DB { implicit session =>
     if (exists(participant)) false
-    else {
-      participants += participant
-      true
-    }
+    else (participants += participant) == 1
   }
 
   def exists(participant: Participant): Boolean = DB { implicit session =>
-    participants.filter(p => (p.email === participant.email || p.username === participant.username)).list.nonEmpty
+    participants.filter(p => p.email === participant.email || p.username === participant.username).list.nonEmpty
   }
 
   def update(participant: Participant): Boolean = DB { implicit session =>
-   participants.filter(_.email === participant.email).update(participant) > 0
-
+    participants.filter(_.email === participant.email).update(participant) > 0
   }
 
   def delete(participant: Participant): Boolean = DB { implicit session =>
-   participants.filter(_.email === participant.email).delete > 0
+    participants.filter(_.email === participant.email).delete > 0
   }
 
-  def getParticipants: List[Participant] = DB {implicit session =>
-      participants.list
+  def getApplicants: List[Applicant] = DB { implicit session =>
+    InterviewDAO.interviewDAO.filter(_.hasFinished).list
+      .map(itw =>
+        Applicant(getByEmail(itw.email).get, itw.startDate.get, itw.averageScore.get, itw.id.get))
   }
 
   def getParticipantsWithPage(page: Int): ParticipantResponse = DB { implicit session =>
@@ -74,17 +79,31 @@ object Participants {
     }
   }
 
+  def getAll = DB { implicit session =>
+    participants.list
+  }
+
   def getByEmail(email: String): Option[Participant] = DB { implicit session =>
     val participantList: List[Participant] = participants.filter(_.email === email).list
     participantList.headOption
   }
-  def getUserNameByEmail(email: String): Option[String] = DB { implicit session =>
-     participants.filter(p => (p.email === email) || (p.username === email)).list match
-       {
-       case x :: xs => Some(x.username)
-       case _ => None
-     }
 
+  def getUserNameByEmail(email: String): Option[String] = DB { implicit session =>
+    participants.filter(p => (p.email === email) || (p.username === email)).list match {
+      case x :: xs => Some(x.username)
+      case _ => None
+    }
+  }
+
+  def getClaimData(username: String): Option[ClaimData] = DB { implicit session =>
+
+    participants.filter(_.username === username).list.headOption match {
+
+      case Some(p) => Users.get(p.username).map(u => ClaimData(u.username, u.email.get, u.isadmin.get, u.ispersonnel.get))
+
+      case None => None
+
+    }
   }
 
 }
@@ -98,7 +117,7 @@ class Participants(tag: Tag) extends Table[Participant](tag, "participant") {
 
   def lastname = column[String]("lastname")
 
-  def email = column[String]("email")
+  def email = column[Email]("email")
 
   def phone = column[String]("phone")
 

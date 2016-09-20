@@ -3,13 +3,13 @@
 # ~~~~
 
 # Home page
-GET         /                                  controllers.ParticipantController.index
+#GET         /                                  controllers.ParticipantController.index
 
 POST        /insertParticipant                 controllers.ParticipantController.insertParticipant
 POST        /updateParticipant                 controllers.ParticipantController.updateParticipant
 POST        /admin/deleteParticipant           controllers.ParticipantController.deleteParticipant
 GET         /admin/getParticipants             controllers.ParticipantController.getParticipants
-#GET         /admin/getParticipants             controllers.ParticipantController.getParticipants()
+GET         /admin/getApplicants               controllers.ParticipantController.getApplicants
 
 POST        /admin/insertUser                  controllers.UserController.insert
 POST        /admin/updateUser                  controllers.UserController.update
@@ -38,7 +38,7 @@ GET         /getQuestionSets                   controllers.QuestionSetController
 POST        /admin/insertCategory              controllers.CategoryController.insert
 POST        /admin/updateCategory              controllers.CategoryController.update
 POST        /admin/deleteCategory              controllers.CategoryController.delete
-GET         /admin/getCategory/:id              controllers.CategoryController.get(id : Long)
+GET         /admin/getCategory/:id             controllers.CategoryController.get(id : Long)
 POST        /admin/getCategories               controllers.CategoryController.getAll
 
 POST        /startTest                         controllers.InterviewController.startTest
@@ -51,13 +51,17 @@ POST        /admin/insertSet                   controllers.CollectionController.
 POST        /admin/updateSet                   controllers.CollectionController.update
 POST        /admin/deleteSet                   controllers.CollectionController.delete
 POST        /admin/makeDefaultSet              controllers.CollectionController.setDefaultQuestionSet
-
+GET         /admin/scores                      controllers.ScoresController.getAll
 
 POST        /signUp                            controllers.LoginSignUpController.signUp
 POST        /login                             controllers.LoginSignUpController.login
 
-POST        /answer                            controllers.AnswerController.insertAnswer
+POST        /answer                            controllers.AnswerController.insert
+
 GET         /getAnswers                        controllers.AnswerController.getAnswers
+POST        /getComparativeReport              controllers.ScoresController.getComparativeReport
+GET         /admin/getUsersResults             controllers.ScoresController.getUsersResults
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                      controllers.Assets.at(path="/public", file)

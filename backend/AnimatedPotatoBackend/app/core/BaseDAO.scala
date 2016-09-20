@@ -2,7 +2,6 @@ package core
 
 import animatedPotato.protocol.protocol.IdType
 import utils.DB
-
 import scala.reflect.ClassTag
 import scala.slick.lifted.TableQuery
 import slick.driver.PostgresDriver.simple._
@@ -32,5 +31,10 @@ abstract class BaseDAO[T <: BaseTable[E], E <: BaseModel : ClassTag](tableDAO: T
   def getAll = DB { implicit session =>
     tableDAO.filter(_.isDeleted === false).list
   }
+
+  def insertAll(rowList: List[E]) = DB { implicit session =>
+    tableDAO.insertAll(rowList: _*)
+  }
+
 
 }

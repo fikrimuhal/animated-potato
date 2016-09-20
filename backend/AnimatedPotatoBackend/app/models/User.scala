@@ -1,15 +1,10 @@
 package models
 
-import animatedPotato.protocol.protocol.UserIdType
-import com.github.t3hnar.bcrypt._
-import utils.{Constants, DB}
-
+import animatedPotato.protocol.protocol.{Email, UserIdType}
+import org.mindrot.jbcrypt.BCrypt
+import utils.DB
 import slick.driver.PostgresDriver.simple._
-import utils.Formatter._
 
-/**
-  * Created by who on 09.08.2016.
-  */
 case class User(id: Option[UserIdType] = None,
                 username: String,
                 password: String,
@@ -17,14 +12,14 @@ case class User(id: Option[UserIdType] = None,
                 isadmin: Option[Boolean] = Some(false),
                 ispersonnel: Option[Boolean] = Some(false))
 
-case class UserDetails(id : UserIdType,name : String, lastName : String, email : String, phone : String, photo : Option[String],isAdmin : Option[Boolean] = None )
+case class UserDetails(id: UserIdType, name: String, lastName: String, email: String, phone: String, photo: Option[String], isAdmin: Option[Boolean] = None)
 
 object Users {
   lazy val users = TableQuery[Users]
   lazy val participants = TableQuery[Participants]
 
   def insert(user: User) = DB { implicit session =>
-    users += user.copy(password = user.password.bcrypt)
+    users += user
   }
 
   def exists(user: User): Boolean = DB { implicit session =>
@@ -47,16 +42,11 @@ object Users {
   }
 
   def isValid(userNameOrEmail: String, password: String): Boolean = DB { implicit session =>
-    try {
-      val a = users.filter(u => (u.username === userNameOrEmail) || (u.email === userNameOrEmail)).list.distinct
-      if (a.nonEmpty) {
-        password.isBcrypted(a.head.password)
-      }
-      else false
-    }
-    catch {
-      case e: Exception => false
-    }
+
+    val a = users.filter(u => (u.username === userNameOrEmail) || (u.email === userNameOrEmail)).list.distinct
+    if (a.nonEmpty) BCrypt.checkpw(password, a.head.password)
+    else false
+
   }
 
   def get(usernameOrEmail: String): Option[User] = DB { implicit session =>
@@ -74,16 +64,20 @@ object Users {
     users.list
   }
 
-  def isAdmin(user: User): Boolean = DB { implicit session =>
-    users.filter(_.username === user.username).map(u => u.isAdmin).list.head
+  def isAdmin(userName: String): Boolean = DB { implicit session =>
+    users.filter(_.username === userName).map(u => u.isAdmin).list.nonEmpty
+  }
+
+  def isPersonnel(email: Email): Boolean = DB { implicit session =>
+    users.filter(u => u.email === email).map(_.isPersonnel).list.headOption.getOrElse(false)
   }
 
   def makePersonnel(id: UserIdType) = DB { implicit session =>
-    users.filter(_.id === id).map(_.isPersonnel).update(true)  == 1
+    users.filter(_.id === id).map(_.isPersonnel).update(true) == 1
   }
 
   def makeAdmin(id: UserIdType): Boolean = DB { implicit session =>
-    users.filter(_.id === id).map(_.isAdmin).update(true)  == 1
+    users.filter(_.id === id).map(_.isAdmin).update(true) == 1
   }
 
   def getPersonnelList = DB { implicit session =>
@@ -101,19 +95,23 @@ object Users {
   }
 
   def getUsersDetailed: List[UserDetails] = DB { implicit session =>
-    users.filter(u=> u.isAdmin === false && u.isPersonnel === false).list.
+    users.filter(u => u.isAdmin === false && u.isPersonnel === false).list.
       flatMap(usr => participants.filter(u => u.username === usr.username).list
-      .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
+        .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
   }
 
   def getPersonnelsDetailed: List[UserDetails] = DB { implicit session =>
     users.filter(_.isPersonnel === true).list.flatMap(usr => participants.filter(_.username === usr.username).list
-      .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo,usr.isadmin)))
+      .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo, usr.isadmin)))
   }
 
   def getAdminsDetailed: List[UserDetails] = DB { implicit session =>
     users.filter(_.isAdmin === true).list.flatMap(usr => participants.filter(_.username === usr.username).list
       .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
+  }
+
+  def getPersonnelEmails: List[Email] = DB { implicit session =>
+    users.filter(_.isPersonnel === true).map(_.email).list
   }
 
 }

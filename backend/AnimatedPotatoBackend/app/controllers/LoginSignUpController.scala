@@ -2,14 +2,11 @@ package controllers
 
 import models._
 import play.api.mvc.{Action, Controller}
-import com.github.t3hnar.bcrypt._
+import org.mindrot.jbcrypt.BCrypt
 import utils.Formatter._
-import play.api._
-import play.api.mvc._
 import play.api.libs.json._
-import play.api.libs.functional.syntax._
 import pdi.jwt._
-
+import utils.Constants
 case class SignSuccessMessage(status: String, userInfo: Participant, isAdmin: Boolean)
 
 case class LoginForm(username: String, password: String)
@@ -27,13 +24,13 @@ class LoginSignUpController extends Controller {
     request.body.asJson.flatMap(_.validate[LoginForm].asOpt) match {
 
       case Some(loginForm) if Users.isValid(loginForm.username, loginForm.password) =>
-        Ok(Json.toJson(SignSuccessMessage("ok"
+        Ok(Json.toJson(SignSuccessMessage(Constants.OK
           , Participants.getParticipant(loginForm.username).get
           , Users.get(loginForm.username).get.isadmin.get))
-        ).addingToJwtSession("user", loginForm)
+        ).addingToJwtSession("user", Participants.getClaimData(loginForm.username))
 
       case Some(loginForm) =>
-        Ok(Json.toJson(SignFailMessage("fail", "-1", "kullanıcı adı veya şifre hatalı")))
+        Ok(Json.toJson(SignFailMessage(Constants.FAIL, "-1", "kullanıcı adı veya şifre hatalı")))
 
       case None =>
         BadRequest("-1")
@@ -44,7 +41,7 @@ class LoginSignUpController extends Controller {
   def signUp() = Action { implicit request =>
     try {
       val form: SignUp = request.body.asJson.get.as[SignUp]
-      val user: User = User(form.id, form.username, form.password.bcrypt, Some(form.email))
+      val user: User = User(form.id, form.username, BCrypt.hashpw(form.password, BCrypt.gensalt()), Some(form.email))
       val participant: Participant = Participant(form.id, form.username, form.name, form.lastname, form.email, form.phone, form.photo, form.website, form.notes)
 
       SignUp.checkUser(form.username, form.email) match {
@@ -57,7 +54,7 @@ class LoginSignUpController extends Controller {
               Participants.getParticipant(user.username).get,
               Users.get(user.username).get.isadmin.get))
           )
-            .addingToJwtSession("user", user)
+            .addingToJwtSession("user", Participants.getClaimData(user.username))
 
         case UserNameExists =>
           Ok(Json.toJson(SignFailMessage("fail", "-2", "username kullanımda")))

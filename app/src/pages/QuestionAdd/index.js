@@ -137,26 +137,59 @@ export default class QuestionAddContainer extends React.Component {
             //db.setQuestionToStorage(questionObj);
             var questionModel = this.createQuestionModel(questionObj);
             log("questionObj: ",questionModel);
-            api.QuestionAPI.create(questionModel).then(response=>{
-                return response.json();
-            }).then(json=>{
-                //log("jsonnnn",json);
-                _this.context.showMessage("Question saved!!__",2000);
-                if(json.status == "OK") {
-                    _this.context.showMessage("Question saved!!",2000);
-                    Cache.QuestionCaching.clear();
-                }
-                else if(json.status == "FAIL") {
-                    _this.context.showMessage("An error encountered!! Question hasn't saved.",2000);
-                    log(json.message);
-                }
-                this.setState({
-                    loadingShow:false
-                });
-            });
+            if(this.props.editMode) {
+                this.handleUpdate(questionModel);
+            }
+            else {
+                this.handleCreate(questionModel);
+            }
         }
     };
+    handleUpdate = function (questionModel){
+        var _this = this;
+        log("handleUpdate",questionModel);
+        //TODO question update yapılacak
+        api.QuestionAPI.update(questionModel).then(response=>{return response.json()}).then(json=>{
+            log(json);
+            if(json.status == "OK") {
+                _this.context.showMessage("Question updated.",2000);
+                Cache.QuestionCaching.clear();
 
+            }
+            else if(json.status == "FAIL") {
+                _this.context.showMessage("Question update failed!. Try again",3000);
+            }
+            else {
+                _this.context.showMessage("An error occured.",3000);
+            }
+            _this.setState({
+                loadingShow:false
+            });
+        }).catch(err=>{
+            log("error",err);
+            _this.context.showMessage("An error occured.",3000);
+        });
+    };
+    handleCreate = function (questionModel){
+        var _this = this;
+        api.QuestionAPI.create(questionModel).then(response=>{
+            return response.json();
+        }).then(json=>{
+            //log("jsonnnn",json);
+            _this.context.showMessage("Question saved!!__",2000);
+            if(json.status == "OK") {
+                _this.context.showMessage("Question saved!!",2000);
+                Cache.QuestionCaching.clear();
+            }
+            else if(json.status == "FAIL") {
+                _this.context.showMessage("An error encountered!! Question hasn't saved.",2000);
+                log(json.message);
+            }
+            _this.setState({
+                loadingShow:false
+            });
+        });
+    };
     checkModelValid = function (immutableQuestion){
         var qType = immutableQuestion.get("qType");
         var options = immutableQuestion.get("options");
@@ -194,7 +227,6 @@ export default class QuestionAddContainer extends React.Component {
                 weight:opt.weight
             }
         });
-
         return questionObj;
     };
     normalizeTitle = function (title){
@@ -270,5 +302,5 @@ QuestionAddContainer.propTypes = {
     question:React.PropTypes.object
 };
 QuestionAddContainer.contextTypes = {
-    showMessage : React.PropTypes.func
+    showMessage:React.PropTypes.func
 };

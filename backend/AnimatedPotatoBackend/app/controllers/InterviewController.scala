@@ -3,14 +3,17 @@ package controllers
 import javax.inject.{Inject, Named}
 
 import akka.pattern._
-import akka.actor.{ActorRef, ActorSelection, Kill}
+import akka.actor.ActorRef
 import akka.util.Timeout
 import animatedPotato.protocol.protocol.{Question => _, _}
 import com.google.inject.Singleton
+import dao.AnswerDAO
 import play.api.libs.json.Json
 import models._
-import play.api.mvc.{Action, Controller, Result}
+import models.Category
+import play.api.mvc.{Action, Controller}
 import models.Answer
+
 import scala.concurrent.duration._
 import scala.concurrent.Future
 import utils.Constants
@@ -29,42 +32,39 @@ case class NextQuestionRequest(answer: YesNoAnswer, interviewId: InterviewId, em
 
 case class NextQuestionResponse(status: String, interviewId: InterviewId, remainingQuestion: Int, question: Option[QuestionResponse], testOver: Boolean, isRegistered: Boolean)
 
+case class CategoryScore(category: Category, score: Score, percentage: Option[Score] = None, confidence: Option[Confidence] = None)
+
+case class ComparativeReport(userScore: List[CategoryScore], personnelAverage: List[CategoryScore], overallAverage: List[CategoryScore])
+
 case object RandomInterviewImpl
 
-case class KillActor(interviewId: InterviewId)
 
-@Singleton
 class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends Controller {
   final val INTERVIEW_IMPL = RandomInterviewImpl
+  final val TEST_IS_NOT_OVER = false
+  final val TEST_IS_OVER = true
 
   import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
   implicit val defaultTimeOut = Timeout(2 seconds)
 
   def startTest() = Action.async { implicit request =>
-
     println("InterviewController : received a startTest request")
     request.body.asJson.flatMap(_.validate[TestRequest].asOpt) match {
 
       case Some(testRequest) =>
-        InterviewDAO.insert(testRequest.email) match {
+        val interviewId = InterviewDAO.insert(testRequest.email)
+        (rootActor ? (INTERVIEW_IMPL, TestStart(interviewId, Left(testRequest.email))))
+          .mapTo[NextQuestion]
+          .map { response =>
+            Ok(Json.toJson(NextQuestionResponse(Constants.OK,
+              interviewId,
+              response.remainingQuestions,
+              Questions.getQuestionById(response.questionId),
+              TEST_IS_NOT_OVER,
+              Users.get(testRequest.email).isDefined)))
 
-          case Left(_) =>
-            Future.successful(Ok(Json.toJson(ResponseMessage(Constants.FAIL, "Daha önceden testi çözmüşsün"))))
-
-          case Right(interviewId) =>
-            (rootActor ? (INTERVIEW_IMPL, TestStart(interviewId, Left(testRequest.email))))
-              .mapTo[NextQuestion]
-              .map { response =>
-                Ok(Json.toJson(NextQuestionResponse(Constants.OK,
-                  interviewId,
-                  response.remainingQuestions,
-                  Questions.getQuestionById(response.questionId),
-                  false,
-                  Users.get(testRequest.email).isDefined)))
-              }
-        }
-
+          }
       case _ =>
         Future.successful(BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
 
@@ -77,7 +77,7 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
 
       case Some(data) =>
 
-        Answers.insert(Answer(None, data.answer.questionId, data.userId, data.interviewId, data.email, data.answer.value))
+        (new AnswerDAO).insert(Answer(None, data.answer.questionId, data.userId, data.interviewId, data.email, data.answer.value))
 
         (rootActor ? (RandomInterviewImpl, GetNextQuestion(Some(data.answer), data.interviewId)))
           .map {
@@ -87,12 +87,12 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
                 interviewId,
                 remainingQuestions,
                 Questions.getQuestionById(questionId),
-                false,
+                TEST_IS_NOT_OVER,
                 Users.get(data.email.get).isDefined)))
 
             case testFinish: TestFinish =>
               InterviewDAO.finishTest(Right(testFinish.interviewId))
-              Ok(Json.toJson(NextQuestionResponse(Constants.OK, testFinish.interviewId, 0, None, true, Users.get(data.email.get).isDefined)))
+              Ok(Json.toJson(NextQuestionResponse(Constants.OK, testFinish.interviewId, 0, None, TEST_IS_OVER, Users.get(data.email.get).isDefined)))
           }
 
       case _ => Future.successful(BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
@@ -100,22 +100,14 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
     }
   }
 
-  def testReport = Action.async { implicit request =>
+  def testReport = Action { implicit request =>
     println("InterviewController : received a testReport request")
 
     request.body.asJson.flatMap(_.validate[TestReportRequest].asOpt) match {
 
-      case Some(testReportRequest) =>
+      case Some(request) => Ok(Json.toJson(ScoresDAO.getAll))
 
-        Future.successful(Ok("Temsili Test Raporu"))
-
-        //TODO : Test Report requesti geldiğinde, daha önceden test finish olduğunda hesaplanıp değeri girilen tablodan çek
-
-//        (rootActor ? (RandomInterviewImpl, testReportRequest))
-//          .mapTo[TestReport]
-//          .map(x => Ok(s"TestReport : ${x.interviewId} : ${x.scores} : ${x.userIdentifier}"))
-
-      case _ => Future.successful(BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
+      case _ => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
 
     }
   }
@@ -123,7 +115,4 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
   def listAll = Action {
     Ok(Json.toJson(InterviewDAO.getAll))
   }
-
 }
-
-

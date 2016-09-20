@@ -8,7 +8,7 @@ import {AdminLayout, DefaultLayout, UserLayout, InterviewLayout}   from './layou
 import perf from "react-addons-perf";
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
-const log=log2("app");
+const log = log2("app");
 //const perflog=log2("performance");
 // setTimeout(function () {
 //   perflog("started");
@@ -52,12 +52,13 @@ ReactDOM.render((
                 <Route path="QuestionList" component={pages.QuestionList}/>
                 <Route path="SkillTestReport/:userId" component={pages.SkillTestReport}/>
                 <Route path="QuestionDetail/:questionId" component={pages.QuestionDetail}/>
+                <Route path="initialization" component={pages.Initialization}/>
             </Route>
         </Route>
 
     </Router>
 ), document.getElementById('app'))
 //perflog(perf);
-if(module.hot) {
+if (module.hot) {
     module.hot.accept();
 }

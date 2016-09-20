@@ -1,9 +1,14 @@
 package utils
 
+
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+
 import animatedPotato.protocol.protocol.{Answer => _, Category => _, Question => _, QuestionCategory => _, QuestionOption => _, _}
-import controllers.{NextQuestionRequest, NextQuestionResponse, TestRequest}
+import controllers._
 import models._
-import play.api.libs.json.Json
+import play.api.libs.json._
+import controllers.Email
 
 import slick.driver.PostgresDriver.simple._
 
@@ -26,12 +31,27 @@ object Formatter {
   implicit val answerFormat = Json.format[Answer]
   implicit val responseMessageFormat = Json.format[ResponseMessage]
   implicit val questionSetFormatter = Json.format[QuestionSet]
+  implicit val categoryScoreFormatter = Json.format[CategoryScore]
+  implicit val comparativeReportFormatter = Json.format[ComparativeReport]
+  implicit val emailFormatter = Json.format[Email]
+  implicit val claimDataFormatter = Json.format[ClaimData]
+  implicit object timestampFormat extends Format[Timestamp] {
+    val format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SS")
+    def reads(json: JsValue) = {
+      val str = json.as[String]
+      JsSuccess(new Timestamp(format.parse(str).getTime))
+    }
+    def writes(ts: Timestamp) = JsString(format.format(ts))
+  }
+  implicit val applicantFormatter = Json.format[Applicant]
   implicit val interviewFormatter = Json.format[Interview]
   implicit val testReportRequestFormat = Json.format[TestReportRequest]
   implicit val collectionFormat = Json.format[Collection]
   implicit val collectionResponseFormat = Json.format[CollectionResponse]
   implicit val userDetailsFormat = Json.format[UserDetails]
   implicit val nextQuestionRepsonseFormat = Json.format[NextQuestionResponse]
+  implicit val scoresFormat = Json.format[Scores]
+  implicit val userCategoryResultsFormatter = Json.format[UserCategoryScores]
 
 
 

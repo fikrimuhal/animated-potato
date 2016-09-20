@@ -163,7 +163,7 @@ export const questionAddPage = {
 
 export const AdminLayoutStyle = {
     main:{
-        backgroundImage:"url("+image+")",
+        backgroundImage:"url(" + image + ")",
         height:"auto !important",
         minHeight:"100%",
         backgroundSize:"cover"
@@ -187,3 +187,40 @@ export const AdminLayoutStyle = {
         maxWidth:"100%"
     }
 }
+
+export  const GraphStyles = {
+  widgetContainer:{
+      border:"1px teal dotted",
+      borderRadius:"10px",
+      marginTop:"15px",
+      padding:"5px",
+      backgroundColor:"rgba(213, 224, 205, 0.1)"
+  },
+    SummaryBarPaper:{
+        height: "110px",
+        width: "90%",
+        margin: 20,
+        textAlign: 'center',
+        display: 'inline-block',
+        border:"1px solid teal"
+    },
+    SummaryBarLabel:{
+        fontWeight: "bolder",
+        fontSize: "35px",
+        color: "#9c475b",
+        padding:"5px",
+        //borderBottom:"5px inset #9c475b",
+        //borderRadius:"50%",
+
+    },
+    userInfoCol:{
+        fontSize:"17px",
+        color:"9c475b",
+        borderBottom:"1px dotted teal"
+    },
+    avatar:{
+        width:"100%",
+        height:"100%",
+        border:"1px solid teal"
+    }
+};

@@ -20,7 +20,7 @@ export const getUserSkillTestReport = userId =>{
                 Cache.cacheTestResultReport(response.userInfo,response.reportHtml);
             }
             resolve(JSON.stringify(response));
-        },Math.floor(Math.random() * 1500))
+        },Math.floor(Math.random() * 300))
     });
     return promise;
 };
@@ -34,3 +34,13 @@ export const getQuestionSets = () =>{
     });
     return promise;
 };
+
+export const getRadarData = ()=>{
+    var promise = new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            var response = mockDataFactory.TestResultMockDataCreator.getRadarData();
+            resolve(response);
+        },Math.floor(Math.random() * 1500))
+    })
+    return promise;
+}
