@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 
 import animatedPotato.protocol.protocol.{Answer => _, Category => _, Question => _, QuestionCategory => _, QuestionOption => _, _}
 import controllers._
-import models._
+import models.{CategoryResults, _}
 import play.api.libs.json._
 import controllers.Email
 
@@ -51,6 +51,8 @@ object Formatter {
   implicit val userDetailsFormat = Json.format[UserDetails]
   implicit val nextQuestionRepsonseFormat = Json.format[NextQuestionResponse]
   implicit val scoresFormat = Json.format[Scores]
+  implicit val categoryResultsFormatter = Json.format[CategoryResults]
+  implicit val categoryResultsResponseFormatter = Json.format[CategoryResultsResponse]
   implicit val userCategoryResultsFormatter = Json.format[UserCategoryScores]
 
 

@@ -9,7 +9,10 @@ import slick.driver.PostgresDriver.simple._
 
 case class Scores(interviewId: InterviewId, categoryId: CategoryId, score: Score, confidence: Confidence)
 
-case class UserCategoryScores(participantId: IdType, interviewId: InterviewId, name: String, lastName: String, isPersonnel: Boolean, scores: List[CategoryScore], overallPercentage: Score, overallScore: Score, overAllConfidence: Confidence)
+case class UserCategoryScores(participantId: IdType, interviewId: InterviewId, name: String, lastName: String, email : Email, phone: String,isPersonnel: Boolean, scores: List[CategoryScore], overallPercentage: Score, overallScore: Score, overAllConfidence: Confidence, order : Int)
+
+case class CategoryResults(participantId : IdType, interviewId: InterviewId,name: String,lastname : String, order : Int, score : Score)
+case class CategoryResultsResponse(category: Category,results: List[CategoryResults])
 
 object ScoresDAO {
 
@@ -89,7 +92,7 @@ object ScoresDAO {
   def getCategoryScores: List[UserCategoryScores] = DB { implicit session =>
 
     val categories = (new CategoryDAO).getAll
-    val scores: List[Scores] = scoresDAO.list
+    val scores: List[Scores] = ScoresDAO.getAll
     val interviews = InterviewDAO.interviewDAO.filter(_.hasFinished).list
 
     if (interviews == Nil || scores == Nil) {
@@ -112,22 +115,25 @@ object ScoresDAO {
 
         val categoryScore = categories.map { cat =>
           interviewScores.find(_.categoryId == cat.id.get) match {
-            case Some(i) => CategoryScore(cat, i.score, Some(i.score / categoricalAverageScores.filter(_.category.id.get == i.categoryId).head.score), Some(i.confidence))
+            case Some(i) =>
+              val orderInCategory = scores.filter(_.categoryId == cat.id.get).sortBy(1 - _.score).zipWithIndex.find(_._1.interviewId == itw.id.get).map(_._2).get + 1
+              CategoryScore(cat, i.score, Some(1-(orderInCategory /  scores.count(_.categoryId == cat.id.get).toDouble )) , Some(i.confidence),Some(orderInCategory))
             // kullanıcıya soru sorulmamış kategoriler için reporta böyle bir CategoryScore eklendi
             case None => CategoryScore(cat, -1, Some(0), Some(0))
           }
         }
 
-        UserCategoryScores(p.id.get, itw.id.get, p.name, p.lastname, Users.isPersonnel(p.email), categoryScore, categoryScore.filter(_.score >= 0).map(_.percentage.get).sum / categoryScore.count(_.score >= 0), itw.averageScore.get, categoryScore.filter(_.score >= 0).map(_.confidence.get).sum / categoryScore.count(_.score >= 0))
-      }.sortWith(_.overallPercentage > _.overallPercentage)
+        UserCategoryScores(p.id.get, itw.id.get, p.name, p.lastname,p.email,p.lastname, Users.isPersonnel(p.email), categoryScore, categoryScore.filter(_.score >= 0).map(_.percentage.get).sum / categoryScore.count(_.score >= 0), itw.averageScore.get, categoryScore.filter(_.score >= 0).map(_.confidence.get).sum / categoryScore.count(_.score >= 0),interviews.sortBy(1 - _.averageScore.get).zipWithIndex.find(_._1.id == itw.id).map(_._2).get + 1)
+      }.sortBy(_.order)
     }
   }
 
-  def getUserCategoryScores(interviewId: InterviewId): List[UserCategoryScores] = DB { implicit session =>
+  def getInterviewCategoryScores(interviewId: InterviewId): List[UserCategoryScores] = DB { implicit session =>
 
     val categories = (new CategoryDAO).getAll
     val scores = scoresDAO.list
-    val interview = InterviewDAO.interviewDAO.filter(_.id === interviewId).list
+    val interviews = InterviewDAO.interviewDAO.filter(_.hasFinished).list
+    val interview = interviews.filter(_.id == interviewId)
 
     val categoricalAverageScoreTuple: List[(CategoryId, Score)] =
       scores.map(x => (x.categoryId, x.score))
@@ -141,20 +147,44 @@ object ScoresDAO {
       .map(x =>
         CategoryScore(categories.filter(c => c.id.get == x._1).head, x._2))
 
-    interview.map { itw =>
+    interviews.map { itw =>
       val p = Participants.getParticipant(itw.email).get
       val interviewScores: List[Scores] = scores.filter(_.interviewId == itw.id.get)
 
       val categoryScore = categories.map { cat =>
         interviewScores.find(_.categoryId == cat.id) match {
-          case Some(i) => CategoryScore(cat, i.score, Some(i.score / categoricalAverageScores.filter(_.category.id.get == i.categoryId).head.score), Some(i.confidence))
+          case Some(i) =>
+            val orderInCategory = scores.filter(_.categoryId == cat.id.get).sortBy(1 - _.score).zipWithIndex.find(_._1.interviewId == itw.id.get).map(_._2).get + 1
+            CategoryScore(cat, i.score, Some(1-(orderInCategory /  scores.count(_.categoryId == cat.id.get).toDouble )) , Some(i.confidence),Some(orderInCategory))
           // kullanıcıya soru sorulmamış kategoriler için reporta böyle bir CategoryScore eklendi
           case None => CategoryScore(cat, -1, Some(0), Some(0))
         }
       }
 
-      UserCategoryScores(p.id.get, itw.id.get, p.name, p.lastname, Users.isPersonnel(p.email), categoryScore, categoryScore.filter(_.score >= 0).map(_.percentage.get).sum / categoryScore.count(_.score >= 0), itw.averageScore.get, categoryScore.filter(_.score >= 0).map(_.confidence.get).sum / categoryScore.count(_.score >= 0))
-    }.sortWith(_.overallPercentage > _.overallPercentage)
+      UserCategoryScores(p.id.get, itw.id.get, p.name, p.lastname,p.email,p.lastname, Users.isPersonnel(p.email), categoryScore, categoryScore.filter(_.score >= 0).map(_.percentage.get).sum / categoryScore.count(_.score >= 0), itw.averageScore.get, categoryScore.filter(_.score >= 0).map(_.confidence.get).sum / categoryScore.count(_.score >= 0),interviews.sortBy(1 - _.averageScore.get).zipWithIndex.find(_._1.id == itw.id).map(_._2).get + 1)
+    }.sortBy(_.order)
+
+  }
+
+  def getCategoryResults(interviewId: InterviewId) = DB { implicit session =>
+
+    val scores = ScoresDAO.getAll
+    val categoryIDs = scores.map(_.categoryId).distinct
+    val categories = (new CategoryDAO).getAll
+
+    categoryIDs.map{ cat =>
+
+      val results = scores.filter(_.categoryId == cat).sortBy(1 - _.score).zipWithIndex.map{ x =>
+         val p = InterviewDAO.getParticipantByInterviewId(x._1.interviewId)
+        CategoryResults(p.id.get,x._1.interviewId,p.name,p.lastname,x._2+1,x._1.score)
+      }
+      val numberOfParticipants = results.length
+      val interviewOrder = results.zipWithIndex.find(_._1.interviewId == interviewId).map(_._2).get
+
+      results.filter(x => List(1,2,numberOfParticipants,numberOfParticipants-1,interviewOrder,interviewOrder+1,interviewOrder-1).contains(x.order))
+
+      CategoryResultsResponse(categories.find(_.id.get == cat).get, results)
+    }
 
   }
 }
