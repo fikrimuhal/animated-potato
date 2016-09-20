@@ -17,12 +17,29 @@ const log = log2("CategoryScoreTable");
 export default  class CategoryScoreTable extends React.Component {
     constructor(props) {
         super(props);
-        this.init();
+        this.state = {
+            categoryCount: this.getCategories().length,
+            currentCategoryIndex: 0
+        };
+        setInterval(()=> {
+            var current = this.state.currentCategoryIndex;
+            var last = this.state.categoryCount;
+            if (current < last - 1) {
+                current++;
+            }
+            else {
+                current = 0;
+            }
+            this.setState({
+                currentCategoryIndex: current
+            });
+        }, 5000)
+        //this.init();
     }
 
-    init = function () {
-        var categories = this.getCategories();
-    };
+    // init = function () {
+    //     var categories = this.getCategories();
+    // };
     getCategories = function () {
         var firstPersonData = this.props.data[0];
         var categories = firstPersonData.scores.map(score=> {
@@ -31,7 +48,7 @@ export default  class CategoryScoreTable extends React.Component {
         return categories;
     };
     getContent = function () {
-        var selectedCategory = this.getCategories()[0];
+        var selectedCategory = this.getCategories()[this.state.currentCategoryIndex];
         var scoreList = this.props.data.map((item, index)=> {
             var fullName = item.name + ' ' + item.lastName;
             var catScoreInfo = _.filter(item.scores, q => {
@@ -42,7 +59,7 @@ export default  class CategoryScoreTable extends React.Component {
                 name: fullName,
                 score: score,
                 userId: item.participantId,
-                interviewId:item.interviewId,
+                interviewId: item.interviewId,
                 visible: false
             };
         });
@@ -79,7 +96,7 @@ export default  class CategoryScoreTable extends React.Component {
         }
         ;
 
-       // log("new scoreList", scoreList);
+        // log("new scoreList", scoreList);
 
         var content = scoreList.map((item, index)=> {
             //log("userIds", item.userId, this.context.userId);
@@ -103,13 +120,14 @@ export default  class CategoryScoreTable extends React.Component {
             return <TableRow key={index + 1} style={style}>
                 <TableRowColumn>#{index + 1}</TableRowColumn>
                 <TableRowColumn>{item.name}</TableRowColumn>
-                <TableRowColumn>{item.score.toFixed(2)}</TableRowColumn>
+                <TableRowColumn>{(item.score*100).toFixed(2)}</TableRowColumn>
             </TableRow>
         });
         return content;
 
     };
     render = ()=> {
+        var selectedCategory = this.getCategories()[this.state.currentCategoryIndex];
         return (
             <div style={s.GraphStyles.widgetContainer}>
                 <Table
@@ -126,13 +144,13 @@ export default  class CategoryScoreTable extends React.Component {
                         <TableRow>
                             <TableHeaderColumn colSpan="3" tooltip="Score Table By Category Groups"
                                                style={{textAlign: 'left'}}>
-                                <h5 style={{color: colors.darkText.primary}}> Score Table By Category Groups</h5>
+                                <h5 style={{color: colors.darkText.primary}}>{selectedCategory} Score Table</h5>
                             </TableHeaderColumn>
                         </TableRow>
                         <TableRow>
                             <TableHeaderColumn tooltip="Order"><b>#Order</b></TableHeaderColumn>
                             <TableHeaderColumn tooltip="Name"><b>Name</b></TableHeaderColumn>
-                            <TableHeaderColumn tooltip="Score"><b>Score</b></TableHeaderColumn>
+                            <TableHeaderColumn tooltip="Score"><b>Score(/100)</b></TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
                     <TableBody

@@ -28,17 +28,18 @@ export default  class PieChartWidget extends React.Component {
         this.state = {
             dataLoaded:false
         };
+        log(this.props.data);
         this.createGraph();
     }
 
     createGraph = function (){
         var dataset = [];
         var data = {};
-        // mockApi.getRadarData().then(json=>{
-        //     log("received json=>",json);
-        var grData = this.props.data["score"].map(item=>{
+
+
+        var grData = this.props.data["scores"].map(item=>{
             return {
-                label:item.category,
+                label:item.category.category,
                 value:parseFloat(item.score.toPrecision(2))
             }
         });
@@ -80,6 +81,7 @@ export default  class PieChartWidget extends React.Component {
         }
     };
     render = ()=>{
+        log("rendered",this.props.data)
         return (
             <div style={s.GraphStyles.widgetContainer}>
                 {this.getContent()}

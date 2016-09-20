@@ -55,11 +55,12 @@ export default  class SkillTestReportContainer extends React.Component {
     };
     initializeFromCache = function (userId) {
         log("Data from CACHE");
-        var data = Cache.getTestResultReportFromCache(userId);
+        //var data = Cache.getTestResultReportFromCache(userId);
         data.isValidUser = true;
         this.state = {
             dataWaiting: false,
-            data: data
+            comparativeResultLoaded: false
+            //data: data
         }
     };
     goToList = function () {
@@ -67,27 +68,6 @@ export default  class SkillTestReportContainer extends React.Component {
     };
     initData = function () {
         var _this = this;
-        var generalScoreInfo = {
-            trustRate: Math.floor(Math.random() * 50 + 50),
-            score: Math.floor(Math.random() * 80 + 20),
-            degree: Math.floor(Math.random() * 50),
-            rate: Math.floor(Math.random() * 100)
-        };
-        var userInfo = {
-            name: "Şükrü",
-            lastname: "Hasdemir",
-            email: "sukru@fikrimuhal.com",
-            tel: "+90 539 585 45 12"
-        };
-        // mockApi.getRadarData().then(json=> {
-        //     _this.setState({
-        //         categoryScoreInfo: json,
-        //         generalScoreInfo: generalScoreInfo,
-        //         userInfo: userInfo,
-        //         scoreData: mockData.TestResultMockDataCreator.createScoresData(10),
-        //         dataLoaded: true
-        //     })
-        // });
         api.ReportAPI.getAllResult().then(response=> {
             return response.json()
         }).then(json=> {
@@ -96,9 +76,19 @@ export default  class SkillTestReportContainer extends React.Component {
                 generalInfo: _.filter(json, q=> {
                     return q.interviewId == _this.props.params.userId
                 })[0], //TODO interviewId ile değişecek
-                userInfo: userInfo,
                 scoreData: json,
                 dataLoaded: true
+            })
+        })
+
+        api.ReportAPI.getComparativeResult({
+            id: parseInt(_this.props.params.userId)
+        }).then(response=> {
+            return response.json()
+        }).then(json=> {
+            this.setState({
+                comparativeResult: json,
+                comparativeResultLoaded: true
             })
         })
 
@@ -113,8 +103,10 @@ export default  class SkillTestReportContainer extends React.Component {
     createReport = ()=> {
         return <ReportView categoryScoreInfo={this.state.categoryScoreInfo}
                            generalInfo={this.state.generalInfo}
-                           userInfo={this.state.userInfo}
-                           scoreData={this.state.scoreData}/>
+                           scoreData={this.state.scoreData}
+                           comparativeResult={this.state.comparativeResult}
+                           comparativeResultLoaded={this.state.comparativeResultLoaded}
+        />
 
     };
     getContent = function () {

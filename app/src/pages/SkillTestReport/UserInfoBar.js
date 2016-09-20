@@ -30,10 +30,10 @@ export default  class UserInfoBar extends React.Component {
                                 <text><b>Lastname:</b> {info.lastName}</text>
                             </Col>
                             <Col lg={12} style={s.GraphStyles.userInfoCol}>
-                                <text><b>Email:</b> {info.email}</text>
+                                <text><b>Email:</b> test@test.com{info.email}</text>
                             </Col>
                             <Col lg={12} style={s.GraphStyles.userInfoCol}>
-                                <text><b>Tel:</b> {info.tel}</text>
+                                <text><b>Tel:</b> (216) 546 6576{info.tel}</text>
                             </Col>
                         </Row>
                     </Col>

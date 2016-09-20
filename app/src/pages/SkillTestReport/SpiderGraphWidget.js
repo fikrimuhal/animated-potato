@@ -8,7 +8,8 @@ import log2                 from '../../utils/log2'
 import {Radar}              from 'react-chartjs-2'
 import * as util            from '../../utils/utils'
 import * as s               from '../../layouts/style'
-import materialColors               from '../../utils/material-colors'
+import * as _               from 'lodash'
+import materialColors       from '../../utils/material-colors'
 const log = log2("SpiderGraphWidget");
 var colorHash = {
     "score": {
@@ -66,46 +67,67 @@ export default  class SpiderGraphWidget extends React.Component {
         this.state = {
             dataLoaded: false
         };
-        this.createGraph();
+        log(this.props)
+        //this.createGraph();
     }
 
     createGraph = function () {
         var dataset = [];
         var data = {};
+        //3 katmanda kategorilere göre sıralanıyor
+        var userScore  = _.take(_.sortBy(this.props.data["userScore"],o=>{return o.category.category}),6);
+        var personelAverageScore  = _.take(_.sortBy(this.props.data["personnelAverage"],o=>{return o.category.category}),6);
+        var generalAverageScore  = _.take(_.sortBy(this.props.data["overallAverage"],o=>{return o.category.category}),6);
 
-        var labels = this.props.data["score"].map(item=> {
-            return item.category
+        //Grafikte gözükecek etiketler
+        data.labels = userScore.map(item=> {
+            return item.category.category
+        });
+        log("labels sorted->",data.labels);
+
+        var userScoreValues = userScore.map(o=>{return o.score.toFixed(2);});
+        var personelAverageScoreValues = personelAverageScore.map(o=>{return o.score.toFixed(2);});
+        var generalAverageScoreValues = generalAverageScore.map(o=>{return o.score.toFixed(2);});
+
+        dataset.push({
+            label: "User's Score",
+            data: userScoreValues,
+            backgroundColor: colorHash["score"].light,
+            borderColor:  colorHash["score"].dark,
+            pointBackgroundColor:  colorHash["score"].dark,
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor:  colorHash["score"].dark
+        });
+        dataset.push({
+            label: "Personals's Average Score",
+            data: personelAverageScoreValues,
+            backgroundColor: colorHash["companyScore"].light,
+            borderColor:  colorHash["companyScore"].dark,
+            pointBackgroundColor:  colorHash["companyScore"].dark,
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor:  colorHash["companyScore"].dark
+        });
+        dataset.push({
+            label: "Overall Average Score",
+            data: generalAverageScoreValues,
+            backgroundColor: colorHash["generalScore"].light,
+            borderColor:  colorHash["generalScore"].dark,
+            pointBackgroundColor:  colorHash["generalScore"].dark,
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor:  colorHash["generalScore"].dark
         });
 
-        //log("labels", labels);
-        data.labels = labels;
-
-        ["score", "companyScore", "generalScore"].forEach(scoreType=> {
-            var values = this.props.data[scoreType].map(valueItem=> {
-                return parseFloat(valueItem.score.toPrecision(2));
-            });
-            dataset.push({
-                label: labelHash[scoreType],
-                data: values,
-                backgroundColor: colorHash[scoreType].light,
-                borderColor: colorHash[scoreType].dark,
-                pointBackgroundColor: colorHash[scoreType].dark,
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: colorHash[scoreType].dark
-            })
-        });
         data.datasets = dataset;
-        //log("data", data);
-        this.state = {
-            graphData: data,
-            dataLoaded: true
-        };
 
+        return  <Radar data={data} options={options}/>
     };
     getContent = function () {
-        if (this.state.dataLoaded) {
-            return <Radar data={this.state.graphData} options={options}/>
+        if (this.props.dataLoaded) {
+            //return <Radar data={this.state.graphData} options={options}/>
+            return this.createGraph();
         }
         else {
             return <LinearProgress mode="indeterminate" color="red"/>

@@ -20,43 +20,39 @@ import  SummaryBar      from './SummaryBar'
 import  ScoreTable      from './CategoryScoreTable'
 import ColorMatrix      from './ColorMatrixChart'
 import BoxPlot          from './BoxPlotWidget'
+import * as _           from 'lodash'
 const log = log2("ReportViewer");
 
 export default  class ReportViewer extends React.Component {
     constructor(props) {
         super(props)
-
     }
 
     render = ()=> {
-        log("rendered")
-        var scoreInfo = this.props.generalInfo;
-        var userInfo = this.props.userInfo;
+        log("rendered", this.props.scoreData);
+        var userScoreData = _.filter(this.props.scoreData, q=> {
+            return q.interviewId == this.context.interviewId
+        })[0];
+
         return (
             <div>
                 <Row>
-                    <SummaryBar degree={scoreInfo.degree}
-                                rate={scoreInfo.rate}
-                                score={scoreInfo.score}
-                                trustRate={scoreInfo.trustRate}
-                                userInfo={userInfo}
-                                data={this.props.generalInfo}
-                    />
+                    <SummaryBar data={this.props.generalInfo}/>
                 </Row>
                 <hr/>
                 <Row style={{height: "400px"}}>
                     <Col lg={6}>
-                        <SpiderWidget data={this.props.categoryScoreInfo}/>
+                        <SpiderWidget data={this.props.comparativeResult} dataLoaded={this.props.comparativeResultLoaded}/>
                     </Col>
                     <Col lg={6}>
-                        <PieWidget data={this.props.categoryScoreInfo}/>
+                        <PieWidget data={userScoreData}/>
                     </Col>
                 </Row> <br/>
                 <hr/>
 
                 <Row style={{height: "480px"}}>
                     <Col lg>
-                        <BarWidget data={this.props.categoryScoreInfo}/>
+                        <BarWidget data={this.props.comparativeResult} dataLoaded={this.props.comparativeResultLoaded}/>
                     </Col>
                 </Row><br/>
                 <hr/>
@@ -88,6 +84,9 @@ export default  class ReportViewer extends React.Component {
 ReportViewer.propTypes = {
     categoryScoreInfo: React.PropTypes.object.isRequired,
     generalScoreInfo: React.PropTypes.object.isRequired,
-    userInfo: React.PropTypes.object.isRequired,
     scoreData: React.PropTypes.array.isRequired
 };
+
+ReportViewer.contextTypes = {
+    interviewId: React.PropTypes.number
+}

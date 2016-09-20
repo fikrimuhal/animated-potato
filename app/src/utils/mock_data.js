@@ -1,6 +1,7 @@
 import * as faker from 'Faker';
 import {log2} from '../utils'
 import * as api from '../utils/api'
+import sorular from '../../../design/sorular';
 const log = log2("MockData");
 
 export const questionSets = (count)=> {
@@ -18,7 +19,7 @@ export const questionSets = (count)=> {
 
 export const TestResultMockDataCreator = {
     createRadarData: ()=> {
-        return ["Java", "Backend", "Frontend", "XML", "C#", "Machine Learning","A","B","C","D"].map(category=> {
+        return ["Java", "Backend", "Frontend", "XML", "C#", "Machine Learning", "A", "B", "C", "D"].map(category=> {
             return {
                 category: category,
                 score: Math.random()
@@ -35,7 +36,7 @@ export const TestResultMockDataCreator = {
     },
     createScoresData: (count)=> {
         var data = [];
-        var categories = ["Java", "C#","Backend","Frontend","ReactJS","BackboneJS","MeteorJs","Scala","PlayFW","Matlab","Webpack","Asp.NET","PHP","JS"];
+        var categories = ["Java", "C#", "Backend", "Frontend", "ReactJS", "BackboneJS", "MeteorJs", "Scala", "PlayFW", "Matlab", "Webpack", "Asp.NET", "PHP", "JS"];
         for (var i = 0; i < count; i++) {
             var item = {};
             item.participantId = i;
@@ -61,8 +62,6 @@ export const TestResultMockDataCreator = {
         return data;
     }
 };
-
-import sorular from '../../../design/sorular';
 
 
 export const MockQuestionCreator = {
@@ -96,3 +95,39 @@ export const MockQuestionCreator = {
         log("data", data);
     }
 };
+
+export const mock_users = [
+    {
+        name: "Ahmet",
+        lastname: "Yiğit",
+        email: "ahmet@mesut.com",
+        phone: "123321123",
+        photo: "",
+        website: "",
+        notes: "",
+        username: "ahmet",
+        password: "123321"
+    },
+    {
+        name: "Mehmet",
+        lastname: "Tazegül",
+        email: "mehmet@mesut.com",
+        phone: "123321123",
+        photo: "",
+        website: "",
+        notes: "",
+        username: "mehmet",
+        password: "123321"
+    },
+    {
+        name: "Veli",
+        lastname: "Yiğit",
+        email: "veli@mesut.com",
+        phone: "123321123",
+        photo: "",
+        website: "",
+        notes: "",
+        username: "veli",
+        password: "123321"
+    }
+];

@@ -18,7 +18,7 @@ export default  class SummaryBar extends React.Component {
     }
 
     getScoreColor = function () {
-        var score =this.props.data.overallScore * 100;
+        var score = this.props.data.overallScore * 100;
         var color = colors.grey.x800;
         switch (true) {
             case (score < 20):
@@ -64,7 +64,7 @@ export default  class SummaryBar extends React.Component {
         };
     };
     getTrustRateChartData = function () {
-        var tRate = parseFloat(85);
+        var tRate = parseFloat(this.props.data.overAllConfidence*100).toFixed(2);
         var data = [tRate, (100 - tRate)];
         var labels = ["Trust Rate", ""];
         var dataset = [
@@ -89,8 +89,8 @@ export default  class SummaryBar extends React.Component {
         return chartData;
     };
     getPercentRateChartData = function () {
-        var pDegree = parseFloat(this.props.data.overallPercentage);
-        var data = [1 - pDegree, pDegree];
+        var pDegree = parseFloat(this.props.data.overallPercentage * 100).toFixed(2);
+        var data = [ pDegree,100 - pDegree];
         var labels = ["Percent Degree", ""];
         var dataset = [
             {
@@ -118,7 +118,7 @@ export default  class SummaryBar extends React.Component {
         var info = this.props.data;
         return (
             <div>
-                <LinearProgress mode="determinate" color={this.getScoreColor()} value={info.overallScore*100}
+                <LinearProgress mode="determinate" color={this.getScoreColor()} value={info.overallScore * 100}
                                 style={{height: "20px"}}/>
                 <Row>
                     <Col lg={5}> <UserInfoBar userInfo={info}/></Col>
@@ -130,7 +130,7 @@ export default  class SummaryBar extends React.Component {
                                     <b>Trust Rate</b><br/>
 
                                     <Row height={85}>
-                                        <Col lg={7}>
+                                        <Col lg={12}>
                                             <div style={{height: "85px"}}>
                                                 <Doughnut data={this.getTrustRateChartData()}
                                                           options={{
@@ -143,7 +143,7 @@ export default  class SummaryBar extends React.Component {
 
                                             </div>
                                         </Col>
-                                        <Col lg={5}><span style={s.GraphStyles.SummaryBarLabel}>85%</span></Col>
+                                        {/*<Col lg={5}><span style={s.GraphStyles.SummaryBarLabel}>{(this.props.data.overAllConfidence*100).toFixed(1)}%</span></Col>*/}
                                     </Row>
                                 </Paper>
                             </Col>
@@ -151,7 +151,9 @@ export default  class SummaryBar extends React.Component {
                                 style={Object.assign(s.GraphStyles.SummaryBarPaper, this.getPaperColor())}
                                 rounded={false}>
                                 <b>Score</b><br/>
-                                <span style={s.GraphStyles.SummaryBarLabel}> {(info.overallScore.toFixed(3) * 100).toFixed(2)}/<span style={{fontSize:"20px"}}>100</span></span>
+                                <span
+                                    style={s.GraphStyles.SummaryBarLabel}> {(info.overallScore.toFixed(3) * 100).toFixed(1)}/<span
+                                    style={{fontSize: "20px"}}>100</span></span>
                             </Paper>
                             </Col>
                             <Col lg={6}><Paper
@@ -166,7 +168,7 @@ export default  class SummaryBar extends React.Component {
                                 rounded={false}>
                                 <b>Percent Degree</b><br/>
                                 <Row height={85}>
-                                    <Col lg={7}>
+                                    <Col lg={12}>
                                         <div style={{height: "85px"}}>
                                             <Doughnut data={this.getPercentRateChartData()}
                                                       options={{
@@ -180,7 +182,7 @@ export default  class SummaryBar extends React.Component {
                                         </div>
                                     </Col>
                                     {/*<Col lg={5}>*/}
-                                        {/*<span style={s.GraphStyles.SummaryBarLabel}> %{info.overallPercentage.toFixed(2)} </span>*/}
+                                    {/*<span style={s.GraphStyles.SummaryBarLabel}> %{info.overallPercentage.toFixed(2)} </span>*/}
                                     {/*</Col>*/}
                                 </Row>
 
@@ -195,10 +197,5 @@ export default  class SummaryBar extends React.Component {
 }
 
 SummaryBar.propTypes = {
-    // trustRate: React.PropTypes.number.isRequired,
-    // score: React.PropTypes.number.isRequired,
-    // degree: React.PropTypes.number.isRequired,
-    // rate: React.PropTypes.number.isRequired,
-    // userInfo: React.PropTypes.object.isRequired,
     data: React.PropTypes.object.isRequired
 };
