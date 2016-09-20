@@ -8,6 +8,7 @@ CREATE TABLE answer
   email character VARYING(255),
   questionid bigint NOT NULL,
   answer boolean NOT NULL,
+  isdeleted BOOLEAN NOT NULL DEFAULT false,
 
   CONSTRAINT answer_pkey PRIMARY KEY (id)
 )

@@ -77,7 +77,6 @@ class InterviewManager(database: ActorRef) extends Actor with Stash {
       database ! x
       sender ! PoisonPill
       interviewActors -= interviewId
-    //  TODO : burada database actorü ile database e kaydet
 
     case x =>
       println(s"InterviewManager : unexpected arg : $x")

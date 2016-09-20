@@ -6,7 +6,7 @@ import play.api.mvc._
 import play.api.mvc.Results._
 import utils.Formatter._
 import pdi.jwt._
-import models.{ClaimData, Users}
+import models.{ClaimData, Participant, Users}
 
 class AuthenticatedRequest[A](val user: ClaimData, request: Request[A]) extends WrappedRequest[A](request)
 
@@ -31,3 +31,4 @@ object AdminAction extends ActionBuilder[AuthenticatedRequest] {
       case _ => Future.successful(Unauthorized("Unauthorized Access"))
     }
 }
+

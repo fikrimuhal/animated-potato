@@ -41,7 +41,6 @@ class RootActor extends Actor {
     println("Root Actor preStart")
     val database: ActorRef = context.actorOf(Database.props, "database")
     interviewManager = context.actorOf(InterviewManager.props(database), "interviewmanager")
-    //    context.actorOf(MockInterviewClient.props, "mockclient")
 
   }
 }

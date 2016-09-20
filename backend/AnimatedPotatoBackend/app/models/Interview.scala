@@ -17,20 +17,11 @@ object InterviewDAO {
 
   /**
     * @param email
-    * @return if there is a test record at interview table, returns false
-    *         else inserts into interview table and returns interviewId
+    * @return returns interviewID
     */
 
-  def insert(email: String): Either[Boolean, InterviewId] = DB { implicit session =>
-    if (hasTested(email)) {
-      Left(false)
-    }
-    else {
-      Right(
-        (interviewDAO returning interviewDAO.map(_.id)) += Interview(None, email, startDate = Some(new java.util.Date))
-      )
-    }
-
+  def insert(email: String): InterviewId = DB { implicit session =>
+    (interviewDAO returning interviewDAO.map(_.id)) += Interview(None, email, startDate = Some(new java.util.Date))
   }
 
   /**
@@ -77,30 +68,9 @@ object InterviewDAO {
 
   }
 
-  /**
-    *
-    * @param email
-    * @return interview ID for the input email if interview has finished
-    */
-  def getInterviewID(email: Email): Option[IdType] = DB { implicit session =>
-
-    interviewDAO.filter(itw => itw.email === email && itw.hasFinished === true).map(_.id).list.headOption
-  }
-
   def insertAverageScore(interviewId: InterviewId, averageScore: Score) = DB { implicit session =>
     interviewDAO.filter(_.id === interviewId).map(_.averageScore).update(averageScore)
   }
-
-
-  def hasFinishedTest(email: Email): Boolean = DB { implicit session =>
-    interviewDAO.filter(i => i.email === email && i.hasFinished).list.nonEmpty
-  }
-
-  def hasFinishedTest(id: InterviewId): Boolean = DB { implicit session =>
-    interviewDAO.filter(i => i.id === id && i.hasFinished).list.nonEmpty
-  }
-
-
 
 
 }

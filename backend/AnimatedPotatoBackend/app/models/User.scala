@@ -2,14 +2,9 @@ package models
 
 import animatedPotato.protocol.protocol.{Email, UserIdType}
 import org.mindrot.jbcrypt.BCrypt
-import utils.{Constants, DB}
-
+import utils.DB
 import slick.driver.PostgresDriver.simple._
-import utils.Formatter._
 
-/**
-  * Created by who on 09.08.2016.
-  */
 case class User(id: Option[UserIdType] = None,
                 username: String,
                 password: String,
