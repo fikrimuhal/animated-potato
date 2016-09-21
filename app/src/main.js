@@ -50,7 +50,7 @@ ReactDOM.render((
                 <Route path="QuestionAdd" component={pages.QuestionAdd}/>
                 <Route path="ListofQuestionSet" component={pages.ListOfQuestionSet}/>
                 <Route path="QuestionList" component={pages.QuestionList}/>
-                <Route path="SkillTestReport/:userId" component={pages.SkillTestReport}/>
+                <Route path="SkillTestReport/:interviewId" component={pages.SkillTestReport}/>
                 <Route path="QuestionDetail/:questionId" component={pages.QuestionDetail}/>
                 <Route path="initialization" component={pages.Initialization}/>
             </Route>

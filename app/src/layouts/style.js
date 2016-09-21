@@ -174,7 +174,7 @@ export const AdminLayoutStyle = {
         borderRadius:"10px",
         minHeight:"300px",
         height:"auto !important",
-        width:"75%",
+        width:"95%",
         padding:"15px",
         marginTop:"10px"
     },

@@ -21,25 +21,22 @@ export default  class CategoryScoreTable extends React.Component {
             categoryCount: this.getCategories().length,
             currentCategoryIndex: 0
         };
+    }
+
+    componentDidMount = ()=> {
         setInterval(()=> {
             var current = this.state.currentCategoryIndex;
             var last = this.state.categoryCount;
-            if (current < last - 1) {
+            if (current < last - 1)
                 current++;
-            }
-            else {
+            else
                 current = 0;
-            }
             this.setState({
                 currentCategoryIndex: current
             });
-        }, 5000)
-        //this.init();
-    }
+        }, 4000);
+    };
 
-    // init = function () {
-    //     var categories = this.getCategories();
-    // };
     getCategories = function () {
         var firstPersonData = this.props.data[0];
         var categories = firstPersonData.scores.map(score=> {
@@ -120,7 +117,7 @@ export default  class CategoryScoreTable extends React.Component {
             return <TableRow key={index + 1} style={style}>
                 <TableRowColumn>#{index + 1}</TableRowColumn>
                 <TableRowColumn>{item.name}</TableRowColumn>
-                <TableRowColumn>{(item.score*100).toFixed(2)}</TableRowColumn>
+                <TableRowColumn>{(item.score * 100).toFixed(2)}</TableRowColumn>
             </TableRow>
         });
         return content;

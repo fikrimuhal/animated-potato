@@ -47,7 +47,7 @@ export default class AdminLayout extends React.Component {
 
         var propEquality = im_currentProp.equals(im_nextProp);
         var stateEquality = im_currentState.equals(im_nextState);
-        log("shouldComponentUpdate",propEquality,stateEquality,(!propEquality || !stateEquality));
+        //log("shouldComponentUpdate",propEquality,stateEquality,(!propEquality || !stateEquality));
         return (!propEquality || !stateEquality);
     };
     getChildContext(){
@@ -56,7 +56,7 @@ export default class AdminLayout extends React.Component {
     };
 
     v = (e,combo)=>{
-        log(combo);
+        //log(combo);
         switch(combo) {
             case "shift+m+1":
                 browserHistory.push("/adminpanel/listofparticipants");

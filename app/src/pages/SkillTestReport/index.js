@@ -25,7 +25,7 @@ export default  class SkillTestReportContainer extends React.Component {
         };
         this.initData();
 
-        //var userId = this.props.params.userId;
+        //var userId = this.props.params.interviewId;
         // if(Cache.checkTestResultReportCache(userId))
         //     this.initializeFromCache(userId)
         // else
@@ -37,8 +37,8 @@ export default  class SkillTestReportContainer extends React.Component {
 
     getChildContext() {
         log("**getChildContext**", this.props.params);
-        context.userId = this.props.params.userId;
-        context.interviewId = this.props.params.userId;
+        context.userId = this.props.params.interviewId;
+        context.interviewId = this.props.params.interviewId;
         return context;
     };
 
@@ -74,15 +74,15 @@ export default  class SkillTestReportContainer extends React.Component {
             _this.setState({
                 categoryScoreInfo: mockData.TestResultMockDataCreator.getRadarData(),
                 generalInfo: _.filter(json, q=> {
-                    return q.interviewId == _this.props.params.userId
-                })[0], //TODO interviewId ile değişecek
+                    return q.interviewId == _this.props.params.interviewId
+                })[0],
                 scoreData: json,
                 dataLoaded: true
             })
         })
 
         api.ReportAPI.getComparativeResult({
-            id: parseInt(_this.props.params.userId)
+            id: parseInt(_this.props.params.interviewId)
         }).then(response=> {
             return response.json()
         }).then(json=> {

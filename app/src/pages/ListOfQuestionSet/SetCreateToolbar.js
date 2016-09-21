@@ -14,44 +14,44 @@ const log = log2("SetCreateToolbar");
 
 export default  class SetCreateToolbar extends React.Component {
     //TODO create new set
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
-            mode:"create"
+            mode: "create"
         }
-        util.bindFunctions.call(this,['toogleMode','saveQuestionSet']);
+        util.bindFunctions.call(this, ['toogleMode', 'saveQuestionSet']);
 
     }
 
-    toogleMode = function (){
-        log("toogleMode",this.refs);
-        if(this.refs.txtSetName != null) {
+    toogleMode = function () {
+        //log("toogleMode",this.refs);
+        if (this.refs.txtSetName != null) {
             this.refs.txtSetName.input.value = "";
         }
         this.setState({
-            mode:this.state.mode == "create" ? "edit" : "create"
+            mode: this.state.mode == "create" ? "edit" : "create"
         });
     };
-    saveQuestionSet = function (){
+    saveQuestionSet = function () {
 
         var setName = this.refs.txtSetName.input.value;
-        log("saveQuestionSet",this.refs,setName);
+        //log("saveQuestionSet",this.refs,setName);
         var _this = this;
-        if(setName != null && setName != "") {
-            this.props.saveQuestionSet(setName).then(result=>{
-                if(result.status=="ok"){
+        if (setName != null && setName != "") {
+            this.props.saveQuestionSet(setName).then(result=> {
+                if (result.status == "ok") {
                     this.refs.txtSetName.input.value = "";
                     _this.toogleMode();
                 }
             })
         }
-        else{
-            _this.context.showMessage("Question set title required.",1000);
+        else {
+            _this.context.showMessage("Question set title required.", 1000);
         }
 
     };
-    iconButtons = ()=>{
-        if(this.state.mode == "create") {
+    iconButtons = ()=> {
+        if (this.state.mode == "create") {
             return (<FloatingActionButton onClick={this.toogleMode} mini={true}><ContentAdd  /></FloatingActionButton>);
         }
         else {
@@ -64,7 +64,7 @@ export default  class SetCreateToolbar extends React.Component {
         }
     };
 
-    render = ()=>{
+    render = ()=> {
         return (
             <div style={s.questionSetDetailPage.setCreateToolbar}>
                 {this.iconButtons()}
@@ -74,9 +74,9 @@ export default  class SetCreateToolbar extends React.Component {
 }
 
 SetCreateToolbar.contextTypes = {
-    title:React.PropTypes.string,
-    showMessage:React.PropTypes.func
+    title: React.PropTypes.string,
+    showMessage: React.PropTypes.func
 };
 SetCreateToolbar.propTypes = {
-    saveQuestionSet:React.PropTypes.func.isRequired
+    saveQuestionSet: React.PropTypes.func.isRequired
 }
