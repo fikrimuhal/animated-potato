@@ -104,8 +104,6 @@ export default class ListOfQuestionSet extends React.Component {
     };
     initializeDataFromApi = function (){
         log("Data from API");
-        //TODO question sets from real api
-
         QuestionSetAPI.getAllQuestionSet().then(repsonse=>{
             return repsonse.json()
         }).then(json=>{
@@ -318,7 +316,8 @@ export default class ListOfQuestionSet extends React.Component {
         var newQuestionSet = {
             title:setName,
             isDefaultSet:false,
-            id:id
+            id:id,
+            questionCount:0
         };
         var newRows = this.state.originalData;
         newRows.push(newQuestionSet);

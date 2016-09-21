@@ -147,8 +147,7 @@ export default class QuestionAddContainer extends React.Component {
     };
     handleUpdate = function (questionModel){
         var _this = this;
-        log("handleUpdate",questionModel);
-        //TODO question update yapılacak
+        //log("handleUpdate",questionModel);
         api.QuestionAPI.update(questionModel).then(response=>{return response.json()}).then(json=>{
             log(json);
             if(json.status == "OK") {

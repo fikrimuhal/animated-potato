@@ -9,6 +9,12 @@ import utils.Constants
 
 class ParticipantController extends Controller with Secured {
 
+
+  def index = Action{
+    Ok("READY!")
+  }
+
+
   def insertParticipant = Action { implicit request =>
     try {
       val participant: Participant = request.body.asJson.get.as[Participant]

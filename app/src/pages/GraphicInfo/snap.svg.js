@@ -3272,7 +3272,7 @@ Snap.plugin(function (Snap, Element, Paper, glob, Fragment) {
      = (Element) the `<marker>` element
      * You can specify the marker later as an argument for `marker-start`, `marker-end`, `marker-mid`, and `marker` attributes. The `marker` attribute places the marker at every point along the path, and `marker-mid` places them at every point except the start and end.
     \*/
-    // TODO add usage for markers
+
     elproto.marker = function (x, y, width, height, refX, refY) {
         var p = make("marker", getSomeDefs(this));
         if (x == null) {

@@ -11,7 +11,7 @@ import log2             from '../../utils/log2'
 import * as Cache       from '../../utils/cache'
 import * as util        from '../../utils/utils'
 import * as s           from '../../layouts/style'
-import * as lodash      from 'lodash'
+import * as _           from 'lodash'
 import ReportView       from './ReportViewer'
 //consts and variables
 const log = log2("SkillTestReportContainer");
@@ -21,11 +21,13 @@ export default  class SkillTestReportContainer extends React.Component {
         super(props);
         util.bindFunctions.call(this, ['initializeFromAPI', 'initializeFromCache']);
         this.state = {
-            dataWaiting: true
+            dataWaiting: true,
+            comparativeResultLoaded:false,
+            scoreTableLoaded:false
         };
         this.initData();
 
-        //var userId = this.props.params.userId;
+        //var userId = this.props.params.interviewId;
         // if(Cache.checkTestResultReportCache(userId))
         //     this.initializeFromCache(userId)
         // else
@@ -38,7 +40,7 @@ export default  class SkillTestReportContainer extends React.Component {
     getChildContext() {
         log("**getChildContext**", this.props.params);
         context.userId = this.props.params.userId;
-        context.interviewId = this.props.params.userId;
+        context.interviewId = this.props.params.interviewId;
         return context;
     };
 
@@ -59,8 +61,8 @@ export default  class SkillTestReportContainer extends React.Component {
         data.isValidUser = true;
         this.state = {
             dataWaiting: false,
-            comparativeResultLoaded: false
-            //data: data
+            comparativeResultLoaded: false,
+            scoreTableLoaded:false
         }
     };
     goToList = function () {
@@ -72,17 +74,17 @@ export default  class SkillTestReportContainer extends React.Component {
             return response.json()
         }).then(json=> {
             _this.setState({
-                categoryScoreInfo: mockData.TestResultMockDataCreator.getRadarData(),
+                //categoryScoreInfo: mockData.TestResultMockDataCreator.getRadarData(),
                 generalInfo: _.filter(json, q=> {
-                    return q.interviewId == _this.props.params.userId
-                })[0], //TODO interviewId ile değişecek
+                    return q.interviewId == _this.props.params.interviewId
+                })[0],
                 scoreData: json,
                 dataLoaded: true
             })
         })
 
         api.ReportAPI.getComparativeResult({
-            id: parseInt(_this.props.params.userId)
+            id: parseInt(_this.props.params.interviewId)
         }).then(response=> {
             return response.json()
         }).then(json=> {
@@ -91,6 +93,17 @@ export default  class SkillTestReportContainer extends React.Component {
                 comparativeResultLoaded: true
             })
         })
+
+        //TODO #BACKEND skorların hesaplanmasında performans düşüklüğü var
+        api.ReportAPI.getScoreTable({
+            id: parseInt(_this.props.params.userId)
+        }).then(response=>{return response.json()}).then(json=>{
+           this.setState({
+               scoreTable:json,
+               scoreTableLoaded:true
+           });
+        });
+
 
     };
 
@@ -106,7 +119,9 @@ export default  class SkillTestReportContainer extends React.Component {
                            scoreData={this.state.scoreData}
                            comparativeResult={this.state.comparativeResult}
                            comparativeResultLoaded={this.state.comparativeResultLoaded}
-        />
+                           scoreTable={this.state.scoreTable}
+                           scoreTableLoaded={this.state.scoreTableLoaded}
+                        />
 
     };
     getContent = function () {

@@ -174,7 +174,7 @@ export const AdminLayoutStyle = {
         borderRadius:"10px",
         minHeight:"300px",
         height:"auto !important",
-        width:"75%",
+        width:"95%",
         padding:"15px",
         marginTop:"10px"
     },
@@ -201,6 +201,14 @@ export  const GraphStyles = {
         width: "90%",
         margin: 20,
         textAlign: 'center',
+        display: 'inline-block',
+        border:"1px solid teal"
+    },
+    SummaryBarPaper2:{
+        //height: "110px",
+        width: "90%",
+        marginTop:20,
+        padding:"5px",
         display: 'inline-block',
         border:"1px solid teal"
     },

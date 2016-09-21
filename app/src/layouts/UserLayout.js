@@ -31,13 +31,15 @@ export default class UserLayout extends React.Component {
         super(props);
         //log("UserLayout consttttttttttttttttttttttttttttttttttttttt")
         if(!db.isLoggedIn()){
-            window.location.href="/signin";
+            //window.location.href="/signin";
+            browserHistory.push("/signin");
             return false;
             //browserHistory.push("/signin");
         }
         else{
             if(db.isAdmin()){
-                window.location.href="/dashboard";
+                browserHistory.push("/dashboard");
+                //window.location.href="/dashboard";
             }
         }
         this.state={

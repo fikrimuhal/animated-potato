@@ -54,4 +54,17 @@ class ScoresController extends Controller {
 
   }
 
+
+  def getCategoryResults = Action { implicit request =>
+
+    request.body.asJson.flatMap(_.validate[ID].asOpt) match {
+
+      case Some(request) => Ok(Json.toJson(ScoresDAO.getCategoryResults(request.id)))
+
+      case _ => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
+
+    }
+  }
+
+
 }

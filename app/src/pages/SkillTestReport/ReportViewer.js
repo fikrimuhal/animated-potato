@@ -29,15 +29,13 @@ export default  class ReportViewer extends React.Component {
     }
 
     render = ()=> {
-        log("rendered", this.props.scoreData);
-        var userScoreData = _.filter(this.props.scoreData, q=> {
-            return q.interviewId == this.context.interviewId
-        })[0];
 
+        var userScoreData = this.props.generalInfo;
+        //log("rendered", userScoreData ,this.props.generalInfo );
         return (
             <div>
                 <Row>
-                    <SummaryBar data={this.props.generalInfo}/>
+                    <SummaryBar data={this.props.generalInfo} />
                 </Row>
                 <hr/>
                 <Row style={{height: "400px"}}>
@@ -51,28 +49,28 @@ export default  class ReportViewer extends React.Component {
                 <hr/>
 
                 <Row style={{height: "480px"}}>
-                    <Col lg>
+                    <Col lg={12} style={{width:"100%"}}>
                         <BarWidget data={this.props.comparativeResult} dataLoaded={this.props.comparativeResultLoaded}/>
                     </Col>
                 </Row><br/>
                 <hr/>
-                <Row style={{height: "480px"}}>
-                    <Col lg={6}>
-                        <ScoreTable data={this.props.scoreData}/>
+                <Row>
+                    <Col lg={6} md={6} style={{width:"50%"}}>
+                        <ScoreTable data={this.props.scoreTable} dataLoaded={this.props.scoreTableLoaded}/>
                     </Col>
-                    <Col lg={6}>
-                        <ScoreTable data={this.props.scoreData}/>
+                    <Col lg={6} md={6} style={{width:"50%"}}>
+                        <ScoreTable data={this.props.scoreTable} dataLoaded={this.props.scoreTableLoaded}/>
                     </Col>
                 </Row><br/>
                 <hr/>
                 <Row>
-                    <Col lg>
+                    <Col lg={12} md={12}>
                         <BoxPlot/>
                     </Col>
                 </Row><br/>
                 <hr/>
                 <Row>
-                    <Col lg>
+                    <Col lg={12} style={{width:"100%"}}>
                         <ColorMatrix data={this.props.scoreData}/>
                     </Col>
                 </Row>
