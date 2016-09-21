@@ -13,7 +13,7 @@ import log2                 from '../../utils/log2'
 const log = log2("SetCreateToolbar");
 
 export default  class SetCreateToolbar extends React.Component {
-    //TODO create new set
+
     constructor(props) {
         super(props)
         this.state = {

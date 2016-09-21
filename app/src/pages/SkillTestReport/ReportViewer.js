@@ -56,12 +56,12 @@ export default  class ReportViewer extends React.Component {
                     </Col>
                 </Row><br/>
                 <hr/>
-                <Row style={{height: "480px"}}>
+                <Row>
                     <Col lg={6}>
-                        <ScoreTable data={this.props.scoreData}/>
+                        <ScoreTable data={this.props.scoreTable} dataLoaded={this.props.scoreTableLoaded}/>
                     </Col>
                     <Col lg={6}>
-                        <ScoreTable data={this.props.scoreData}/>
+                        <ScoreTable data={this.props.scoreTable} dataLoaded={this.props.scoreTableLoaded}/>
                     </Col>
                 </Row><br/>
                 <hr/>

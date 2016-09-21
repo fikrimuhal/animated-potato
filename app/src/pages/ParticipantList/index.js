@@ -158,7 +158,7 @@ export default class ParticipantList extends React.Component {
                             style={{minWidth: "50px"}}></FlatButton>
             </Col>
             <Col lg={3}>
-                <FlatButton icon={<ViewIcon/>} onClick={this.viewRow(rowData.interviewId)}
+                <FlatButton icon={<ViewIcon/>} onClick={this.viewRow(rowData.info.id,rowData.interviewId)}
                             style={{minWidth: "50px"}}></FlatButton>
             </Col>
         </Row>);
@@ -166,9 +166,9 @@ export default class ParticipantList extends React.Component {
     deleteRow = index => ()=> {
         log("deleting row ->", index);
     };
-    viewRow = interviewId => ()=> {
+    viewRow = (userId,interviewId) => ()=> {
         log("viewing row ->", interviewId);
-        browserHistory.push("/dashboard/skilltestreport/" + interviewId)
+        browserHistory.push("/dashboard/skilltestreport/" + userId + "/" + interviewId);
     };
     getRows = function () {
         return Selectors.getRows(this.state);

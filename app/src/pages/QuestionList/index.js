@@ -148,7 +148,6 @@ export default class QuestionList extends React.Component {
     viewQuestion = id => ()=>{
         log("viewing-> ",id);
         browserHistory.push("/dashboard/QuestionDetail/" + id);
-        //TODO soru detay sayfası yapılacak
     };
     getRows = function (){
         //log("get rows state",this.state );

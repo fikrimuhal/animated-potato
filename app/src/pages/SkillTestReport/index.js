@@ -21,7 +21,9 @@ export default  class SkillTestReportContainer extends React.Component {
         super(props);
         util.bindFunctions.call(this, ['initializeFromAPI', 'initializeFromCache']);
         this.state = {
-            dataWaiting: true
+            dataWaiting: true,
+            comparativeResultLoaded:false,
+            scoreTableLoaded:false
         };
         this.initData();
 
@@ -37,7 +39,7 @@ export default  class SkillTestReportContainer extends React.Component {
 
     getChildContext() {
         log("**getChildContext**", this.props.params);
-        context.userId = this.props.params.interviewId;
+        context.userId = this.props.params.userId;
         context.interviewId = this.props.params.interviewId;
         return context;
     };
@@ -59,8 +61,8 @@ export default  class SkillTestReportContainer extends React.Component {
         data.isValidUser = true;
         this.state = {
             dataWaiting: false,
-            comparativeResultLoaded: false
-            //data: data
+            comparativeResultLoaded: false,
+            scoreTableLoaded:false
         }
     };
     goToList = function () {
@@ -92,6 +94,17 @@ export default  class SkillTestReportContainer extends React.Component {
             })
         })
 
+        //TODO #BACKEND skorların hesaplanmasında performans düşüklüğü var
+        api.ReportAPI.getScoreTable({
+            id: parseInt(_this.props.params.userId)
+        }).then(response=>{return response.json()}).then(json=>{
+           this.setState({
+               scoreTable:json,
+               scoreTableLoaded:true
+           });
+        });
+
+
     };
 
     createWaitingContent = ()=> {
@@ -106,7 +119,9 @@ export default  class SkillTestReportContainer extends React.Component {
                            scoreData={this.state.scoreData}
                            comparativeResult={this.state.comparativeResult}
                            comparativeResultLoaded={this.state.comparativeResultLoaded}
-        />
+                           scoreTable={this.state.scoreTable}
+                           scoreTableLoaded={this.state.scoreTableLoaded}
+                        />
 
     };
     getContent = function () {

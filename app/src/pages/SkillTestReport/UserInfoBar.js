@@ -30,10 +30,10 @@ export default  class UserInfoBar extends React.Component {
                                 <text><b>Lastname:</b> {info.lastName}</text>
                             </Col>
                             <Col lg={12} style={s.GraphStyles.userInfoCol}>
-                                <text><b>Email:</b> test@test.com{info.email}</text>
+                                <text><b>Email:</b>{info.email}</text>
                             </Col>
                             <Col lg={12} style={s.GraphStyles.userInfoCol}>
-                                <text><b>Tel:</b> (216) 546 6576{info.tel}</text>
+                                <text><b>Phone:</b>{info.phone}</text>
                             </Col>
                         </Row>
                     </Col>
@@ -42,7 +42,7 @@ export default  class UserInfoBar extends React.Component {
         )
     }
 }
-
+//TODO: #BACKEND-> info.phone kısmına soyadı kısmı geliyor. backend tarafında düzeltilecek
 UserInfoBar.propTypes = {
     userInfo:React.PropTypes.object.isRequired
 };
