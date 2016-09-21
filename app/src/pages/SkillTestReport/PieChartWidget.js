@@ -40,7 +40,7 @@ export default  class PieChartWidget extends React.Component {
         var grData = this.props.data["scores"].map(item=>{
             return {
                 label:item.category.category,
-                value:parseFloat(item.score.toPrecision(2))
+                value:parseFloat(item.score.toPrecision(3))
             }
         });
         grData = _.sortBy(grData,"value").reverse();
@@ -49,7 +49,8 @@ export default  class PieChartWidget extends React.Component {
             return item.label
         });
         var values = grData.map(item=>{
-            return item.value
+            var value = item.value == -1?0:(item.value*100).toFixed(2);
+            return value
         });
         var colors = labels.map(item=>{
             return util.generateColor()

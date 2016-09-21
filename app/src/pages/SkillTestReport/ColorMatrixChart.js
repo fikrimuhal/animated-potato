@@ -85,7 +85,7 @@ export default  class ColorMatrixChart extends React.Component {
     getColor = function (score) {
         var normalizedScore = score;
         var color = colors.grey.x400;
-        if(normalizedScore==0)
+        if(normalizedScore<=0)
             color = colors.grey.x400;
         else if(normalizedScore<0.25)
             color = colors.green.x200;
@@ -98,138 +98,18 @@ export default  class ColorMatrixChart extends React.Component {
         return color;
     };
     render = ()=> {
+        var height = this.props.data.length * 40;
+        var width = this.props.data[0].scores.length * 40;
+        var viewBox = "0 -20 "+ Math.floor(width/2)+" "+ Math.floor(height/2);
         return (
             <div style={s.GraphStyles.widgetContainer}>
                 <h5>Color Matrix</h5>
 
-                <svg width="700" height={60+this.props.data.length * 15} className="">
+                <svg width={width} height={height} className="" viewBox={viewBox}>
                     <g transform="translate(80, 60)">
-                        {/*<g transform="translate(0, 0)">*/}
-                        {/*<rect className="day" width="11" height="11" y="0" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-07-10"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="13" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-07-11"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="26" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-07-12"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="39" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-07-13"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="52" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-07-14"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="65" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-07-15"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="78" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-07-16"></rect>*/}
-                        {/*</g>*/}
-                        {/*<g transform="translate(13, 0)">*/}
-                        {/*<rect className="day" width="11" height="11" y="0" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-07-17"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="13" fill="#8cc665" data-count="2"*/}
-                        {/*data-date="2016-07-18"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="26" fill="#8cc665" data-count="3"*/}
-                        {/*data-date="2016-07-19"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="39" fill="#d6e685" data-count="1"*/}
-                        {/*data-date="2016-07-20"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="52" fill="#8cc665" data-count="3"*/}
-                        {/*data-date="2016-07-21"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="65" fill="#d6e685" data-count="1"*/}
-                        {/*data-date="2016-07-22"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="78" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-07-23"></rect>*/}
-                        {/*</g>*/}
-                        {/*<g transform="translate(26, 0)">*/}
-                        {/*<rect className="day" width="11" height="11" y="0" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-07-24"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="13" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-07-25"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="26" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-07-26"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="39" fill="#8cc665" data-count="3"*/}
-                        {/*data-date="2016-07-27"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="52" fill="#8cc665" data-count="3"*/}
-                        {/*data-date="2016-07-28"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="65" fill="#44a340" data-count="4"*/}
-                        {/*data-date="2016-07-29"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="78" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-07-30"></rect>*/}
-                        {/*</g>*/}
-                        {/*<g transform="translate(39, 0)">*/}
-                        {/*<rect className="day" width="11" height="11" y="0" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-07-31"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="13" fill="#44a340" data-count="4"*/}
-                        {/*data-date="2016-08-01"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="26" fill="#1e6823" data-count="6"*/}
-                        {/*data-date="2016-08-02"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="39" fill="#44a340" data-count="4"*/}
-                        {/*data-date="2016-08-03"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="52" fill="#d6e685" data-count="1"*/}
-                        {/*data-date="2016-08-04"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="65" fill="#1e6823" data-count="8"*/}
-                        {/*data-date="2016-08-05"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="78" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-08-06"></rect>*/}
-                        {/*</g>*/}
-                        {/*<g transform="translate(52, 0)">*/}
-                        {/*<rect className="day" width="11" height="11" y="0" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-08-07"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="13" fill="#1e6823" data-count="8"*/}
-                        {/*data-date="2016-08-08"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="26" fill="#8cc665" data-count="2"*/}
-                        {/*data-date="2016-08-09"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="39" fill="#8cc665" data-count="3"*/}
-                        {/*data-date="2016-08-10"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="52" fill="#1e6823" data-count="21"*/}
-                        {/*data-date="2016-08-11"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="65" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-08-12"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="78" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-08-13"></rect>*/}
-                        {/*</g>*/}
-                        {/*<g transform="translate(65, 0)">*/}
-                        {/*<rect className="day" width="11" height="11" y="0" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-08-14"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="13" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-08-15"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="26" fill="#8cc665" data-count="3"*/}
-                        {/*data-date="2016-08-16"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="39" fill="#8cc665" data-count="3"*/}
-                        {/*data-date="2016-08-17"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="52" fill="#d6e685" data-count="1"*/}
-                        {/*data-date="2016-08-18"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="65" fill="#8cc665" data-count="2"*/}
-                        {/*data-date="2016-08-19"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="78" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-08-20"></rect>*/}
-                        {/*</g>*/}
-                        {/*<g transform="translate(78, 0)">*/}
-                        {/*<rect className="day" width="11" height="11" y="0" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-08-21"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="13" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-08-22"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="26" fill="#1e6823" data-count="8"*/}
-                        {/*data-date="2016-08-23"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="39" fill="#44a340" data-count="4"*/}
-                        {/*data-date="2016-08-24"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="52" fill="#1e6823" data-count="8"*/}
-                        {/*data-date="2016-08-25"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="65" fill="#1e6823" data-count="7"*/}
-                        {/*data-date="2016-08-26"></rect>*/}
-                        {/*<rect className="day" width="11" height="11" y="78" fill="#eeeeee" data-count="0"*/}
-                        {/*data-date="2016-08-27"></rect>*/}
-                        {/*</g>*/}
                         {this.createMatrix()}
                         {this.createXaxis()}
                         {this.createYaxis()}
-                        {/*<text x="-3" y="-3" style={styles.month}>Java</text>*/}
-                        {/*<text x="-3" y="-15" style={styles.month}>C#</text>*/}
-                        {/*<text x="-3" y="-27" style={styles.month}>Back.</text>*/}
-                        {/*<text x="-3" y="-39" style={styles.month}>Front.</text>*/}
-                        {/*<text text-anchor="middle" dx="-45" dy="9" style={styles.wday}>Person</text>*/}
-                        {/*<text text-anchor="middle" dx="-45" dy="22" style={styles.wday}>Fikrimuhal</text>*/}
-                        {/*<text text-anchor="middle" dx="-45" dy="35" style={styles.wday}>Mesut</text>*/}
-                        {/*<text text-anchor="middle" dx="-45" dy="48" style={styles.wday}>Ilgaz</text>*/}
-                        {/*<text text-anchor="middle" dx="-45" dy="61" style={styles.wday}>Mücahit</text>*/}
-                        {/*<text text-anchor="middle" dx="-45" dy="74" style={styles.wday}>Şükrü</text>*/}
-                        {/*<text text-anchor="middle" dx="-45" dy="87" style={styles.wday}>Fatih</text>*/}
                     </g>
                 </svg>
             </div>

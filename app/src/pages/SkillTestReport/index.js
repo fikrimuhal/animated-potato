@@ -11,7 +11,7 @@ import log2             from '../../utils/log2'
 import * as Cache       from '../../utils/cache'
 import * as util        from '../../utils/utils'
 import * as s           from '../../layouts/style'
-import * as lodash      from 'lodash'
+import * as _           from 'lodash'
 import ReportView       from './ReportViewer'
 //consts and variables
 const log = log2("SkillTestReportContainer");
@@ -74,7 +74,7 @@ export default  class SkillTestReportContainer extends React.Component {
             return response.json()
         }).then(json=> {
             _this.setState({
-                categoryScoreInfo: mockData.TestResultMockDataCreator.getRadarData(),
+                //categoryScoreInfo: mockData.TestResultMockDataCreator.getRadarData(),
                 generalInfo: _.filter(json, q=> {
                     return q.interviewId == _this.props.params.interviewId
                 })[0],

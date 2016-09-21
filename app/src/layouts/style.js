@@ -204,6 +204,14 @@ export  const GraphStyles = {
         display: 'inline-block',
         border:"1px solid teal"
     },
+    SummaryBarPaper2:{
+        //height: "110px",
+        width: "90%",
+        marginTop:20,
+        padding:"5px",
+        display: 'inline-block',
+        border:"1px solid teal"
+    },
     SummaryBarLabel:{
         fontWeight: "bolder",
         fontSize: "35px",

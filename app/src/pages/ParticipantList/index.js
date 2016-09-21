@@ -12,6 +12,7 @@ import * as Cache       from  '../../utils/cache'
 import * as api         from '../../utils/api'
 import  moment          from 'moment'
 import {Row, Col}        from 'react-flexbox-grid'
+import * as _           from 'lodash'
 require("!style!css!react-data-grid/themes/react-data-grid.css");
 
 const Selectors = Data.Selectors;
@@ -137,19 +138,21 @@ export default class ParticipantList extends React.Component {
         //         rows:tableData,
     };
     convertTableRawData = (rows)=> {
+
         var tableData = rows.map(r => {
             r.options = this.getOptionCell(r);
-            r.date = moment(r.applyDate,"DD-MM-YYYY hh:mm:ss").format('ll');
+            r.date = moment(r.applyDate, "DD-MM-YYYY hh:mm:ss").format('YYYY-MM-DD');
             r.fullName = r.info.name + ' ' + r.info.lastname;
             r.email = r.info.email;
             r.phone = r.info.phone;
-            r.formattedScore = r.averageScore.toFixed(2);
+            r.formattedScore = (r.averageScore * 100).toFixed(2);
 
             //r.score = Math.floor(Math.random() * 100);
 
             return r;
         });
-        return tableData;
+        var sortedData=_.orderBy(tableData,["date","averageScore"],["desc","desc"]);
+        return sortedData;
     };
     getOptionCell = (rowData) => {
         return (<Row>
@@ -158,7 +161,7 @@ export default class ParticipantList extends React.Component {
                             style={{minWidth: "50px"}}></FlatButton>
             </Col>
             <Col lg={3}>
-                <FlatButton icon={<ViewIcon/>} onClick={this.viewRow(rowData.info.id,rowData.interviewId)}
+                <FlatButton icon={<ViewIcon/>} onClick={this.viewRow(rowData.info.id, rowData.interviewId)}
                             style={{minWidth: "50px"}}></FlatButton>
             </Col>
         </Row>);
@@ -166,7 +169,7 @@ export default class ParticipantList extends React.Component {
     deleteRow = index => ()=> {
         log("deleting row ->", index);
     };
-    viewRow = (userId,interviewId) => ()=> {
+    viewRow = (userId, interviewId) => ()=> {
         log("viewing row ->", interviewId);
         browserHistory.push("/dashboard/skilltestreport/" + userId + "/" + interviewId);
     };

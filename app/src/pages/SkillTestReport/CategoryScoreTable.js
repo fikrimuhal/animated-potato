@@ -165,8 +165,8 @@ export default  class CategoryScoreTable extends React.Component {
                 border: border
             };
             return <TableRow key={index + 1} style={style}>
-                <TableRowColumn style={{width: "10%"}}>#{item.order}</TableRowColumn>
-                <TableRowColumn style={{width: "70%"}}>{item.name}</TableRowColumn>
+                <TableRowColumn style={{width: "15%"}}>#{item.order}</TableRowColumn>
+                <TableRowColumn style={{width: "65%"}}>{item.name}</TableRowColumn>
                 <TableRowColumn style={{width: "20%"}}>{(item.score * 100).toFixed(2)}</TableRowColumn>
             </TableRow>
         });
@@ -200,8 +200,8 @@ export default  class CategoryScoreTable extends React.Component {
                     </TableHeaderColumn>
                 </TableRow>
                 <TableRow>
-                    <TableHeaderColumn tooltip="Order" style={{width: "10%"}}><b>#Order</b></TableHeaderColumn>
-                    <TableHeaderColumn tooltip="Name" style={{width: "70%"}}><b>Name</b></TableHeaderColumn>
+                    <TableHeaderColumn tooltip="Order" style={{width: "15%"}}><b>#Order</b></TableHeaderColumn>
+                    <TableHeaderColumn tooltip="Name" style={{width: "65%"}}><b>Name</b></TableHeaderColumn>
                     <TableHeaderColumn tooltip="Score" style={{width: "20%"}}><b>Score (#/100)</b></TableHeaderColumn>
                 </TableRow>
             </TableHeader>
