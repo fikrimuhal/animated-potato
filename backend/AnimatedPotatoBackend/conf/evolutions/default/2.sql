@@ -9,7 +9,6 @@ CREATE TABLE answer
   questionid bigint NOT NULL,
   answer boolean NOT NULL,
   isdeleted BOOLEAN NOT NULL DEFAULT false,
-
   CONSTRAINT answer_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -17,3 +16,5 @@ WITH (
 );
 ALTER TABLE answer
   OWNER TO postgres;
+
+create index answer_index ON answer (id, interviewId)

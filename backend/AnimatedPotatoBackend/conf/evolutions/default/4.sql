@@ -5,8 +5,9 @@ CREATE TABLE questionoption
   id bigserial NOT NULL,
   title character varying(255) NOT NULL,
   weight double precision NOT NULL,
-  questionid bigint,
+  questionid bigint not null,
   CONSTRAINT questionoption_pkey PRIMARY KEY (id)
+
 )
 WITH (
   OIDS=FALSE
