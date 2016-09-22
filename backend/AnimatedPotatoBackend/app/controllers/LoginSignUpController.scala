@@ -41,7 +41,7 @@ class LoginSignUpController extends Controller {
   def signUp() = Action { implicit request =>
     try {
       val form: SignUp = request.body.asJson.get.as[SignUp]
-      val user: User = User(form.id, form.username, BCrypt.hashpw(form.password, BCrypt.gensalt()), Some(form.email))
+      val user: User = User(form.id, form.username,form.password, Some(form.email))
       val participant: Participant = Participant(form.id, form.username, form.name, form.lastname, form.email, form.phone, form.photo, form.website, form.notes)
 
       SignUp.checkUser(form.username, form.email) match {
