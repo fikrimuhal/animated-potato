@@ -1,0 +1,46 @@
+{
+  "name": "influent",
+  "main": "./dist/influent.min.js",
+  "homepage": "https://github.com/gobwas/influent",
+  "authors": [
+    "Sergey Kamardin <gobwas@gmail.com>"
+  ],
+  "description": "InfluxDB driver",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "InfluxDB",
+    "influx",
+    "db",
+    "driver"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "TODO.md",
+    "gulpfile.js",
+    "package.json",
+    "index.js",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "build",
+    "lib"
+  ],
+  "version": "0.5.2",
+  "_release": "0.5.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.5.2",
+    "commit": "fc26e5b6ee4a56e8fcfb984c5ac600171f07f11c"
+  },
+  "_source": "https://github.com/gobwas/influent.git",
+  "_target": "^0.5.2",
+  "_originalSource": "influent",
+  "_direct": true
+}

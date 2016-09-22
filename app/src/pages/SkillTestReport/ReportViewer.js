@@ -35,7 +35,7 @@ export default  class ReportViewer extends React.Component {
         return (
             <div>
                 <Row>
-                    <SummaryBar data={this.props.generalInfo} />
+                    <SummaryBar data={userScoreData} />
                 </Row>
                 <hr/>
                 <Row style={{height: "400px"}}>
@@ -65,7 +65,7 @@ export default  class ReportViewer extends React.Component {
                 <hr/>
                 <Row>
                     <Col lg={12} md={12}>
-                        <BoxPlot/>
+                        <BoxPlot data={userScoreData} />
                     </Col>
                 </Row><br/>
                 <hr/>

@@ -13,6 +13,7 @@ import * as util        from '../../utils/utils'
 import * as s           from '../../layouts/style'
 import * as _           from 'lodash'
 import ReportView       from './ReportViewer'
+import influent         from '../../../../bower_components/influent/dist/influent'
 //consts and variables
 const log = log2("SkillTestReportContainer");
 var context = {};
@@ -22,10 +23,36 @@ export default  class SkillTestReportContainer extends React.Component {
         util.bindFunctions.call(this, ['initializeFromAPI', 'initializeFromCache']);
         this.state = {
             dataWaiting: true,
-            comparativeResultLoaded:false,
-            scoreTableLoaded:false
+            comparativeResultLoaded: false,
+            scoreTableLoaded: false
         };
         this.initData();
+        influent
+            .createHttpClient({
+                server: [
+                    {
+                        protocol: "http",
+                        host:     "influxdb.ofis.fikrimuhal.com",
+                        port:     8086
+                    }
+                ],
+                username: "admin",
+                password: "admin",
+                database: "mulakat-dev
+            })
+            .then(function(client) {
+                client
+                    .query("show databases")
+                    .then(function(result) {
+                        // ...
+                        log("databases-> " , result);
+                    });
+                // super simple point
+                client.write({ key: "resultPageView", value: 1 });
+            });
+        // metricClient.writePoint("resultPageView", 1, {foo: 'bar', foobar: 'baz'}, (ss)=> {
+        //     log("success", ss)
+        // })
 
         //var userId = this.props.params.interviewId;
         // if(Cache.checkTestResultReportCache(userId))
@@ -62,7 +89,7 @@ export default  class SkillTestReportContainer extends React.Component {
         this.state = {
             dataWaiting: false,
             comparativeResultLoaded: false,
-            scoreTableLoaded:false
+            scoreTableLoaded: false
         }
     };
     goToList = function () {
@@ -97,11 +124,13 @@ export default  class SkillTestReportContainer extends React.Component {
         //TODO #BACKEND skorların hesaplanmasında performans düşüklüğü var
         api.ReportAPI.getScoreTable({
             id: parseInt(_this.props.params.userId)
-        }).then(response=>{return response.json()}).then(json=>{
-           this.setState({
-               scoreTable:json,
-               scoreTableLoaded:true
-           });
+        }).then(response=> {
+            return response.json()
+        }).then(json=> {
+            this.setState({
+                scoreTable: json,
+                scoreTableLoaded: true
+            });
         });
 
 
@@ -121,7 +150,7 @@ export default  class SkillTestReportContainer extends React.Component {
                            comparativeResultLoaded={this.state.comparativeResultLoaded}
                            scoreTable={this.state.scoreTable}
                            scoreTableLoaded={this.state.scoreTableLoaded}
-                        />
+        />
 
     };
     getContent = function () {

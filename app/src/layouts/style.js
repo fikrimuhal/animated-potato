@@ -2,6 +2,7 @@
  * Created by MYigit on 9.8.2016.
  */
 var image = require("!file!../assets/images/bg1.jpg");
+import * as colors from 'material-ui/styles/colors';
 export const userLayoutStyles = {
     paperStyle:{
         margin:"0 auto",
@@ -210,7 +211,15 @@ export  const GraphStyles = {
         marginTop:20,
         padding:"5px",
         display: 'inline-block',
-        border:"1px solid teal"
+        border:"1px dashed teal",
+        minHeight:"260px"
+    },
+    SummaryBarPaper2Title:{
+        backgroundColor:colors.lightGreen100,
+        textAlign:"center",
+        fontSize:"15px",
+        fontWeight:"bold",
+        color:colors.blueGrey500
     },
     SummaryBarLabel:{
         fontWeight: "bolder",
