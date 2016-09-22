@@ -1,6 +1,5 @@
 # --- !Ups
 DROP TABLE  IF EXISTS collection;
-DROP TABLE  IF EXISTS sets;
 CREATE TABLE collection
 (
   id bigserial NOT NULL,
