@@ -18,29 +18,35 @@ export default class AdminMenu extends React.Component {
         return (
 
             <Menu onItemTouchTap={this.props.menuClick} style={s.AdminLayoutStyle.adminMenuBar}>
-                <Link to='/dashboard/ListofParticipants'>
-                    <MenuItem primaryText="Participants" leftIcon={<GroupIcon />}/>
-                </Link>
+
+                <MenuItem primaryText="Participants" leftIcon={<GroupIcon />}
+                          containerElement={<Link to='/dashboard/ListofParticipants'></Link>}/>
+
                 <Divider/>
-                <Link to='/dashboard/QuestionList'>
-                    <MenuItem primaryText="Questions" leftIcon={<LabelIcon />}/>
-                </Link>
+
+                <MenuItem primaryText="Questions" leftIcon={<LabelIcon />}
+                          containerElement={<Link to='/dashboard/QuestionList'></Link>}/>
+
                 <Divider/>
-                <Link to='/dashboard/ListOfQuestionSet'>
-                    <MenuItem primaryText="Question Sets" leftIcon={<DescriptionIcon/>}/>
-                </Link>
+
+                <MenuItem primaryText="Question Sets" leftIcon={<DescriptionIcon/>}
+                          containerElement={ <Link to='/dashboard/ListOfQuestionSet'></Link>}/>
+
                 <Divider/>
-                <Link to='/dashboard/ListofUser'>
-                    <MenuItem primaryText="Users List" leftIcon={<PersonIcon/>}/>
-                </Link>
+
+                <MenuItem primaryText="Users List" leftIcon={<PersonIcon/>}
+                          containerElement={<Link to='/dashboard/ListofUser'></Link>}/>
+
                 <Divider/>
-                <Link to='/dashboard/ListofStaff'>
-                    <MenuItem primaryText="Staff List" leftIcon={<PersonIcon/>}/>
-                </Link>
+
+                <MenuItem primaryText="Staff List" leftIcon={<PersonIcon/>}
+                          containerElement={ <Link to='/dashboard/ListofStaff'></Link>}/>
+
                 <Divider/>
-                <Link to='/dashboard/initialization'>
-                    <MenuItem primaryText="DB Initialization" leftIcon={<DbIcon/>}/>
-                </Link>
+
+                <MenuItem primaryText="DB Initialization" leftIcon={<DbIcon/>}
+                          containerElement={<Link to='/dashboard/initialization'></Link>}/>
+
                 {/*<Divider/>*/}
                 {/*<Link to='/dashboard/AdminProfile'>*/}
                 {/*<MenuItem primaryText="Admin Info" leftIcon={<AdminIcon/>}/>*/}

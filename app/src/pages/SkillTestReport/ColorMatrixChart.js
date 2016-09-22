@@ -34,7 +34,7 @@ export default  class ColorMatrixChart extends React.Component {
         var content = categories.map(category=> {
             var y = -1 * (i * 13 + 3);
             i++;
-            return <text x="-3" y={y} style={styles.month}>{category}</text>
+            return <text x="-3" y={y} style={styles.month} key={"textCategory-"+i}>{category}</text>
         });
         return content;
     };
@@ -44,7 +44,7 @@ export default  class ColorMatrixChart extends React.Component {
         var content = this.props.data.map(item=> {
             if (i == 0) dy = 9; else dy += 13;
             i++;
-            return <text text-anchor="middle" dx="-5" dy={dy} style={styles.wday}>{item.name} {item.lastName}</text>
+            return <text textAnchor="middle" dx="-5" dy={dy} style={styles.wday} key={"textUser-"+i}>{item.name} {item.lastName}</text>
         });
         return content;
     };
@@ -55,8 +55,9 @@ export default  class ColorMatrixChart extends React.Component {
             return x.category.category;
         });
         var x = 0, y = 0;
+        var gCount = 0;
         var matrix = categories.map(category=> {
-            return <g transform={"translate(" + x + "," + y + ")"}>
+            return <g transform={"translate(" + x + "," + y + ")"} key={"g-"+gCount++}>
                 {
                     (()=> {
                         x += 13;
@@ -67,8 +68,8 @@ export default  class ColorMatrixChart extends React.Component {
 
                                 return q.category.category == category
                             })[0].score;
-
-                            return this.createCell(11, 11, location, score);
+                            var key = category  + index;
+                            return this.createCell(11, 11, location, score,key);
                         })
                         return column;
                     })()
@@ -78,9 +79,9 @@ export default  class ColorMatrixChart extends React.Component {
         return matrix;
     };
 
-    createCell = function (width, height, location, score) {
+    createCell = function (width, height, location, score,key) {
         var color = this.getColor(score);
-        return <rect className="day" width={width} height={height} y={location} fill={color} data-score={score}></rect>;
+        return <rect className="day" width={width} height={height} y={location} fill={color} data-score={score} key={key}></rect>;
     };
     getColor = function (score) {
         var normalizedScore = score;
@@ -117,5 +118,5 @@ export default  class ColorMatrixChart extends React.Component {
     }
 }
 ColorMatrixChart.propTypes = {
-    data: React.PropTypes.object.isRequired
+    data: React.PropTypes.array.isRequired
 }

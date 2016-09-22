@@ -13,7 +13,7 @@ import * as util        from '../../utils/utils'
 import * as s           from '../../layouts/style'
 import * as _           from 'lodash'
 import ReportView       from './ReportViewer'
-import influent         from '../../../../bower_components/influent/dist/influent'
+import {MetricAPI}        from '../../utils/metricDB'
 //consts and variables
 const log = log2("SkillTestReportContainer");
 var context = {};
@@ -27,32 +27,9 @@ export default  class SkillTestReportContainer extends React.Component {
             scoreTableLoaded: false
         };
         this.initData();
-        influent
-            .createHttpClient({
-                server: [
-                    {
-                        protocol: "http",
-                        host:     "influxdb.ofis.fikrimuhal.com",
-                        port:     8086
-                    }
-                ],
-                username: "admin",
-                password: "admin",
-                database: "mulakat-dev
-            })
-            .then(function(client) {
-                client
-                    .query("show databases")
-                    .then(function(result) {
-                        // ...
-                        log("databases-> " , result);
-                    });
-                // super simple point
-                client.write({ key: "resultPageView", value: 1 });
-            });
-        // metricClient.writePoint("resultPageView", 1, {foo: 'bar', foobar: 'baz'}, (ss)=> {
-        //     log("success", ss)
-        // })
+        MetricAPI.getClient().then(client=> {
+            client.write({key: "resultPageView", value: 1});
+        });
 
         //var userId = this.props.params.interviewId;
         // if(Cache.checkTestResultReportCache(userId))
@@ -66,8 +43,8 @@ export default  class SkillTestReportContainer extends React.Component {
 
     getChildContext() {
         log("**getChildContext**", this.props.params);
-        context.userId = this.props.params.userId;
-        context.interviewId = this.props.params.interviewId;
+        context.userId = parseInt(this.props.params.userId);
+        context.interviewId = parseInt(this.props.params.interviewId);
         return context;
     };
 
@@ -122,8 +99,9 @@ export default  class SkillTestReportContainer extends React.Component {
         })
 
         //TODO #BACKEND skorların hesaplanmasında performans düşüklüğü var
+        log("****interviewID", _this.props.params.interviewId)
         api.ReportAPI.getScoreTable({
-            id: parseInt(_this.props.params.userId)
+            id: parseInt(_this.props.params.interviewId)
         }).then(response=> {
             return response.json()
         }).then(json=> {

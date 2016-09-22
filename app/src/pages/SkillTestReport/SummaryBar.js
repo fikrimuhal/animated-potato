@@ -57,9 +57,10 @@ export default  class SummaryBar extends React.Component {
                 <GradeIcon color={materialColors.yellow500}/>
             </Col>
         </Row>
+        var i = 0;
         return this.getGoodAtCategories().map(category=> {
             return <ListItem primaryText={category}
-                             leftIcon={stars}/>
+                             leftIcon={stars} key={"Listitem" + (i++)}/>
         })
     };
     getScoreColor = function () {

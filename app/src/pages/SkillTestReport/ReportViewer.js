@@ -80,9 +80,9 @@ export default  class ReportViewer extends React.Component {
     }
 }
 ReportViewer.propTypes = {
-    categoryScoreInfo: React.PropTypes.object.isRequired,
-    generalScoreInfo: React.PropTypes.object.isRequired,
-    scoreData: React.PropTypes.array.isRequired
+    categoryScoreInfo: React.PropTypes.object,
+    generalScoreInfo: React.PropTypes.object,
+    scoreData: React.PropTypes.array
 };
 
 ReportViewer.contextTypes = {

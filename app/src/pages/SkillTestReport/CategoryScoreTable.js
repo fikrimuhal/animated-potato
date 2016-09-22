@@ -178,7 +178,7 @@ export default  class CategoryScoreTable extends React.Component {
         //var selectedCategory = this.getCategories()[this.state.currentCategoryIndex];
         var selectedCategory = this.state.selectedCategory;
         return <Table
-            height={500}
+            height="500px"
             fixedHeader={true}
             fixedFooter={false}
             selectable={false}
@@ -229,7 +229,7 @@ export default  class CategoryScoreTable extends React.Component {
         var content = this.getCategories().map(category=> {
             var isSelected  = category == this.state.selectedCategory;
             return <FlatButton label={category} labelStyle={{fontSize: "9px"}}
-                               onClick={this.showCategoryResult(category)} primary={isSelected}></FlatButton>
+                               onClick={this.showCategoryResult(category)} primary={isSelected} key={"btnCategory-"+category}></FlatButton>
         });
         return content;
     };
@@ -249,7 +249,7 @@ export default  class CategoryScoreTable extends React.Component {
 }
 
 CategoryScoreTable.propTypes = {
-    data: React.PropTypes.array.isRequired,
+    data: React.PropTypes.array,
     dataLoaded: React.PropTypes.bool
 };
 CategoryScoreTable.contextTypes = {
