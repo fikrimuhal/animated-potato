@@ -212,7 +212,7 @@ object ScoresDAO {
       }
 
       val numberOfParticipants = results.length
-      val interviewOrder = results.zipWithIndex.find(_._1.interviewId == interviewId).map(_._2).get
+      val interviewOrder = results.zipWithIndex.find(_._1.interviewId == interviewId).map(_._2).get + 1
       val filteredResults = results.filter(x => List(1, 2, numberOfParticipants, numberOfParticipants - 1, interviewOrder, interviewOrder + 1, interviewOrder - 1).contains(x.order) ||
         List(ALL_INTERVIEW, PERSONNEL_INTERVIEW).contains(x.interviewId))
 
