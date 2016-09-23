@@ -13,6 +13,7 @@ import * as util        from '../../utils/utils'
 import * as s           from '../../layouts/style'
 import * as _           from 'lodash'
 import ReportView       from './ReportViewer'
+
 import {MetricAPI}        from '../../utils/metricDB'
 //consts and variables
 const log = log2("SkillTestReportContainer");
@@ -42,14 +43,14 @@ export default  class SkillTestReportContainer extends React.Component {
     }
 
     getChildContext() {
-        log("**getChildContext**", this.props.params);
+        //log("**getChildContext**", this.props.params);
         context.userId = parseInt(this.props.params.userId);
         context.interviewId = parseInt(this.props.params.interviewId);
         return context;
     };
 
     initializeFromAPI = function (userId) {
-        log("Data from SERVER");
+        //log("Data from SERVER");
         mockApi.getUserSkillTestReport(userId).then(response=> {
             var data = JSON.parse(response);
             log("data", data);
@@ -60,7 +61,7 @@ export default  class SkillTestReportContainer extends React.Component {
         })
     };
     initializeFromCache = function (userId) {
-        log("Data from CACHE");
+        //log("Data from CACHE");
         //var data = Cache.getTestResultReportFromCache(userId);
         data.isValidUser = true;
         this.state = {
@@ -99,7 +100,7 @@ export default  class SkillTestReportContainer extends React.Component {
         })
 
         //TODO #BACKEND skorların hesaplanmasında performans düşüklüğü var
-        log("****interviewID", _this.props.params.interviewId)
+        //log("****interviewID", _this.props.params.interviewId)
         api.ReportAPI.getScoreTable({
             id: parseInt(_this.props.params.interviewId)
         }).then(response=> {

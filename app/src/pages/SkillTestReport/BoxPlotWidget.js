@@ -36,7 +36,7 @@ export default  class BoxPlotWidget extends React.Component {
                 boxpoints:'all'
             };
         })
-        log("categoryTraces",categoryTraces)
+        //log("categoryTraces",categoryTraces)
         var chartData = categoryTraces;
         Plotly.newPlot('chartDiv', chartData);
 

@@ -25,11 +25,6 @@ var colorHash = {
         dark: "rgba(0, 188, 212,1.0)"
     }
 };
-var labelHash = {
-    "score": "This Person",
-    "companyScore": "Avarage of Fikrimuhal's Staffs",
-    "generalScore": "Avarage of All Person"
-};
 const options = {
     responsive: true,
     maintainAspectRatio:false,
@@ -67,7 +62,7 @@ export default  class SpiderGraphWidget extends React.Component {
         this.state = {
             dataLoaded: false
         };
-        log(this.props)
+        //log(this.props)
         //this.createGraph();
     }
 
@@ -83,7 +78,7 @@ export default  class SpiderGraphWidget extends React.Component {
         data.labels = userScore.map(item=> {
             return item.category.category
         });
-        log("labels sorted->",data.labels);
+        //log("labels sorted->",data.labels);
 
         var userScoreValues = userScore.map(o=>{return o.score.toFixed(2);});
         var personelAverageScoreValues = personelAverageScore.map(o=>{return o.score.toFixed(2);});

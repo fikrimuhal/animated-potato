@@ -28,7 +28,7 @@ export default  class PieChartWidget extends React.Component {
         this.state = {
             dataLoaded:false
         };
-        log(this.props.data);
+        //log(this.props.data);
         this.createGraph();
     }
 
@@ -82,7 +82,7 @@ export default  class PieChartWidget extends React.Component {
         }
     };
     render = ()=>{
-        log("rendered",this.props.data)
+        log("rendered")
         return (
             <div style={s.GraphStyles.widgetContainer}>
                 {this.getContent()}

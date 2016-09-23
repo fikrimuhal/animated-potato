@@ -160,7 +160,7 @@ export default  class SummaryBar extends React.Component {
         return chartData;
     };
     render = ()=> {
-        log("rendered", this.props.data);
+        log("rendered");
         var info = this.props.data;
         return (
             <div>

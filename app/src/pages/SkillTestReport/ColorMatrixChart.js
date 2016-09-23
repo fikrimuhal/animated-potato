@@ -6,12 +6,13 @@ import * as s               from '../../layouts/style'
 import colors from '../../utils/material-colors'
 import * as _ from 'lodash'
 const styles = {
-    wday: {
+    userLabel: {
         fontSize: "9px",
         fill: "#767676",
-        direction: "rtl"
+        direction: "rtl",
+        //textAnchor:"middle"
     },
-    month: {
+    categoryLabel: {
         fontSize: "9px",
         fill: "#767676",
         transform: "rotate(90deg)",
@@ -34,7 +35,7 @@ export default  class ColorMatrixChart extends React.Component {
         var content = categories.map(category=> {
             var y = -1 * (i * 13 + 3);
             i++;
-            return <text x="-3" y={y} style={styles.month} key={"textCategory-"+i}>{category}</text>
+            return <text x="-3" y={y} style={styles.categoryLabel} key={"textCategory-"+i}>{category}</text>
         });
         return content;
     };
@@ -44,7 +45,7 @@ export default  class ColorMatrixChart extends React.Component {
         var content = this.props.data.map(item=> {
             if (i == 0) dy = 9; else dy += 13;
             i++;
-            return <text textAnchor="middle" dx="-5" dy={dy} style={styles.wday} key={"textUser-"+i}>{item.name} {item.lastName}</text>
+            return <text  dx="-5" dy={dy} style={styles.userLabel}>{item.name} {item.lastName}</text>
         });
         return content;
     };
@@ -99,8 +100,10 @@ export default  class ColorMatrixChart extends React.Component {
         return color;
     };
     render = ()=> {
-        var height = this.props.data.length * 40;
+
+        var height = this.props.data.length * 60;
         var width = this.props.data[0].scores.length * 40;
+
         var viewBox = "0 -20 "+ Math.floor(width/2)+" "+ Math.floor(height/2);
         return (
             <div style={s.GraphStyles.widgetContainer}>
