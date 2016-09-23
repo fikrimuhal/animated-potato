@@ -1,5 +1,8 @@
 package controllers
 
+//import _root_.com.paulgoldbaum.influxdbclient._
+import scala.concurrent.ExecutionContext.Implicits.global
+
 import models.{ID, ResponseMessage, Scores, ScoresDAO}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
@@ -63,11 +66,11 @@ class ScoresController extends Controller {
 
   def getCategoryResults = Action { implicit request =>
 
-//    val influxdb = InfluxDB.connect("influxdb.ofis.fikrimuhal.com", 8086)
-//
-//    val database = influxdb.selectDatabase("mulakat_dev")
-//
-//    database.write(Point(key = "TABLO_ADI", timestamp = System.currentTimeMillis).addField("FIELD_ADI", 786786))
+  //    val influxdb = InfluxDB.connect("influxdb.ofis.fikrimuhal.com", 8086)
+  //
+  //    val database = influxdb.selectDatabase("mulakat_dev")
+  //
+  //    database.write(Point(key = "TABLO_ADI", timestamp = System.currentTimeMillis).addField("FIELD_ADI", 786786))
 
     request.body.asJson.flatMap(_.validate[ID].asOpt) match {
 
