@@ -19,7 +19,8 @@ libraryDependencies ++= Seq(
   "org.postgresql"     %  "postgresql" % "9.3-1102-jdbc41",
   "org.mindrot" % "jbcrypt" % "0.3m",
   "com.paulgoldbaum" % "scala-influxdb-client_2.10" % "0.5.1",
-  "com.jason-goodwin" %% "authentikat-jwt" % "0.4.1"
+  "com.jason-goodwin" %% "authentikat-jwt" % "0.4.1",
+  "com.pauldijou" %% "jwt-play" % "0.8.0"
 )
 
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )  
