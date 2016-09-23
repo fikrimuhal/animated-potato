@@ -86,10 +86,7 @@ object Users {
       .map(user =>
         Participants.participants.filter(_.username === user.username).list.head)
   }
-  def getPersonnelEmails = DB{implicit session =>
 
-  users.filter(_.isPersonnel).map(_.email).list
-  }
 
   def getAdminList: List[Participant] = DB { implicit session =>
 

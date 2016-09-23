@@ -76,8 +76,9 @@ object InterviewDAO {
     Participants.getByEmail(interviewDAO.filter(_.id === interviewId).first.email).get
   }
 
-  def getPersonnelInterviewIds(personnelEmailList: List[Email]): List[IdType] = DB { implicit session =>
-    interviewDAO.filter(_.email inSet personnelEmailList).map(_.id).list
+  def getPersonnelInterviewIds : List[InterviewId] = DB { implicit session =>
+    val personnelEmailList = Users.users.filter(_.isPersonnel).map(_.email).list
+      interviewDAO.filter(_.email inSet personnelEmailList).map(_.id).list
   }
 
 }

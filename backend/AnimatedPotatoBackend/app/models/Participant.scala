@@ -78,6 +78,10 @@ object Participants {
       case _ => None
     }
   }
+  def getByEmailList(emails :List[Email]) = DB { implicit session =>
+  participants.filter(_.email inSet emails).list
+
+  }
 
   def getAll = DB { implicit session =>
     participants.list
