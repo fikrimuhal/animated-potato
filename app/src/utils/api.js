@@ -36,7 +36,7 @@ export const UserAPI = {
 };
 
 export const ReportAPI = {
-    getAllResult: db.getApiPromise("admin/getUsersResults", "GET"),
+    getAllResult: db.getApiPromise("admin/getUsersResults", "POST"),
     getComparativeResult:db.getApiPromise("getComparativeReport","POST"),
     getScoreTable:db.getApiPromise("admin/getCategoryResults","POST")
 }

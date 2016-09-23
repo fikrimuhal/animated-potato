@@ -213,7 +213,7 @@ export default class QuestionAdd extends React.Component {
                 <Row><h3>{editMode ? "Edit Question" : "New Question"}</h3></Row>
                 <Row>
                     <Col xs={9} sm={9} md={9} lg={9}>
-                        <TextField hintText="Question Title" floatingLabelText="Question Title"
+                        <TextField hintText="Question Title //s:1,2 c:1,1-2,4 t:5" floatingLabelText="Question Title"
                                    onChange={this.handleQuestionTextChange} style={{width:"100%"}} value={title} /></Col>
                     <Col xs={3} sm={3} md={3} lg={3}>
                         <RaisedButton label="Save Question" secondary={true}

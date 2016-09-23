@@ -192,7 +192,7 @@ export const AdminLayoutStyle = {
 export  const GraphStyles = {
   widgetContainer:{
       border:"1px teal dotted",
-      borderRadius:"10px",
+      //borderRadius:"10px",
       marginTop:"15px",
       padding:"5px",
       backgroundColor:"rgba(213, 224, 205, 0.1)"
@@ -239,5 +239,8 @@ export  const GraphStyles = {
         width:"100%",
         height:"100%",
         border:"1px solid teal"
+    },
+    barcodeContainer:{
+        margin:"5px"
     }
 };

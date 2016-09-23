@@ -18,16 +18,37 @@ import  BarWidget       from './BarChartsWidget'
 import  PieWidget       from './PieChartWidget'
 import  SummaryBar      from './SummaryBar'
 import  ScoreTable      from './CategoryScoreTable'
-import ColorMatrix      from './ColorMatrixChart'
-import BoxPlot          from './BoxPlotWidget'
+import  ColorMatrix      from './ColorMatrixChart'
+import  BoxPlot          from './BoxPlotWidget'
 import * as _           from 'lodash'
+import QRCode           from 'qrcode.react'
+import colors           from '../../utils/material-colors'
 const log = log2("ReportViewer");
 
 export default  class ReportViewer extends React.Component {
     constructor(props) {
         super(props)
+        this.state = {
+            url:window.location.href
+        }
     }
 
+    getScoreTables = function () {
+        var userScoreData = _.filter(this.props.generalInfo.scores, q=> {
+            return q.score != -1
+        });
+        log("userScoreData", userScoreData)
+        var tables = userScoreData.map(item=> {
+
+            var category = item.category.category;
+            return <Col lg={3} md={4}>
+                <ScoreTable data={this.props.scoreTable} dataLoaded={this.props.scoreTableLoaded}
+                            selectedCategory={category} showCategorChangeBar={false}/>
+            </Col>
+        });
+
+        return tables;
+    };
     render = ()=> {
 
         var userScoreData = this.props.generalInfo;
@@ -35,12 +56,13 @@ export default  class ReportViewer extends React.Component {
         return (
             <div>
                 <Row>
-                    <SummaryBar data={userScoreData} />
+                    <SummaryBar data={userScoreData}/>
                 </Row>
                 <hr/>
                 <Row style={{height: "400px"}}>
                     <Col lg={6}>
-                        <SpiderWidget data={this.props.comparativeResult} dataLoaded={this.props.comparativeResultLoaded}/>
+                        <SpiderWidget data={this.props.comparativeResult}
+                                      dataLoaded={this.props.comparativeResultLoaded}/>
                     </Col>
                     <Col lg={6}>
                         <PieWidget data={userScoreData}/>
@@ -49,32 +71,34 @@ export default  class ReportViewer extends React.Component {
                 <hr/>
 
                 <Row style={{height: "480px"}}>
-                    <Col lg={12} style={{width:"100%"}}>
+                    <Col lg={12} style={{width: "100%"}}>
                         <BarWidget data={this.props.comparativeResult} dataLoaded={this.props.comparativeResultLoaded}/>
                     </Col>
                 </Row><br/>
                 <hr/>
                 <Row>
-                    <Col lg={6} md={6} style={{width:"50%"}}>
-                        <ScoreTable data={this.props.scoreTable} dataLoaded={this.props.scoreTableLoaded}/>
-                    </Col>
-                    <Col lg={6} md={6} style={{width:"50%"}}>
-                        <ScoreTable data={this.props.scoreTable} dataLoaded={this.props.scoreTableLoaded}/>
-                    </Col>
+                    {this.getScoreTables()}
                 </Row><br/>
                 <hr/>
                 <Row>
                     <Col lg={12} md={12}>
-                        <BoxPlot data={userScoreData} />
+                        <BoxPlot data={userScoreData}/>
                     </Col>
                 </Row><br/>
                 <hr/>
                 <Row>
-                    <Col lg={12} style={{width:"100%"}}>
+                    <Col lg={12} style={{width: "100%"}}>
                         <ColorMatrix data={this.props.scoreData}/>
                     </Col>
                 </Row>
+                <Row>
+                    <Col lg={12} md={12} >
+                        <div style={{textAlign:"center",marginTop:"10px"}}  >
+                            <QRCode value={this.state.url} size={128} fgColor={colors.teal.x500} />
+                        </div>
+                    </Col>
 
+                </Row>
             </div>
         )
     }

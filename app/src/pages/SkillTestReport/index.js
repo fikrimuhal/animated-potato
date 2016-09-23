@@ -74,22 +74,27 @@ export default  class SkillTestReportContainer extends React.Component {
         browserHistory.push("/dashboard/listofparticipants");
     };
     initData = function () {
+        var interviewId = parseInt(this.props.params.interviewId);
         var _this = this;
-        api.ReportAPI.getAllResult().then(response=> {
+        api.ReportAPI.getAllResult({
+            id: interviewId
+        }).then(response=> {
             return response.json()
         }).then(json=> {
             _this.setState({
                 //categoryScoreInfo: mockData.TestResultMockDataCreator.getRadarData(),
                 generalInfo: _.filter(json, q=> {
-                    return q.interviewId == _this.props.params.interviewId
+                    return q.interviewId == interviewId
                 })[0],
                 scoreData: json,
                 dataLoaded: true
             })
+        }).catch(err=>{
+            _this.context.showMessage("Error occured... try again",6000)
         })
 
         api.ReportAPI.getComparativeResult({
-            id: parseInt(_this.props.params.interviewId)
+            id: interviewId
         }).then(response=> {
             return response.json()
         }).then(json=> {
@@ -99,10 +104,10 @@ export default  class SkillTestReportContainer extends React.Component {
             })
         })
 
-        //TODO #BACKEND skorların hesaplanmasında performans düşüklüğü var
+
         //log("****interviewID", _this.props.params.interviewId)
         api.ReportAPI.getScoreTable({
-            id: parseInt(_this.props.params.interviewId)
+            id: interviewId
         }).then(response=> {
             return response.json()
         }).then(json=> {
@@ -159,3 +164,7 @@ SkillTestReportContainer.childContextTypes = {
     userId: React.PropTypes.number,
     interviewId: React.PropTypes.number
 };
+
+SkillTestReportContainer.contextTypes = {
+    showMessage: React.PropTypes.func
+}

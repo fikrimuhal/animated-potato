@@ -97,6 +97,7 @@ export const MockQuestionCreator = {
 };
 
 export const mock_users = [
+
     {
         name: "Ahmet",
         lastname: "Yiğit",
