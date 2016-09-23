@@ -147,7 +147,7 @@ object ScoresDAO {
             // kullanıcıya soru sorulmamış kategoriler için Score'u -1 diğer değerleri 0 atadım
             case None => CategoryScore(cat, -1, Some(0), Some(0))
           }
-        }
+        }//.::(CategoryScore(Category(Some(99),"All"), itw.averageScore.get,None,None,filteredInterviews.sortBy(1- _.score).zipWithIndex.find((_._1.averageScore.get))))
 
         UserCategoryScores(p.id.get, itw.id.get, p.name, p.lastname, p.email, p.phone, Users.isPersonnel(p.email), categoryScore, (categoryScore.filter(_.score >= 0).map(_.score).sum / categoryScore.count(_.score >= 0)) * 100, itw.averageScore.get, categoryScore.filter(_.score >= 0).map(_.confidence.get).sum / categoryScore.count(_.score >= 0), interviews.sortBy(1 - _.averageScore.get).zipWithIndex.find(_._1.id == itw.id).map(_._2).get + 1)
       }.::(UserCategoryScores(-2, -2, "PERSONNEL", "PERSONNEL", "PERSONNEL", "", isPersonnel = true, personnelCategoricalScores, -1, personnelCategoricalScores.filter(_.score >= 0).map(_.score).sum / numberOfPersonnel, -1, -1))
@@ -181,13 +181,16 @@ object ScoresDAO {
   }
 
   def getCategoryResults(interviewId: InterviewId) = DB { implicit session =>
+
     val scores = ScoresDAO.getAll
     val categoryIDs = scores.map(_.categoryId).distinct
     val categories = (new CategoryDAO).getAll
     val personnelInterviewIds = InterviewDAO.getPersonnelInterviewIds
     val PERSONNEL_INTERVIEW = -2
     val ALL_INTERVIEW = -4
+
     categoryIDs.map { cat =>
+
       val scoreFilteredCategory = scores.filter(_.categoryId == cat)
       val personnelScores = scoreFilteredCategory.filter(s => personnelInterviewIds.contains(s.interviewId))
       val personnelAverage: Double = if (personnelScores == Nil) 0
