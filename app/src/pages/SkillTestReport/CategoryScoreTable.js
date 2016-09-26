@@ -182,9 +182,10 @@ export default  class CategoryScoreTable extends React.Component {
         });
     }
     render = ()=> {
-
+        var minHeight = this.props.dataLoaded ? "410px":"50px";
+        var containerStyle = Object.assign(JSON.parse(JSON.stringify(s.GraphStyles.widgetContainer)), {height: "inherit",minHeight:minHeight})
         return (
-            <div style={Object.assign(s.GraphStyles.widgetContainer, {height: "inherit",minHeight:"410px"})}>
+            <div style={containerStyle}>
                 {this.getContent()}
             </div>
         )

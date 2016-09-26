@@ -122,5 +122,5 @@ export default  class BarChartsWidget extends React.Component {
     }
 }
 BarChartsWidget.propTypes = {
-    data: React.PropTypes.object.isRequired
+    data: React.PropTypes.object
 };

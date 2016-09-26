@@ -138,5 +138,5 @@ export default  class SpiderGraphWidget extends React.Component {
 }
 
 SpiderGraphWidget.propTypes = {
-    data: React.PropTypes.object.isRequired
+    data: React.PropTypes.object
 }

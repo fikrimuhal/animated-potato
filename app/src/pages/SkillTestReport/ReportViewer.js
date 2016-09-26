@@ -43,7 +43,7 @@ export default  class ReportViewer extends React.Component {
             var category = item.category.category;
             return <Col lg={3} md={4}>
                 <ScoreTable data={this.props.scoreTable} dataLoaded={this.props.scoreTableLoaded}
-                            selectedCategory={category} showCategorChangeBar={false}/>
+                            selectedCategory={category} showCategorChangeBar={false} key={"table-"+category}/>
             </Col>
         });
 
@@ -93,11 +93,10 @@ export default  class ReportViewer extends React.Component {
                 </Row>
                 <Row>
                     <Col lg={12} md={12} >
-                        <div style={{textAlign:"center",marginTop:"10px"}}  >
+                        <div style={s.GraphStyles.barcodeContainer}  >
                             <QRCode value={this.state.url} size={128} fgColor={colors.teal.x500} />
                         </div>
                     </Col>
-
                 </Row>
             </div>
         )

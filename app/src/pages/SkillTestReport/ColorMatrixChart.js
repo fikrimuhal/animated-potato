@@ -51,7 +51,7 @@ export default  class ColorMatrixChart extends React.Component {
             var fullName = item.name + " " + item.lastName;
             if (item.interviewId == -4)fullName = "Global Avg";
             if (item.interviewId == -2)fullName = "Staffs Avg";
-            return <text dx="-5" dy={dy} style={styles.userLabel}>{fullName}</text>
+            return <text dx="-5" dy={dy} style={styles.userLabel} key={"userLabel-"+i}>{fullName}</text>
         });
         return content;
     };
