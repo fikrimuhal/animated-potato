@@ -21,7 +21,7 @@ class AnswerController extends Controller with Secured {
 
   def delete = evalOperation(AnswerDAO.delete)
 
-  def getAnswers = Action { implicit request =>
+  def getAnswers = Admin { implicit request =>
     Ok(Json.toJson(AnswerDAO.getAll))
   }
 
@@ -51,15 +51,18 @@ class AnswerController extends Controller with Secured {
     *             not_found: message that explains
     *           onFailure : BadRequest Response Message that explains error
     */
-  def getAnswer = Action { implicit request =>
+  def getAnswer = UserAction { implicit request =>
 
     request.body.asJson.flatMap(_.validate[GetAnswer].asOpt) match {
 
       case Some(getAnswer) =>
+
         val answer = AnswerDAO.get(getAnswer.interviewId, getAnswer.questionId)
         if (answer.isDefined) Ok(Json.toJson(answer))
         else Ok(Json.toJson(ResponseMessage(Constants.FAIL, Constants.NOT_EXISTS)))
+
       case _ =>
+
         BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
   }
