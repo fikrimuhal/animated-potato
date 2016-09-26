@@ -36,7 +36,7 @@ class Database extends Actor {
         (new AnswerDAO).getAll.map(answer => UserQuestionAnswerTuple(
           answer.userId match {
             case Some(id) => Right(id)
-            case _ => Left(answer.email.get)
+            case _ => Left(answer.email)
           }
           , answer.questionId, answer.answer))
       )

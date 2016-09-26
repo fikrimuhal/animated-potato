@@ -13,6 +13,6 @@ object Constants {
   final val SERVER_ERROR_MESSAGE = "Sunucuda beklenmeyen bir hata oluştu"
   final val NO_INTERVIEW_WITH_THIS_EMAIL = "Bu email adresiyle kayıtlı mülakat bulunamadı"
   final val TEST_HAS_SOLVED_BEFORE ="Bu testi daha önceden çözdüğünüz için tekrar çözemezsiniz"
-
+  final val NOT_EXISTS = "Ulaşmak istediğiniz içerik bulunamadı"
 
 }

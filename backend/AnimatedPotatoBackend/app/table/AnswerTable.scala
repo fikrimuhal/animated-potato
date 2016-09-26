@@ -19,6 +19,6 @@ class AnswerTable(tag: Tag) extends BaseTable[Answer](tag, "answer") {
 
   def answer = column[Boolean]("answer")
 
-  def * = (id.?, questionId, userId.?, interviewId, email.?, answer) <> (Answer.tupled, Answer.unapply)
+  def * = (id.?, questionId, userId.?, interviewId, email, answer) <> (Answer.tupled, Answer.unapply)
 }
 
