@@ -96,6 +96,7 @@ object ScoresDAO {
     */
   def getCategoryScores(interviewId: InterviewId): List[UserCategoryScores] = DB { implicit session =>
     val categories = (new CategoryDAO).getAll
+    val categoryIds = categories.map(_.id.get)
     val scores: List[Scores] = ScoresDAO.getAll
     val interviews = InterviewDAO.interviewDAO.filter(_.hasFinished).list
     if (interviews == Nil || scores == Nil) {
@@ -122,9 +123,17 @@ object ScoresDAO {
           .mapValues(x => (x.map(_._2).sum / x.length, x.map(_._3).sum / x.length))
           .map { case (k, m) => (k, m) }(collection.breakOut)
 
+
       val personnelCategoricalScores: List[CategoryScore] =
         personnelCategoricalScoreTuple
           .map(x => CategoryScore(categories.filter(c => c.id.get == x._1).head, x._2._1, Some(x._2._2)))
+//BURADA KALDIM
+      val categoriesAddedLater: List[CategoryScore] = categories.map { cat =>
+        personnelCategoricalScores.find(_.category.id.get == cat.id.get) match {
+          case None => CategoryScore(cat, -1, Some(-1))
+        }
+      }
+      val personnelCategoricalScoresEdited = personnelCategoricalScores::categoriesAddedLater
 
       // sonuçta sadece gelen interviewID ve personel interviewleri olacak
       val filteredInterviews = interviews.filter(i => (i.id.get == interviewId) || personnelInterviewIds.contains(i.id.get))
@@ -147,9 +156,10 @@ object ScoresDAO {
             // kullanıcıya soru sorulmamış kategoriler için Score'u -1 diğer değerleri 0 atadım
             case None => CategoryScore(cat, -1, Some(0), Some(0))
           }
-        }//.::(CategoryScore(Category(Some(99),"All"), itw.averageScore.get,None,None,filteredInterviews.sortBy(1- _.score).zipWithIndex.find((_._1.averageScore.get))))
+        } //.::(CategoryScore(Category(Some(99),"All"), itw.averageScore.get,None,None,filteredInterviews.sortBy(1- _.score).zipWithIndex.find((_._1.averageScore.get))))
 
-        UserCategoryScores(p.id.get, itw.id.get, p.name, p.lastname, p.email, p.phone, Users.isPersonnel(p.email), categoryScore, (categoryScore.filter(_.score >= 0).map(_.score).sum / categoryScore.count(_.score >= 0)) * 100, itw.averageScore.get, categoryScore.filter(_.score >= 0).map(_.confidence.get).sum / categoryScore.count(_.score >= 0), interviews.sortBy(1 - _.averageScore.get).zipWithIndex.find(_._1.id == itw.id).map(_._2).get + 1)
+
+        UserCategoryScores(p.id.get, itw.id.get, p.name, p.lastname, p.email, p.phone, personnelInterviewIds contains p.id.get, categoryScore, (categoryScore.filter(_.score >= 0).map(_.score).sum / categoryScore.count(_.score >= 0)) * 100, itw.averageScore.get, categoryScore.filter(_.score >= 0).map(_.confidence.get).sum / categoryScore.count(_.score >= 0), interviews.sortBy(1 - _.averageScore.get).zipWithIndex.find(_._1.id == itw.id).map(_._2).get + 1)
       }.::(UserCategoryScores(-2, -2, "PERSONNEL", "PERSONNEL", "PERSONNEL", "", isPersonnel = true, personnelCategoricalScores, -1, personnelCategoricalScores.filter(_.score >= 0).map(_.score).sum / numberOfPersonnel, -1, -1))
         .::(UserCategoryScores(-4, -4, "ALL", "ALL", "ALL", "", isPersonnel = false, allCategoricalScores, -1, allCategoricalScores.filter(_.score >= 0).map(_.score).sum / numberOfParticipant, -1, -1))
     }
