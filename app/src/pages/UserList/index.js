@@ -152,7 +152,7 @@ export default class UserList extends React.Component {
 
     };
     viewRow = id => ()=>{
-        log("viewing row ->",id);
+        //log("viewing row ->",id);
         browserHistory.push("/dashboard/skilltestreport/" + id)
     };
     deleteUser = id => ()=> {
@@ -180,18 +180,16 @@ export default class UserList extends React.Component {
     getRows = function (){
         return Selectors.getRows(this.state);
     };
-
     getSize = function (){
         return this.getRows().length;
     };
-
     rowGetter = function (rowIdx){
         var rows = this.getRows();
         return rows[rowIdx];
     };
 
     handleFilterChange = function (filter){
-        log(filter);
+        //log(filter);
         let newFilters = Object.assign({},this.state.filters);
         if(filter.filterTerm) {
             newFilters[filter.column.key] = filter.filterTerm;
@@ -199,7 +197,7 @@ export default class UserList extends React.Component {
         else {
             delete newFilters[filter.column.key];
         }
-        log("filter",newFilters);
+        //log("filter",newFilters);
         var rows = this.state.originalRows;
         //rows = _.filter(rows,newFilters);
         rows = _.filter(rows,row=>{

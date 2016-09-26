@@ -100,19 +100,6 @@ export default class ParticipantList extends React.Component {
     };
     initializeDataFromApi = function () {
         log("Data from SERVER");
-        // api.getParticipants().then(response=>{
-        //     return response.json();
-        // }).then(json=>{
-        //     var rows = json;
-        //     Cache.ParticipantsCache.cache(rows);
-        //     var tableData = this.convertTableRawData(rows);
-        //     this.setState({
-        //         rows:tableData,
-        //         originalRows:tableData,
-        //         dataLoaded:true
-        //     });
-        // });
-
         api.getApplicants().then(response=> {
             return response.json()
         }).then(json=> {
@@ -124,18 +111,7 @@ export default class ParticipantList extends React.Component {
                 originalRows: tableData,
                 dataLoaded: true
             });
-        })
-
-        // db.getApplicantListFromAPI().then((rows)=>{
-        //         originalRows:tableData,
-        //         dataLoaded:true
-        //     });
-        // })
-        //     rows = JSON.parse(rows);
-        //     Cache.cacheParticipantList(rows);
-        //     var tableData = this.convertTableRawData(rows);
-        //     this.setState({
-        //         rows:tableData,
+        });
     };
     convertTableRawData = (rows)=> {
 
@@ -146,22 +122,21 @@ export default class ParticipantList extends React.Component {
             r.email = r.info.email;
             r.phone = r.info.phone;
             r.formattedScore = (r.averageScore * 100).toFixed(2);
-
-            //r.score = Math.floor(Math.random() * 100);
-
             return r;
         });
-        var sortedData=_.orderBy(tableData,["date","averageScore"],["desc","desc"]);
+        var sortedData = _.orderBy(tableData, ["date", "averageScore"], ["desc", "desc"]);
         return sortedData;
     };
     getOptionCell = (rowData) => {
         return (<Row>
             <Col lg={3}>
-                <FlatButton icon={<DeleteIcon/>} onClick={this.deleteRow(rowData.interviewId)}
+                <FlatButton icon={<DeleteIcon/>}
+                            onClick={this.deleteRow(rowData.interviewId)}
                             style={{minWidth: "50px"}}></FlatButton>
             </Col>
             <Col lg={3}>
-                <FlatButton icon={<ViewIcon/>} onClick={this.viewRow(rowData.info.id, rowData.interviewId)}
+                <FlatButton icon={<ViewIcon/>}
+                            onClick={this.viewRow(rowData.info.id, rowData.interviewId)}
                             style={{minWidth: "50px"}}></FlatButton>
             </Col>
         </Row>);
@@ -175,17 +150,14 @@ export default class ParticipantList extends React.Component {
     };
     getRows = function () {
         return Selectors.getRows(this.state);
-    }
-
+    };
     getSize = function () {
         return this.getRows().length;
-    }
-
+    };
     rowGetter = function (rowIdx) {
         var rows = this.getRows();
         return rows[rowIdx];
-    }
-
+    };
     handleFilterChange = function (filter) {
         //TODO filtering calışmıyor
         let newFilters = Object.assign({}, this.state.filters);
@@ -198,7 +170,7 @@ export default class ParticipantList extends React.Component {
         this.setState({filters: newFilters});
     }
     handleGridSort = function (sortColumn, sortDirection) {
-        log("rows-1", this.state.rows)
+        //log("rows-1", this.state.rows)
         var comparer = function (a, b) {
             if (sortDirection === 'ASC') {
                 return (a[sortColumn] > b[sortColumn]) ? 1 : -1;
@@ -211,9 +183,8 @@ export default class ParticipantList extends React.Component {
         if (sortDirection != 'NONE') {
             log("rows-2", this.state.rows.sort(comparer))
         }
-        //this.setState({rows:rows});
-    }
 
+    };
     render() {
         log("rendered");
         return (
@@ -239,9 +210,8 @@ export default class ParticipantList extends React.Component {
                                 />
                             }
                             else {
-                                content = <div><CircularProgress size={1.5}/></div>
+                                content = <div><CircularProgress size={1}/></div>
                             }
-
                             return content;
                         })()
                     }
