@@ -81,6 +81,11 @@ object InterviewDAO {
       interviewDAO.filter(_.email inSet personnelEmailList).map(_.id).list
   }
 
+  def getUserandPersonnelInterviews(interviewId: InterviewId): List[Interview] = DB { implicit session =>
+    val personnelEmailList = Users.users.filter(_.isPersonnel).map(_.email).list
+    interviewDAO.filter(i => (i.email inSet personnelEmailList ) || (i.id === interviewId) ).list
+  }
+
 }
 
 class InterviewDAO(tag: Tag) extends Table[Interview](tag, "interview") {

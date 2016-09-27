@@ -5,3 +5,5 @@ dist
 npm-debug.log
 .editorconfig.example
 app/InterviewService/
+/backend/AnimatedPotatoBackend/app/worksheet.sc
+/backend/AnimatedPotatoBackend/logs/application.log
