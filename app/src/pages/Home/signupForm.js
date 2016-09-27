@@ -10,7 +10,7 @@ import * as s                   from '../../layouts/style'
 import {Row, Col}               from 'react-flexbox-grid'
 import TextField                from "material-ui/TextField"
 import FlatButton               from 'material-ui/FlatButton';
-
+import * as Cache               from '../../utils/cache'
 const log = log2("SignUpForm")
 const styles = {
     formButton: {
@@ -94,15 +94,16 @@ export default class SignUpForm extends React.Component {
         this.displayProgress(true);
         api.signUp(userInfo).then((response)=> {
             response.json().then(json=> {
-                if (json.status == "ok") {
+                if (json.status == "OK") {
                     this.context.showMessage("Bilgileriniz kaydedildi.", 2000);
                     util.setToken(response.headers.get("Authorization"));
                     json.userInfo.admin = json.isAdmin;
                     db.setUserInfo(json.userInfo);
+                    Cache.UserCaching.clear();
                     if (json.isAdmin) browserHistory.push("/adminpanel");
                     else browserHistory.push("/home");
                 }
-                else if (json.status == "fail") {
+                else if (json.status == "FAIL") {
                     this.context.showMessage(json.message, 1000);
                 }
                 else {

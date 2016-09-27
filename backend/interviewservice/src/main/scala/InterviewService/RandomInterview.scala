@@ -15,7 +15,7 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
 
   println("RandomInterview : Constructor")
   final val MAX_NUMBER_OF_QUESTIONS = 20
-  var shuffledQuestionIds: List[IdType] = scala.util.Random.shuffle(initMessage.questionCategoryWeightTuple.value.map(_.questionId).distinct.take(MAX_NUMBER_OF_QUESTIONS))
+  var shuffledQuestionIds: List[IdType] = scala.util.Random.shuffle(initMessage.questionCategoryWeightTuple.value.map(_.questionId)).distinct.take(MAX_NUMBER_OF_QUESTIONS)
   var answerList = new ListBuffer[YesNoAnswer]()
 
   override def receive: Receive = ready

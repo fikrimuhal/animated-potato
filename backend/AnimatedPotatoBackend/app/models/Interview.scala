@@ -72,8 +72,9 @@ object InterviewDAO {
     interviewDAO.filter(_.id === interviewId).map(_.averageScore).update(averageScore)
   }
 
-  def getParticipantByInterviewId(interviewId: InterviewId) = DB { implicit session =>
-    Participants.getByEmail(interviewDAO.filter(_.id === interviewId).first.email).get
+  def getParticipantByInterviewId(interviewId: InterviewId):Option[Participant] = DB { implicit session =>
+
+    Participants.getByEmail(interviewDAO.filter(_.id === interviewId).first.email)
   }
 
   def getPersonnelInterviewIds : List[InterviewId] = DB { implicit session =>

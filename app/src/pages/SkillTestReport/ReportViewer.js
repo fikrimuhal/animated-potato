@@ -12,14 +12,15 @@ import log2             from '../../utils/log2'
 import * as Cache       from '../../utils/cache'
 import * as util        from '../../utils/utils'
 import * as s           from '../../layouts/style'
-import  {Row, Col}       from 'react-flexbox-grid'
+import  {Row, Col}      from 'react-flexbox-grid'
 import  SpiderWidget    from './SpiderGraphWidget'
 import  BarWidget       from './BarChartsWidget'
 import  PieWidget       from './PieChartWidget'
 import  SummaryBar      from './SummaryBar'
 import  ScoreTable      from './CategoryScoreTable'
-import  ColorMatrix      from './ColorMatrixChart'
-import  BoxPlot          from './BoxPlotWidget'
+import  ColorMatrix     from './ColorMatrixChart'
+import  BoxPlot         from './BoxPlotWidget'
+import  AnswersWidget   from './AnswersWidget'
 import * as _           from 'lodash'
 import QRCode           from 'qrcode.react'
 import colors           from '../../utils/material-colors'
@@ -29,7 +30,7 @@ export default  class ReportViewer extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            url:window.location.href
+            url: window.location.href
         }
     }
 
@@ -37,13 +38,13 @@ export default  class ReportViewer extends React.Component {
         var userScoreData = _.filter(this.props.generalInfo.scores, q=> {
             return q.score != -1
         });
-        log("userScoreData", userScoreData)
+        //log("userScoreData", userScoreData)
         var tables = userScoreData.map(item=> {
 
             var category = item.category.category;
             return <Col lg={3} md={4}>
                 <ScoreTable data={this.props.scoreTable} dataLoaded={this.props.scoreTableLoaded}
-                            selectedCategory={category} showCategorChangeBar={false} key={"table-"+category}/>
+                            selectedCategory={category} showCategorChangeBar={false} key={"table-" + category}/>
             </Col>
         });
 
@@ -91,10 +92,16 @@ export default  class ReportViewer extends React.Component {
                         <ColorMatrix data={this.props.scoreData}/>
                     </Col>
                 </Row>
+                <hr/>
                 <Row>
-                    <Col lg={12} md={12} >
-                        <div style={s.GraphStyles.barcodeContainer}  >
-                            <QRCode value={this.state.url} size={128} fgColor={colors.teal.x500} />
+                    <Col lg={12} style={{width: "100%"}}>
+                        <AnswersWidget data={this.props.answers} dataLoaded={this.props.answersLoaded}/>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col lg={12} md={12}>
+                        <div style={s.GraphStyles.barcodeContainer}>
+                            <QRCode value={this.state.url} size={128} fgColor={colors.teal.x500}/>
                         </div>
                     </Col>
                 </Row>
@@ -105,7 +112,8 @@ export default  class ReportViewer extends React.Component {
 ReportViewer.propTypes = {
     categoryScoreInfo: React.PropTypes.object,
     generalScoreInfo: React.PropTypes.object,
-    scoreData: React.PropTypes.array
+    scoreData: React.PropTypes.array,
+    answers: React.PropTypes.array
 };
 
 ReportViewer.contextTypes = {

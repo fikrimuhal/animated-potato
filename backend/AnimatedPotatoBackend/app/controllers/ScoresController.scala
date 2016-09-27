@@ -10,7 +10,7 @@ import utils.Constants
 import utils.Formatter._
 
 
-class ScoresController extends Controller {
+class ScoresController extends Controller  with Secured{
 
 
   def insert(scores: Scores) = Action { implicit request =>
@@ -51,7 +51,7 @@ class ScoresController extends Controller {
     }
   }
 
-  def getUsersResults = Action { implicit request =>
+  def getUsersResults = UserAction { implicit request =>
     request.body.asJson.flatMap(_.validate[ID].asOpt) match {
 
       case Some(id) =>

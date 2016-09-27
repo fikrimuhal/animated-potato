@@ -38,7 +38,8 @@ export const UserAPI = {
 export const ReportAPI = {
     getAllResult: db.getApiPromise("admin/getUsersResults", "POST"),
     getComparativeResult:db.getApiPromise("getComparativeReport","POST"),
-    getScoreTable:db.getApiPromise("admin/getCategoryResults","POST")
+    getScoreTable:db.getApiPromise("admin/getCategoryResults","POST"),
+    getAnswersByInterviewId:db.getApiPromise("admin/getInterviewAnswers","POST")
 }
 
 export const CategoryAPI = {

@@ -13,7 +13,6 @@ import * as util        from '../../utils/utils'
 import * as s           from '../../layouts/style'
 import * as _           from 'lodash'
 import ReportView       from './ReportViewer'
-
 import {MetricAPI}        from '../../utils/metricDB'
 //consts and variables
 const log = log2("SkillTestReportContainer");
@@ -25,12 +24,14 @@ export default  class SkillTestReportContainer extends React.Component {
         this.state = {
             dataWaiting: true,
             comparativeResultLoaded: false,
-            scoreTableLoaded: false
+            scoreTableLoaded: false,
+            answersLoaded: false
         };
         this.initData();
-        MetricAPI.getClient().then(client=> {
-            client.write({key: "resultPageView", value: 1});
-        });
+        //Örnek metrik oluşturulması
+        // MetricAPI.getClient().then(client=> {
+        //     client.write({key: "resultPageView", value: 1});
+        // });
 
         //var userId = this.props.params.interviewId;
         // if(Cache.checkTestResultReportCache(userId))
@@ -81,16 +82,31 @@ export default  class SkillTestReportContainer extends React.Component {
         }).then(response=> {
             return response.json()
         }).then(json=> {
-            _this.setState({
-                //categoryScoreInfo: mockData.TestResultMockDataCreator.getRadarData(),
-                generalInfo: _.filter(json, q=> {
-                    return q.interviewId == interviewId
-                })[0],
-                scoreData: json,
-                dataLoaded: true
-            })
-        }).catch(err=>{
-            _this.context.showMessage("Error occured... try again",6000)
+            log("getAllResult", json);
+            if (json.status == "SESSION_TIME_OUT" || json.status == "UNAUTHORIZED") {
+                util.clearToken();
+                _this.context.showMessage(json.message, 2000);
+                setTimeout(()=> {
+                    browserHistory.push("/signin")
+                }, 2000)
+                return;
+            }
+            else if(json.status =="FORBIDDEN"){
+                browserHistory.push("/")
+            }
+            else {
+                _this.setState({
+                    //categoryScoreInfo: mockData.TestResultMockDataCreator.getRadarData(),
+                    generalInfo: _.filter(json, q=> {
+                        return q.interviewId == interviewId
+                    })[0],
+                    scoreData: json,
+                    dataLoaded: true
+                })
+            }
+
+        }).catch(err=> {
+            _this.context.showMessage("Error occured... try again", 6000)
         })
 
         api.ReportAPI.getComparativeResult({
@@ -118,6 +134,18 @@ export default  class SkillTestReportContainer extends React.Component {
         });
 
 
+        api.ReportAPI.getAnswersByInterviewId({
+            id: interviewId
+        }).then(response=> {
+            return response.json()
+        }).then(json=> {
+            this.setState({
+                answers: json,
+                answersLoaded: true
+            })
+
+        });
+
     };
 
     createWaitingContent = ()=> {
@@ -134,6 +162,8 @@ export default  class SkillTestReportContainer extends React.Component {
                            comparativeResultLoaded={this.state.comparativeResultLoaded}
                            scoreTable={this.state.scoreTable}
                            scoreTableLoaded={this.state.scoreTableLoaded}
+                           answers={this.state.answers}
+                           answersLoaded={this.state.answersLoaded}
         />
 
     };

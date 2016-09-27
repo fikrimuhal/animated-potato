@@ -18,12 +18,14 @@ export default class StartInterview extends React.Component {
         var email = this.refs.txtEmail.input.value;
         //log(this.props,this.props.location.search);
         var query = "";
+        log("this.props.location",this.props.location);
         if(this.props.location.search.length > 0) {
             query = this.props.location.search + "&email=" + email;
         }
         //var query=this.props.location.search + "&email=" + email;
         log("query",query);
-        browserHistory.push("/skilltest/?" + query)
+
+        browserHistory.push("/skilltest/" + query)
     };
     componentWillMount = function (){
         if(db.isLoggedIn()) {

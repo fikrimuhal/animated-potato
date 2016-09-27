@@ -203,15 +203,20 @@ object ScoresDAO {
       }
       val allAverage: Double = scoreFilteredCategory.map(_.score).sum / scoreFilteredCategory.length
 
-      val results: List[CategoryResults] = scoreFilteredCategory.::(Scores(PERSONNEL_INTERVIEW, cat, personnelAverage, -1)).::(Scores(ALL_INTERVIEW, cat, allAverage, -1))
-        .sortBy(1 - _.score).zipWithIndex.map { x =>
+      var results: List[CategoryResults] = List()
+      scoreFilteredCategory.::(Scores(PERSONNEL_INTERVIEW, cat, personnelAverage, -1)).::(Scores(ALL_INTERVIEW, cat, allAverage, -1))
+        .sortBy(1 - _.score).zipWithIndex.foreach{ x =>
         if (x._1.interviewId == PERSONNEL_INTERVIEW)
-          CategoryResults(PERSONNEL_INTERVIEW, PERSONNEL_INTERVIEW, "Personnel", "Personnel", x._2 + 1, personnelAverage)
+          results = CategoryResults(PERSONNEL_INTERVIEW, PERSONNEL_INTERVIEW, "Personnel", "Personnel", x._2 + 1, personnelAverage) :: results
         else if (x._1.interviewId == ALL_INTERVIEW)
-          CategoryResults(ALL_INTERVIEW, ALL_INTERVIEW, "All", "All", x._2 + 1, allAverage)
+          results=CategoryResults(ALL_INTERVIEW, ALL_INTERVIEW, "All", "All", x._2 + 1, allAverage):: results
         else {
           val p = InterviewDAO.getParticipantByInterviewId(x._1.interviewId)
-          CategoryResults(p.id.get, x._1.interviewId, p.name, p.lastname, x._2 + 1, x._1.score)
+          p match{
+            case Some(participantInfo) =>   results=CategoryResults(participantInfo.id.get, x._1.interviewId, participantInfo.name, participantInfo.lastname, x._2 + 1, x._1.score):: results
+            case None =>
+          }
+
         }
       }
 
