@@ -18,49 +18,49 @@ var toastHelper = null;
 const log = log2("SignIn.js");
 //Styles
 const styles = {
-    paperStyle:{
-        width:"500px",
-        height:300,
-        margin:"0 auto",
-        marginTop:"20px",
-        padding:"10px",
-        paddingLeft:"5%"
+    paperStyle: {
+        width: "500px",
+        height: 300,
+        margin: "0 auto",
+        marginTop: "20px",
+        padding: "10px",
+        paddingLeft: "5%"
     },
-    rightFloated:{
-        float:"right",
-        marginRight:"5px"
+    rightFloated: {
+        float: "right",
+        marginRight: "5px"
     },
-    header:{
-        fontSize:"15px"
+    header: {
+        fontSize: "15px"
 
     },
-    refresh:{
-        margin:"0 auto",
-        marginLeft:"20%"
+    refresh: {
+        margin: "0 auto",
+        marginLeft: "20%"
     }
 }
 
 export default class UserSignIn extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            toastSettings:{
-                open:false,
-                message:"",
-                duration:0
+            toastSettings: {
+                open: false,
+                message: "",
+                duration: 0
             },
-            progressDisplay:"none"
+            progressDisplay: "none"
         }
-        util.bindFunctions.call(this,['signIn','signUp','onKeyDown']);
-        toastHelper = util.myToast("toastSettings",this);
+        util.bindFunctions.call(this, ['signIn', 'signUp', 'onKeyDown']);
+        toastHelper = util.myToast("toastSettings", this);
     }
 
-    componentWillMount = function (){
-        if(db.isLoggedIn()) {
-            if(db.isUser()) {
+    componentWillMount = function () {
+        if (db.isLoggedIn()) {
+            if (db.isUser()) {
                 browserHistory.push("/home")
             }
-            else if(db.isAdmin()) {
+            else if (db.isAdmin()) {
                 browserHistory.push("/adminpanel")
             }
         }
@@ -68,51 +68,51 @@ export default class UserSignIn extends React.Component {
             //browserHistory.push("/signin")
         }
     };
-    displayProgress = function (mode){
+    displayProgress = function (mode) {
         this.setState({
-            progressDisplay:mode
+            progressDisplay: mode
         });
     };
-    signIn = function (){
+    signIn = function () {
         this.displayProgress("");
         var username = this.refs.username.input.value;
         var password = this.refs.password.input.value;
         //validation
-        if(username == "" || password == "") {
-            toastHelper("Kullanıcı adı ve şifre alanlarını boş geçilemez!.",2000);
+        if (username == "" || password == "") {
+            toastHelper("Kullanıcı adı ve şifre alanlarını boş geçilemez!.", 2000);
             this.displayProgress("none");
             return;
         }
 
         var loginRequest = {
-            "username":username,
-            "password":password
+            "username": username,
+            "password": password
         };
 
-        api.authenticate(loginRequest).then(response=>{
-            response.json().then(json=>{
-                log(json,response.headers.get("Authorization"));
-                if(json.status == "FAIL") {
-                    toastHelper(json.message,2000);
+        api.authenticate(loginRequest).then(response=> {
+            response.json().then(json=> {
+                log(json, response.headers.get("Authorization"));
+                if (json.status == "FAIL") {
+                    toastHelper(json.message, 2000);
                 }
-                else if(json.status == "OK") {
-                    toastHelper("Kullanıcı adı şifre doğru.",2000);
+                else if (json.status == "OK") {
+                    toastHelper("Kullanıcı adı şifre doğru.", 2000);
                     util.setToken(response.headers.get("Authorization"));
                     json.userInfo.admin = json.isAdmin;
                     db.setUserInfo(json.userInfo);
-                    if(json.isAdmin) browserHistory.push("/dashboard");
+                    if (json.isAdmin) browserHistory.push("/dashboard");
                     else browserHistory.push("/home");
                 }
                 else {
-                    log("error unexpected",json,response)
-                    toastHelper("Sunucuda hata oluştu,tekrar deneyiniz.",1000);
+                    log("error unexpected", json, response)
+                    toastHelper("Sunucuda hata oluştu,tekrar deneyiniz.", 1000);
                     this.displayProgress("none");
                 }
             });
             this.displayProgress("none");
-        }).catch(err=>{
-            log("error",err);
-            toastHelper("Sunucuda hata oluştu,tekrar deneyiniz.",1000);
+        }).catch(err=> {
+            log("error", err);
+            toastHelper("Sunucuda hata oluştu,tekrar deneyiniz.", 1000);
             this.displayProgress("none");
         });
 
@@ -134,31 +134,35 @@ export default class UserSignIn extends React.Component {
         //
         // });
     };
-    signUp = function (){
+    signUp = function () {
         browserHistory.push("/signup");
     };
-    onKeyDown = function (event,keyCode){
+    onKeyDown = function (event, keyCode) {
         // console.log(event);
         // console.log(keyCode);
         this.signIn();
     }
-    render = function (){
+    render = function () {
         return (
-            <div className="xx" style={s.userLayoutStyles.signInContainer}>
-                <Subheader style={styles.header}><b> Fikrimuhal HR - Giriş</b></Subheader>
+            <div style={s.userLayoutStyles.signInContainer}>
+                <Subheader style={styles.header}><b> Fikrimuhal Hızlı Mülakat - Giriş</b></Subheader>
 
-                <TextField ref={"username"} hintText="Kullanıcı Adı/Eposta"
-                           floatingLabelText="Kullanıcı Adı/Eposta"/><br/>
-                <TextField ref={"password"} hintText="Şifre" floatingLabelText="Şifre"
-                           onEnterKeyDown={(e,v)=>this.onKeyDown(e,v)}/> <br/>
+                <TextField ref={"username"} hintText="Kullanıcı Adı/ Eposta"
+                           floatingLabelText="Kullanıcı Adı/ Eposta"/><br/>
+                <TextField ref={"password"}
+                           hintText="Şifre"
+                           floatingLabelText="Şifre"
+                           onEnterKeyDown={(e, v)=>this.onKeyDown(e, v)}
+                            type={"password"}/> <br/>
                 <div>
                     <RaisedButton label="Giriş" primary={true} onClick={this.signIn}
-                                  disabled={this.state.progressDisplay != "none"}/>
-                    <FlatButton label="Kayıt ol" onClick={this.signUp} style={{marginLeft:"10px"}}/>
-                    <FlatButton label="Şifremi unuttum.."/>
+                                  disabled={this.state.progressDisplay != "none"} labelStyle={{textTransform: "none"}}/>
+                    <FlatButton label="Kayıt ol" onClick={this.signUp} style={{marginLeft: "5px"}}
+                                labelStyle={{textTransform: "none"}}/>
+                    <FlatButton label="Şifremi unuttum.." labelStyle={{textTransform: "none"}}/>
                 </div>
                 <br/>
-                <LinearProgress mode="indeterminate" color="red" style={{display:this.state.progressDisplay}}/>
+                <LinearProgress mode="indeterminate" color="red" style={{display: this.state.progressDisplay}}/>
 
 
                 <Toast settings={this.state.toastSettings}/>

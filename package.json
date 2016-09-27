@@ -27,6 +27,7 @@
     "datatables.net": "^1.10.12",
     "fixed-data-table": "^0.6.2",
     "jquery": "^3.1.0",
+    "jquery-validation": "^1.15.1",
     "lodash": "^4.13.1",
     "material-design-icons": "^2.2.3",
     "material-ui": "^0.15.2",
@@ -41,13 +42,16 @@
     "react-checkbox-group": "^1.0.4",
     "react-dom": "^15.3.1",
     "react-dropdown": "^1.0.4",
+    "react-form-validate": "^1.0.3",
     "react-jquery-datatables": "^0.7.1",
     "react-jsonschema-form": "^0.38.0",
+    "react-redux": "^4.4.5",
     "react-router": "^2.5.2",
     "react-schema-form": "^0.2.9",
     "react-select": "^1.0.0-beta14",
     "react-select-box": "^3.0.1",
-    "react-tap-event-plugin": "^1.0.0"
+    "react-tap-event-plugin": "^1.0.0",
+    "redux-form": "^6.0.5"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.1",

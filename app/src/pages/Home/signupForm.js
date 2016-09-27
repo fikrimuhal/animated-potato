@@ -2,126 +2,210 @@
 import React                    from 'react'
 import SmartForm                from "react-jsonschema-form"
 import {browserHistory}         from 'react-router'
-import LinearProgress from 'material-ui/LinearProgress';
-//my imports
-import {log2,util}              from '../../utils/'
+import LinearProgress           from 'material-ui/LinearProgress';
+import {log2, util}             from '../../utils/'
 import * as db                  from '../../utils/data'
 import * as api                 from '../../utils/api'
-import {Toast}                  from '../../components/MyComponents'
 import * as s                   from '../../layouts/style'
+import {Row, Col}               from 'react-flexbox-grid'
+import TextField                from "material-ui/TextField"
+import FlatButton               from 'material-ui/FlatButton';
 
-//variables and consts
-var toastHelper = null;
 const log = log2("SignUpForm")
-
-//Styles
 const styles = {
-    paperStyle:{
-        width:"800px",
-        height:300,
-        margin:"0 auto",
-        marginTop:"10px",
-        padding:"10px"
-    },
-    rightFloated:{
-        float:"right",
-        marginRight:"5px"
-    }
-}
-//Form schema
-const schema = {
-    title:"SignUp Form",
-    type:"object",
-    required:["name","lastname","email","phone","username","password"],
-    properties:{
-        name:{type:"string",title:"Adınız"},
-        lastname:{type:"string",title:"Soyadınız"},
-        email:{type:"string",title:"Eposta"},
-        phone:{type:"string",title:"Telefon"},
-        photo:{type:"string",title:"Resim",format:"data-url"},
-        website:{type:"string",title:"Website"},
-        notes:{type:"string",title:"Açıklama,Not"},
-        username:{type:"string",title:"Kullanıcı Adı"},
-        password:{type:"string",title:"Şifre"}
+    formButton: {
+        textTransform: "none",
+        border: "1px solid teal",
+        float: "right",
+        margin: "5px"
     }
 };
-const uiSchema = {
-    "notes":{
-        "ui:widget":"textarea"
-    },
-    "password":{
-        "ui:widget":"password"
-    }
-}
-var formData = {}
+
+
 export default class SignUpForm extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            toastSettings:{
-                open:false,
-                message:"",
-                duration:0
-            },
-            progressDisplay:"none"
+            progressDisplay: "none"
         };
-        util.bindFunctions.call(this,['onSubmit'])
-        toastHelper = util.myToast("toastSettings",this);
+        util.bindFunctions.call(this, ['onSubmit', 'handleSubmit'])
+
     }
-    displayProgress = function (show){
+
+    displayProgress = function (show) {
         this.setState({
-            progressDisplay:show?"":"none"
+            progressDisplay: show ? "" : "none"
         });
     };
-    onSubmit = function (data){
+    onSubmit = function (data) {
 
         log(data);
         var userInfo = data.formData;
-        formData = userInfo;
+        //formData = userInfo;
         this.displayProgress(true);
-        api.signUp(userInfo).then((response)=>{
-            response.json().then(json=>{
-                if(json.status == "ok") {
-                    toastHelper("Bilgileriniz kaydedildi.",2000);
+        api.signUp(userInfo).then((response)=> {
+            response.json().then(json=> {
+                if (json.status == "ok") {
+                    this.context.showMessage("Bilgileriniz kaydedildi.", 2000);
                     util.setToken(response.headers.get("Authorization"));
                     json.userInfo.admin = json.isAdmin;
                     db.setUserInfo(json.userInfo);
-                    if(json.isAdmin) browserHistory.push("/adminpanel");
+                    if (json.isAdmin) browserHistory.push("/adminpanel");
                     else browserHistory.push("/home");
                 }
-                else if(json.status == "fail") {
-                    toastHelper(json.message,1000);
+                else if (json.status == "fail") {
+                    this.context.showMessage(json.message, 1000);
                 }
                 else {
-                    toastHelper("Sunucuda hata oluştu.",1000);
+                    this.context.showMessage("Sunucuda hata oluştu.", 1000);
                 }
                 this.displayProgress(false);
             });
-        }).catch((err)=>{
-            toastHelper("Hata oluştu.",1000);
+        }).catch((err)=> {
+            this.context.showMessage("Hata oluştu.", 1000);
             log(err);
             this.displayProgress(false);
         });
     };
+    handleSubmit = function () {
+        //log(this.refs);
+        var data = {};
+        ["name", "lastname", "email", "phone", "github", "website", "username", "password","notes"].forEach(field=> {
+            //log(field,this.refs[field].input.value);
+            data[field] = this.refs[field].input.value;
+        })
+        data["notes"] = this.refs["notes"].input.refs.input.value
+        log(data);
+        log(this.refs.notes);
 
-    render = function (){
+        var requiredFields = ["name","lastname","email","phone","username","password"];
+        var valid = true;
+        requiredFields.forEach(field=>{
+           if(data[field] == undefined || data[field]==""){
+                   valid=false;
+           }
+        });
+        if(!valid){
+            this.context.showMessage("Gerekli alanları doldurunuz",3000);
+            return;
+        }
+        var userInfo = data;
+        //formData = userInfo;
+        this.displayProgress(true);
+        api.signUp(userInfo).then((response)=> {
+            response.json().then(json=> {
+                if (json.status == "ok") {
+                    this.context.showMessage("Bilgileriniz kaydedildi.", 2000);
+                    util.setToken(response.headers.get("Authorization"));
+                    json.userInfo.admin = json.isAdmin;
+                    db.setUserInfo(json.userInfo);
+                    if (json.isAdmin) browserHistory.push("/adminpanel");
+                    else browserHistory.push("/home");
+                }
+                else if (json.status == "fail") {
+                    this.context.showMessage(json.message, 1000);
+                }
+                else {
+                    this.context.showMessage("Sunucuda hata oluştu.", 1000);
+                }
+                this.displayProgress(false);
+            });
+        }).catch((err)=> {
+            this.context.showMessage("Hata oluştu.", 1000);
+            log(err);
+            this.displayProgress(false);
+        });
+    };
+    render = function () {
+
 
         return (
             <div style={s.userLayoutStyles.signInContainer}>
-                <style>
-                    {
-                        ".form-group > input,.form-group > textarea,textarea.form-control, input.form-control, [type=text].form-control, [type=password].form-control, [type=email].form-control, [type=tel].form-control, [contenteditable].form-control {\n    webkit-box-shadow: inset 0 -2px 0 #BDBDBD !important;\n    box-shadow: inset 0 -2px 0 #BDBDBD !important;\n}\n.form-group > input,.form-group > textarea,textarea.form-control:focus, input.form-control:focus,  [type=email].form-control:focus, [type=tel].form-control:focus, [contenteditable].form-control:focus {\n    webkit-box-shadow: inset 0 -2px 0 #00BCD4 !important;\n    box-shadow: inset 0 -2px 0 #00BCD4 !important;\n}"
-                    }
-                </style>
-                <LinearProgress mode="indeterminate" color="red" style={{display:this.state.progressDisplay}}/>
-                <SmartForm schema={schema}
-                           onSubmit={(formData)=>this.onSubmit(formData)}
-                           onError={()=> log("errors")}
-                           uiSchema={uiSchema}
-                           formData={formData}
-                />
-                <Toast settings={this.state.toastSettings}/>
+                <LinearProgress mode="indeterminate" color="red" style={{display: this.state.progressDisplay}}/>
+                <h5>Fikrimuhal Hızlı Mülakat - Kayıt Formu</h5>
+
+                <form ref={"vForm"}>
+                    <Row>
+                        <Col lg={6}>
+                            <TextField ref={"name"}
+                                       hintText="Adınız(*)"
+                                       floatingLabelText="Adınız(*)"
+                                       style={{width: "100%"}} name={"name"}/>
+                        </Col>
+                        <Col lg={6}>
+                            <TextField ref={"lastname"}
+                                       hintText="Soyadınız(*)"
+                                       floatingLabelText="Soyadınız(*)"
+                                       style={{width: "100%"}} name={"lastname"}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col lg={6}>
+                            <TextField ref={"email"}
+                                       hintText="Eposta(*)"
+                                       floatingLabelText="Eposta(*)"
+                                       style={{width: "100%"}} name={"lastname"}/>
+                        </Col>
+                        <Col lg={6}>
+                            <TextField ref={"phone"}
+                                       hintText="Telefon(*)"
+                                       floatingLabelText="Telefon(*)"
+                                       style={{width: "100%"}} name={"phone"}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col lg={6}>
+                            <TextField ref={"github"}
+                                       hintText="Github"
+                                       floatingLabelText="Github adresiniz"
+                                       style={{width: "100%"}} name={"github"}/>
+                        </Col>
+                        <Col lg={6}>
+                            <TextField ref={"website"}
+                                       hintText="Website adresiniz"
+                                       floatingLabelText="Website adresiniz"
+                                       style={{width: "100%"}} name={"website"}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col lg={6}>
+                            <TextField ref={"username"}
+                                       hintText="Kullanıcı Adınız(*)"
+                                       floatingLabelText="Kullanıcı Adınız(*)"
+                                       style={{width: "100%"}} name={"username"}/>
+                        </Col>
+                        <Col lg={6}>
+                            <TextField ref={"password"}
+                                       hintText="Şifreniz(*)"
+                                       floatingLabelText="Şifreniz(*)"
+                                       style={{width: "100%"}}
+                                       type="password"/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col lg={12}>
+                            <TextField ref={"notes"}
+                                       hintText="Not/Açıklama(*)"
+                                       floatingLabelText="Not/Açıklama(*)"
+                                       style={{width: "100%"}}
+                                       multiLine={true}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col lg={12}>
+                            <FlatButton label={"Kaydet"} primary={true} labelStyle={{textTransform: "none"}}
+                                        style={styles.formButton} onClick={this.handleSubmit}/>
+                            <FlatButton label={"Giriş Yap"} labelStyle={{textTransform: "none"}} onClick={()=> {
+                                browserHistory.push("/signin")
+                            }} style={styles.formButton}/>
+
+                        </Col>
+                    </Row>
+                </form>
             </div>
         )
     }
 }
+SignUpForm.contextTypes = {
+    showMessage: React.PropTypes.func
+};

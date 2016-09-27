@@ -129,12 +129,12 @@ export default class ParticipantList extends React.Component {
     };
     getOptionCell = (rowData) => {
         return (<Row>
-            <Col lg={3}>
+            <Col lg={1} md={1}>
                 <FlatButton icon={<DeleteIcon/>}
                             onClick={this.deleteRow(rowData.interviewId)}
                             style={{minWidth: "50px"}}></FlatButton>
             </Col>
-            <Col lg={3}>
+            <Col lg={1} md={1}>
                 <FlatButton icon={<ViewIcon/>}
                             onClick={this.viewRow(rowData.info.id, rowData.interviewId)}
                             style={{minWidth: "50px"}}></FlatButton>
@@ -162,11 +162,34 @@ export default class ParticipantList extends React.Component {
         //TODO filtering calışmıyor
         let newFilters = Object.assign({}, this.state.filters);
         if (filter.filterTerm) {
-            newFilters[filter.columnKey] = filter.filterTerm;
+            newFilters[filter.column.key] = filter.filterTerm;
         }
         else {
-            delete newFilters[filter.columnKey];
+            delete newFilters[filter.column.key];
         }
+
+        var rows = this.state.originalRows;
+        //log("rows", rows);
+        //log("filter", newFilters);
+
+        rows = _.filter(rows, row=> {
+            var result = false;
+            if (Object.keys(newFilters).length == 0) {
+                return true;
+            }
+            else {
+                Object.keys(newFilters).forEach(key=> {
+                    if (row[key].toLowerCase().includes(newFilters[key].toLowerCase())) result = true;
+                })
+            }
+            return result;
+        });
+        this.setState({
+            filters: newFilters,
+            rows: rows
+        });
+
+
         this.setState({filters: newFilters});
     }
     handleGridSort = function (sortColumn, sortDirection) {
@@ -185,6 +208,7 @@ export default class ParticipantList extends React.Component {
         }
 
     };
+
     render() {
         log("rendered");
         return (

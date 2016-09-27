@@ -127,13 +127,7 @@ object ScoresDAO {
       val personnelCategoricalScores: List[CategoryScore] =
         personnelCategoricalScoreTuple
           .map(x => CategoryScore(categories.filter(c => c.id.get == x._1).head, x._2._1, Some(x._2._2)))
-//BURADA KALDIM
-      val categoriesAddedLater: List[CategoryScore] = categories.map { cat =>
-        personnelCategoricalScores.find(_.category.id.get == cat.id.get) match {
-          case None => CategoryScore(cat, -1, Some(-1))
-        }
-      }
-      val personnelCategoricalScoresEdited = personnelCategoricalScores::categoriesAddedLater
+
 
       // sonuçta sadece gelen interviewID ve personel interviewleri olacak
       val filteredInterviews = interviews.filter(i => (i.id.get == interviewId) || personnelInterviewIds.contains(i.id.get))
