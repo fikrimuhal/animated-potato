@@ -32,7 +32,7 @@ case class ParticipantResponse(participantList: List[Participant], page: Int, nu
 
 case class Applicant(info: Participant, applyDate: Timestamp, averageScore: Score, interviewId: InterviewId)
 
-case class ClaimData(userName: String, email: Email, isAdmin: Boolean, isPersonnel: Boolean, timeZone : Long)
+case class ClaimData(userName: String, email: Email, isAdmin: Boolean, isPersonnel: Boolean)
 
 object Participants {
 
@@ -104,7 +104,7 @@ object Participants {
 
     participants.filter(p => p.username === username).list.headOption match {
 
-      case Some(p) => Users.get(p.username).map(u => ClaimData(u.username, u.email.get, u.isadmin.get, u.ispersonnel.get,System.currentTimeMillis))
+      case Some(p) => Users.get(p.username).map(u => ClaimData(u.username, u.email.get, u.isadmin.get, u.ispersonnel.get))
 
       case None => None
 
