@@ -21,35 +21,17 @@ export default  class CategoryScoreTable extends React.Component {
         this.state = {
             //categoryCount: 0,
             //currentCategoryIndex: 0,
-            selectedCategory: ""
+            selectedCategory: props.selectedCategory
         };
     }
 
     componentWillReceiveProps = function (nextProps) {
-        //log("componentWillReceiveProps",nextProps);
         this.props = nextProps;
-        var categoryCount = (nextProps.dataLoaded) ? this.getCategories().length : 0;
-        var selectedCategory = (nextProps.dataLoaded && this.getCategories().length > 0) ? this.getCategories()[0] : "";
+        //var selectedCategory = (nextProps.dataLoaded && this.getCategories().length > 0) ? this.getCategories()[0] : "";
         this.setState({
-            //categoryCount: categoryCount,
-            //currentCategoryIndex: 0
-            selectedCategory: selectedCategory
+            selectedCategory: nextProps.selectedCategory
         })
     }
-    componentDidMount = ()=> {
-
-        // setInterval(()=> {
-        //     var current = this.state.currentCategoryIndex;
-        //     var last = this.state.categoryCount;
-        //     if (current < last - 1)
-        //         current++;
-        //     else
-        //         current = 0;
-        //     this.setState({
-        //         currentCategoryIndex: current
-        //     });
-        // }, 10000);
-    };
 
     getCategories = function () {
         // var firstPersonData = this.props.data[0];
@@ -64,16 +46,17 @@ export default  class CategoryScoreTable extends React.Component {
     createTableBody = function () {
         //var selectedCategory = this.getCategories()[this.state.currentCategoryIndex];
         var selectedCategory = this.state.selectedCategory;
+        //log("selectedCategory",selectedCategory , "data",this.props.data)
         var scoreList = _.filter(this.props.data, q=> {
             return q.category.category == selectedCategory
         })[0].results;
         scoreList = scoreList.map(item=> {
             var fullName = item.name + " " + item.lastname;
             if (item.participantId == -2) {
-                fullName = "Average of All Staff"
+                fullName = "Average of Staffs"
             }
             else if (item.participantId == -4) {
-                fullName = "Average of All Person"
+                fullName = "Average of People"
             }
             return {
                 name: fullName,
@@ -85,57 +68,6 @@ export default  class CategoryScoreTable extends React.Component {
             };
         });
         scoreList = _.orderBy(scoreList, ["order"]);
-        //scoreList.reverse();
-
-
-        // var scoreList = this.props.data.map((item, index)=> {
-        //     var fullName = item.name + ' ' + item.lastName;
-        //     var catScoreInfo = _.filter(item.scores, q => {
-        //         return q.category.category == selectedCategory
-        //     })[0];
-        //     var score = catScoreInfo.score;
-        //     return {
-        //         name: fullName,
-        //         score: score,
-        //         userId: item.participantId,
-        //         interviewId: item.interviewId,
-        //         visible: false
-        //     };
-        // });
-        //
-        //
-        // scoreList = _.orderBy(scoreList, ["score"]);
-        // scoreList.reverse();
-        // for (var i = 0; i < scoreList.length; i++) {
-        //     var item = scoreList[i];
-        //     //log("item.interviewId ->",item.interviewId,this.context.interviewId);
-        //     if (scoreList.length <= 5) {
-        //         item.visible = true;
-        //     }
-        //     else {
-        //         if (item.interviewId == this.context.interviewId && i < 5) {
-        //             for (var j = 0; j < 5; j++) {
-        //                 scoreList[j].visible = true;
-        //             }
-        //             break;
-        //         }
-        //         else if (i == 0 || i == 1 || i == (scoreList.length - 1)) {
-        //             item.visible = true;
-        //         }
-        //         else if (item.interviewId == this.context.interviewId) {
-        //             item.visible = true;
-        //             if (i > 0)scoreList[i - 1].visible = true;
-        //             if (i < (scoreList.length - 1))scoreList[i + 1].visible = true;
-        //             i++;
-        //         }
-        //         else {
-        //             item.visible = false;
-        //         }
-        //     }
-        // }
-
-
-        // log("new scoreList", scoreList);
 
         var content = scoreList.map((item, index)=> {
             //log("userIds", item.userId, this.context.userId);
@@ -165,9 +97,9 @@ export default  class CategoryScoreTable extends React.Component {
                 border: border
             };
             return <TableRow key={index + 1} style={style}>
-                <TableRowColumn style={{width: "15%"}}>#{item.order}</TableRowColumn>
-                <TableRowColumn style={{width: "65%"}}>{item.name}</TableRowColumn>
-                <TableRowColumn style={{width: "20%"}}>{(item.score * 100).toFixed(2)}</TableRowColumn>
+                <TableRowColumn style={{width:"15%"}}>#{item.order}</TableRowColumn>
+                <TableRowColumn style={{width:"50%",textAlign:"right"}}>{item.name}</TableRowColumn>
+                <TableRowColumn>{(item.score * 100).toFixed(2)}</TableRowColumn>
             </TableRow>
         });
         return content;
@@ -177,32 +109,41 @@ export default  class CategoryScoreTable extends React.Component {
     createTable = function () {
         //var selectedCategory = this.getCategories()[this.state.currentCategoryIndex];
         var selectedCategory = this.state.selectedCategory;
+        var _this = this;
+        log("showCategorChangeBar",this.props.showCategorChangeBar);
         return <Table
-            height={500}
             fixedHeader={true}
             fixedFooter={false}
             selectable={false}
+            style={{width: "100%"}}
         >
             <TableHeader
                 displaySelectAll={false}
                 adjustForCheckbox={false}
                 enableSelectAll={false}
+                style={{minWidth: "220px",width:"100%"}}
             >
-                <TableRow>
-                    <TableHeaderColumn colSpan="3" style={{whiteSpace: "normal",paddingLeft:0,paddingRight:0}}>
-                        {this.getCategoryButtons()}
-                    </TableHeaderColumn>
-                </TableRow>
+                { (()=> {
+                    if (_this.props.showCategorChangeBar) {
+                        return <TableRow>
+                            <TableHeaderColumn colSpan="3"
+                                               style={{whiteSpace: "normal", paddingLeft: 0, paddingRight: 0}}>
+                                {this.getCategoryButtons()}
+                            </TableHeaderColumn>
+                        </TableRow>
+                    }
+                })()}
+
                 <TableRow>
                     <TableHeaderColumn colSpan="3" tooltip="Score Table By Category Groups"
-                                       style={{textAlign: 'left'}}>
+                                       style={{textAlign: 'left',whiteSpace:"normal"}}>
                         <h5 style={{color: colors.darkText.primary}}>{selectedCategory} Score Table</h5>
                     </TableHeaderColumn>
                 </TableRow>
                 <TableRow>
-                    <TableHeaderColumn tooltip="Order" style={{width: "15%"}}><b>#Order</b></TableHeaderColumn>
-                    <TableHeaderColumn tooltip="Name" style={{width: "65%"}}><b>Name</b></TableHeaderColumn>
-                    <TableHeaderColumn tooltip="Score" style={{width: "20%"}}><b>Score (#/100)</b></TableHeaderColumn>
+                    <TableHeaderColumn tooltip="Order"><b>Order</b></TableHeaderColumn>
+                    <TableHeaderColumn tooltip="Name" ><b>Name</b></TableHeaderColumn>
+                    <TableHeaderColumn tooltip="Score"><b>Score</b></TableHeaderColumn>
                 </TableRow>
             </TableHeader>
             <TableBody
@@ -210,6 +151,7 @@ export default  class CategoryScoreTable extends React.Component {
                 deselectOnClickaway={true}
                 showRowHover={false}
                 stripedRows={false}
+                style={{width:"100%"}}
             >
                 {this.createTableBody()}
             </TableBody>
@@ -227,9 +169,10 @@ export default  class CategoryScoreTable extends React.Component {
 
     getCategoryButtons = function () {
         var content = this.getCategories().map(category=> {
-            var isSelected  = category == this.state.selectedCategory;
+            var isSelected = category == this.props.selectedCategory;
             return <FlatButton label={category} labelStyle={{fontSize: "9px"}}
-                               onClick={this.showCategoryResult(category)} primary={isSelected}></FlatButton>
+                               onClick={this.showCategoryResult(category)} primary={isSelected}
+                               key={"btnCategory-" + category}></FlatButton>
         });
         return content;
     };
@@ -239,9 +182,10 @@ export default  class CategoryScoreTable extends React.Component {
         });
     }
     render = ()=> {
-
+        var minHeight = this.props.dataLoaded ? "410px":"50px";
+        var containerStyle = Object.assign(JSON.parse(JSON.stringify(s.GraphStyles.widgetContainer)), {height: "inherit",minHeight:minHeight})
         return (
-            <div style={s.GraphStyles.widgetContainer}>
+            <div style={containerStyle}>
                 {this.getContent()}
             </div>
         )
@@ -249,8 +193,10 @@ export default  class CategoryScoreTable extends React.Component {
 }
 
 CategoryScoreTable.propTypes = {
-    data: React.PropTypes.array.isRequired,
-    dataLoaded: React.PropTypes.bool
+    data: React.PropTypes.array,
+    dataLoaded: React.PropTypes.bool,
+    selectedCategory: React.PropTypes.string,
+    showCategorChangeBar: React.PropTypes.bool
 };
 CategoryScoreTable.contextTypes = {
     userId: React.PropTypes.number,

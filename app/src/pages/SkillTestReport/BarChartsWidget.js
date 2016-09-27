@@ -45,7 +45,7 @@ export default  class BarChartsWidget extends React.Component {
         data.labels = userScore.map(item=> {
             return item.category.category
         });
-        log("labels sorted->",data.labels);
+        //log("labels sorted->",data.labels);
 
         var userScoreValues = userScore.map(o=>{return o.score.toFixed(2);});
         var personelAverageScoreValues = personelAverageScore.map(o=>{return o.score.toFixed(2);});
@@ -122,5 +122,5 @@ export default  class BarChartsWidget extends React.Component {
     }
 }
 BarChartsWidget.propTypes = {
-    data: React.PropTypes.object.isRequired
+    data: React.PropTypes.object
 };

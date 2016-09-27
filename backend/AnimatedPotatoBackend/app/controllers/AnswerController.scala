@@ -1,25 +1,30 @@
 package controllers
 
-import animatedPotato.protocol.protocol.IdType
+import animatedPotato.protocol.protocol.{IdType, QuestionId}
 import dao.AnswerDAO
-import models.{Answer, ResponseMessage}
+import models.InterviewDAO.InterviewId
+import models.{Answer, ID, ResponseMessage}
 import play.api.mvc.{Action, Controller}
 import utils.Formatter._
 import play.api.libs.json.Json
 import utils.Constants
+
+case class GetAnswer(interviewId: InterviewId, questionId: QuestionId)
 
 class AnswerController extends Controller with Secured {
 
   lazy val AnswerDAO = new AnswerDAO
 
   def insert = evalOperation(AnswerDAO.insert)
+
   def update = evalOperation(AnswerDAO.update)
+
   def delete = evalOperation(AnswerDAO.delete)
 
-  def getAnswers = Action{implicit request =>
+  def getAnswers = Admin { implicit request =>
     Ok(Json.toJson(AnswerDAO.getAll))
   }
-  
+
   def evalOperation(function: Answer => IdType) = Action { implicit request =>
 
     request.body.asJson.flatMap(_.validate[Answer].asOpt) match {
@@ -36,4 +41,46 @@ class AnswerController extends Controller with Secured {
         BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
   }
+
+  /**
+    * requires GetAnswer typed JSON in a request body that has two fields : interviewID and questionID
+    *
+    * @return : Returns
+    *           onSuccess :
+    *             found : interview answer of specified interviewID and questionID
+    *             not_found: message that explains
+    *           onFailure : BadRequest Response Message that explains error
+    */
+  def getAnswer = UserAction { implicit request =>
+
+    request.body.asJson.flatMap(_.validate[GetAnswer].asOpt) match {
+
+      case Some(getAnswer) =>
+
+        val answer = AnswerDAO.get(getAnswer.interviewId, getAnswer.questionId)
+        if (answer.isDefined) Ok(Json.toJson(answer))
+        else Ok(Json.toJson(ResponseMessage(Constants.FAIL, Constants.NOT_EXISTS)))
+
+      case _ =>
+
+        BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
+    }
+  }
+
+  /**
+    * requires ID typed JSON in a request body that indicates interviewID
+    *
+    * @return : Returns interview answers of (each personnels and interviewId from request body)
+    */
+  def getInterviewAnswers = Action { implicit request =>
+
+    request.body.asJson.flatMap(_.validate[ID].asOpt) match {
+
+      case Some(id) => Ok(Json.toJson(AnswerDAO.getAllQuestionAnswer(id.id)))
+
+      case _ => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
+
+    }
+  }
+
 }

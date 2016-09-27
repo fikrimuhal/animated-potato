@@ -51,7 +51,9 @@ export default class DefaultLayout extends React.Component {
         }
         else {
             return (<header>
-                <AppBar title="Fikrimuhal Teknoloji - HR" showMenuIconButton={false}/>
+                <AppBar title="Fikrimuhal Teknoloji - Hızlı Mülakat" showMenuIconButton={false} iconElementRight={
+                    <img src="http://fikrimuhal.com/wp-content/uploads/2014/11/logo_sag-02-01-300x113.png" height={"55px"}/>
+                }/>
             </header>)
         }
     }

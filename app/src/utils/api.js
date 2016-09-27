@@ -1,7 +1,7 @@
 import * as db from './data.js'
 
-export const authenticate = db.getApiPromise("login", "POST");
-export const signUp = db.getApiPromise("signUp", "POST");
+export const authenticate = db.getApiPromise("login", "POST",false);
+export const signUp = db.getApiPromise("signUp", "POST",false);
 export const getParticipants = db.getApiPromise("admin/getParticipants", "GET");
 export const getCategoryList = db.getApiPromise("admin/getCategories", "POST");
 export const getApplicants = db.getApiPromise("admin/getApplicants", "GET")
@@ -22,9 +22,9 @@ export const QuestionAPI = {
 };
 
 export const InterviewAPI = {
-    startTest: db.getApiPromise("startTest", "POST"),
-    startTestWithoutAuthentication: (email)=> db.getApiPromise("startTest", "POST"),
-    nextQuestion: db.getApiPromise("nextQuestion", "POST")
+    startTest: db.getApiPromise("startTest", "POST",false),
+    startTestWithoutAuthentication: (email)=> db.getApiPromise("startTest", "POST",false),
+    nextQuestion: db.getApiPromise("nextQuestion", "POST",false)
 };
 
 export const UserAPI = {
@@ -36,9 +36,10 @@ export const UserAPI = {
 };
 
 export const ReportAPI = {
-    getAllResult: db.getApiPromise("admin/getUsersResults", "GET"),
+    getAllResult: db.getApiPromise("admin/getUsersResults", "POST"),
     getComparativeResult:db.getApiPromise("getComparativeReport","POST"),
-    getScoreTable:db.getApiPromise("admin/getCategoryResults","POST")
+    getScoreTable:db.getApiPromise("admin/getCategoryResults","POST"),
+    getAnswersByInterviewId:db.getApiPromise("admin/getInterviewAnswers","POST")
 }
 
 export const CategoryAPI = {

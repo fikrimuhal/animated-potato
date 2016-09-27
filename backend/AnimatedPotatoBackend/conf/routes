@@ -60,8 +60,10 @@ POST        /answer                            controllers.AnswerController.inse
 
 GET         /getAnswers                        controllers.AnswerController.getAnswers
 POST        /getComparativeReport              controllers.ScoresController.getComparativeReport
-GET         /admin/getUsersResults             controllers.ScoresController.getUsersResults
+POST         /admin/getUsersResults             controllers.ScoresController.getUsersResults
 POST        /admin/getCategoryResults          controllers.ScoresController.getCategoryResults
+POST        /admin/getInterviewAnswers          controllers.AnswerController.getInterviewAnswers
+POST        /admin/getAnswer                    controllers.AnswerController.getAnswer
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                      controllers.Assets.at(path="/public", file)

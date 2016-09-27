@@ -2,6 +2,7 @@
  * Created by MYigit on 9.8.2016.
  */
 var image = require("!file!../assets/images/bg1.jpg");
+import * as colors from 'material-ui/styles/colors';
 export const userLayoutStyles = {
     paperStyle:{
         margin:"0 auto",
@@ -191,7 +192,7 @@ export const AdminLayoutStyle = {
 export  const GraphStyles = {
   widgetContainer:{
       border:"1px teal dotted",
-      borderRadius:"10px",
+      //borderRadius:"10px",
       marginTop:"15px",
       padding:"5px",
       backgroundColor:"rgba(213, 224, 205, 0.1)"
@@ -210,7 +211,15 @@ export  const GraphStyles = {
         marginTop:20,
         padding:"5px",
         display: 'inline-block',
-        border:"1px solid teal"
+        border:"1px dashed teal",
+        minHeight:"260px"
+    },
+    SummaryBarPaper2Title:{
+        backgroundColor:colors.lightGreen100,
+        textAlign:"center",
+        fontSize:"15px",
+        fontWeight:"bold",
+        color:colors.blueGrey500
     },
     SummaryBarLabel:{
         fontWeight: "bolder",
@@ -230,5 +239,9 @@ export  const GraphStyles = {
         width:"100%",
         height:"100%",
         border:"1px solid teal"
+    },
+    barcodeContainer:{
+        marginTop:"20px",
+        textAlign:"center"
     }
 };

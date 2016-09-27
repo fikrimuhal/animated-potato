@@ -77,7 +77,7 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
 
       case Some(data) =>
 
-        (new AnswerDAO).insert(Answer(None, data.answer.questionId, data.userId, data.interviewId, data.email, data.answer.value))
+        (new AnswerDAO).insert(Answer(None, data.answer.questionId, data.userId, data.interviewId, data.email.get, data.answer.value))
 
         (rootActor ? (RandomInterviewImpl, GetNextQuestion(Some(data.answer), data.interviewId)))
           .map {

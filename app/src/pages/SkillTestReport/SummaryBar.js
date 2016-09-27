@@ -23,21 +23,44 @@ export default  class SummaryBar extends React.Component {
     }
 
     getBestAtCategories = function () {
-        return _.filter(this.props.data.scores,o=>{return o.percentage >= 0.75}).map(item => {return item.category.category});
+        //Think TODO: best ve good kategorilerinin belirlenmesindeki yüzdelik dilim parametlerine karar verilecek
+        return _.filter(this.props.data.scores, o=> {
+            return o.percentage > 0 && o.percentage <= 0.20
+        }).map(item => {
+            return item.category.category
+        });
     }
     getGoodAtCategories = function () {
-        return _.filter(this.props.data.scores,o=>{return o.percentage < 0.75 && o.percentage >=0.50}).map(item => {return item.category.category});
+        return _.filter(this.props.data.scores, o=> {
+            return o.percentage > 0.20 && o.percentage <= 0.35
+        }).map(item => {
+            return item.category.category
+        });
     }
     getBestAtList = function () {
-        return this.getBestAtCategories().map(category=>{
+        return this.getBestAtCategories().map(category=> {
+            var stars = <Row style={{width: "50px"}}>
+                <Col lg={12} md={12} style={{display: "flex"}}>
+                    <GradeIcon color={materialColors.yellow500}/>
+                    <GradeIcon color={materialColors.yellow500}/>
+                    <GradeIcon color={materialColors.yellow500}/>
+                </Col>
+            </Row>
             return <ListItem primaryText={category}
-                      leftIcon={<GradeIcon color={materialColors.yellow500}/>}/>
+                             leftIcon={stars}/>
         })
     };
     getGoodAtList = function () {
-        return this.getGoodAtCategories().map(category=>{
+        var stars = <Row style={{width: "30px"}}>
+            <Col lg={12} md={12} style={{display: "flex"}}>
+                <GradeIcon color={materialColors.yellow500}/>
+                <GradeIcon color={materialColors.yellow500}/>
+            </Col>
+        </Row>
+        var i = 0;
+        return this.getGoodAtCategories().map(category=> {
             return <ListItem primaryText={category}
-                      leftIcon={<GradeIcon color={materialColors.yellow500}/>}/>
+                             leftIcon={stars} key={"Listitem" + (i++)}/>
         })
     };
     getScoreColor = function () {
@@ -137,8 +160,7 @@ export default  class SummaryBar extends React.Component {
         return chartData;
     };
     render = ()=> {
-        log("rendered", this.props.data);
-        //TODO best at, good at için Herhangi bir sınırlama olmadan hesaplama yapılacak listeye konacak
+        //log("rendered",this.props.data);
         var info = this.props.data;
         return (
             <div>
@@ -222,25 +244,21 @@ export default  class SummaryBar extends React.Component {
                                 </Row>
                             </Col>
                             <Col lg={4} md={4}>
-
-
                                 <Paper style={s.GraphStyles.SummaryBarPaper2}
                                        rounded={false}>
-                                    <Divider/>
-                                    <b>Best at</b><br/>
-                                    <Divider/>
+
+                                    <div style={s.GraphStyles.SummaryBarPaper2Title}>Best at</div>
+
                                     <List>
                                         {this.getBestAtList()}
                                     </List>
-                                    <Divider/>
-                                    <b>Good at</b>
-                                    <Divider/>
+
+                                    <div style={s.GraphStyles.SummaryBarPaper2Title}>Good at</div>
+
                                     <List>
                                         {this.getGoodAtList()}
                                     </List>
                                 </Paper>
-
-
                             </Col>
                         </Row>
                     </Col>

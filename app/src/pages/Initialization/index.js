@@ -26,7 +26,9 @@ export default  class DbInitialization extends React.Component {
         this.setState({
             waiting: true
         });
-        var categories = ["Java", "C#", "Backend", "Frontend", "Javascript", "Scala", "PHP", "ASP.NET", "Machine Learning", "ReactJS"];
+        var categories = ["Java", "C#", "Backend", "Frontend", "Javascript", "Scala",
+                          "PHP", "ASP.NET", "Machine Learning", "ReactJS","Spark","Hadoop",
+                          "OOP","C++","Unity","Objective C","Swift","Phyton","Ruby","Haskell"];
         var processedCategoryCount = 0;
         var checkFinish = ()=> {
             if (processedCategoryCount == categories.length) {

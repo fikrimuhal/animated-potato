@@ -32,7 +32,7 @@ case class ParticipantResponse(participantList: List[Participant], page: Int, nu
 
 case class Applicant(info: Participant, applyDate: Timestamp, averageScore: Score, interviewId: InterviewId)
 
-case class ClaimData(userName: String, email: Email, isAdmin: Boolean, isPersonnel: Boolean)
+case class ClaimData(userName: String, email: Email, isAdmin: Boolean, isPersonnel: Boolean, timeZone : Long)
 
 object Participants {
 
@@ -56,7 +56,8 @@ object Participants {
   }
 
   def getApplicants: List[Applicant] = DB { implicit session =>
-    InterviewDAO.interviewDAO.filter(_.hasFinished).list
+    val interviews = InterviewDAO.interviewDAO.filter(_.hasFinished).list
+      interviews.filter(i=> getByEmail(i.email).isDefined)
       .map(itw =>
         Applicant(getByEmail(itw.email).get, itw.startDate.get, itw.averageScore.get, itw.id.get))
   }
@@ -78,6 +79,10 @@ object Participants {
       case _ => None
     }
   }
+  def getByEmailList(emails :List[Email]) = DB { implicit session =>
+  participants.filter(_.email inSet emails).list
+
+  }
 
   def getAll = DB { implicit session =>
     participants.list
@@ -97,9 +102,9 @@ object Participants {
 
   def getClaimData(username: String): Option[ClaimData] = DB { implicit session =>
 
-    participants.filter(_.username === username).list.headOption match {
+    participants.filter(p => p.username === username).list.headOption match {
 
-      case Some(p) => Users.get(p.username).map(u => ClaimData(u.username, u.email.get, u.isadmin.get, u.ispersonnel.get))
+      case Some(p) => Users.get(p.username).map(u => ClaimData(u.username, u.email.get, u.isadmin.get, u.ispersonnel.get,System.currentTimeMillis))
 
       case None => None
 

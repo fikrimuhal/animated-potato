@@ -13,4 +13,6 @@ WITH (
 ALTER TABLE question
   OWNER TO postgres;
 
+create index question_index ON question (id)
+
 -- DROP TABLE IF EXISTS question;

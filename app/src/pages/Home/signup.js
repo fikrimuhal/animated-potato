@@ -18,7 +18,7 @@ export default class UserSignUp extends React.Component{
     render=function () {
         return(
             <div>
-                <Subheader>Fikrimuhal HR - Sign Up</Subheader>
+                {/*<Subheader>Fikrimuhal Hızlı Mülakat - Kayıt</Subheader>*/}
                 <SignUpForm />
             </div>
         )

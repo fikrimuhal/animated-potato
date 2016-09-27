@@ -19,7 +19,7 @@ object Users {
   lazy val participants = TableQuery[Participants]
 
   def insert(user: User) = DB { implicit session =>
-    users += user
+    users += user.copy(password =  BCrypt.hashpw(user.password, BCrypt.gensalt()))
   }
 
   def exists(user: User): Boolean = DB { implicit session =>
@@ -65,7 +65,7 @@ object Users {
   }
 
   def isAdmin(userName: String): Boolean = DB { implicit session =>
-    users.filter(_.username === userName).map(u => u.isAdmin).list.nonEmpty
+    users.filter(_.username === userName).map(u => u.isAdmin).list.head
   }
 
   def isPersonnel(email: Email): Boolean = DB { implicit session =>
@@ -86,6 +86,7 @@ object Users {
       .map(user =>
         Participants.participants.filter(_.username === user.username).list.head)
   }
+
 
   def getAdminList: List[Participant] = DB { implicit session =>
 
@@ -110,9 +111,6 @@ object Users {
       .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
   }
 
-  def getPersonnelEmails: List[Email] = DB { implicit session =>
-    users.filter(_.isPersonnel === true).map(_.email).list
-  }
 
 }
 

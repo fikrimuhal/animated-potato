@@ -1,114 +1,105 @@
-import React from 'react'
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import {pink500} from 'material-ui/styles/colors';
-import {log2,db,util} from '../../utils';
-import userProfileUpdate from './userProfileUpdate';
-import userInfoForm from './userInfoForm';
-import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
-
-
-const styles ={
-    font:{
-        fontFamily: 'PT Sans Caption',
-    },
-    container:{
-        display:"flex",
-        backgroundColor:"#f1f1f1",
-        marginTop:"5px",
-
-        fontFamily: 'Hammersmith One',
-        width: "350px"
-    },
-    fontIconStyle:{
-        backgroundColor:"#D2CCCC",
-        height: "23px",
-        width: "23px",
-        marginRight: "5px",
-    },
-    divCorner: {
-        marginTop: '10px',
-
-        padding: '20px',
-        width: '430px',
-        height: '400px',
-    },
-    form:{
-        marginLeft: 20
-    },
-    paperStyle:{
-       width: '100%',
+import React        from 'react'
+import FlatButton   from 'material-ui/FlatButton';
+import FontIcon     from 'material-ui/FontIcon';
+import {pink500}    from 'material-ui/styles/colors';
+import Paper        from 'material-ui/Paper';
+import TextField    from 'material-ui/TextField';
+import log2         from '../../utils/log2'
+import * as db      from '../../utils/data'
+import  ContactIcon from 'material-ui/svg-icons/communication/contacts'
+import  ContactEmailIcon from 'material-ui/svg-icons/communication/contact-mail'
+import  ContactPhoneIcon from 'material-ui/svg-icons/communication/contact-phone'
+import * as util    from '../../utils/utils'
+import colors from '../../utils/material-colors'
+import {Row, Col}   from 'react-flexbox-grid'
+import Divider      from 'material-ui/Divider'
+const styles = {
+    paperStyle: {
+        width: '100%',
         margin: 20,
-        textAlign: 'center',
-        display: 'inline-block',
+        padding: "10px"
+
+
+    },
+    infoRow: {
+        marginTop: "5px",
+        borderBottom: "1px dashed teal",
+        padding: "5px",
+        fontSize: "15px",
+
+    },
+    infoLabel: {
+        fontWeight: "bold",
+        color: "teal"
     }
 }
-export default  class  UserProfile extends  React.Component{
-    constructor(props){
-    super(props)
+export default  class UserProfile extends React.Component {
+    constructor(props) {
+        super(props)
 
         this.state = {
             activeForm: true
         }
-        util.bindFunctions.call(this,['goToUpdate','nameChanced']);
+        util.bindFunctions.call(this, ['goToUpdate', 'nameChanced']);
 
     }
-    nameChanced = function(event, value){
+
+    nameChanced = function (event, value) {
         console.log(value)
-        var oldUser = this.props.user
+        //var oldUser = this.props.user
     }
-    goToUpdate = function(){
+    goToUpdate = function () {
 
-            this.setState({
-                activeForm:false
-            })
+        this.setState({
+            activeForm: false
+        })
     }
-    render = ()=>{
+    render = ()=> {
+        var user = this.props.user;
+        return (
+            <div>
+                <h5>Profil Bilgileri</h5>
+                <Row>
+                    <Col lg={12} md={12}>
+
+                            <Row style={styles.infoRow}>
+                                <Col lg={1} md={1}><ContactIcon color={colors.teal.x300}/></Col>
+                                <Col lg={1} md={2} style={styles.infoLabel}>Ad:</Col>
+                                <Col lg={10} md={8}>{user.name}</Col>
+                            </Row>
+                            <Row style={styles.infoRow}>
+                                <Col lg={1} md={1}><ContactIcon color={colors.teal.x300}/></Col>
+                                <Col lg={1} md={2} style={styles.infoLabel}>Soyad:</Col>
+                                <Col lg={10} md={8}>{user.lastname}</Col>
+                            </Row>
+                            <Row style={styles.infoRow}>
+                                <Col lg={1} md={1}><ContactEmailIcon color={colors.teal.x300}/></Col>
+                                <Col lg={1} md={2} style={styles.infoLabel}>Email:</Col>
+                                <Col lg={10} md={8}>{user.email}</Col>
+                            </Row>
+                            <Row style={styles.infoRow}>
+                                <Col lg={1} md={1}><ContactPhoneIcon color={colors.teal.x300}/></Col>
+                                <Col lg={1} md={2} style={styles.infoLabel}>Phone:</Col>
+                                <Col lg={10} md={8}>{user.phone}</Col>
+                            </Row>
+                            {/*<Row>*/}
+                                {/*<Col lg={12}>*/}
+                                    {/*<FlatButton label="İptal" style={{float: "right"}} secondary={true}*/}
+                                                {/*disabled={this.state.activeForm}/>*/}
+                                    {/*<FlatButton label="Düzenle" style={{float: "right"}} secondary={true}*/}
+                                                {/*onClick={this.goToUpdate}/>*/}
+                                {/*</Col>*/}
+
+                            {/*</Row>*/}
+
+                    </Col>
+                </Row>
+
+            </div>
+        )
         console.log(this.state.activeForm)
-    return(
-    <div>
-         <div style={styles.divCorner}>
-                <Paper style={styles.paperStyle} zDepth={1} >
-            <h4>{this.props.user.name} {this.props.user.lastname} - Profil Bilgileri</h4>
-                    <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >person</FontIcon>
-                    Adı: <TextField
-                    disabled={this.state.activeForm}
-                        hintText={this.props.user.name}
-                    defaultValue={this.props.user.name}
-                    /><br />
-                    <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >person</FontIcon>
-                    Soyadı: <TextField
-                        disabled={this.state.activeForm}
-                        hintText={this.props.user.lastname}
-                        defaultValue={this.props.user.lastname}
-                    /><br />
-                    <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >mail</FontIcon>
-                    Email:<TextField
-                    disabled={this.state.activeForm}
-                        hintText={this.props.user.email}
-                    defaultValue={this.props.user.email}
-                    /><br />
-                    <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >home</FontIcon>
-                    WebSite: <TextField
-                    disabled={this.state.activeForm}
-                        hintText={this.props.user.website}
-                        defaultValue={this.props.user.website}
-                    /><br />
-                    <FontIcon style={styles.fontIconStyle} color={pink500} className="material-icons md-dark md-inactive" >note</FontIcon>
-                    Your Notes: <TextField
-                    disabled={this.state.activeForm}
-                    hintText={this.props.user.yournotes}
-                    defaultValue={this.props.user.yournotes}
-                />
-                    <FlatButton label="İptal" style={{float:"right"}} secondary={true} disabled={this.state.activeForm}/>
-                    <FlatButton label="Düzenle" style={{float:"right"}} secondary={true} onClick={this.goToUpdate}/>
-             </Paper>
-         </div>
-    </div>
-    )
     }
 }
-UserProfile.propTypes ={
+UserProfile.propTypes = {
     user: React.PropTypes.object.isRequired
 }

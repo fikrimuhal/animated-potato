@@ -13,6 +13,7 @@ import * as util        from '../../utils/utils'
 import * as s           from '../../layouts/style'
 import * as _           from 'lodash'
 import ReportView       from './ReportViewer'
+import {MetricAPI}        from '../../utils/metricDB'
 //consts and variables
 const log = log2("SkillTestReportContainer");
 var context = {};
@@ -22,10 +23,15 @@ export default  class SkillTestReportContainer extends React.Component {
         util.bindFunctions.call(this, ['initializeFromAPI', 'initializeFromCache']);
         this.state = {
             dataWaiting: true,
-            comparativeResultLoaded:false,
-            scoreTableLoaded:false
+            comparativeResultLoaded: false,
+            scoreTableLoaded: false,
+            answersLoaded: false
         };
         this.initData();
+        //Örnek metrik oluşturulması
+        // MetricAPI.getClient().then(client=> {
+        //     client.write({key: "resultPageView", value: 1});
+        // });
 
         //var userId = this.props.params.interviewId;
         // if(Cache.checkTestResultReportCache(userId))
@@ -38,14 +44,14 @@ export default  class SkillTestReportContainer extends React.Component {
     }
 
     getChildContext() {
-        log("**getChildContext**", this.props.params);
-        context.userId = this.props.params.userId;
-        context.interviewId = this.props.params.interviewId;
+        //log("**getChildContext**", this.props.params);
+        context.userId = parseInt(this.props.params.userId);
+        context.interviewId = parseInt(this.props.params.interviewId);
         return context;
     };
 
     initializeFromAPI = function (userId) {
-        log("Data from SERVER");
+        //log("Data from SERVER");
         mockApi.getUserSkillTestReport(userId).then(response=> {
             var data = JSON.parse(response);
             log("data", data);
@@ -56,35 +62,55 @@ export default  class SkillTestReportContainer extends React.Component {
         })
     };
     initializeFromCache = function (userId) {
-        log("Data from CACHE");
+        //log("Data from CACHE");
         //var data = Cache.getTestResultReportFromCache(userId);
         data.isValidUser = true;
         this.state = {
             dataWaiting: false,
             comparativeResultLoaded: false,
-            scoreTableLoaded:false
+            scoreTableLoaded: false
         }
     };
     goToList = function () {
         browserHistory.push("/dashboard/listofparticipants");
     };
     initData = function () {
+        var interviewId = parseInt(this.props.params.interviewId);
         var _this = this;
-        api.ReportAPI.getAllResult().then(response=> {
+        api.ReportAPI.getAllResult({
+            id: interviewId
+        }).then(response=> {
             return response.json()
         }).then(json=> {
-            _this.setState({
-                //categoryScoreInfo: mockData.TestResultMockDataCreator.getRadarData(),
-                generalInfo: _.filter(json, q=> {
-                    return q.interviewId == _this.props.params.interviewId
-                })[0],
-                scoreData: json,
-                dataLoaded: true
-            })
+            log("getAllResult", json);
+            if (json.status == "SESSION_TIME_OUT" || json.status == "UNAUTHORIZED") {
+                util.clearToken();
+                _this.context.showMessage(json.message, 2000);
+                setTimeout(()=> {
+                    browserHistory.push("/signin")
+                }, 2000)
+                return;
+            }
+            else if(json.status =="FORBIDDEN"){
+                browserHistory.push("/")
+            }
+            else {
+                _this.setState({
+                    //categoryScoreInfo: mockData.TestResultMockDataCreator.getRadarData(),
+                    generalInfo: _.filter(json, q=> {
+                        return q.interviewId == interviewId
+                    })[0],
+                    scoreData: json,
+                    dataLoaded: true
+                })
+            }
+
+        }).catch(err=> {
+            _this.context.showMessage("Error occured... try again", 6000)
         })
 
         api.ReportAPI.getComparativeResult({
-            id: parseInt(_this.props.params.interviewId)
+            id: interviewId
         }).then(response=> {
             return response.json()
         }).then(json=> {
@@ -94,16 +120,31 @@ export default  class SkillTestReportContainer extends React.Component {
             })
         })
 
-        //TODO #BACKEND skorların hesaplanmasında performans düşüklüğü var
+
+        //log("****interviewID", _this.props.params.interviewId)
         api.ReportAPI.getScoreTable({
-            id: parseInt(_this.props.params.userId)
-        }).then(response=>{return response.json()}).then(json=>{
-           this.setState({
-               scoreTable:json,
-               scoreTableLoaded:true
-           });
+            id: interviewId
+        }).then(response=> {
+            return response.json()
+        }).then(json=> {
+            this.setState({
+                scoreTable: json,
+                scoreTableLoaded: true
+            });
         });
 
+
+        api.ReportAPI.getAnswersByInterviewId({
+            id: interviewId
+        }).then(response=> {
+            return response.json()
+        }).then(json=> {
+            this.setState({
+                answers: json,
+                answersLoaded: true
+            })
+
+        });
 
     };
 
@@ -121,7 +162,9 @@ export default  class SkillTestReportContainer extends React.Component {
                            comparativeResultLoaded={this.state.comparativeResultLoaded}
                            scoreTable={this.state.scoreTable}
                            scoreTableLoaded={this.state.scoreTableLoaded}
-                        />
+                           answers={this.state.answers}
+                           answersLoaded={this.state.answersLoaded}
+        />
 
     };
     getContent = function () {
@@ -151,3 +194,7 @@ SkillTestReportContainer.childContextTypes = {
     userId: React.PropTypes.number,
     interviewId: React.PropTypes.number
 };
+
+SkillTestReportContainer.contextTypes = {
+    showMessage: React.PropTypes.func
+}

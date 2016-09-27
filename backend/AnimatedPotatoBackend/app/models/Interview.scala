@@ -71,9 +71,20 @@ object InterviewDAO {
   def insertAverageScore(interviewId: InterviewId, averageScore: Score) = DB { implicit session =>
     interviewDAO.filter(_.id === interviewId).map(_.averageScore).update(averageScore)
   }
-  
-  def getParticipantByInterviewId(interviewId: InterviewId) = DB { implicit session =>
-    Participants.getByEmail(interviewDAO.filter(_.id === interviewId).first.email).get
+
+  def getParticipantByInterviewId(interviewId: InterviewId):Option[Participant] = DB { implicit session =>
+
+    Participants.getByEmail(interviewDAO.filter(_.id === interviewId).first.email)
+  }
+
+  def getPersonnelInterviewIds : List[InterviewId] = DB { implicit session =>
+    val personnelEmailList = Users.users.filter(_.isPersonnel).map(_.email).list
+      interviewDAO.filter(_.email inSet personnelEmailList).map(_.id).list
+  }
+
+  def getUserandPersonnelInterviews(interviewId: InterviewId): List[Interview] = DB { implicit session =>
+    val personnelEmailList = Users.users.filter(_.isPersonnel).map(_.email).list
+    interviewDAO.filter(i => (i.email inSet personnelEmailList ) || (i.id === interviewId) ).list
   }
 
 }

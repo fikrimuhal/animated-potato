@@ -12,3 +12,5 @@ WITH (
 );
 ALTER TABLE score
   OWNER TO postgres;
+
+create index score_index ON score (interviewid, categoryid)

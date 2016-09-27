@@ -5,13 +5,17 @@ import React from 'react'
 import * as s               from '../../layouts/style'
 import colors from '../../utils/material-colors'
 import * as _ from 'lodash'
+import log2   from '../../utils/log2'
+const log = log2("ColorMatrixChart")
 const styles = {
-    wday: {
+    userLabel: {
         fontSize: "9px",
         fill: "#767676",
-        direction: "rtl"
+        direction: "rtl",
+        unicodeBidi: "plaintext"
+        //textAnchor:"middle"
     },
-    month: {
+    categoryLabel: {
         fontSize: "9px",
         fill: "#767676",
         transform: "rotate(90deg)",
@@ -34,7 +38,7 @@ export default  class ColorMatrixChart extends React.Component {
         var content = categories.map(category=> {
             var y = -1 * (i * 13 + 3);
             i++;
-            return <text x="-3" y={y} style={styles.month}>{category}</text>
+            return <text x="-3" y={y} style={styles.categoryLabel} key={"textCategory-" + i}>{category}</text>
         });
         return content;
     };
@@ -44,7 +48,10 @@ export default  class ColorMatrixChart extends React.Component {
         var content = this.props.data.map(item=> {
             if (i == 0) dy = 9; else dy += 13;
             i++;
-            return <text text-anchor="middle" dx="-5" dy={dy} style={styles.wday}>{item.name} {item.lastName}</text>
+            var fullName = item.name + " " + item.lastName;
+            if (item.interviewId == -4)fullName = "Global Avg";
+            if (item.interviewId == -2)fullName = "Staffs Avg";
+            return <text dx="-5" dy={dy} style={styles.userLabel} key={"userLabel-"+i}>{fullName}</text>
         });
         return content;
     };
@@ -55,8 +62,9 @@ export default  class ColorMatrixChart extends React.Component {
             return x.category.category;
         });
         var x = 0, y = 0;
+        var gCount = 0;
         var matrix = categories.map(category=> {
-            return <g transform={"translate(" + x + "," + y + ")"}>
+            return <g transform={"translate(" + x + "," + y + ")"} key={"g-" + gCount++}>
                 {
                     (()=> {
                         x += 13;
@@ -67,8 +75,8 @@ export default  class ColorMatrixChart extends React.Component {
 
                                 return q.category.category == category
                             })[0].score;
-
-                            return this.createCell(11, 11, location, score);
+                            var key = category + index;
+                            return this.createCell(11, 11, location, score, key);
                         })
                         return column;
                     })()
@@ -78,32 +86,36 @@ export default  class ColorMatrixChart extends React.Component {
         return matrix;
     };
 
-    createCell = function (width, height, location, score) {
+    createCell = function (width, height, location, score, key) {
         var color = this.getColor(score);
-        return <rect className="day" width={width} height={height} y={location} fill={color} data-score={score}></rect>;
+        return <rect className="day" width={width} height={height} y={location} fill={color} data-score={score}
+                     key={key}></rect>;
     };
     getColor = function (score) {
         var normalizedScore = score;
         var color = colors.grey.x400;
-        if(normalizedScore<=0)
+        if (normalizedScore <= 0)
             color = colors.grey.x400;
-        else if(normalizedScore<0.25)
+        else if (normalizedScore < 0.25)
             color = colors.green.x200;
-        else if(normalizedScore<0.50)
+        else if (normalizedScore < 0.50)
             color = colors.green.x400;
-        else if(normalizedScore<0.75)
+        else if (normalizedScore < 0.75)
             color = colors.green.x600;
         else
             color = colors.green.x900;
         return color;
     };
     render = ()=> {
-        var height = this.props.data.length * 40;
-        var width = this.props.data[0].scores.length * 40;
-        var viewBox = "0 -20 "+ Math.floor(width/2)+" "+ Math.floor(height/2);
+        log("this.props.data",this.props.data);
+        var height = 100 + this.props.data.length * 60;
+        var width = 100 + this.props.data[0].scores.length * 40;
+
+        var viewBox = "0 -20 " + Math.floor(width / 2) + " " + Math.floor(height / 2);
         return (
             <div style={s.GraphStyles.widgetContainer}>
                 <h5>Color Matrix</h5>
+
 
                 <svg width={width} height={height} className="" viewBox={viewBox}>
                     <g transform="translate(80, 60)">
@@ -117,5 +129,5 @@ export default  class ColorMatrixChart extends React.Component {
     }
 }
 ColorMatrixChart.propTypes = {
-    data: React.PropTypes.object.isRequired
+    data: React.PropTypes.array.isRequired
 }
