@@ -56,7 +56,8 @@ object Participants {
   }
 
   def getApplicants: List[Applicant] = DB { implicit session =>
-    InterviewDAO.interviewDAO.filter(_.hasFinished).list
+    val interviews = InterviewDAO.interviewDAO.filter(_.hasFinished).list
+      interviews.filter(i => getByEmail(i.email).isDefined)
       .map(itw =>
         Applicant(getByEmail(itw.email).get, itw.startDate.get, itw.averageScore.get, itw.id.get))
   }

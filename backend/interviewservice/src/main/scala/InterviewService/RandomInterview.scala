@@ -51,6 +51,7 @@ class RandomInterview(initMessage: InitMessage) extends Actor with Stash {
 
       val scores = categoryList.map { c_id =>
         val categoricQcwt = qcwt.filter(qcw => qcw.categoryId == c_id && answers.map(_.questionId).contains(qcw.questionId))
+
         CategoryScoreConfidence(c_id,
           categoricQcwt.map(qcw => qcw.weight * answers.filter(a => a.questionId == qcw.questionId).head.value).sum / categoricQcwt.map(_.weight).sum,
           scala.util.Random.nextDouble)
