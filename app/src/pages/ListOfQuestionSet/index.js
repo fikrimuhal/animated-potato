@@ -251,13 +251,33 @@ export default class ListOfQuestionSet extends React.Component {
     handleFilterChange = function (filter){
         let newFilters = Object.assign({},this.state.filters);
         if(filter.filterTerm) {
-            newFilters[filter.columnKey] = filter.filterTerm;
+            newFilters[filter.column.key] = filter.filterTerm;
         }
         else {
-            delete newFilters[filter.columnKey];
+            delete newFilters[filter.column.key];
         }
-        this.setState({filters:newFilters});
-    }
+
+
+        log("filter", newFilters);
+        var rows = this.state.originalRows;
+        //rows = _.filter(rows,newFilters);
+        rows = _.filter(rows, row=> {
+            var result = false;
+            if (Object.keys(newFilters).length == 0) {
+                return true;
+            }
+            else {
+                Object.keys(newFilters).forEach(key=> {
+                    if (row[key].toLowerCase().includes(newFilters[key].toLowerCase()))result = true;
+                })
+            }
+            return result;
+        });
+        this.setState({
+            filters: newFilters,
+            rows: rows
+        });
+    };
     handleGridSort = function (sortColumn,sortDirection){
         var comparer = function (a,b){
             if(sortDirection === 'ASC') {
