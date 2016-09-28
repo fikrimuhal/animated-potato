@@ -74,7 +74,7 @@ object Questions {
     questions.filter(_.id === question.id).update(QuestionTable(question.id, question.title, question.qType))
     // questionOptions update
     questionOptions.filter(qopt => qopt.questionId === question.id).delete
-    question.options.foreach { qopt => questionOptions += QuestionOption(question.id,None,qopt.title,qopt.weight)}
+    question.options.foreach { qopt => questionOptions += QuestionOption(question.id, None, qopt.title, qopt.weight) }
     //questionCategory Update
     questionCategories.filter(qct => qct.questionId === question.id).delete
     question.categoryWeights.foreach(qct => questionCategories += QuestionCategory(question.id.get, qct.id, qct.weight))
@@ -131,6 +131,14 @@ object Questions {
 
       case _ => None
     }
+  }
+
+  def getQuestionText(id: IdType): Option[QuestionTable] = DB { implicit session =>
+    questions.filter(_.id === id).list.headOption
+  }
+
+  def getAllQuestions: List[QuestionTable] = DB { implicit session =>
+    questions.list
   }
 }
 

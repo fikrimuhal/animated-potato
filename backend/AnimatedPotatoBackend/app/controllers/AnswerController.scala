@@ -3,13 +3,14 @@ package controllers
 import animatedPotato.protocol.protocol.{IdType, QuestionId}
 import dao.AnswerDAO
 import models.InterviewDAO.InterviewId
-import models.{Answer, ID, ResponseMessage}
+import models._
 import play.api.mvc.{Action, Controller}
 import utils.Formatter._
 import play.api.libs.json.Json
 import utils.Constants
 
 case class GetAnswer(interviewId: InterviewId, questionId: QuestionId)
+case class QuestionAndAnswer(question : Option[QuestionTable], answer: Option[Answer])
 
 class AnswerController extends Controller with Secured {
 
@@ -56,13 +57,13 @@ class AnswerController extends Controller with Secured {
     request.body.asJson.flatMap(_.validate[GetAnswer].asOpt) match {
 
       case Some(getAnswer) =>
+       val questionOption: Option[QuestionTable] = Questions.getQuestionText(getAnswer.questionId)
 
         val answer = AnswerDAO.get(getAnswer.interviewId, getAnswer.questionId)
-        if (answer.isDefined) Ok(Json.toJson(answer))
+        if (answer.isDefined) Ok(Json.toJson(QuestionAndAnswer(questionOption,answer)))
         else Ok(Json.toJson(ResponseMessage(Constants.FAIL, Constants.NOT_EXISTS)))
 
       case _ =>
-
         BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
   }
@@ -73,6 +74,7 @@ class AnswerController extends Controller with Secured {
     * @return : Returns interview answers of (each personnels and interviewId from request body)
     */
   def getInterviewAnswers = Action { implicit request =>
+
 
     request.body.asJson.flatMap(_.validate[ID].asOpt) match {
 

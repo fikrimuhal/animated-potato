@@ -12,7 +12,7 @@ import scala.slick.lifted.TableQuery
 
 case class InterviewAnswers(interviewId: InterviewId,participantId : IdType,name : String, lastName: String, answers: List[QuestionAnswer])
 
-case class QuestionAnswer(questionId: QuestionId, value: Int)
+case class QuestionAnswer(question: Option[QuestionTable], value: Int)
 
 class AnswerDAO extends BaseDAO[AnswerTable, Answer](TableQuery[AnswerTable]) {
 
@@ -36,17 +36,19 @@ class AnswerDAO extends BaseDAO[AnswerTable, Answer](TableQuery[AnswerTable]) {
     lazy val questionDAO = TableQuery[Questions]
     val answers = answerDAO.list
 
-    val questionIDs = questionDAO.map(_.id).groupBy(x => x).map(_._1).list
+    val questions = questionDAO.list
+    val questionIDs = questions.map(_.id).groupBy(x => x).keys
     val interviews = InterviewDAO.getUserandPersonnelInterviews(interviewId)
     val participants = Participants.getByEmailList(interviews.map(_.email))
 
     interviews.map { itw =>
 
       val answerValues = questionIDs.map { q_id =>
-        val answer = answers.find(ans => ans.interviewId == itw.id.get & ans.questionId == q_id)
-        if (answer.isDefined) QuestionAnswer(q_id, bool2int(answer.get.answer))
-        else QuestionAnswer(q_id, UNQUESTIONED)
-      }
+        val answer = answers.find(ans => ans.interviewId == itw.id.get & ans.questionId == q_id.get)
+        val question = questions.find(_.id == q_id)
+        if (answer.isDefined) QuestionAnswer(question, bool2int(answer.get.answer))
+        else QuestionAnswer(question, UNQUESTIONED)
+      }.toList
       val p = participants.filter(_.email == itw.email).head
 
       InterviewAnswers(itw.id.get,p.id.get,p.name,p.lastname,answerValues)
