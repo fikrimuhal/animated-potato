@@ -38,18 +38,36 @@ export default  class BarChartsWidget extends React.Component {
         var dataset = [];
         var data = {};
         //3 katmanda kategorilere göre sıralanıyor
-        var userScore  = _.sortBy(this.props.data["userScore"],o=>{return o.category.category});
-        var personelAverageScore  = _.sortBy(this.props.data["personnelAverage"],o=>{return o.category.category});
-        var generalAverageScore  = _.sortBy(this.props.data["overallAverage"],o=>{return o.category.category});
+        var userScore = _.orderBy(this.props.data["userScore"],['score'],['desc']);
+        //var personelAverageScore  = _.sortBy(this.props.data["personnelAverage"],o=>{return o.category.category});
+        //var generalAverageScore  = _.sortBy(this.props.data["overallAverage"],o=>{return o.category.category});
+        var personelAverageScore = [], generalAverageScore = [];
+
+        userScore.forEach(item=> {
+            let category = item.category.category;
+            personelAverageScore.push(_.filter(this.props.data["personnelAverage"], (q)=> {
+                return q.category.category == category
+            })[0]);
+            generalAverageScore.push(_.filter(this.props.data["overallAverage"], (q)=> {
+                return q.category.category == category
+            })[0]);
+        });
+
         //Grafikte gözükecek etiketler
         data.labels = userScore.map(item=> {
             return item.category.category
         });
         //log("labels sorted->",data.labels);
 
-        var userScoreValues = userScore.map(o=>{return o.score.toFixed(2);});
-        var personelAverageScoreValues = personelAverageScore.map(o=>{return o.score.toFixed(2);});
-        var generalAverageScoreValues = generalAverageScore.map(o=>{return o.score.toFixed(2);});
+        var userScoreValues = userScore.map(o=> {
+            return o.score.toFixed(2);
+        });
+        var personelAverageScoreValues = personelAverageScore.map(o=> {
+            return o.score.toFixed(2);
+        });
+        var generalAverageScoreValues = generalAverageScore.map(o=> {
+            return o.score.toFixed(2);
+        });
 
         dataset.push({
             label: "User's Score",

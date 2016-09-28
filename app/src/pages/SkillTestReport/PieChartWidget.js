@@ -83,8 +83,9 @@ export default  class PieChartWidget extends React.Component {
     };
     render = ()=>{
         log("rendered")
+        var containerStyle = Object.assign(JSON.parse(JSON.stringify(s.GraphStyles.widgetContainer)), {height:"100%"});
         return (
-            <div style={s.GraphStyles.widgetContainer}>
+            <div style={containerStyle}>
                 {this.getContent()}
             </div>
         )

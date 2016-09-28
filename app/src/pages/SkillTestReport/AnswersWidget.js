@@ -49,9 +49,7 @@ export default  class AnswersWidget extends React.Component {
         var i = 0;
         var questions = [];
         questions = this.props.data[0].answers.map(answer=> {
-            return  {
-                id:parseInt(answer.questionId)
-            }
+            return  answer.question
         });
         questions=_.orderBy(questions,['id'],['asc']);
         //questions.sort();
@@ -62,7 +60,7 @@ export default  class AnswersWidget extends React.Component {
             //var fullName = item.name + " " + item.lastName;
             //if (item.interviewId == -4)fullName = "Global Avg";
             //if (item.interviewId == -2)fullName = "Staffs Avg";
-            return <text dx="-5" dy={dy} style={styles.userLabel} key={"questionLabel-" + i}>{question.id}</text>
+            return <text dx="-5" dy={dy} style={styles.userLabel} key={"questionLabel-" + i}>{question.title}</text>
         });
         return content;
     };
@@ -83,11 +81,11 @@ export default  class AnswersWidget extends React.Component {
                         x += 13;
                         var index = 0;
                         var answers = data[gCount].answers.map(ans=>{
-                            ans.questionId = parseInt(ans.questionId);
+                            ans.question.id = parseInt(ans.question.id);
                             return ans
                         });
                         //log("unsorted ansers",answers);
-                        answers = _.orderBy(answers, ['questionId'], ['asc']);
+                        answers = _.orderBy(answers, (item)=>{return item.question.id}, ['asc']);
                         var column = answers.map(item=> {
                             var location = index++ * 13;
                             var value = item.value;
@@ -133,10 +131,10 @@ export default  class AnswersWidget extends React.Component {
                     (()=> {
                         if (this.props.dataLoaded) {
                             var height = 100 + answersData[0].answers.length * 15;
-                            var width = 100 + answersData.length * 40;
+                            var width = 400 + answersData.length * 40;
                             //var viewBox = "0 -20 " + Math.floor(width / 2) + " " + Math.floor(height / 2);
                             return <svg width={width} height={height} className="" >
-                                <g transform="translate(80, 60)">
+                                <g transform="translate(400, 60)">
                                     {this.createMatrix()}
                                     {this.createXaxis()}
                                     {this.createYaxis()}

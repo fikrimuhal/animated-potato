@@ -71,7 +71,7 @@ export default  class ReportViewer extends React.Component {
                 </Row> <br/>
                 <hr/>
 
-                <Row style={{height: "480px"}}>
+                <Row>
                     <Col lg={12} style={{width: "100%"}}>
                         <BarWidget data={this.props.comparativeResult} dataLoaded={this.props.comparativeResultLoaded}/>
                     </Col>
@@ -99,7 +99,12 @@ export default  class ReportViewer extends React.Component {
                 <hr/>
 
                 <Row>
-                    <Col lg={12} md={12}>
+                    <Col lg={9} md={9} style={{position:"relative"}}>
+                        <div style={{position:"absolute",bottom:"0px"}}>
+                            {this.state.url} {"Bu sayfa " + Date.now().toLocaleString() + " tarihinde oluşturulmuştur"}
+                        </div>
+                    </Col>
+                    <Col lg={3} md={3}>
                         <div style={s.GraphStyles.barcodeContainer}>
                             <QRCode value={this.state.url} size={128} fgColor={colors.teal.x500}/>
                         </div>

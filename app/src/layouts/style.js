@@ -242,6 +242,6 @@ export  const GraphStyles = {
     },
     barcodeContainer:{
         marginTop:"20px",
-        textAlign:"center"
+        textAlign:"right"
     }
 };

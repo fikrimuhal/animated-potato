@@ -137,10 +137,10 @@ export default class QuestionList extends React.Component {
     };
     deleteQuestion = id => ()=> {
         log("deleting-> ", id);
-        QuestionAPI.deleteById({id: id}).then(repsonse=> {
+        QuestionAPI.deleteById({id: id}).then(response=> {
             return response.json()
         }).then(json=> {
-            if (json.statu == "OK") {
+            if (json.status == "OK") {
                 this.context.showMessage("Question deleted", 2000);
                 var rows = this.state.originalData;
                 rows = _.filter(rows, q => {
@@ -149,11 +149,13 @@ export default class QuestionList extends React.Component {
                 this.setState({
                     rows: rows
                 });
+                Cache.QuestionCaching.clear();
             }
-            else if (statu == "FAIL") {
+            else if (status == "FAIL") {
                 this.context.showMessage("Deleting Fail!", 2000);
             }
         }).catch(err=> {
+            log("question delete error",err);
             this.context.showMessage("An error occured", 2000);
         });
     };

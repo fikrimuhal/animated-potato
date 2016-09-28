@@ -41,9 +41,9 @@ export default  class SummaryBar extends React.Component {
         return this.getBestAtCategories().map(category=> {
             var stars = <Row style={{width: "50px"}}>
                 <Col lg={12} md={12} style={{display: "flex"}}>
-                    <GradeIcon color={materialColors.yellow500}/>
-                    <GradeIcon color={materialColors.yellow500}/>
-                    <GradeIcon color={materialColors.yellow500}/>
+                    <GradeIcon color={materialColors.teal500}/>
+                    <GradeIcon color={materialColors.teal500}/>
+
                 </Col>
             </Row>
             return <ListItem primaryText={category}
@@ -53,8 +53,7 @@ export default  class SummaryBar extends React.Component {
     getGoodAtList = function () {
         var stars = <Row style={{width: "30px"}}>
             <Col lg={12} md={12} style={{display: "flex"}}>
-                <GradeIcon color={materialColors.yellow500}/>
-                <GradeIcon color={materialColors.yellow500}/>
+                <GradeIcon color={materialColors.teal500}/>
             </Col>
         </Row>
         var i = 0;
@@ -86,25 +85,25 @@ export default  class SummaryBar extends React.Component {
         return color;
     };
     getPaperColor = function () {
-        var score = this.props.data.overallScore * 100;
-        var color = colors.grey.x200;
-        switch (true) {
-            case (score < 20):
-                color = colors.grey.x200;
-                break;
-            case (score < 40):
-                color = colors.blueGrey.x200;
-                break;
-            case (score < 60):
-                color = colors.blue.x200;
-                break;
-            case (score < 80):
-                color = colors.teal.x200;
-                break;
-            default:
-                color = colors.green.x200;
-                break;
-        }
+        // var score = this.props.data.overallScore * 100;
+         var color = colors.white;
+        // switch (true) {
+        //     case (score < 20):
+        //         color = colors.grey.x200;
+        //         break;
+        //     case (score < 40):
+        //         color = colors.blueGrey.x200;
+        //         break;
+        //     case (score < 60):
+        //         color = colors.blue.x200;
+        //         break;
+        //     case (score < 80):
+        //         color = colors.teal.x200;
+        //         break;
+        //     default:
+        //         color = colors.green.x200;
+        //         break;
+        // }
         return {
             backgroundColor: color
         };

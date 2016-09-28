@@ -26,6 +26,7 @@ export default  class BoxPlotWidget extends React.Component {
     }
     componentDidMount = ()=> {
         var scores = _.filter(this.props.data.scores,q => {return q.score>=0});
+        scores =_.orderBy(scores,['score'],['desc']);
         var categoryTraces = scores.map(item=>{
             var score = parseFloat((item.score * 100).toFixed(2));
             var category = item.category.category;
@@ -33,7 +34,7 @@ export default  class BoxPlotWidget extends React.Component {
                 y:this.createDataSeries(score ,10),
                 name:category,
                 type:'box',
-                boxpoints:'all'
+                //boxpoints:'all'
             };
         })
         //log("categoryTraces",categoryTraces)

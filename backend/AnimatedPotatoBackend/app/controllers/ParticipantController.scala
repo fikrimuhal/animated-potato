@@ -45,10 +45,14 @@ class ParticipantController extends Controller with Secured {
     def deleteParticipant = Admin { implicit request =>
       try {
         val participant = request.body.asJson.get.as[Participant]
-        if (Participants.delete(participant)) Ok("1") else BadRequest("-1")
+
+        if (Participants.delete(participant))
+          Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
+        else
+          BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
       }
       catch {
-        case e: Exception => BadRequest("-1")
+        case e: Exception => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
       }
     }
 
