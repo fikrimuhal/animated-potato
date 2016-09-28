@@ -127,13 +127,7 @@ object ScoresDAO {
       val personnelCategoricalScores: List[CategoryScore] =
         personnelCategoricalScoreTuple
           .map(x => CategoryScore(categories.filter(c => c.id.get == x._1).head, x._2._1, Some(x._2._2)))
-//BURADA KALDIM
-      val categoriesAddedLater: List[CategoryScore] = categories.map { cat =>
-        personnelCategoricalScores.find(_.category.id.get == cat.id.get) match {
-          case None => CategoryScore(cat, -1, Some(-1))
-        }
-      }
-      val personnelCategoricalScoresEdited = personnelCategoricalScores::categoriesAddedLater
+
 
       // sonuçta sadece gelen interviewID ve personel interviewleri olacak
       val filteredInterviews = interviews.filter(i => (i.id.get == interviewId) || personnelInterviewIds.contains(i.id.get))
@@ -209,15 +203,20 @@ object ScoresDAO {
       }
       val allAverage: Double = scoreFilteredCategory.map(_.score).sum / scoreFilteredCategory.length
 
-      val results: List[CategoryResults] = scoreFilteredCategory.::(Scores(PERSONNEL_INTERVIEW, cat, personnelAverage, -1)).::(Scores(ALL_INTERVIEW, cat, allAverage, -1))
-        .sortBy(1 - _.score).zipWithIndex.map { x =>
+      var results: List[CategoryResults] = List()
+      scoreFilteredCategory.::(Scores(PERSONNEL_INTERVIEW, cat, personnelAverage, -1)).::(Scores(ALL_INTERVIEW, cat, allAverage, -1))
+        .sortBy(1 - _.score).zipWithIndex.foreach{ x =>
         if (x._1.interviewId == PERSONNEL_INTERVIEW)
-          CategoryResults(PERSONNEL_INTERVIEW, PERSONNEL_INTERVIEW, "Personnel", "Personnel", true ,x._2 + 1, personnelAverage)
+          results = CategoryResults(PERSONNEL_INTERVIEW, PERSONNEL_INTERVIEW, "Personnel", "Personnel",true, x._2 + 1, personnelAverage) :: results
         else if (x._1.interviewId == ALL_INTERVIEW)
-          CategoryResults(ALL_INTERVIEW, ALL_INTERVIEW, "All", "All", false,x._2 + 1, allAverage)
+          results=CategoryResults(ALL_INTERVIEW, ALL_INTERVIEW, "All", "All",false, x._2 + 1, allAverage):: results
         else {
           val p = InterviewDAO.getParticipantByInterviewId(x._1.interviewId)
-          CategoryResults(p.id.get, x._1.interviewId, p.name, p.lastname, personnelInterviewIds contains x._1.interviewId  ,x._2 + 1, x._1.score)
+          p match{
+            case Some(participantInfo) =>   results=CategoryResults(participantInfo.id.get, x._1.interviewId, participantInfo.name, participantInfo.lastname,personnelInterviewIds contains x._1.interviewId, x._2 + 1, x._1.score):: results
+            case None =>
+          }
+
         }
       }
 
