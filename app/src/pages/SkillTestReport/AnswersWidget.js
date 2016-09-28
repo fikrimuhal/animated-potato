@@ -24,6 +24,8 @@ const styles = {
         direction: "rtl"
     }
 }
+
+//SVG nin viewBoxu ayarlanacak
 export default  class AnswersWidget extends React.Component {
     constructor(props) {
         super(props)

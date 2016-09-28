@@ -88,16 +88,16 @@ export default  class ReportViewer extends React.Component {
                 </Row><br/>
                 <hr/>
                 <Row>
-                    <Col lg={12} style={{width: "100%"}}>
+                    <Col lg={8} style={{width: "100%"}}>
                         <ColorMatrix data={this.props.scoreData}/>
                     </Col>
-                </Row>
-                <hr/>
-                <Row>
-                    <Col lg={12} style={{width: "100%"}}>
+                    <Col lg={4} style={{width: "100%"}}>
+
                         <AnswersWidget data={this.props.answers} dataLoaded={this.props.answersLoaded}/>
                     </Col>
                 </Row>
+                <hr/>
+
                 <Row>
                     <Col lg={12} md={12}>
                         <div style={s.GraphStyles.barcodeContainer}>
