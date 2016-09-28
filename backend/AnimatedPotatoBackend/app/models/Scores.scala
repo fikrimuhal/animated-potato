@@ -11,7 +11,7 @@ case class Scores(interviewId: InterviewId, categoryId: CategoryId, score: Score
 
 case class UserCategoryScores(participantId: IdType, interviewId: InterviewId, name: String, lastName: String, email: Email, phone: String, isPersonnel: Boolean, scores: List[CategoryScore], overallPercentage: Score, overallScore: Score, overAllConfidence: Confidence, order: Int)
 
-case class CategoryResults(participantId: IdType, interviewId: InterviewId, name: String, lastname: String, order: Int, score: Score)
+case class CategoryResults(participantId: IdType, interviewId: InterviewId, name: String, lastname: String, isPeronnel : Boolean, order: Int, score: Score)
 
 case class CategoryResultsResponse(category: Category, results: List[CategoryResults])
 
@@ -212,12 +212,12 @@ object ScoresDAO {
       val results: List[CategoryResults] = scoreFilteredCategory.::(Scores(PERSONNEL_INTERVIEW, cat, personnelAverage, -1)).::(Scores(ALL_INTERVIEW, cat, allAverage, -1))
         .sortBy(1 - _.score).zipWithIndex.map { x =>
         if (x._1.interviewId == PERSONNEL_INTERVIEW)
-          CategoryResults(PERSONNEL_INTERVIEW, PERSONNEL_INTERVIEW, "Personnel", "Personnel", x._2 + 1, personnelAverage)
+          CategoryResults(PERSONNEL_INTERVIEW, PERSONNEL_INTERVIEW, "Personnel", "Personnel", true ,x._2 + 1, personnelAverage)
         else if (x._1.interviewId == ALL_INTERVIEW)
-          CategoryResults(ALL_INTERVIEW, ALL_INTERVIEW, "All", "All", x._2 + 1, allAverage)
+          CategoryResults(ALL_INTERVIEW, ALL_INTERVIEW, "All", "All", false,x._2 + 1, allAverage)
         else {
           val p = InterviewDAO.getParticipantByInterviewId(x._1.interviewId)
-          CategoryResults(p.id.get, x._1.interviewId, p.name, p.lastname, x._2 + 1, x._1.score)
+          CategoryResults(p.id.get, x._1.interviewId, p.name, p.lastname, personnelInterviewIds contains x._1.interviewId  ,x._2 + 1, x._1.score)
         }
       }
 
