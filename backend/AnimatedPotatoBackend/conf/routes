@@ -21,6 +21,8 @@ GET         /admin/getAdmins                   controllers.UserController.getAdm
 
 POST        /admin/makeAdmin                   controllers.UserController.makeAdmin
 POST        /admin/makePersonnel               controllers.UserController.makePersonnel
+POST        /admin/makeUnadmin                 controllers.UserController.makeUnadmin
+POST        /admin/makeUnPersonnel            controllers.UserController.makeUnPersonnel
 
 POST        /admin/insertQuestion              controllers.QuestionController.insert
 POST        /admin/updateQuestion              controllers.QuestionController.update

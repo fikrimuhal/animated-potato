@@ -32,8 +32,8 @@ object AuthenticatedAction extends ActionBuilder[AuthenticatedRequest] {
         block(new AuthenticatedRequest(claimData, request)).map(_.refreshJwtSession(request))
 
       case _ =>
-        val token = request.headers.get("Authorization").get
-        if (Jwt.decode(token, JwtOptions(expiration = true, signature = false)).toString.contains("JwtExpirationException"))
+        val tokenOption = request.headers.get("Authorization")
+        if (tokenOption.isDefined && Jwt.decode(tokenOption.get, JwtOptions(expiration = true, signature = false)).toString.contains("JwtExpirationException"))
           Future.successful(Ok(Json.toJson(ResponseMessage(Constants.SESSION_TIME_OUT, Constants.SESSION_TIME_OUT_MESSAGE))))
         else
           Future.successful(Unauthorized(Json.toJson(ResponseMessage(Constants.UNAUTHORIZED, Constants.UNAUTHORIZED_ACCESS))))
@@ -51,8 +51,9 @@ object AdminAction extends ActionBuilder[AuthenticatedRequest] {
       case Some(_) => Future.successful(Forbidden(Json.toJson(ResponseMessage(Constants.FORBIDDEN, Constants.FORBIDDEN_MESSAGE))).refreshJwtSession(request))
 
       case _ =>
-        val token = request.headers.get("Authorization").get
-        if (Jwt.decode(token, JwtOptions(expiration = true, signature = false)).toString.contains("JwtExpirationException"))
+        val tokenOption = request.headers.get("Authorization")
+
+        if (tokenOption.isDefined && Jwt.decode(tokenOption.get, JwtOptions(expiration = true, signature = false)).toString.contains("JwtExpirationException"))
           Future.successful(Ok(Json.toJson(ResponseMessage(Constants.SESSION_TIME_OUT, Constants.SESSION_TIME_OUT_MESSAGE))))
         else
           Future.successful(Unauthorized(Json.toJson(ResponseMessage(Constants.UNAUTHORIZED, Constants.UNAUTHORIZED_ACCESS))))

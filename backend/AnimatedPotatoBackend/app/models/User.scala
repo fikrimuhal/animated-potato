@@ -1,6 +1,6 @@
 package models
 
-import animatedPotato.protocol.protocol.{Email, UserIdType}
+import animatedPotato.protocol.protocol.{Email, IdType, UserIdType}
 import org.mindrot.jbcrypt.BCrypt
 import utils.DB
 import slick.driver.PostgresDriver.simple._
@@ -79,6 +79,15 @@ object Users {
   def makeAdmin(id: UserIdType): Boolean = DB { implicit session =>
     users.filter(_.id === id).map(_.isAdmin).update(true) == 1
   }
+
+  def makeUnPersonnel(id: IdType): Boolean = DB { implicit session =>
+    users.filter(_.id === id).map(_.isPersonnel).update(false) == 1
+  }
+
+  def makeUnadmin(id: UserIdType): Boolean = DB { implicit session =>
+    users.filter(_.id === id).map(_.isAdmin).update(false) == 1
+  }
+
 
   def getPersonnelList = DB { implicit session =>
 
