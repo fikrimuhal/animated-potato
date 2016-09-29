@@ -14,7 +14,9 @@ import  log2                                from '../../utils/log2'
 import * as db                              from '../../utils/data'
 import * as _                               from 'lodash'
 import  Immutable                           from 'immutable'
-import CircularProgress from 'material-ui/CircularProgress';
+import CircularProgress                     from 'material-ui/CircularProgress';
+import  CategoryFilterToolbar               from './CategoryFilterToolbar'
+import {Row, Col}                            from 'react-flexbox-grid'
 require("!style!css!react-data-grid/themes/react-data-grid.css")
 
 const Selectors = Data.Selectors;
@@ -53,11 +55,13 @@ export default class QuestionList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            selectedCategories: [-1],
             rows: [],
             filters: {},
             originalRows: [],
             originalData: [],
             dataWaiting: true
+
         };
         util.bindFunctions.call(this, ['getRows', 'getSize',
             'rowGetter', 'handleFilterChange', 'handleClearFilters',
@@ -67,35 +71,40 @@ export default class QuestionList extends React.Component {
     }
 
     shouldComponentUpdate = (nextProps, nextState)=> {
-        var im_currentProp = Immutable.fromJS(this.props, (k, v)=> {
-            return v.toOrderedMap()
-        });
-        var im_nextProp = Immutable.fromJS(nextProps, (k, v)=> {
-            return v.toOrderedMap()
-        });
-        var im_currentState = Immutable.fromJS(this.state, (k, v)=> {
-            return v.toOrderedMap()
-        });
-        var im_nextState = Immutable.fromJS(nextState, (k, v)=> {
-            return v.toOrderedMap()
-        });
-        var propEquality = im_currentProp.equals(im_nextProp);
-        var stateEquality = im_currentState.equals(im_nextState);
-        //log("shouldComponentUpdate", propEquality, stateEquality, (!propEquality || !stateEquality));
-        return (!propEquality || !stateEquality);
+        // log("state",this.state);
+        // log("nextState",nextState);
+        // var im_currentProp = Immutable.fromJS(this.props, (k, v)=> {
+        //     return v.toOrderedMap()
+        // });
+        // var im_nextProp = Immutable.fromJS(nextProps, (k, v)=> {
+        //     return v.toOrderedMap()
+        // });
+        // var im_currentState = Immutable.fromJS(this.state, (k, v)=> {
+        //     return v.toOrderedMap()
+        // });
+        // var im_nextState = Immutable.fromJS(nextState, (k, v)=> {
+        //     return v.toOrderedMap()
+        // });
+        // var propEquality = im_currentProp.equals(im_nextProp);
+        // var stateEquality = im_currentState.equals(im_nextState);
+        // log("shouldComponentUpdate", propEquality, stateEquality, (!propEquality || !stateEquality));
+        // return (!propEquality || !stateEquality);
+        return true;
     };
 
     initializeData = function () {
         if (Cache.QuestionCaching.checkAll()) {
             log("**********From CACHE************");
             var rows = Cache.QuestionCaching.getAll();
+            //this.initData(rows,[-1]);
             var tableData = this.convertTableRawData(rows);
             this.state = {
                 rows: tableData,
                 originalRows: tableData,
                 filters: {},
                 originalData: rows,
-                dataWaiting: false
+                dataWaiting: false,
+                selectedCategories: [-1]
             };
         }
         else {
@@ -107,19 +116,50 @@ export default class QuestionList extends React.Component {
         QuestionAPI.getAll().then(response=>response.json()).then(json=> {
             var rows = json;
             Cache.QuestionCaching.cacheAll(rows);
-            rows = this.convertTableRawData(rows);
-
-            this.setState({
-                rows: rows,
-                originalRows: rows,
-                originalData: rows,
-                filters: {},
-                dataWaiting: false
-            });
+            this.initData(rows, [-1]);
+            // rows = this.convertTableRawData(rows);
+            //
+            // this.setState({
+            //     rows: rows,
+            //     originalRows: rows,
+            //     originalData: rows,
+            //     filters: {},
+            //     dataWaiting: false,
+            //     selectedCategories: [-1],
+            // });
         });
     };
+    initData = (rows, selectedCategories)=> {
+        var tableRows = this.convertTableRawData(rows);
+        this.setState({
+            rows: tableRows,
+            originalRows: tableRows,
+            originalData: rows,
+            filters: {},
+            dataWaiting: false,
+            selectedCategories: selectedCategories
+        });
+    }
     convertTableRawData = function (rows) {
         var cloneOfRows = JSON.parse(JSON.stringify(rows));
+        var selectedCategories = this.state.selectedCategories;
+
+        cloneOfRows = _.filter(cloneOfRows, o=> {
+            var result = false;
+            if (selectedCategories.includes(-1)) {
+                result = true;
+            }
+            else {
+                this.state.selectedCategories.forEach(categoryId=> {
+                    if (_.findIndex(o.categoryWeights, q => {
+                            return q.id == categoryId
+                        }) != -1) {
+                        result = true;
+                    }
+                });
+            }
+            return result;
+        })
         var tableData = cloneOfRows.map(r => {
             r.options = this.getOptionCell(r)
             return r;
@@ -155,7 +195,7 @@ export default class QuestionList extends React.Component {
                 this.context.showMessage("Deleting Fail!", 2000);
             }
         }).catch(err=> {
-            log("question delete error",err);
+            log("question delete error", err);
             this.context.showMessage("An error occured", 2000);
         });
     };
@@ -227,8 +267,26 @@ export default class QuestionList extends React.Component {
         //all filters removed
         this.setState({filters: {}});
     };
+    categorySelectChanged = (id)=> {
+        var selectedCategories = this.state.selectedCategories;
+        log("->selectedCategories", selectedCategories);
+        if (selectedCategories.includes(id)) {
+            _.pull(selectedCategories, id);
+        }
+        else {
+            selectedCategories.push(id);
+        }
+
+        log("selectedCategories->", selectedCategories);
+        this.initData(this.state.originalData, selectedCategories);
+        // this.setState({
+        //     selectedCategories: selectedCategories
+        // });
+    };
 
     render() {
+        var _this = this;
+        log("this.state", this.state);
         return (
 
             <div>
@@ -249,18 +307,28 @@ export default class QuestionList extends React.Component {
                             }
                             else {
                                 content =
-                                    <ReactDataGrid
-                                        columns={columns}
-                                        rowGetter={this.rowGetter}
-                                        enableCellSelect={true}
-                                        rowsCount={this.getSize()}
-                                        minHeight={500}
-                                        rowHeight={50}
-                                        toolbar={<Toolbar enableFilter={true}/>}
-                                        onAddFilter={this.handleFilterChange}
-                                        onGridSort={this.handleGridSort}
-                                        onRowUpdated={this.handleRowUpdated}
-                                        onClearFilters={this.handleClearFilters}/>
+                                    <div>
+                                        <Row>
+                                            <CategoryFilterToolbar selectedCategories={_this.state.selectedCategories}
+                                                                   categorySelectChanged={_this.categorySelectChanged}/>
+                                        </Row>
+                                        <Row>
+                                            <ReactDataGrid
+                                                columns={columns}
+                                                rowGetter={this.rowGetter}
+                                                enableCellSelect={true}
+                                                rowsCount={this.getSize()}
+                                                minHeight={500}
+                                                rowHeight={50}
+                                                toolbar={<Toolbar enableFilter={true}/>}
+                                                onAddFilter={this.handleFilterChange}
+                                                onGridSort={this.handleGridSort}
+                                                onRowUpdated={this.handleRowUpdated}
+                                                onClearFilters={this.handleClearFilters}/>
+                                        </Row>
+
+                                    </div>
+
                             }
                             return content;
                         })()
