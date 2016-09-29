@@ -1,5 +1,4 @@
 import React            from 'react';
-import {log2, util}      from '../../utils/';
 import * as db          from '../../utils/data';
 import ReactDataGrid    from 'react-data-grid';
 import {Toolbar, Data}   from 'react-data-grid/addons';
@@ -13,6 +12,9 @@ import * as api         from '../../utils/api'
 import  moment          from 'moment'
 import {Row, Col}        from 'react-flexbox-grid'
 import * as _           from 'lodash'
+import * as util        from '../../utils/utils'
+import log2             from '../../utils/log2'
+import {ResponseStatus} from '../../utils/static-messages'
 require("!style!css!react-data-grid/themes/react-data-grid.css");
 
 const Selectors = Data.Selectors;
@@ -101,19 +103,33 @@ export default class ParticipantList extends React.Component {
     };
     initializeDataFromApi = function () {
         log("Data from SERVER");
+        var _this = this;
         api.getApplicants().then(response=> {
-            return response.json()
-        }).then(json=> {
-            var rows = json;
-            Cache.ParticipantsCache.cache(rows);
-            this.initTable(rows);
-            // var tableData = this.convertTableRawData(rows);
-            // this.setState({
-            //     rows: tableData,
-            //     originalRows: tableData,
-            //     originalData:rows,
-            //     dataLoaded: true
-            // });
+            response.json()
+                .then(json=> {
+                    if (json.status == ResponseStatus.SESSION_EXPIRED || json.status == ResponseStatus.UNAUTHORIZED) {
+                        util.clearToken();
+                        _this.context.showMessage(json.message, 2000);
+                        setTimeout(()=> {
+                            browserHistory.push("/signin")
+                        }, 2000);
+                        return;
+                    }
+                    else if (json.status == ResponseStatus.FORBIDDEN) {
+                        browserHistory.push("/")
+                    } else {
+                        util.setToken(response.headers.get("Authorization"));
+                        var rows = json;
+                        Cache.ParticipantsCache.cache(rows);
+                        this.initTable(rows);
+                    }
+                }).catch(err=> {
+                _this.context.showMessage("Error", 2000);
+                log("error ", err);
+            })
+        }).catch(err=> {
+            _this.context.showMessage("An error occured", 2000);
+            log("error ", err);
         });
     };
     convertTableRawData = (rows)=> {

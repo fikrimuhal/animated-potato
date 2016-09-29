@@ -1,4 +1,5 @@
 import * as db from './data.js'
+
 const SecureLevel = {
     SECURED: true,
     ANONYM: false
@@ -28,7 +29,7 @@ export const InterviewAPI = {
     startTest: db.getApiPromise("startTest", "POST", SecureLevel.ANONYM),
     startTestWithoutAuthentication: (email)=> db.getApiPromise("startTest", "POST", SecureLevel.ANONYM),
     nextQuestion: db.getApiPromise("nextQuestion", "POST", SecureLevel.ANONYM),
-    deleteInterview: db.getApiPromise("admin/deleteInterview","POST",SecureLevel.SECURED)
+    deleteInterview: db.getApiPromise("admin/deleteInterview", "POST", SecureLevel.SECURED)
 };
 
 export const UserAPI = {
@@ -51,3 +52,6 @@ export const ReportAPI = {
 export const CategoryAPI = {
     insert: db.getApiPromise("admin/insertCategory", "POST")
 }
+
+
+

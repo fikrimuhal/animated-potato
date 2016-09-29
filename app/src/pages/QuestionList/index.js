@@ -117,16 +117,6 @@ export default class QuestionList extends React.Component {
             var rows = json;
             Cache.QuestionCaching.cacheAll(rows);
             this.initData(rows, [-1]);
-            // rows = this.convertTableRawData(rows);
-            //
-            // this.setState({
-            //     rows: rows,
-            //     originalRows: rows,
-            //     originalData: rows,
-            //     filters: {},
-            //     dataWaiting: false,
-            //     selectedCategories: [-1],
-            // });
         });
     };
     initData = (rows, selectedCategories)=> {
@@ -309,8 +299,10 @@ export default class QuestionList extends React.Component {
                                 content =
                                     <div>
                                         <Row>
-                                            <CategoryFilterToolbar selectedCategories={_this.state.selectedCategories}
-                                                                   categorySelectChanged={_this.categorySelectChanged}/>
+                                            <Col lg={12} md={12}>
+                                                <CategoryFilterToolbar selectedCategories={_this.state.selectedCategories}
+                                                                       categorySelectChanged={_this.categorySelectChanged}/>
+                                            </Col>
                                         </Row>
                                         <Row>
                                             <ReactDataGrid

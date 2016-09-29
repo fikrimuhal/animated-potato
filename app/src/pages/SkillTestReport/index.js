@@ -130,6 +130,7 @@ export default  class SkillTestReportContainer extends React.Component {
                         browserHistory.push("/")
                     }
                     else {
+                        util.setToken(response.headers.get("Authorization"));
                         this.setState({
                             comparativeResult: json,
                             comparativeResultLoaded: true
@@ -163,6 +164,7 @@ export default  class SkillTestReportContainer extends React.Component {
                     browserHistory.push("/")
                 }
                 else {
+                    util.setToken(response.headers.get("Authorization"));
                     this.setState({
                         scoreTable: json,
                         scoreTableLoaded: true

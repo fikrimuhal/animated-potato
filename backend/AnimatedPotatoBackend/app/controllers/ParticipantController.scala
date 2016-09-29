@@ -69,7 +69,7 @@ class ParticipantController extends Controller with Secured {
       Ok(Json.toJson(Participants.getAll))
     }
 
-    def getApplicants = Action {
+    def getApplicants = Admin {
 
       Ok(Json.toJson(Participants.getApplicants))
 

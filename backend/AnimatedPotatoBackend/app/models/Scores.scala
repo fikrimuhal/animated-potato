@@ -37,10 +37,7 @@ object ScoresDAO {
 
   def getComparativeReport(interviewId: InterviewId): ComparativeReport = DB { implicit session =>
 
-    val personnelInterviewIDs = InterviewDAO.interviewDAO.filter(_.hasFinished)
-      .list
-      .filter(itw => Users.isPersonnel(itw.email))
-      .map(_.id.get)
+    val personnelInterviewIDs = InterviewDAO.getPersonnelInterviewIds
 
     val categories = (new CategoryDAO).getAll
 
