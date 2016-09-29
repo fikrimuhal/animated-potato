@@ -22,7 +22,7 @@ libraryDependencies ++= Seq(
   "com.jason-goodwin" %% "authentikat-jwt" % "0.4.1",
   "com.pauldijou" %% "jwt-play" % "0.8.0"
 )
-libraryDependencies += "com.paulgoldbaum" %% "scala-influxdb-client" % "0.5.1"
+//libraryDependencies += "com.paulgoldbaum" %% "scala-influxdb-client" % "0.5.1"
 
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )  
 
