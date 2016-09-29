@@ -134,6 +134,7 @@ export default  class SummaryBar extends React.Component {
         return chartData;
     };
     getPercentRateChartData = function () {
+        log("this.props.data.overallPercentage ",this.props.data)
         var pDegree = parseFloat(this.props.data.overallPercentage * 100).toFixed(2);
         var data = [pDegree, 100 - pDegree];
         var labels = ["Percent Degree", ""];

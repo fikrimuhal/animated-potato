@@ -3,10 +3,11 @@ package models
 import animatedPotato.protocol.protocol.{Email, IdType, UserIdType}
 import org.mindrot.jbcrypt.BCrypt
 import utils.DB
+
 import slick.driver.PostgresDriver.simple._
 
 case class User(id: Option[UserIdType] = None,
-                username: String,
+                username: String, 
                 password: String,
                 email: Option[String] = None,
                 isadmin: Option[Boolean] = Some(false),
@@ -15,6 +16,7 @@ case class User(id: Option[UserIdType] = None,
 case class UserDetails(id: UserIdType, name: String, lastName: String, email: String, phone: String, photo: Option[String], isAdmin: Option[Boolean] = None)
 
 object Users {
+
   lazy val users = TableQuery[Users]
   lazy val participants = TableQuery[Participants]
 
@@ -81,7 +83,7 @@ object Users {
   }
 
   def makeUnPersonnel(id: IdType): Boolean = DB { implicit session =>
-    users.filter(_.id === id).map(_.isPersonnel).update(false) == 1
+    users.filter(_.id === id).map(u => (u.isPersonnel,u.isPersonnel)).update(false,false) == 1
   }
 
   def makeUnadmin(id: UserIdType): Boolean = DB { implicit session =>

@@ -38,9 +38,7 @@ export default  class BarChartsWidget extends React.Component {
         var dataset = [];
         var data = {};
         //3 katmanda kategorilere göre sıralanıyor
-        var userScore = _.orderBy(this.props.data["userScore"],['score'],['desc']);
-        //var personelAverageScore  = _.sortBy(this.props.data["personnelAverage"],o=>{return o.category.category});
-        //var generalAverageScore  = _.sortBy(this.props.data["overallAverage"],o=>{return o.category.category});
+        var userScore = _.orderBy(this.props.data["userScore"],['score','category.category'],['desc','asc']);
         var personelAverageScore = [], generalAverageScore = [];
 
         userScore.forEach(item=> {

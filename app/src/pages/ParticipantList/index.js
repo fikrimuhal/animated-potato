@@ -95,6 +95,7 @@ export default class ParticipantList extends React.Component {
         this.state = {
             rows: tableData,
             originalRows: tableData,
+            originalData: rows,
             dataLoaded: true
         };
     };
@@ -105,17 +106,19 @@ export default class ParticipantList extends React.Component {
         }).then(json=> {
             var rows = json;
             Cache.ParticipantsCache.cache(rows);
-            var tableData = this.convertTableRawData(rows);
-            this.setState({
-                rows: tableData,
-                originalRows: tableData,
-                dataLoaded: true
-            });
+            this.initTable(rows);
+            // var tableData = this.convertTableRawData(rows);
+            // this.setState({
+            //     rows: tableData,
+            //     originalRows: tableData,
+            //     originalData:rows,
+            //     dataLoaded: true
+            // });
         });
     };
     convertTableRawData = (rows)=> {
-
-        var tableData = rows.map(r => {
+        var cloneOfRows = JSON.parse(JSON.stringify(rows));
+        var tableData = cloneOfRows.map(r => {
             r.options = this.getOptionCell(r);
             r.date = moment(r.applyDate, "DD-MM-YYYY hh:mm:ss").format('YYYY-MM-DD');
             r.fullName = r.info.name + ' ' + r.info.lastname;
@@ -127,6 +130,17 @@ export default class ParticipantList extends React.Component {
         var sortedData = _.orderBy(tableData, ["date", "averageScore"], ["desc", "desc"]);
         return sortedData;
     };
+
+    initTable = (rows)=> {
+        var tableData = this.convertTableRawData(rows);
+        this.setState({
+            rows: tableData,
+            originalRows: tableData,
+            originalData: rows,
+            dataLoaded: true
+        });
+    };
+
     getOptionCell = (rowData) => {
         return (<Row>
             <Col lg={1} md={1}>
@@ -141,8 +155,26 @@ export default class ParticipantList extends React.Component {
             </Col>
         </Row>);
     };
-    deleteRow = index => ()=> {
-        log("deleting row ->", index);
+    deleteRow = interviewId => ()=> {
+        log("deleting row ->", interviewId);
+        api.InterviewAPI.deleteInterview({
+            id: parseInt(interviewId)
+        }).then(response => response.json()).then(json=> {
+            if (json.status == "OK") {
+                Cache.ParticipantsCache.clear();
+                this.context.showMessage("Interview has successfully  deleted.", 2000)
+                var rows = this.state.originalData;
+                rows = _.filter(rows, (o)=> {
+                    return o.interviewId != interviewId;
+                });
+                this.initTable(rows);
+            } else if (json.status == "FAIL") {
+                this.context.showMessage("Deleting error", 2000);
+            }
+        }).catch(err => {
+            this.context.showMessage("An error occured", 2000);
+            log("error->", err);
+        })
     };
     viewRow = (userId, interviewId) => ()=> {
         log("viewing row ->", interviewId);
@@ -244,4 +276,7 @@ export default class ParticipantList extends React.Component {
             </div>
         );
     }
+}
+ParticipantList.contextTypes = {
+    showMessage: React.PropTypes.func
 }

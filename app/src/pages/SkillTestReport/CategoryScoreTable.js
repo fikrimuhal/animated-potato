@@ -64,7 +64,8 @@ export default  class CategoryScoreTable extends React.Component {
                 userId: item.participantId,
                 interviewId: item.interviewId,
                 order: item.order,
-                visible: true
+                visible: true,
+                isPersonnel: item.isPeronnel
             };
         });
         scoreList = _.orderBy(scoreList, ["order"]);
@@ -73,15 +74,16 @@ export default  class CategoryScoreTable extends React.Component {
             //log("userIds", item.userId, this.context.userId);
             var isCurrentUser = item.interviewId == this.context.interviewId;
             var isStaffAvg = item.interviewId == -2;
+            var isStaff = item.isPersonnel;
             var isGeneralAvg = item.interviewId == -4;
 
             var backColor = isCurrentUser ? colors.red.x100 : colors.white.x100;
             var foreColor = isCurrentUser ? colors.blueGrey.x500 : colors.blueGrey.x800;
-            var border = isCurrentUser ? "2px dashed teal" : "none";
-
-            if (isStaffAvg)
+            var border = isCurrentUser ? "2px solid teal" : "none";
+            //log(item,isStaff)
+            if (!isCurrentUser && (isStaffAvg || isStaff))
                 backColor = colors.green.x300;
-            if (isGeneralAvg)
+            else if (!isCurrentUser && isGeneralAvg)
                 backColor = colors.blue.x100;
 
             // if (index == (scoreList.length - 1) && !isCurrentUser)
@@ -96,12 +98,12 @@ export default  class CategoryScoreTable extends React.Component {
                 backgroundColor: backColor,
                 color: foreColor,
                 border: border,
-                height:"24px"
+                height: "24px"
             };
             return <TableRow key={index + 1} style={style}>
-                <TableRowColumn style={{width:"20%", height:"24px"}}>{item.order}</TableRowColumn>
-                <TableRowColumn style={{width:"50%",textAlign:"right", height:"24px"}}>{item.name}</TableRowColumn>
-                <TableRowColumn style={{height:"24px"}}>{(item.score * 100).toFixed(2)}</TableRowColumn>
+                <TableRowColumn style={{width: "20%", height: "24px"}}>{item.order}</TableRowColumn>
+                <TableRowColumn style={{width: "50%", textAlign: "right", height: "24px"}}>{item.name}</TableRowColumn>
+                <TableRowColumn style={{height: "24px"}}>{(item.score * 100).toFixed(2)}</TableRowColumn>
             </TableRow>
         });
         return content;
@@ -111,8 +113,11 @@ export default  class CategoryScoreTable extends React.Component {
     createTable = function () {
         //var selectedCategory = this.getCategories()[this.state.currentCategoryIndex];
         var selectedCategory = this.state.selectedCategory;
+        var numberOfParticipant = _.filter(this.props.data, q=> {
+            return q.category.category == selectedCategory
+        })[0].numberOfParticipant;
         var _this = this;
-        log("showCategorChangeBar",this.props.showCategorChangeBar);
+        //log("showCategorChangeBar", this.props.showCategorChangeBar);
         return <Table
             fixedHeader={true}
             fixedFooter={false}
@@ -123,7 +128,7 @@ export default  class CategoryScoreTable extends React.Component {
                 displaySelectAll={false}
                 adjustForCheckbox={false}
                 enableSelectAll={false}
-                style={{minWidth: "220px",width:"100%"}}
+                style={{minWidth: "220px", width: "100%"}}
             >
                 { (()=> {
                     if (_this.props.showCategorChangeBar) {
@@ -138,13 +143,13 @@ export default  class CategoryScoreTable extends React.Component {
 
                 <TableRow>
                     <TableHeaderColumn colSpan="3" tooltip="Score Table By Category Groups"
-                                       style={{textAlign: 'left',whiteSpace:"normal"}}>
+                                       style={{textAlign: 'left', whiteSpace: "normal"}}>
                         <h5 style={{color: colors.darkText.primary}}>{selectedCategory} Score Table</h5>
                     </TableHeaderColumn>
                 </TableRow>
                 <TableRow>
                     <TableHeaderColumn tooltip="Order"><b>#</b></TableHeaderColumn>
-                    <TableHeaderColumn tooltip="Name" ><b>Name</b></TableHeaderColumn>
+                    <TableHeaderColumn tooltip="Name"><b>Name</b></TableHeaderColumn>
                     <TableHeaderColumn tooltip="Score"><b>Score</b></TableHeaderColumn>
                 </TableRow>
             </TableHeader>
@@ -153,10 +158,16 @@ export default  class CategoryScoreTable extends React.Component {
                 deselectOnClickaway={true}
                 showRowHover={false}
                 stripedRows={false}
-                style={{width:"100%"}}
+                style={{width: "100%"}}
             >
                 {this.createTableBody()}
             </TableBody>
+            <TableFooter>
+                <TableRow>
+                    <TableRowColumn colSpan={2}><b>Total Participant : {numberOfParticipant}</b></TableRowColumn>
+
+                </TableRow>
+            </TableFooter>
         </Table>
     }
 
@@ -184,8 +195,11 @@ export default  class CategoryScoreTable extends React.Component {
         });
     }
     render = ()=> {
-        var minHeight = this.props.dataLoaded ? "300px":"50px";
-        var containerStyle = Object.assign(JSON.parse(JSON.stringify(s.GraphStyles.widgetContainer)), {height: "inherit",minHeight:minHeight})
+        var minHeight = this.props.dataLoaded ? "320px" : "40px";
+        var containerStyle = Object.assign(JSON.parse(JSON.stringify(s.GraphStyles.widgetContainer)), {
+            height: "inherit",
+            minHeight: minHeight
+        })
         return (
             <div style={containerStyle}>
                 {this.getContent()}

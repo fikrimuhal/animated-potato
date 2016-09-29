@@ -39,7 +39,7 @@ case class ComparativeReport(userScore: List[CategoryScore], personnelAverage: L
 case object RandomInterviewImpl
 
 
-class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends Controller {
+class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends Controller with  Secured {
   final val INTERVIEW_IMPL = RandomInterviewImpl
   final val TEST_IS_NOT_OVER = false
   final val TEST_IS_OVER = true
@@ -73,6 +73,7 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
 
   def nextQuestion = Action.async { implicit request =>
     println("InterviewController : received a nextQuestion request")
+
     request.body.asJson.flatMap(_.validate[NextQuestionRequest].asOpt) match {
 
       case Some(data) =>
@@ -115,4 +116,22 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
   def listAll = Action {
     Ok(Json.toJson(InterviewDAO.getAll))
   }
+
+  def deleteInterview = Admin { implicit request =>
+
+    request.body.asJson.flatMap(_.validate[ID].asOpt) match {
+
+      case Some(id) =>
+
+        if (InterviewDAO.delete(id.id)) {
+          Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
+        }
+        else InternalServerError(Json.toJson(ResponseMessage(Constants.FAIL, Constants.SERVER_ERROR_MESSAGE)))
+
+      case _ => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
+    }
+  }
+
+
+
 }

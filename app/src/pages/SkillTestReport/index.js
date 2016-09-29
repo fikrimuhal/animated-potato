@@ -12,6 +12,7 @@ import * as Cache       from '../../utils/cache'
 import * as util        from '../../utils/utils'
 import * as s           from '../../layouts/style'
 import * as _           from 'lodash'
+
 import ReportView       from './ReportViewer'
 import {MetricAPI}        from '../../utils/metricDB'
 //consts and variables
@@ -80,57 +81,100 @@ export default  class SkillTestReportContainer extends React.Component {
         api.ReportAPI.getAllResult({
             id: interviewId
         }).then(response=> {
-            return response.json()
-        }).then(json=> {
-            log("getAllResult", json);
-            if (json.status == "SESSION_TIME_OUT" || json.status == "UNAUTHORIZED") {
-                util.clearToken();
-                _this.context.showMessage(json.message, 2000);
-                setTimeout(()=> {
-                    browserHistory.push("/signin")
-                }, 2000)
-                return;
-            }
-            else if(json.status =="FORBIDDEN"){
-                browserHistory.push("/")
-            }
-            else {
-                _this.setState({
-                    //categoryScoreInfo: mockData.TestResultMockDataCreator.getRadarData(),
-                    generalInfo: _.filter(json, q=> {
-                        return q.interviewId == interviewId
-                    })[0],
-                    scoreData: json,
-                    dataLoaded: true
-                })
-            }
+            return response.json().then(json=> {
+                log("getAllResult", json);
+                if (json.status == "SESSION_TIME_OUT" || json.status == "UNAUTHORIZED") {
+                    util.clearToken();
+                    _this.context.showMessage(json.message, 2000);
+                    setTimeout(()=> {
+                        browserHistory.push("/signin")
+                    }, 2000)
+                    return;
+                }
+                else if (json.status == "FORBIDDEN") {
+                    browserHistory.push("/")
+                }
+                else {
+                    //log("response", response, response.headers.get("Authorization"));
+                    util.setToken(response.headers.get("Authorization"));
+                    _this.setState({
+                        //categoryScoreInfo: mockData.TestResultMockDataCreator.getRadarData(),
+                        generalInfo: _.filter(json, q=> {
+                            return q.interviewId == interviewId
+                        })[0],
+                        scoreData: json,
+                        dataLoaded: true
+                    })
+                }
 
-        }).catch(err=> {
-            _this.context.showMessage("Error occured... try again", 6000)
-        })
+            }).catch(err=> {
+                _this.context.showMessage("Error occured... try again", 6000);
+                log("error", err);
+            })
+        });
 
         api.ReportAPI.getComparativeResult({
             id: interviewId
         }).then(response=> {
             return response.json()
-        }).then(json=> {
-            this.setState({
-                comparativeResult: json,
-                comparativeResultLoaded: true
-            })
-        })
+                .then(json=> {
+                    if (json.status == "SESSION_TIME_OUT" || json.status == "UNAUTHORIZED") {
+                        util.clearToken();
+                        _this.context.showMessage(json.message, 2000);
+                        setTimeout(()=> {
+                            browserHistory.push("/signin")
+                        }, 2000);
+                        return;
+                    }
+                    else if (json.status == "FORBIDDEN") {
+                        browserHistory.push("/")
+                    }
+                    else {
+                        this.setState({
+                            comparativeResult: json,
+                            comparativeResultLoaded: true
+                        })
+                    }
+
+                }).catch(err=> {
+                    log("error", err);
+                    _this.context.showMessage("Error", 2000);
+                })
+        }).catch(err=> {
+            log("error", err);
+            _this.context.showMessage("An error occured", 2000);
+        });
 
 
         //log("****interviewID", _this.props.params.interviewId)
         api.ReportAPI.getScoreTable({
             id: interviewId
         }).then(response=> {
-            return response.json()
-        }).then(json=> {
-            this.setState({
-                scoreTable: json,
-                scoreTableLoaded: true
-            });
+            return response.json().then(json=> {
+                if (json.status == "SESSION_TIME_OUT" || json.status == "UNAUTHORIZED") {
+                    util.clearToken();
+                    _this.context.showMessage(json.message, 2000);
+                    setTimeout(()=> {
+                        browserHistory.push("/signin")
+                    }, 2000);
+                    return;
+                }
+                else if (json.status == "FORBIDDEN") {
+                    browserHistory.push("/")
+                }
+                else {
+                    this.setState({
+                        scoreTable: json,
+                        scoreTableLoaded: true
+                    });
+                }
+            }).catch(err=> {
+                log("error", err);
+                _this.context.showMessage("Error", 2000);
+            })
+        }).catch(err=> {
+            log("error", err);
+            _this.context.showMessage("An error occured", 2000);
         });
 
 

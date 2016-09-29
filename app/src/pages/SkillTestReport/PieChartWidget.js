@@ -43,7 +43,7 @@ export default  class PieChartWidget extends React.Component {
                 value:parseFloat(item.score.toPrecision(3))
             }
         });
-        grData = _.sortBy(grData,"value").reverse();
+        grData = _.orderBy(grData,['value','label'],['desc','asc']);
 
         var labels = grData.map(item=>{
             return item.label

@@ -2,7 +2,7 @@ package models
 
 import java.sql.Timestamp
 
-import animatedPotato.protocol.protocol.{Email, Score, UserIdType}
+import animatedPotato.protocol.protocol.{Email, IdType, Score, UserIdType}
 import models.InterviewDAO.InterviewId
 import utils.{Constants, DB}
 
@@ -36,6 +36,7 @@ case class ClaimData(userName: String, email: Email, isAdmin: Boolean, isPersonn
 
 object Participants {
 
+
   lazy val participants = TableQuery[Participants]
 
   def insert(participant: Participant): Boolean = DB { implicit session =>
@@ -56,10 +57,13 @@ object Participants {
   }
 
   def getApplicants: List[Applicant] = DB { implicit session =>
+
     val interviews = InterviewDAO.interviewDAO.filter(_.hasFinished).list
-      interviews.filter(i => getByEmail(i.email).isDefined)
+    val participantList = participants.filter(_.email inSet interviews.map(_.email)).list
+
+    interviews.filter(i => participantList.exists(_.email == i.email))
       .map(itw =>
-        Applicant(getByEmail(itw.email).get, itw.startDate.get, itw.averageScore.get, itw.id.get))
+        Applicant(participantList.filter(_.email == itw.email).head, itw.startDate.get, itw.averageScore.get, itw.id.get))
   }
 
   def getParticipantsWithPage(page: Int): ParticipantResponse = DB { implicit session =>
@@ -79,18 +83,14 @@ object Participants {
       case _ => None
     }
   }
-  def getByEmailList(emails :List[Email]) = DB { implicit session =>
-  participants.filter(_.email inSet emails).list
+
+  def getByEmailList(emails: List[Email]) = DB { implicit session =>
+    participants.filter(_.email inSet emails).list
 
   }
 
   def getAll = DB { implicit session =>
     participants.list
-  }
-
-  def getByEmail(email: String): Option[Participant] = DB { implicit session =>
-    val participantList: List[Participant] = participants.filter(_.email === email).list
-    participantList.headOption
   }
 
   def getUserNameByEmail(email: String): Option[String] = DB { implicit session =>
