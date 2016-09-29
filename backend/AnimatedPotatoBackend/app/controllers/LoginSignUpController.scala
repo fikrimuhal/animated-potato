@@ -29,7 +29,7 @@ class LoginSignUpController extends Controller {
 
       case Some(loginForm) if Users.isValid(loginForm.username, loginForm.password) =>
         Ok(Json.toJson(SignSuccessMessage(Constants.OK
-          , Participants.getParticipant(loginForm.username).get
+          , Participants.get(loginForm.username).get
           , Users.get(loginForm.username).get.isadmin.get))
         ).addingToJwtSession(Constants.CLAIM_DATA_KEY, Participants.getClaimData(loginForm.username))
 
@@ -55,7 +55,7 @@ class LoginSignUpController extends Controller {
           Participants.insert(participant)
           Ok(Json.toJson(
             SignSuccessMessage(Constants.OK,
-              Participants.getParticipant(user.username).get,
+              Participants.get(user.username).get,
               Users.get(user.username).get.isadmin.get))
           )
             .addingToJwtSession(Constants.CLAIM_DATA_KEY, Participants.getClaimData(user.username))

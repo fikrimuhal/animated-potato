@@ -32,7 +32,7 @@ case class ParticipantResponse(participantList: List[Participant], page: Int, nu
 
 case class Applicant(info: Participant, applyDate: Timestamp, averageScore: Score, interviewId: InterviewId)
 
-case class ClaimData(userName: String, email: Email, isAdmin: Boolean, isPersonnel: Boolean)
+case class ClaimData(email: Email, isAdmin: Boolean, isPersonnel: Boolean)
 
 object Participants {
 
@@ -45,7 +45,7 @@ object Participants {
   }
 
   def exists(participant: Participant): Boolean = DB { implicit session =>
-    participants.filter(p => p.email === participant.email || p.username === participant.username).list.nonEmpty
+    participants.filter(p => p.email === participant.email || p.userName === participant.username).list.nonEmpty
   }
 
   def update(participant: Participant): Boolean = DB { implicit session =>
@@ -59,29 +59,22 @@ object Participants {
   def getApplicants: List[Applicant] = DB { implicit session =>
 
     val interviews = InterviewDAO.interviewDAO.filter(_.hasFinished).list
-    val participantList = participants.filter(_.email inSet interviews.map(_.email)).list
+    // aynı kullanıcı birden fazla test çözdüyse en son çözdüğünü filtrelemek için yazıldı
+    val lastInterviewIDs: List[IdType] = interviews.groupBy(_.email).values.toList.
+      map(i => i.sortBy(_.startDate.get.getTime).last.id.get)
+    val filteredInterviews = interviews.filter(i => lastInterviewIDs.contains(i.id.get))
+    val participantList = participants.filter(_.email inSet filteredInterviews.map(_.email)).list
 
-    interviews.filter(i => participantList.exists(_.email == i.email))
-      .map(itw =>
-        Applicant(participantList.filter(_.email == itw.email).head, itw.startDate.get, itw.averageScore.get, itw.id.get))
+    //yalnızca üye olanların bilgileri getirilecek şekilde filtrelendi
+    filteredInterviews.filter(i => participantList.exists(_.email == i.email)).map(itw =>
+      Applicant(participantList.filter(_.email == itw.email).head, itw.startDate.get, itw.averageScore.get, itw.id.get))
   }
 
-  def getParticipantsWithPage(page: Int): ParticipantResponse = DB { implicit session =>
-    val participantList = participants
-      .sortBy(p => (p.name, p.lastname))
-      .drop(page * 20)
-      .take((page + 1) * 20)
-      .list
-    ParticipantResponse(participantList, page + 1, (participantList.length / Constants.PAGE_SIZE) + 1)
-  }
 
-  def getParticipant(userNameOrEmail: String): Option[Participant] = DB { implicit session =>
-    participants.filter(p =>
-      (p.email === userNameOrEmail) || (p.username === userNameOrEmail)
-    ).list.distinct match {
-      case x :: xs => Some(x)
-      case _ => None
-    }
+  def get(userNameOrEmail: String): Option[Participant] = DB { implicit session =>
+    participants.filter(p => (p.email === userNameOrEmail) || (p.userName === userNameOrEmail))
+      .firstOption
+
   }
 
   def getByEmailList(emails: List[Email]) = DB { implicit session =>
@@ -93,22 +86,22 @@ object Participants {
     participants.list
   }
 
-  def getUserNameByEmail(email: String): Option[String] = DB { implicit session =>
-    participants.filter(p => (p.email === email) || (p.username === email)).list match {
-      case x :: xs => Some(x.username)
-      case _ => None
-    }
-  }
-
   def getClaimData(username: String): Option[ClaimData] = DB { implicit session =>
 
-    participants.filter(p => p.username === username).list.headOption match {
+    participants.filter(p => p.userName === username).list.headOption match {
 
-      case Some(p) => Users.get(p.username).map(u => ClaimData(u.username, u.email.get, u.isadmin.get, u.ispersonnel.get))
+      case Some(p) => Users.get(p.username).map(u => ClaimData(u.email.get, u.isadmin.get, u.ispersonnel.get))
 
       case None => None
 
     }
+  }
+
+  def getByInterviewID(interviewId: InterviewId): Option[Participant] = DB { implicit session =>
+
+    val interviewOpt = InterviewDAO.interviewDAO.filter(_.id === interviewId).firstOption
+    if(interviewOpt.isDefined) participants.filter(_.email === interviewOpt.get.email).firstOption
+    else None
   }
 
 }
@@ -116,11 +109,11 @@ object Participants {
 class Participants(tag: Tag) extends Table[Participant](tag, "participant") {
   def id = column[UserIdType]("id", O.PrimaryKey, O.AutoInc)
 
-  def username = column[String]("username")
+  def userName = column[String]("username")
 
   def name = column[String]("name")
 
-  def lastname = column[String]("lastname")
+  def lastName = column[String]("lastname")
 
   def email = column[Email]("email")
 
@@ -132,5 +125,5 @@ class Participants(tag: Tag) extends Table[Participant](tag, "participant") {
 
   def notes = column[Option[String]]("notes")
 
-  def * = (id.?, username, name, lastname, email, phone, photo, website, notes) <> (Participant.tupled, Participant.unapply)
+  def * = (id.?, userName, name, lastName, email, phone, photo, website, notes) <> (Participant.tupled, Participant.unapply)
 }
