@@ -96,7 +96,7 @@ object ScoresDAO {
             case Some(i) =>
 
               val orderInCategory = scores.filter(_.categoryId == cat.id.get).sortBy(1 - _.score).zipWithIndex.find(_._1.interviewId == itw.id.get).map(_._2).get + 1
-              CategoryScore(cat, i.score, Some(1 - (orderInCategory / scores.count(_.categoryId == cat.id.get).toDouble)), Some(i.confidence), Some(orderInCategory))
+              CategoryScore(cat, i.score, Some(orderInCategory / scores.count(_.categoryId == cat.id.get).toDouble), Some(i.confidence), Some(orderInCategory))
 
             // kullanıcıya soru sorulmamış kategoriler için Score'u -1 diğer değerleri 0 atadım
             case None => CategoryScore(cat, -1, Some(0), Some(0))
