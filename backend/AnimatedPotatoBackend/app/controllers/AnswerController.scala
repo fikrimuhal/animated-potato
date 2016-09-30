@@ -53,7 +53,7 @@ class AnswerController extends Controller with Secured {
     *         not_found: message that explains
     *         onFailure : BadRequest Response Message that explains error
     */
-  def getAnswer = UserAction { implicit request =>
+  def getAnswer = Admin { implicit request =>
 
     request.body.asJson.flatMap(_.validate[GetAnswer].asOpt) match {
 
