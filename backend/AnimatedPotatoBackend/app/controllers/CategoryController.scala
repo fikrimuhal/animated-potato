@@ -21,7 +21,7 @@ class CategoryController extends Controller with Secured {
     Ok(Json.toJson(categoryDAO.getById(id)))
   }
 
-  def getAll = Admin {
+  def getAll = Action {
     Ok(Json.toJson(categoryDAO.getAll))
   }
 

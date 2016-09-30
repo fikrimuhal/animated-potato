@@ -51,7 +51,7 @@ object AdminAction extends ActionBuilder[AuthenticatedRequest] {
       case Some(_) => Future.successful(Forbidden(Json.toJson(ResponseMessage(Constants.FORBIDDEN, Constants.FORBIDDEN_MESSAGE))).refreshJwtSession(request))
 
       case _ =>
-        val tokenOption = request.headers.get("Authorization")
+        val tokenOption = request.headers.get("authorization")
         println("Authorization token: " + tokenOption)
         if (tokenOption.isDefined && Jwt.decode(tokenOption.get, JwtOptions(expiration = true, signature = false)).toString.contains("JwtExpirationException"))
           Future.successful(Ok(Json.toJson(ResponseMessage(Constants.SESSION_TIME_OUT, Constants.SESSION_TIME_OUT_MESSAGE))))

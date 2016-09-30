@@ -56,6 +56,7 @@ export default class QuestionList extends React.Component {
         super(props);
         this.state = {
             selectedCategories: [-1],
+            selectedCollections: [-1],
             rows: [],
             filters: {},
             originalRows: [],
@@ -104,7 +105,8 @@ export default class QuestionList extends React.Component {
                 filters: {},
                 originalData: rows,
                 dataWaiting: false,
-                selectedCategories: [-1]
+                selectedCategories: [-1],
+                selectedCollections: [-1]
             };
         }
         else {
@@ -116,10 +118,10 @@ export default class QuestionList extends React.Component {
         QuestionAPI.getAll().then(response=>response.json()).then(json=> {
             var rows = json;
             Cache.QuestionCaching.cacheAll(rows);
-            this.initData(rows, [-1]);
+            this.initData(rows, [-1],[-1]);
         });
     };
-    initData = (rows, selectedCategories)=> {
+    initData = (rows, selectedCategories, selectedCollections)=> {
         var tableRows = this.convertTableRawData(rows);
         this.setState({
             rows: tableRows,
@@ -127,26 +129,40 @@ export default class QuestionList extends React.Component {
             originalData: rows,
             filters: {},
             dataWaiting: false,
-            selectedCategories: selectedCategories
+            selectedCategories: selectedCategories,
+            selectedCollections: selectedCollections
         });
     }
     convertTableRawData = function (rows) {
         var cloneOfRows = JSON.parse(JSON.stringify(rows));
         var selectedCategories = this.state.selectedCategories;
-
+        var selectedCollections = this.state.selectedCollections;
         cloneOfRows = _.filter(cloneOfRows, o=> {
             var result = false;
-            if (selectedCategories.includes(-1)) {
+            if (selectedCategories.includes(-1) && selectedCollections.includes(-1)) {
                 result = true;
             }
             else {
-                this.state.selectedCategories.forEach(categoryId=> {
+                var isIncludeCategories = false, isIncludeCollection = false;
+
+                selectedCategories.forEach(categoryId=> {
+
                     if (_.findIndex(o.categoryWeights, q => {
                             return q.id == categoryId
-                        }) != -1) {
-                        result = true;
+                        }) != -1 || selectedCategories.includes(-1)) {
+                        isIncludeCategories = true;
                     }
                 });
+
+                selectedCollections.forEach(setId=> {
+                    if (_.findIndex(o.setList, (item) => {
+                           return  item.id == setId
+                        }) != -1  || selectedCollections.includes(-1)) {
+                        isIncludeCollection = true;
+                    }
+                });
+                //log("isIncludeCollection,isIncludeCategories",isIncludeCollection,isIncludeCategories)
+                result = (selectedCollections.length==0 || isIncludeCollection) && (selectedCategories.length==0 || isIncludeCategories);
             }
             return result;
         })
@@ -259,20 +275,25 @@ export default class QuestionList extends React.Component {
     };
     categorySelectChanged = (id)=> {
         var selectedCategories = this.state.selectedCategories;
-        log("->selectedCategories", selectedCategories);
-        if (selectedCategories.includes(id)) {
+        //log("->selectedCategories", selectedCategories);
+        if (selectedCategories.includes(id))
             _.pull(selectedCategories, id);
-        }
-        else {
+        else
             selectedCategories.push(id);
-        }
 
-        log("selectedCategories->", selectedCategories);
-        this.initData(this.state.originalData, selectedCategories);
-        // this.setState({
-        //     selectedCategories: selectedCategories
-        // });
+        //log("selectedCategories->", selectedCategories);
+        this.initData(this.state.originalData, selectedCategories, this.state.selectedCollections);
+
     };
+    collectionSelectChanged = (id)=> {
+        log("handle collectionSelectChanged", id);
+        var selectedCollections = this.state.selectedCollections;
+        if (selectedCollections.includes(id))
+            _.pull(selectedCollections, id);
+        else
+            selectedCollections.push(id);
+        this.initData(this.state.originalData, this.state.selectedCategories, selectedCollections);
+    }
 
     render() {
         var _this = this;
@@ -302,7 +323,10 @@ export default class QuestionList extends React.Component {
                                             <Col lg={12} md={12}>
                                                 <CategoryFilterToolbar
                                                     selectedCategories={_this.state.selectedCategories}
-                                                    categorySelectChanged={_this.categorySelectChanged}/>
+                                                    categorySelectChanged={_this.categorySelectChanged}
+                                                    selectedCollections={this.state.selectedCollections}
+                                                    collectionSelectChanged={this.collectionSelectChanged}
+                                                />
                                             </Col>
                                         </Row>
                                         <Row>

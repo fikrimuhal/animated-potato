@@ -246,7 +246,10 @@ export const getApiPromise = (url, method, addToken=true) => data => {
         'mode': 'cors'
     };
     if (addToken) {
-        headers["Authorization"] =  localStorage.getItem("token");
+        Object.assign(headers, {
+            "Authorization":localStorage.getItem("token")
+        })
+        //headers["Authorization"] =  localStorage.getItem("token");
     }
     return fetch('http://localhost:9000/' + url, {
         method: method,

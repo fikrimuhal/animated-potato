@@ -128,7 +128,7 @@ export const QuestionSetCaching = {
         var cacheTime = cache.createdTime;
         var now = Date.now();
         var diff = time.timeDiff(now,cacheTime);
-        return diff.minute <= 1;
+        return diff.minute <= 5;
     },
     clear:()=>{
         localStorage.removeItem("questionSetsCache");

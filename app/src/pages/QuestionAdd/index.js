@@ -24,6 +24,7 @@ export default class QuestionAddContainer extends React.Component {
         var immutableData;
         if (this.props.editMode) {
             var question = this.unNormalizeCategoryWeights(this.props.question);
+            question.setList = question.setList.map(item => {return item.id});
             immutableData = Immutable.fromJS(question, (key, value)=> {
                 return value.toOrderedMap();
             });

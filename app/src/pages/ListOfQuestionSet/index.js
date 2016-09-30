@@ -310,11 +310,11 @@ export default class ListOfQuestionSet extends React.Component {
             isDefaultSet: false
         };
         return new Promise((resolve, reject)=> {
-
             QuestionSetAPI.setQuestionSet(apiRequestData).then(response=> {
                 return response.json()
             }).then(json=> {
                 if (json.status == "OK") {
+                    Cache.QuestionSetCaching.clear();
                     _this.context.showMessage("Question set successfully saved.", 1000);
                     this.addNewQuestionToTable(setName, json.id);
                     resolve({
