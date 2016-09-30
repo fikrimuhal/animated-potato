@@ -11,56 +11,54 @@ import utils.Formatter._
   */
 class UserController extends Controller {
 
+  def insert = Action { implicit request =>
 
-  def insert() = Action { implicit request =>
-    try {
-      val user: User = request.body.asJson.get.as[User]
-      Users.insert(User(username = user.username, password = user.password, email = user.email))
-      Ok("1")
+    request.body.asJson.flatMap(_.validate[User].asOpt) match {
+
+      case Some(user) =>
+        val id = Users.insert(user)
+        if (id > 0) {
+          Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE, Some(id))))
+        }
+        else InternalServerError(Json.toJson(ResponseMessage(Constants.FAIL, Constants.SERVER_ERROR_MESSAGE)))
+
+      case _ => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
-    catch {
-      case e: Exception => BadRequest(s"-1 $e")
+
+  }
+
+
+  def update = Action { implicit request =>
+
+    request.body.asJson.flatMap(_.validate[User].asOpt) match {
+
+      case Some(user) =>
+        if (Users.update(user)) {
+          Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
+        }
+        else InternalServerError(Json.toJson(ResponseMessage(Constants.FAIL, Constants.SERVER_ERROR_MESSAGE)))
+
+      case _ => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
+    }
+
+  }
+
+  def delete = Action { implicit request =>
+
+    request.body.asJson.flatMap(_.validate[User].asOpt) match {
+
+      case Some(user) =>
+        if (Users.update(user)) {
+          Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
+        }
+        else InternalServerError(Json.toJson(ResponseMessage(Constants.FAIL, Constants.SERVER_ERROR_MESSAGE)))
+
+      case _ => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
   }
 
-  def update() = Action { implicit request =>
-    try {
-      val user: User = request.body.asJson.get.as[User]
-      if (Users.update(user)) Ok("1") else BadRequest("-1")
-    }
-    catch {
-      case e: Exception => BadRequest("-1")
-    }
-  }
-
-  def delete() = Action { implicit request =>
-    try {
-      val user: User = request.body.asJson.get.as[User]
-      if (Users.delete(user)) Ok("1") else BadRequest("-1")
-    }
-    catch {
-      case e: Exception => BadRequest("-1")
-    }
-  }
-
-  def getUser(n: String) = Action {
-    try {
-      val user = Users.getById(n.toLong)
-      if (user.id == Some(-1)) BadRequest("-1")
-      else Ok(Json.toJson(user))
-    }
-    catch {
-      case e: Exception => BadRequest("-1")
-    }
-  }
-
-  def getUsers() = Action {
-    try {
-      Ok(Json.toJson(Users.getAll))
-    }
-    catch {
-      case e: Exception => BadRequest("-1")
-    }
+  def getUsers = Action {
+    Ok(Json.toJson(Users.getAll))
   }
 
   def getUsersDetailed = Action {

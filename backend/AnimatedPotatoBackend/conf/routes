@@ -5,17 +5,16 @@
 # Home page
 #GET         /                                  controllers.ParticipantController.index
 
-POST        /insertParticipant                 controllers.ParticipantController.insertParticipant
-POST        /updateParticipant                 controllers.ParticipantController.updateParticipant
-POST        /admin/deleteParticipant           controllers.ParticipantController.deleteParticipant
-GET         /admin/getParticipants             controllers.ParticipantController.getParticipants
+POST        /insertParticipant                 controllers.ParticipantController.insert
+POST        /updateParticipant                 controllers.ParticipantController.update
+POST        /admin/deleteParticipant           controllers.ParticipantController.delete
+GET         /admin/getParticipants             controllers.ParticipantController.getAll
 GET         /admin/getApplicants               controllers.ParticipantController.getApplicants
 
 POST        /admin/insertUser                  controllers.UserController.insert
 POST        /admin/updateUser                  controllers.UserController.update
 POST        /admin/deleteUser                  controllers.UserController.delete
 GET         /admin/getUsers                    controllers.UserController.getUsersDetailed
-GET         /admin/getUser/:n                  controllers.UserController.getUser(n)
 GET         /admin/getPersonnels               controllers.UserController.getPersonnelsDetailed
 GET         /admin/getAdmins                   controllers.UserController.getAdminsDetailed
 

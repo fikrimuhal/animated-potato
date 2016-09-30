@@ -45,7 +45,7 @@ object AdminAction extends ActionBuilder[AuthenticatedRequest] {
   def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]) =
     request.jwtSession.getAs[ClaimData](Constants.CLAIM_DATA_KEY) match {
 
-      case Some(claimData) if Users.isAdmin(claimData.userName) =>
+      case Some(claimData) if Users.isAdmin(claimData.email) =>
           block(new AuthenticatedRequest(claimData, request)).map(_.refreshJwtSession(request))
 
       case Some(_) => Future.successful(Forbidden(Json.toJson(ResponseMessage(Constants.FORBIDDEN, Constants.FORBIDDEN_MESSAGE))).refreshJwtSession(request))

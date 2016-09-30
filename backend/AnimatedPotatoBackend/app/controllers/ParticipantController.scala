@@ -15,7 +15,7 @@ class ParticipantController extends Controller with Secured {
   }
 
 
-  def insertParticipant = Action { implicit request =>
+  def insert = Action { implicit request =>
     try {
       val participant: Participant = request.body.asJson.get.as[Participant]
       if (Participants.insert(participant)) Ok("1") else BadRequest("-1")
@@ -25,7 +25,7 @@ class ParticipantController extends Controller with Secured {
     }
   }
 
-  def updateParticipant = UserAction(parse.json) { implicit request =>
+  def update = UserAction(parse.json) { implicit request =>
 
     val claimData = request.jwtSession.getAs[ClaimData]("user").get
 
@@ -42,7 +42,7 @@ class ParticipantController extends Controller with Secured {
     }
   }
 
-    def deleteParticipant = Admin { implicit request =>
+    def delete = Admin { implicit request =>
       try {
         val participant = request.body.asJson.get.as[Participant]
 
@@ -56,16 +56,8 @@ class ParticipantController extends Controller with Secured {
       }
     }
 
-    def getParticipantsWithPage(n: String) = Action {
-      try {
-        Ok(Json.toJson(Participants.getParticipantsWithPage(n.toInt)))
-      }
-      catch {
-        case e: Exception => BadRequest("-1")
-      }
-    }
 
-    def getParticipants = Action {
+    def getAll = Action {
       Ok(Json.toJson(Participants.getAll))
     }
 

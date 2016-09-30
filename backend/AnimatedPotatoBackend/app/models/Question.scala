@@ -1,7 +1,8 @@
 package models
 
 import animatedPotato.protocol.protocol.{CategoryId, IdType, QuestionId}
-import table.CategoryTable
+import dao.CollectionDAO
+import table.{CategoryTable, CollectionTable}
 import utils.DB
 
 import slick.driver.PostgresDriver.simple._
@@ -22,7 +23,7 @@ case class QuestionResponse(id: IdType,
                             qType: String,
                             options: List[QuestionOption],
                             categoryWeights: List[QuestionCategoryResponse],
-                            setList: List[IdType])
+                            setList: List[Collection])
 
 case class QuestionTable(id: Option[IdType],
                          title: String,
@@ -100,6 +101,8 @@ object Questions {
 
   def getAll: List[QuestionResponse] = DB { implicit session =>
 
+    lazy val collectionDAO = TableQuery[CollectionTable]
+
     for (question <- questions.sortBy(_.id).list if question != null)
       yield
         QuestionResponse(
@@ -109,12 +112,15 @@ object Questions {
           question.id.map(questionId => questionOptions.filter(option => option.questionId === questionId).list).get,
           question.id.map(questionId => questionCategories.filter(questionCategory => questionCategory.questionId === questionId).list.
             map(a => QuestionCategoryResponse(a.categoryId, a.weight, categories.filter(_.id === a.categoryId).list.head.category))).get,
-          question.id.map(questionId => questionSets.filter(questionSet => questionSet.questionId === questionId).list.map(_.setId)).get
+          question.id.map(q_Id => questionSets.filter(questionSet => questionSet.questionId === q_Id).map(_.setId).list).get
+            .map(set_id => collectionDAO.filter(_.id === set_id).first)
         )
 
   }
 
   def getQuestionById(id: Long): Option[QuestionResponse] = DB { implicit session =>
+
+    lazy val collectionDAO = TableQuery[CollectionTable]
 
     questions.filter(_.id === id).list.headOption match {
 
@@ -126,7 +132,8 @@ object Questions {
           question.id.map(questionId => questionOptions.filter(option => option.questionId === questionId).list).orNull,
           question.id.map(questionId => questionCategories.filter(questionCategory => questionCategory.questionId === questionId).list.
             map(ctg => QuestionCategoryResponse(ctg.categoryId, ctg.weight, categories.filter(_.id === ctg.categoryId).list.headOption.map(_.category).getOrElse("")))).orNull,
-          question.id.map(questionId => questionSets.filter(questionSet => questionSet.questionId === questionId).list.map(_.setId)).orNull
+          question.id.map(questionId => questionSets.filter(questionSet => questionSet.questionId === questionId).map(_.setId).list).get
+            .map(qs => collectionDAO.filter(_.id === qs).first)
         ))
 
       case _ => None
