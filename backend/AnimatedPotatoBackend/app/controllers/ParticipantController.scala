@@ -10,7 +10,7 @@ import utils.Constants
 class ParticipantController extends Controller with Secured {
 
 
-  def index = Action{
+  def index = Action {
     Ok("READY!")
   }
 
@@ -32,7 +32,7 @@ class ParticipantController extends Controller with Secured {
     request.body.validate[Participant].asOpt match {
 
       case Some(participant) =>
-        if(claimData.email == participant.email){
+        if (claimData.email == participant.email) {
           Participants.update(participant)
           Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
         }
@@ -42,29 +42,29 @@ class ParticipantController extends Controller with Secured {
     }
   }
 
-    def delete = Admin { implicit request =>
-      try {
-        val participant = request.body.asJson.get.as[Participant]
+  def delete = Admin { implicit request =>
+    try {
+      val participant = request.body.asJson.get.as[Participant]
 
-        if (Participants.delete(participant))
-          Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
-        else
-          BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
-      }
-      catch {
-        case e: Exception => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
-      }
+      if (Participants.delete(participant))
+        Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
+      else
+        BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
-
-
-    def getAll = Action {
-      Ok(Json.toJson(Participants.getAll))
+    catch {
+      case e: Exception => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
+  }
 
-    def getApplicants = Admin {
 
-      Ok(Json.toJson(Participants.getApplicants))
+  def getAll = Action {
+    Ok(Json.toJson(Participants.getAll))
+  }
 
-    }
+  def getApplicants = Action {
+
+    Ok(Json.toJson(Participants.getApplicants))
 
   }
+
+}

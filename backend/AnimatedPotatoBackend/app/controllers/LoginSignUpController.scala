@@ -37,7 +37,7 @@ class LoginSignUpController extends Controller {
         Ok(Json.toJson(SignFailMessage(Constants.FAIL, SIGN_UP_FAIL_CODE, Constants.WRONG_PASSWORD)))
 
       case _ =>
-        BadRequest(Json.toJson(ResponseMessage(Constants.FAIL,Constants.UNEXPECTED_ERROR_MESSAGE)))
+        BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
 
   }
@@ -45,7 +45,7 @@ class LoginSignUpController extends Controller {
   def signUp = Action { implicit request =>
     try {
       val form: SignUp = request.body.asJson.get.as[SignUp]
-      val user: User = User(form.id, form.username,form.password, Some(form.email))
+      val user: User = User(form.id, form.username, form.password, Some(form.email))
       val participant: Participant = Participant(form.id, form.username, form.name, form.lastname, form.email, form.phone, form.photo, form.website, form.notes)
 
       SignUp.checkUser(form.username, form.email) match {
@@ -61,16 +61,16 @@ class LoginSignUpController extends Controller {
             .addingToJwtSession(Constants.CLAIM_DATA_KEY, Participants.getClaimData(user.username))
 
         case UserNameExists =>
-          Ok(Json.toJson(SignFailMessage(Constants.FAIL, USERNAME_EXISTS_CODE,Constants.USERNAME_EXISTS)))
+          Ok(Json.toJson(SignFailMessage(Constants.FAIL, USERNAME_EXISTS_CODE, Constants.USERNAME_EXISTS)))
 
         case EmailExists =>
-          Ok(Json.toJson(SignFailMessage(Constants.FAIL,EMAIL_EXISTS_CODE,Constants.EMAIL_EXISTS)))
+          Ok(Json.toJson(SignFailMessage(Constants.FAIL, EMAIL_EXISTS_CODE, Constants.EMAIL_EXISTS)))
 
       }
     }
     catch {
       case e: Exception =>
-        BadRequest(Json.toJson(ResponseMessage(Constants.FAIL,Constants.UNEXPECTED_ERROR_MESSAGE)))
+        BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
   }
 }

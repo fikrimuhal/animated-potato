@@ -37,14 +37,18 @@ object Formatter {
   implicit val comparativeReportFormatter = Json.format[ComparativeReport]
   implicit val emailFormatter = Json.format[Email]
   implicit val claimDataFormatter = Json.format[ClaimData]
+
   implicit object timestampFormat extends Format[Timestamp] {
     val format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SS")
+
     def reads(json: JsValue) = {
       val str = json.as[String]
       JsSuccess(new Timestamp(format.parse(str).getTime))
     }
+
     def writes(ts: Timestamp) = JsString(format.format(ts))
   }
+
   implicit val applicantFormatter = Json.format[Applicant]
   implicit val interviewFormatter = Json.format[Interview]
   implicit val testReportRequestFormat = Json.format[TestReportRequest]
@@ -61,9 +65,6 @@ object Formatter {
   implicit val questionAnswerFormatter = Json.format[QuestionAnswer]
   implicit val questionAndAnswerFormatter = Json.format[QuestionAndAnswer]
   implicit val interviewAnswersFormatter = Json.format[InterviewAnswers]
-
-
-
 
 
   implicit def longListToString = MappedColumnType.base[List[IdType], String](

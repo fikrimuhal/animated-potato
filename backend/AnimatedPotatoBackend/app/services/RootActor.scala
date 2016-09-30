@@ -29,7 +29,7 @@ class RootActor extends Actor {
       val _sender = sender()
       (interviewManager ? x).map(_sender ! _)
 
-//      interviewManager forward x
+    //      interviewManager forward x
 
     case x =>
       println(s"root hepsini alan $x")

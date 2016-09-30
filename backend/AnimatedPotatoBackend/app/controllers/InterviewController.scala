@@ -32,14 +32,14 @@ case class NextQuestionRequest(answer: YesNoAnswer, interviewId: InterviewId, em
 
 case class NextQuestionResponse(status: String, interviewId: InterviewId, remainingQuestion: Int, question: Option[QuestionResponse], testOver: Boolean, isRegistered: Boolean)
 
-case class CategoryScore(category: Category, score: Score, percentage: Option[Score] = None, confidence: Option[Confidence] = None,order : Option[Int] = None)
+case class CategoryScore(category: Category, score: Score, percentage: Option[Score] = None, confidence: Option[Confidence] = None, order: Option[Int] = None)
 
 case class ComparativeReport(userScore: List[CategoryScore], personnelAverage: List[CategoryScore], overallAverage: List[CategoryScore])
 
 case object RandomInterviewImpl
 
 
-class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends Controller with  Secured {
+class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends Controller with Secured {
   final val INTERVIEW_IMPL = RandomInterviewImpl
   final val TEST_IS_NOT_OVER = false
   final val TEST_IS_OVER = true
@@ -131,7 +131,6 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
       case _ => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
   }
-
 
 
 }

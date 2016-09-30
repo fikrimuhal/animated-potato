@@ -47,7 +47,10 @@ export default  class ReportViewer extends React.Component {
                             selectedCategory={category} showCategorChangeBar={false} key={"table-" + category}/>
             </Col>
         });
-
+        tables = [<Col lg={3} md={4}>
+            <ScoreTable data={this.props.scoreTable} dataLoaded={this.props.scoreTableLoaded}
+                        selectedCategory={"Overall"} showCategorChangeBar={false} key={"table-Overall"}/></Col>].concat(tables);
+          
         return tables;
     };
     render = ()=> {

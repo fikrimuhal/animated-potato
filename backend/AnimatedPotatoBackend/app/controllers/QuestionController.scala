@@ -15,7 +15,7 @@ class QuestionController @Inject() extends Controller {
 
   def update() = evalOperation(Questions.update)
 
-  def delete() =Action { implicit request =>
+  def delete() = Action { implicit request =>
 
     request.body.asJson.flatMap(_.validate[ID].asOpt) match {
 
@@ -37,7 +37,7 @@ class QuestionController @Inject() extends Controller {
 
       case Some(question) => Ok(Json.toJson(question))
 
-      case None => Ok(Json.toJson(ResponseMessage(Constants.FAIL,"Bu ID ile kayıtlı soru bulunmamaktadır")))
+      case None => Ok(Json.toJson(ResponseMessage(Constants.FAIL, "Bu ID ile kayıtlı soru bulunmamaktadır")))
 
     }
   }

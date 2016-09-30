@@ -8,7 +8,7 @@ import play.api.mvc.{Action, Controller}
 import utils.Constants
 import utils.Formatter._
 
-class CategoryController extends Controller {
+class CategoryController extends Controller with Secured {
   val categoryDAO = new CategoryDAO
 
   def insert = evalOperation(categoryDAO.insert)
@@ -21,7 +21,7 @@ class CategoryController extends Controller {
     Ok(Json.toJson(categoryDAO.getById(id)))
   }
 
-  def getAll = Action {
+  def getAll = Admin {
     Ok(Json.toJson(categoryDAO.getAll))
   }
 

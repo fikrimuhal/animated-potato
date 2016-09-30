@@ -42,7 +42,7 @@ class Database extends Actor {
       )
 
     case TestReport(interviewId, userIdentifier, scores) =>
-      ScoresDAO.insertAll(scores.map(category => Scores(interviewId, category.categoryId,category.score, category.confidence)))
+      ScoresDAO.insertAll(scores.map(category => Scores(interviewId, category.categoryId, category.score, category.confidence)))
       InterviewDAO.insertAverageScore(interviewId, scores.map(_.score).sum / scores.size)
   }
 

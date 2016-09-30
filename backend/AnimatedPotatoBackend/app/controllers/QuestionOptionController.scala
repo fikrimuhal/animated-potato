@@ -10,7 +10,7 @@ import utils.Formatter._
 /**
   * Created by who on 08.08.2016.
   */
-class QuestionOptionController @Inject()  extends Controller{
+class QuestionOptionController @Inject() extends Controller {
 
   def insertQuestionOption() = Action { implicit request =>
     try {
@@ -22,7 +22,7 @@ class QuestionOptionController @Inject()  extends Controller{
     }
   }
 
-  def updateQuestionOption() = Action{ implicit request =>
+  def updateQuestionOption() = Action { implicit request =>
     try {
       val question: QuestionOption = request.body.asJson.get.as[QuestionOption]
       if (QuestionOptions.update(question)) Ok("1") else BadRequest("-1")
@@ -32,9 +32,9 @@ class QuestionOptionController @Inject()  extends Controller{
     }
   }
 
-  def deleteQuestionOption() = Action{ implicit request =>
+  def deleteQuestionOption() = Action { implicit request =>
     try {
-      val question : QuestionOption= request.body.asJson.get.as[QuestionOption]
+      val question: QuestionOption = request.body.asJson.get.as[QuestionOption]
       if (QuestionOptions.delete(question)) Ok("1") else BadRequest("-1")
     }
     catch {
@@ -42,9 +42,13 @@ class QuestionOptionController @Inject()  extends Controller{
     }
   }
 
-  def getQuestionOptions() = Action{
-    try {Ok(Json.toJson(QuestionOptions.getQuestionOptions()))}
-    catch {case e: Exception => BadRequest("-1")}
+  def getQuestionOptions() = Action {
+    try {
+      Ok(Json.toJson(QuestionOptions.getQuestionOptions()))
+    }
+    catch {
+      case e: Exception => BadRequest("-1")
+    }
   }
 
 }

@@ -100,7 +100,7 @@ object Participants {
   def getByInterviewID(interviewId: InterviewId): Option[Participant] = DB { implicit session =>
 
     val interviewOpt = InterviewDAO.interviewDAO.filter(_.id === interviewId).firstOption
-    if(interviewOpt.isDefined) participants.filter(_.email === interviewOpt.get.email).firstOption
+    if (interviewOpt.isDefined) participants.filter(_.email === interviewOpt.get.email).firstOption
     else None
   }
 

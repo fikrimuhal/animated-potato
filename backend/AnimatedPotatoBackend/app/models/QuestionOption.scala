@@ -8,7 +8,7 @@ import utils.{Constants, DB}
 /**
   * Created by who on 07.08.2016.
   */
-  case class QuestionOption(questionId: Option[IdType],
+case class QuestionOption(questionId: Option[IdType],
                           id: Option[IdType],
                           title: String,
                           weight: Double) {
@@ -52,7 +52,7 @@ class QuestionOptions(tag: Tag) extends Table[QuestionOption](tag, "questionopti
 
   def weight = column[Double]("weight")
 
-  def * = (questionId.?,id.?, title, weight) <> (QuestionOption.tupled, QuestionOption.unapply)
+  def * = (questionId.?, id.?, title, weight) <> (QuestionOption.tupled, QuestionOption.unapply)
 }
 
 

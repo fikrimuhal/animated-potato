@@ -10,7 +10,8 @@ import play.api.libs.json.Json
 import utils.Constants
 
 case class GetAnswer(interviewId: InterviewId, questionId: QuestionId)
-case class QuestionAndAnswer(question : Option[QuestionTable], answer: Option[Answer])
+
+case class QuestionAndAnswer(question: Option[QuestionTable], answer: Option[Answer])
 
 class AnswerController extends Controller with Secured {
 
@@ -47,20 +48,20 @@ class AnswerController extends Controller with Secured {
     * requires GetAnswer typed JSON in a request body that has two fields : interviewID and questionID
     *
     * @return : Returns
-    *           onSuccess :
-    *             found : interview answer of specified interviewID and questionID
-    *             not_found: message that explains
-    *           onFailure : BadRequest Response Message that explains error
+    *         onSuccess :
+    *         found : interview answer of specified interviewID and questionID
+    *         not_found: message that explains
+    *         onFailure : BadRequest Response Message that explains error
     */
   def getAnswer = UserAction { implicit request =>
 
     request.body.asJson.flatMap(_.validate[GetAnswer].asOpt) match {
 
       case Some(getAnswer) =>
-       val questionOption: Option[QuestionTable] = Questions.getQuestionText(getAnswer.questionId)
+        val questionOption: Option[QuestionTable] = Questions.getQuestionText(getAnswer.questionId)
 
         val answer = AnswerDAO.get(getAnswer.interviewId, getAnswer.questionId)
-        if (answer.isDefined) Ok(Json.toJson(QuestionAndAnswer(questionOption,answer)))
+        if (answer.isDefined) Ok(Json.toJson(QuestionAndAnswer(questionOption, answer)))
         else Ok(Json.toJson(ResponseMessage(Constants.FAIL, Constants.NOT_EXISTS)))
 
       case _ =>

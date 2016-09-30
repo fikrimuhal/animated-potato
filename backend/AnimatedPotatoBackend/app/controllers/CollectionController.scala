@@ -45,7 +45,7 @@ class CollectionController extends Controller {
 
       case Some(id) =>
         if (collectionDAO.setDefaultCollection(id.id))
-        Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
+          Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
         else {
           InternalServerError(Json.toJson(ResponseMessage(Constants.FAIL, Constants.SERVER_ERROR_MESSAGE)))
         }

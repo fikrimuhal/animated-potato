@@ -46,13 +46,13 @@ object AdminAction extends ActionBuilder[AuthenticatedRequest] {
     request.jwtSession.getAs[ClaimData](Constants.CLAIM_DATA_KEY) match {
 
       case Some(claimData) if Users.isAdmin(claimData.email) =>
-          block(new AuthenticatedRequest(claimData, request)).map(_.refreshJwtSession(request))
+        block(new AuthenticatedRequest(claimData, request)).map(_.refreshJwtSession(request))
 
       case Some(_) => Future.successful(Forbidden(Json.toJson(ResponseMessage(Constants.FORBIDDEN, Constants.FORBIDDEN_MESSAGE))).refreshJwtSession(request))
 
       case _ =>
         val tokenOption = request.headers.get("Authorization")
-
+        println("Authorization token: " + tokenOption)
         if (tokenOption.isDefined && Jwt.decode(tokenOption.get, JwtOptions(expiration = true, signature = false)).toString.contains("JwtExpirationException"))
           Future.successful(Ok(Json.toJson(ResponseMessage(Constants.SESSION_TIME_OUT, Constants.SESSION_TIME_OUT_MESSAGE))))
         else

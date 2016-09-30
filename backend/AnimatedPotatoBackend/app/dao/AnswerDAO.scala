@@ -76,7 +76,7 @@ class AnswerDAO extends BaseDAO[AnswerTable, Answer](TableQuery[AnswerTable]) {
 
       val interviewResult = interviewAnswers.find(_.interviewId == interviewId).get
       val personnelResult = InterviewAnswers(PERSONNEL_INTERVIEW_ID, PERSONNEL_INTERVIEW_ID, PERSONNEL, PERSONNEL, personnelAverageQA)
-      val globalResult = InterviewAnswers(ALL_INTERVIEW_ID,ALL_INTERVIEW_ID, ALL, ALL, globalAverageQA)
+      val globalResult = InterviewAnswers(ALL_INTERVIEW_ID, ALL_INTERVIEW_ID, ALL, ALL, globalAverageQA)
 
       interviewResult :: personnelResult :: globalResult :: Nil
     }
