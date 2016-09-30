@@ -61,6 +61,7 @@ object Formatter {
   implicit val questionAnswerFormatter = Json.format[QuestionAnswer]
   implicit val questionAndAnswerFormatter = Json.format[QuestionAndAnswer]
   implicit val interviewAnswersFormatter = Json.format[InterviewAnswers]
+  implicit val interviewResultFormatter = Json.format[InterviewResult]
 
 
 

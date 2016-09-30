@@ -9,7 +9,7 @@ import slick.driver.PostgresDriver.simple._
 case class User(id: Option[UserIdType] = None,
                 username: String,
                 password: String,
-                email: Option[String] = None,
+                email: Email,
                 isadmin: Option[Boolean] = Some(false),
                 ispersonnel: Option[Boolean] = Some(false))
 
@@ -108,6 +108,7 @@ object Users {
       .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
   }
 
+
 }
 
 class Users(tag: Tag) extends Table[User](tag, "users") {
@@ -123,5 +124,5 @@ class Users(tag: Tag) extends Table[User](tag, "users") {
 
   def isPersonnel = column[Boolean]("ispersonnel")
 
-  def * = (id.?, username, password, email.?, isAdmin.?, isPersonnel.?) <> (User.tupled, User.unapply)
+  def * = (id.?, username, password, email, isAdmin.?, isPersonnel.?) <> (User.tupled, User.unapply)
 }

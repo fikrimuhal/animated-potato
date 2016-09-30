@@ -90,7 +90,7 @@ object Participants {
 
     participants.filter(p => p.userName === username).list.headOption match {
 
-      case Some(p) => Users.get(p.username).map(u => ClaimData(u.email.get, u.isadmin.get, u.ispersonnel.get))
+      case Some(p) => Users.get(p.username).map(u => ClaimData(u.email, u.isadmin.get, u.ispersonnel.get))
 
       case None => None
 

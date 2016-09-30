@@ -61,5 +61,14 @@ class ScoresController extends Controller {
     }
   }
 
+  def getUserReport = Action { implicit request =>
 
+    request.body.asJson.flatMap(_.validate[ID].asOpt) match {
+
+      case Some(id) => Ok(Json.toJson(ScoresDAO.getUserReport(id.id)))
+
+      case _ => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
+
+    }
+  }
 }
