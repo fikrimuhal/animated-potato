@@ -8,34 +8,34 @@ import * as util               from '../../utils/utils'
 import * as db                 from '../../utils/data'
 const log = log2("StartInterview");
 export default class StartInterview extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        util.bindFunctions.call(this,['onClick'])
+        util.bindFunctions.call(this, ['onClick'])
     }
 
-    onClick = function (){
+    onClick = function () {
         //log(this.refs.txtEmail);
         var email = this.refs.txtEmail.input.value;
         //log(this.props,this.props.location.search);
         var query = "";
-        log("this.props.location",this.props.location);
-        if(this.props.location.search.length > 0) {
+        log("this.props.location", this.props.location);
+        if (this.props.location.search.length > 0) {
             query = this.props.location.search + "&email=" + email;
         }
         //var query=this.props.location.search + "&email=" + email;
-        log("query",query);
+        log("query", query);
 
         browserHistory.push("/skilltest/" + query)
     };
-    componentWillMount = function (){
-        if(db.isLoggedIn()) {
+    componentWillMount = function () {
+        if (db.isLoggedIn()) {
             browserHistory.push("/")
         }
         else {
             //browserHistory.push("/interview")
         }
     };
-    render = function (){
+    render = function () {
         log("rendered");
         return (
 
@@ -43,7 +43,7 @@ export default class StartInterview extends React.Component {
                 <h4>Fikrimuhal Mülakat Testi</h4>
                 Eposta Adresiniz: <TextField ref="txtEmail" hintText={"Eposta"} floatingLabelText={"Eposta"}
                                              type={"email"} required="required"></TextField><br/>
-                <RaisedButton label={"Test başla"} style={{float:"right"}} onClick={this.onClick}></RaisedButton>
+                <RaisedButton label={"Test başla"} style={{float: "right"}} onClick={this.onClick}></RaisedButton>
             </div>
         )
     }

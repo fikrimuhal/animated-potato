@@ -8,38 +8,38 @@ import LinearProgress from 'material-ui/LinearProgress';
 import log2 from '../../utils/log2'
 const log = log2("RadarWidget")
 export default  class RadarWidget extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
-            dataLoaded:false
+            dataLoaded: false
         };
         this.createGraph();
     }
 
-    createGraph = function (){
-        var _this=this;
+    createGraph = function () {
+        var _this = this;
 
-        mockApi.getRadarData().then(json=>{
-            log("received json=>",json);
+        mockApi.getRadarData().then(json=> {
+            log("received json=>", json);
             var data = [];
-            ["score","companyScore","generalScore"].forEach(scoreType=>{
+            ["score", "companyScore", "generalScore"].forEach(scoreType=> {
                 var layerData = [];
-                layerData = json[scoreType].map(valueItem=>{
+                layerData = json[scoreType].map(valueItem=> {
                     return {
-                        axis:valueItem.category,
-                        value:valueItem.score
+                        axis: valueItem.category,
+                        value: valueItem.score
                     }
                 });
                 data.push(layerData);
             });
             _this.setState({
-                data:data,
-                dataLoaded:true
+                data: data,
+                dataLoaded: true
             })
         });
     };
-    getContent = function (){
-        if(this.state.dataLoaded) {
+    getContent = function () {
+        if (this.state.dataLoaded) {
             return <Radar data={this.state.data}/>
         }
         else {
@@ -47,7 +47,7 @@ export default  class RadarWidget extends React.Component {
             />
         }
     };
-    render = ()=>{
+    render = ()=> {
         return (
             <div>
                 {this.getContent()}

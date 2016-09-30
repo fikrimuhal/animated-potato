@@ -27,8 +27,8 @@ export default  class DbInitialization extends React.Component {
             waiting: true
         });
         var categories = ["Java", "C#", "Backend", "Frontend", "Javascript", "Scala",
-                          "PHP", "ASP.NET", "Machine Learning", "ReactJS","Spark","Hadoop",
-                          "OOP","C++","Unity","Objective C","Swift","Phyton","Ruby","Haskell"];
+            "PHP", "ASP.NET", "Machine Learning", "ReactJS", "Spark", "Hadoop",
+            "OOP", "C++", "Unity", "Objective C", "Swift", "Phyton", "Ruby", "Haskell"];
         var processedCategoryCount = 0;
         var checkFinish = ()=> {
             if (processedCategoryCount == categories.length) {
@@ -141,7 +141,7 @@ export default  class DbInitialization extends React.Component {
             checkFinish();
         });
     }
-    initUsers = ()=>{
+    initUsers = ()=> {
         this.setState({
             waiting: true
         });
@@ -154,7 +154,7 @@ export default  class DbInitialization extends React.Component {
                 this.context.showMessage("Finished.", 3000);
             }
         }
-        mockData.mock_users.forEach(user=>{
+        mockData.mock_users.forEach(user=> {
             api.signUp(user);
             processedItem++;
             checkFinish();

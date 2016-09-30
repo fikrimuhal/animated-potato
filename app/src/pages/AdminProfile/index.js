@@ -1,11 +1,11 @@
 import React from 'react'
 export default class AdminProfile extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
     }
 
-    render(){
+    render() {
         return (
 
             <div>

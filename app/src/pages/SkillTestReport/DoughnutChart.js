@@ -10,11 +10,11 @@ import * as util            from '../../utils/utils'
 
 const log = log2("DoughnutChart");
 export default  class DoughnutChart extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
     }
 
-    render = ()=>{
+    render = ()=> {
         return (
             <div>
                 <Doughnut data={this.props.data}/>
@@ -23,5 +23,5 @@ export default  class DoughnutChart extends React.Component {
     }
 }
 DoughnutChart.propTypes = {
-    data:React.PropTypes.object.isRequired
+    data: React.PropTypes.object.isRequired
 }

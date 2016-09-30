@@ -11,15 +11,15 @@ import Mousetrap    from 'mousetrap'
 import Badge        from 'material-ui/Badge';
 //variables and const definitions
 const log = log2("CheckboxQuestion");
-var keyOptionMap=[];
+var keyOptionMap = [];
 //React component
 export default class CheckboxQuestion extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            answer:[]
+        this.state = {
+            answer: []
         };
-        util.bindFunctions.call(this, ['handleCheckbox','isChecked','handleHotkey']);
+        util.bindFunctions.call(this, ['handleCheckbox', 'isChecked', 'handleHotkey']);
         //log("constructor")
     }
 
@@ -27,41 +27,43 @@ export default class CheckboxQuestion extends React.Component {
 
 
         var answer = this.state.answer;
-        log("old answer",answer);
-        if(checked){
+        log("old answer", answer);
+        if (checked) {
             answer.push(optionId);
         }
-        else{
-         answer = _.filter(answer,(ans)=> {
-             return ans != optionId
-         });
+        else {
+            answer = _.filter(answer, (ans)=> {
+                return ans != optionId
+            });
         }
-        log("new answer",answer);
+        log("new answer", answer);
         this.setState({
-            answer:answer
+            answer: answer
         });
         this.props.onChange(answer);
     };
     isChecked = function (optionId) {
         //log(optionId,this.state.answer);
-      return  undefined !=  this.state.answer.find((v,k)=>{return v==optionId});
+        return undefined != this.state.answer.find((v, k)=> {
+                return v == optionId
+            });
 
     };
-    handleHotkey = function (e,combo) {
-        if(Object.keys(keyOptionMap).includes(combo)){
+    handleHotkey = function (e, combo) {
+        if (Object.keys(keyOptionMap).includes(combo)) {
             var optId = keyOptionMap[combo];
             var checked = !this.refs[optId].state.switched;
-            this.handleCheckbox(optId,checked);
+            this.handleCheckbox(optId, checked);
         }
     };
-    componentWillUpdate = function(nextProps, nextState) {
+    componentWillUpdate = function (nextProps, nextState) {
         var options = util.obj2Array(this.props.question.options);
         var answer = [];
         options.map((opt)=> {
             var checkbox = this.refs[opt.id];
             //console.dir(checkbox);
             //log(checkbox.state.switched);
-            if(checkbox.state.switched){
+            if (checkbox.state.switched) {
                 answer.push(opt.id);
             }
         });
@@ -70,10 +72,10 @@ export default class CheckboxQuestion extends React.Component {
     componentDidMount = ()=> {
         var keyCombines = [];
         var options = util.obj2Array(this.props.question.options);
-        keyOptionMap=[];
-        for(var i=1;i<=options.length;i++){
+        keyOptionMap = [];
+        for (var i = 1; i <= options.length; i++) {
             keyCombines.push(i.toString());
-            keyOptionMap[i]=options[i-1].id;
+            keyOptionMap[i] = options[i - 1].id;
         }
         //log("keyCombines",keyCombines);
         //log("keyOptionMap",keyOptionMap);
@@ -83,8 +85,8 @@ export default class CheckboxQuestion extends React.Component {
     componentWillUnmount = function () {
         var keyCombines = [];
         var options = util.obj2Array(this.props.question.options);
-        keyOptionMap=[];
-        for(var i=1;i <= options.length;i++){
+        keyOptionMap = [];
+        for (var i = 1; i <= options.length; i++) {
             keyCombines.push(i.toString());
         }
         Mousetrap.unbind(keyCombines, this.handleHotkey);
@@ -96,11 +98,12 @@ export default class CheckboxQuestion extends React.Component {
     render = function () {
         log("rendered");
         var options = util.obj2Array(this.props.question.options);
-        var counter =1;
+        var counter = 1;
         return (
             <div>
                 {/*<FontIcon color={blue500} className="material-icons md-dark md-inactive">label</FontIcon>*/}
-                <Badge badgeContent={this.props.currentQuestionNumber} primary={true}  badgeStyle={s.userLayoutStyles.questionBadgeRed}>
+                <Badge badgeContent={this.props.currentQuestionNumber} primary={true}
+                       badgeStyle={s.userLayoutStyles.questionBadgeRed}>
                     <p style={s.userLayoutStyles.questionText}>
                         {this.props.question.title}
                     </p>
@@ -110,19 +113,20 @@ export default class CheckboxQuestion extends React.Component {
                     options.map((option) => {
 
                         return (
-                           <div>
+                            <div>
 
-                            <Checkbox
-                                ref={option.id}
-                                key={option.id}
-                                name={"options"}
-                                value={option.id}
-                                label={<span>{option.text}<i style={s.userLayoutStyles.tusStili}>{counter++}</i></span>}
-                                checked={this.isChecked(option.id)}
-                                onCheck={(event, checked)=> this.handleCheckbox(option.id, checked)}
-                                labelStyle={s.userLayoutStyles.optionText}
-                            />
-                           </div>
+                                <Checkbox
+                                    ref={option.id}
+                                    key={option.id}
+                                    name={"options"}
+                                    value={option.id}
+                                    label={<span>{option.text}<i
+                                        style={s.userLayoutStyles.tusStili}>{counter++}</i></span>}
+                                    checked={this.isChecked(option.id)}
+                                    onCheck={(event, checked)=> this.handleCheckbox(option.id, checked)}
+                                    labelStyle={s.userLayoutStyles.optionText}
+                                />
+                            </div>
                         )
                     })
                 }

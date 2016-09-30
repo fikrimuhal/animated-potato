@@ -16,8 +16,8 @@ const styles = {
         marginTop: "10px",
         padding: "10px"
     },
-    tabPage:{
-        paddingLeft:"10px"
+    tabPage: {
+        paddingLeft: "10px"
     }
 
 }

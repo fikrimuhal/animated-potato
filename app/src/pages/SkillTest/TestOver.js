@@ -4,7 +4,7 @@
 //core imports
 import  React           from 'react'
 import FlatButton       from 'material-ui/FlatButton'
-import {browserHistory,RoutingContext} from "react-router"
+import {browserHistory, RoutingContext} from "react-router"
 import * as db          from '../../utils/data'
 import * as util        from '../../utils/utils'
 import log2             from '../../utils/log2';
@@ -17,26 +17,27 @@ export default  class TestOverPanel extends React.Component {
         util.bindFunctions.call(this, ['getContent'])
     }
 
-    onClick=function () {
+    onClick = function () {
         browserHistory.push("/home");
     };
-    navigateTo=path=>()=> {
+    navigateTo = path=>()=> {
         browserHistory.push(path);
     };
-    getContent=function () {
-        var reqQuery=this.props.query;
+    getContent = function () {
+        var reqQuery = this.props.query;
         var content;
-        log(this.props.validUser,db.isLoggedIn(),reqQuery)
-        if(this.props.validUser && db.isLoggedIn()) {
-            content=<div>
+        log(this.props.validUser, db.isLoggedIn(), reqQuery)
+        if (this.props.validUser && db.isLoggedIn()) {
+            content = <div>
                 <p>Yeterlililik testine katıldığınız için teşekkür ederiz.<br/>
                     Sonuçlarınızı anasayfada görebilirsiniz.
                 </p>
-                <FlatButton label={"Anasayfama git"} backgroundColor={"teal"} onClick={this.navigateTo("/")}></FlatButton>
+                <FlatButton label={"Anasayfama git"} backgroundColor={"teal"}
+                            onClick={this.navigateTo("/")}></FlatButton>
             </div>;
         }
-        else if(!reqQuery.companyToken && !reqQuery.trackNo && !this.props.validUser) {
-            content=<div>
+        else if (!reqQuery.companyToken && !reqQuery.trackNo && !this.props.validUser) {
+            content = <div>
                 <p>Yeterlililik testine katıldığınız için teşekkür ederiz<br/>
                     Kullanıcı bilgilerinizle sisteme giriş yapıp sonuçlarınızı görüntüleyebilirsiniz.
                 </p>
@@ -44,7 +45,7 @@ export default  class TestOverPanel extends React.Component {
             </div>;
         }
         else {
-            content=<div>
+            content = <div>
                 <p>Yeterlililik testine katıldığınız için teşekkür ederiz<br/>
                     Sonuçlarını görebilmek için sisteme üye olup giriş yapınız.
                 </p>
@@ -54,7 +55,7 @@ export default  class TestOverPanel extends React.Component {
         log(content);
         return content;
     };
-    render=()=> {
+    render = ()=> {
         log(this)
         return (
             <div>
@@ -66,6 +67,6 @@ export default  class TestOverPanel extends React.Component {
     }
 }
 
-TestOverPanel.propTypes={
+TestOverPanel.propTypes = {
     validUser: React.PropTypes.bool.isRequired
 };

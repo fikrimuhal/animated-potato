@@ -82,7 +82,7 @@ export default class SkillTestContainer extends React.Component {
     componentWillMount = function () {
 
         var reqQuery = this.props.location.query;
-         log("reqQuery",reqQuery)
+        log("reqQuery", reqQuery)
         if (!db.isLoggedIn() && (!reqQuery.companyToken || !reqQuery.trackNo || !reqQuery.email)) {
             if (reqQuery.trackNo == "new") {
 

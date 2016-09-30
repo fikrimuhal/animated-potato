@@ -70,7 +70,7 @@ export default class SignUpForm extends React.Component {
     handleSubmit = function () {
         //log(this.refs);
         var data = {};
-        ["name", "lastname", "email", "phone", "github", "website", "username", "password","notes"].forEach(field=> {
+        ["name", "lastname", "email", "phone", "github", "website", "username", "password", "notes"].forEach(field=> {
             //log(field,this.refs[field].input.value);
             data[field] = this.refs[field].input.value;
         })
@@ -78,15 +78,15 @@ export default class SignUpForm extends React.Component {
         log(data);
         log(this.refs.notes);
 
-        var requiredFields = ["name","lastname","email","phone","username","password"];
+        var requiredFields = ["name", "lastname", "email", "phone", "username", "password"];
         var valid = true;
-        requiredFields.forEach(field=>{
-           if(data[field] == undefined || data[field]==""){
-                   valid=false;
-           }
+        requiredFields.forEach(field=> {
+            if (data[field] == undefined || data[field] == "") {
+                valid = false;
+            }
         });
-        if(!valid){
-            this.context.showMessage("Gerekli alanları doldurunuz",3000);
+        if (!valid) {
+            this.context.showMessage("Gerekli alanları doldurunuz", 3000);
             return;
         }
         var userInfo = data;

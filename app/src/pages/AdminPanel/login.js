@@ -42,7 +42,8 @@ export default  class AdminLogin extends React.Component {
         util.bindFunctions.call(this, ['signIn']);
         toastHelper = util.myToast("toastSettings", this);
     }
-    signIn=function () {
+
+    signIn = function () {
         var username = this.refs.username.input.value;
         var password = this.refs.password.input.value;
         if (username == "" || password == "") {

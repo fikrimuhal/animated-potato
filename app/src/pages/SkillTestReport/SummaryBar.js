@@ -86,7 +86,7 @@ export default  class SummaryBar extends React.Component {
     };
     getPaperColor = function () {
         // var score = this.props.data.overallScore * 100;
-         var color = colors.white;
+        var color = colors.white;
         // switch (true) {
         //     case (score < 20):
         //         color = colors.grey.x200;
@@ -134,7 +134,7 @@ export default  class SummaryBar extends React.Component {
         return chartData;
     };
     getPercentRateChartData = function () {
-        log("this.props.data.overallPercentage ",this.props.data)
+        log("this.props.data.overallPercentage ", this.props.data)
         var pDegree = parseFloat(this.props.data.overallPercentage).toFixed(2);
         var data = [pDegree, 100 - pDegree];
         var labels = ["Percent Degree", ""];

@@ -8,7 +8,7 @@ import * as util    from '../../utils/utils';
 import * as s       from '../../layouts/style'
 import Badge        from 'material-ui/Badge';
 //variables and const definitions
-const log=log2("FreeTextQuestion");
+const log = log2("FreeTextQuestion");
 
 //React component
 export default class FreeTextQuestion extends React.Component {
@@ -17,23 +17,24 @@ export default class FreeTextQuestion extends React.Component {
         util.bindFunctions.call(this, ['handleTextboxChange'])
     }
 
-    handleTextboxChange=function (event, value) {
+    handleTextboxChange = function (event, value) {
         //log(value);
         this.props.onChange([value]);
     };
-    componentDidMount=()=> {
+    componentDidMount = ()=> {
         //log(this.refs.txtQuestion);
         setTimeout(()=> {
             this.refs.txtQuestion.input.refs.input.focus();
         }, 100);
 
     };
-    render=function () {
+    render = function () {
         log("rendered");
         return (
             <div>
                 {/*<FontIcon color={yellow500} className="material-icons md-dark md-inactive">extension</FontIcon>*/}
-                <Badge badgeContent={this.props.currentQuestionNumber} primary={true} badgeStyle={s.userLayoutStyles.questionBadgeYellow}>
+                <Badge badgeContent={this.props.currentQuestionNumber} primary={true}
+                       badgeStyle={s.userLayoutStyles.questionBadgeYellow}>
                     <p style={s.userLayoutStyles.questionText}>
                         {this.props.question.title}
                     </p>
@@ -45,6 +46,6 @@ export default class FreeTextQuestion extends React.Component {
         )
     }
 }
-FreeTextQuestion.propTypes={
+FreeTextQuestion.propTypes = {
     question: React.PropTypes.any.isRequired
 }

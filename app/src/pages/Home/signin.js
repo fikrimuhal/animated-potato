@@ -153,7 +153,7 @@ export default class UserSignIn extends React.Component {
                            hintText="Şifre"
                            floatingLabelText="Şifre"
                            onEnterKeyDown={(e, v)=>this.onKeyDown(e, v)}
-                            type={"password"}/> <br/>
+                           type={"password"}/> <br/>
                 <div>
                     <RaisedButton label="Giriş" primary={true} onClick={this.signIn}
                                   disabled={this.state.progressDisplay != "none"} labelStyle={{textTransform: "none"}}/>

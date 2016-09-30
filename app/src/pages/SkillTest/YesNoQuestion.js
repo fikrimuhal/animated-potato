@@ -14,43 +14,43 @@ import {
 
 const log = log2("YesNoQuestion");
 export default  class YesNoQuestion extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
-            valueSelected:""
+            valueSelected: ""
         }
-        util.bindFunctions.call(this,['handleHotkey']);
+        util.bindFunctions.call(this, ['handleHotkey']);
     }
 
-    radioChange = function (value){
-        log("radioChange value",value);
+    radioChange = function (value) {
+        log("radioChange value", value);
         this.setState({
-            valueSelected:value
+            valueSelected: value
         });
         this.context.saveAnswer(value);
     };
-    radioQuestionText = (text)=>{
+    radioQuestionText = (text)=> {
 
-        var buttonText = (["yes","evet"].includes(text.toLowerCase())) ? "E" : "H";
+        var buttonText = (["yes", "evet"].includes(text.toLowerCase())) ? "E" : "H";
         return <span>
                     {text} <i style={s.userLayoutStyles.tusStili}>{buttonText}</i>
                 </span>
 
     };
-    componentDidMount = ()=>{
-        Mousetrap.bind([`e`,`h`],this.handleHotkey);
+    componentDidMount = ()=> {
+        Mousetrap.bind([`e`, `h`], this.handleHotkey);
     };
-    componentWillUnmount = function (){
-        Mousetrap.unbind([`e`,`h`],this.handleHotkey);
+    componentWillUnmount = function () {
+        Mousetrap.unbind([`e`, `h`], this.handleHotkey);
     };
-    handleHotkey = function (e,combo){
-        log("combo",combo);
-        if(combo == "e")
+    handleHotkey = function (e, combo) {
+        log("combo", combo);
+        if (combo == "e")
             this.radioChange("yes");
-        else if(combo == "h")
+        else if (combo == "h")
             this.radioChange("no");
     };
-    render = ()=>{
+    render = ()=> {
         return (
             <div>
                 <QuestionTitle number={this.props.currentQuestionNumber}
@@ -58,7 +58,7 @@ export default  class YesNoQuestion extends React.Component {
                                questionTitle={this.context.currentQuestion.title}/>
 
                 <RadioButtonGroup name={this.context.currentQuestion.id}
-                                  onChange={(event,value)=> this.radioChange(value)}
+                                  onChange={(event, value)=> this.radioChange(value)}
                                   valueSelected={this.state.valueSelected}>
                     <RadioButton
                         key={"yes"}
@@ -80,6 +80,6 @@ export default  class YesNoQuestion extends React.Component {
 }
 
 YesNoQuestion.contextTypes = {
-    currentQuestion:React.PropTypes.object,
-    saveAnswer:React.PropTypes.func
+    currentQuestion: React.PropTypes.object,
+    saveAnswer: React.PropTypes.func
 };

@@ -11,6 +11,7 @@ export default  class UserInfoBar extends React.Component {
     constructor(props) {
         super(props)
     }
+
     render = ()=> {
         var info = this.props.userInfo;
         return (

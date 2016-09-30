@@ -4,12 +4,12 @@ import * as mockData from '../../utils/mock_data'
 const log = log2("Dashboard");
 export default class AdminPanel extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         //mockData.MockQuestionCreator.initQuestions();
     }
 
-    render = ()=>{
+    render = ()=> {
         return (
             <div>
                 {this.props.children}

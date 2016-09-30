@@ -199,7 +199,7 @@ export default  class CategoryScoreTable extends React.Component {
         var containerStyle = Object.assign(JSON.parse(JSON.stringify(s.GraphStyles.widgetContainer)), {
             height: "inherit",
             minHeight: minHeight,
-            paddingRight:"5px"
+            paddingRight: "5px"
         })
         return (
             <div style={containerStyle}>

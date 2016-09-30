@@ -4,11 +4,12 @@
 //core imports
 import React from 'react'
 import Spinner from 'react-spin';
-export default  class  WaitingPanel extends  React.Component{
-    constructor(props){
+export default  class WaitingPanel extends React.Component {
+    constructor(props) {
         super(props)
     }
-    render = ()=>{
+
+    render = ()=> {
         var spinCfg = {
             lines: 5 // The number of lines to draw
             , length: 0 // The length of each line
@@ -31,9 +32,9 @@ export default  class  WaitingPanel extends  React.Component{
             , hwaccel: true // Whether to use hardware acceleration
             , position: 'absolute' // Element positioning
         };
-        return(
+        return (
             <div>
-                <Spinner config={spinCfg} />
+                <Spinner config={spinCfg}/>
             </div>
         )
     }

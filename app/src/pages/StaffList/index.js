@@ -128,7 +128,8 @@ export default class StaffList extends React.Component {
                         style={{display: rowData.isAdmin ? "none" : ""}}></FlatButton>
             <FlatButton icon={<ClearIcon/>} onClick={this.unmakeAdmin(rowData.id)} label={"Remove Admin Role"}
                         style={{display: rowData.isAdmin ? "" : "none"}}></FlatButton>
-            <FlatButton icon={<ClearIcon/>} onClick={this.unmakeStaff(rowData.id)} label={"Remove Staff Role"}></FlatButton>
+            <FlatButton icon={<ClearIcon/>} onClick={this.unmakeStaff(rowData.id)}
+                        label={"Remove Staff Role"}></FlatButton>
         </div>);
     };
 
@@ -233,7 +234,9 @@ export default class StaffList extends React.Component {
             if (json.status == "OK") {
                 _this.context.showMessage("Successfully removed staff role.", 2000);
                 var rows = _this.state.originalData;
-                rows = _.filter(rows,q => {return q.id != id});
+                rows = _.filter(rows, q => {
+                    return q.id != id
+                });
                 //var index = _.findIndex(rows, q => q.id == id);
                 //rows[index].isAdmin = false;
                 _this.initTable(rows);

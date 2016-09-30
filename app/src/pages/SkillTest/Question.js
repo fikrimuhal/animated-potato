@@ -17,18 +17,18 @@ const log = log2("Question");
 
 //React component
 export default class Question extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        util.bindFunctions.call(this,['getQuestionComponent'])
+        util.bindFunctions.call(this, ['getQuestionComponent'])
     }
 
-    getQuestionComponent = () =>{
+    getQuestionComponent = () => {
         var questionType = this.props.question.qType;
         var component;
-        switch(questionType) {
+        switch (questionType) {
             case "radio":
-                component = <RadioQuestion    question={this.props.question}
-                                              currentQuestionNumber={this.props.currentQuestionNumber}/>;
+                component = <RadioQuestion question={this.props.question}
+                                           currentQuestionNumber={this.props.currentQuestionNumber}/>;
                 break;
             case "checkbox":
                 component = <CheckboxQuestion question={this.props.question}
@@ -39,12 +39,12 @@ export default class Question extends React.Component {
                                               currentQuestionNumber={this.props.currentQuestionNumber}/>;
                 break;
             case "number":
-                component = <NumberQuestion   question={this.props.question}
-                                              currentQuestionNumber={this.props.currentQuestionNumber}/>;
+                component = <NumberQuestion question={this.props.question}
+                                            currentQuestionNumber={this.props.currentQuestionNumber}/>;
                 break;
             case "yesno":
-                component = <YesNoQuestion    onChange={this.onChange}
-                                              currentQuestionNumber={this.props.currentQuestionNumber}/>;
+                component = <YesNoQuestion onChange={this.onChange}
+                                           currentQuestionNumber={this.props.currentQuestionNumber}/>;
                 break;
             default:
                 <div></div>
@@ -52,10 +52,10 @@ export default class Question extends React.Component {
         }
         return component
     }
-    shouldComponentUpdate = function (nextProps,nextState){
+    shouldComponentUpdate = function (nextProps, nextState) {
         return true;
     }
-    render = function (){
+    render = function () {
         log("rendered");
         return (
             <div style={s.userLayoutStyles.questionContainer}>

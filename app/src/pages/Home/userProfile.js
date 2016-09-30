@@ -62,35 +62,35 @@ export default  class UserProfile extends React.Component {
                 <Row>
                     <Col lg={12} md={12}>
 
-                            <Row style={styles.infoRow}>
-                                <Col lg={1} md={1}><ContactIcon color={colors.teal.x300}/></Col>
-                                <Col lg={1} md={2} style={styles.infoLabel}>Ad:</Col>
-                                <Col lg={10} md={8}>{user.name}</Col>
-                            </Row>
-                            <Row style={styles.infoRow}>
-                                <Col lg={1} md={1}><ContactIcon color={colors.teal.x300}/></Col>
-                                <Col lg={1} md={2} style={styles.infoLabel}>Soyad:</Col>
-                                <Col lg={10} md={8}>{user.lastname}</Col>
-                            </Row>
-                            <Row style={styles.infoRow}>
-                                <Col lg={1} md={1}><ContactEmailIcon color={colors.teal.x300}/></Col>
-                                <Col lg={1} md={2} style={styles.infoLabel}>Email:</Col>
-                                <Col lg={10} md={8}>{user.email}</Col>
-                            </Row>
-                            <Row style={styles.infoRow}>
-                                <Col lg={1} md={1}><ContactPhoneIcon color={colors.teal.x300}/></Col>
-                                <Col lg={1} md={2} style={styles.infoLabel}>Phone:</Col>
-                                <Col lg={10} md={8}>{user.phone}</Col>
-                            </Row>
-                            {/*<Row>*/}
-                                {/*<Col lg={12}>*/}
-                                    {/*<FlatButton label="İptal" style={{float: "right"}} secondary={true}*/}
-                                                {/*disabled={this.state.activeForm}/>*/}
-                                    {/*<FlatButton label="Düzenle" style={{float: "right"}} secondary={true}*/}
-                                                {/*onClick={this.goToUpdate}/>*/}
-                                {/*</Col>*/}
+                        <Row style={styles.infoRow}>
+                            <Col lg={1} md={1}><ContactIcon color={colors.teal.x300}/></Col>
+                            <Col lg={1} md={2} style={styles.infoLabel}>Ad:</Col>
+                            <Col lg={10} md={8}>{user.name}</Col>
+                        </Row>
+                        <Row style={styles.infoRow}>
+                            <Col lg={1} md={1}><ContactIcon color={colors.teal.x300}/></Col>
+                            <Col lg={1} md={2} style={styles.infoLabel}>Soyad:</Col>
+                            <Col lg={10} md={8}>{user.lastname}</Col>
+                        </Row>
+                        <Row style={styles.infoRow}>
+                            <Col lg={1} md={1}><ContactEmailIcon color={colors.teal.x300}/></Col>
+                            <Col lg={1} md={2} style={styles.infoLabel}>Email:</Col>
+                            <Col lg={10} md={8}>{user.email}</Col>
+                        </Row>
+                        <Row style={styles.infoRow}>
+                            <Col lg={1} md={1}><ContactPhoneIcon color={colors.teal.x300}/></Col>
+                            <Col lg={1} md={2} style={styles.infoLabel}>Phone:</Col>
+                            <Col lg={10} md={8}>{user.phone}</Col>
+                        </Row>
+                        {/*<Row>*/}
+                        {/*<Col lg={12}>*/}
+                        {/*<FlatButton label="İptal" style={{float: "right"}} secondary={true}*/}
+                        {/*disabled={this.state.activeForm}/>*/}
+                        {/*<FlatButton label="Düzenle" style={{float: "right"}} secondary={true}*/}
+                        {/*onClick={this.goToUpdate}/>*/}
+                        {/*</Col>*/}
 
-                            {/*</Row>*/}
+                        {/*</Row>*/}
 
                     </Col>
                 </Row>

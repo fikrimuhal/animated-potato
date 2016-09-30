@@ -8,12 +8,29 @@ import * as _ from 'lodash'
 import log2   from '../../utils/log2'
 const log = log2("ColorMatrixChart")
 const styles = {
-    userLabel: {
+    personLabel: {
         fontSize: "9px",
-        fill: "#767676",
+        //fill: "#767676",
         direction: "rtl",
-        unicodeBidi: "plaintext"
-        //textAnchor:"middle"
+        unicodeBidi: "plaintext",
+        color: colors.red.x400,
+        fill: colors.red.x400,
+    },
+    staffLabel: {
+        fontSize: "9px",
+        //fill: "#767676",
+        direction: "rtl",
+        unicodeBidi: "plaintext",
+        color: colors.green.x400,
+        fill: colors.green.x400,
+    },
+    globalLabel: {
+        fontSize: "9px",
+        //fill: "#767676",
+        direction: "rtl",
+        unicodeBidi: "plaintext",
+        color: colors.blue.x400,
+        fill: colors.blue.x400,
     },
     categoryLabel: {
         fontSize: "9px",
@@ -45,13 +62,38 @@ export default  class ColorMatrixChart extends React.Component {
     createYaxis = function () {
         var dy = 9;
         var i = 0;
-        var content = this.props.data.map(item=> {
+        var sortRanks = {
+            "-4": 1,
+            "-2": 2
+        };
+        sortRanks[this.context.interviewId] = 3;
+        var sortedData = _.sortBy(this.props.data, (o)=> {
+            if (sortRanks[o.interviewId.toString()] == undefined && sortRanks[o.interviewId.toString()] == null) {
+                return 4;
+            }
+            else {
+                return sortRanks[o.interviewId.toString()];
+            }
+
+        })
+        log("sortedDAta", sortedData);
+        var content = sortedData.map(item=> {
             if (i == 0) dy = 9; else dy += 13;
             i++;
             var fullName = item.name + " " + item.lastName;
             if (item.interviewId == -4)fullName = "Global Avg";
             if (item.interviewId == -2)fullName = "Staffs Avg";
-            return <text dx="-5" dy={dy} style={styles.userLabel} key={"userLabel-"+i}>{fullName}</text>
+            var labelStyle;
+            if (item.interviewId == this.context.interviewId) {
+                labelStyle = styles.personLabel;
+            }
+            else if (item.isPersonnel) {
+                labelStyle = styles.staffLabel;
+            }
+            else {
+                labelStyle = styles.globalLabel;
+            }
+            return <text dx="-5" dy={dy} style={labelStyle} key={"userLabel-" + i}>{fullName}</text>
         });
         return content;
     };
@@ -107,7 +149,7 @@ export default  class ColorMatrixChart extends React.Component {
         return color;
     };
     render = ()=> {
-        log("this.props.data",this.props.data);
+        log("this.props.data", this.props.data);
         var height = 100 + this.props.data.length * 60;
         var width = 100 + this.props.data[0].scores.length * 40;
 
@@ -130,4 +172,8 @@ export default  class ColorMatrixChart extends React.Component {
 }
 ColorMatrixChart.propTypes = {
     data: React.PropTypes.array.isRequired
+}
+
+ColorMatrixChart.contextTypes = {
+    interviewId: React.PropTypes.number
 }

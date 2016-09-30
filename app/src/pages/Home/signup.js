@@ -10,13 +10,13 @@ import Subheader    from 'material-ui/Subheader';
 import SignUpForm   from './SignUpForm'
 
 
-
-export default class UserSignUp extends React.Component{
-    constructor(props){
+export default class UserSignUp extends React.Component {
+    constructor(props) {
         super(props);
     }
-    render=function () {
-        return(
+
+    render = function () {
+        return (
             <div>
                 {/*<Subheader>Fikrimuhal Hızlı Mülakat - Kayıt</Subheader>*/}
                 <SignUpForm />

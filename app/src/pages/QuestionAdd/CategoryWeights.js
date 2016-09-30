@@ -37,8 +37,8 @@ const styles = {
         marginLeft: "5px",
         marginTop: "5px"
     },
-    border:{
-        border:"2px dashed teal"
+    border: {
+        border: "2px dashed teal"
     }
 };
 export default class CategoryWeights extends React.Component {
@@ -152,15 +152,16 @@ export default class CategoryWeights extends React.Component {
                             let weight = (checked) ? categoryWeights.get(foundKey).toJS().weight : 0;
                             catMap[i++] = item.id;
                             var containerStyle = JSON.parse(JSON.stringify(styles.child));
-                            if(checked)
-                                    Object.assign(containerStyle,styles.border);
+                            if (checked)
+                                Object.assign(containerStyle, styles.border);
 
 
                             return (
                                 <Col lg={2} md={2} key={item.id} style={containerStyle}>
                                     <Checkbox ref="cbKategori" checked={checked} key={item.id} value={item.id}
                                               label={item.category + " (" + i + ")"}
-                                              onClick={() => this.categorySelected(item.id)} labelStyle={{fontSize:"medium",height:"50px"}}/>
+                                              onClick={() => this.categorySelected(item.id)}
+                                              labelStyle={{fontSize: "medium", height: "50px"}}/>
                                     <Slider min={0} max={10} step={1} value={weight} disabled={!checked}
                                             onChange={(event, value)=>this.sliderChange(item.id, foundKey, value)}/>
                                     <span>Weight: {weight.toFixed(2)}</span>

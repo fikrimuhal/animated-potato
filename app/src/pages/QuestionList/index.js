@@ -300,8 +300,9 @@ export default class QuestionList extends React.Component {
                                     <div>
                                         <Row>
                                             <Col lg={12} md={12}>
-                                                <CategoryFilterToolbar selectedCategories={_this.state.selectedCategories}
-                                                                       categorySelectChanged={_this.categorySelectChanged}/>
+                                                <CategoryFilterToolbar
+                                                    selectedCategories={_this.state.selectedCategories}
+                                                    categorySelectChanged={_this.categorySelectChanged}/>
                                             </Col>
                                         </Row>
                                         <Row>

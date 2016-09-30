@@ -18,22 +18,24 @@ export default  class BoxPlotWidget extends React.Component {
         var quartile1, quartile3;
         quartile1 = average - confidence;
         quartile3 = average + confidence;
-        if(quartile1 < 0)quartile1=0;
-        if(quartile3>100)quartile3=100;
+        if (quartile1 < 0)quartile1 = 0;
+        if (quartile3 > 100)quartile3 = 100;
         var result = [0, quartile1, quartile1, average, average, average, quartile3, quartile3, 100];
         //log("result", result);
         return result;
     }
     componentDidMount = ()=> {
-        var scores = _.filter(this.props.data.scores,q => {return q.score>=0});
-        scores =_.orderBy(scores,['score'],['desc']);
-        var categoryTraces = scores.map(item=>{
+        var scores = _.filter(this.props.data.scores, q => {
+            return q.score >= 0
+        });
+        scores = _.orderBy(scores, ['score'], ['desc']);
+        var categoryTraces = scores.map(item=> {
             var score = parseFloat((item.score * 100).toFixed(2));
             var category = item.category.category;
             return {
-                y:this.createDataSeries(score ,10),
-                name:category,
-                type:'box',
+                y: this.createDataSeries(score, 10),
+                name: category,
+                type: 'box',
                 //boxpoints:'all'
             };
         })

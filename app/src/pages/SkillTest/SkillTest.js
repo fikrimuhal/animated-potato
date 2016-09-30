@@ -9,7 +9,7 @@ import * as util           from '../../utils/utils'
 import log2                from '../../utils/log2'
 import * as db             from '../../utils/data'
 import Mousetrap           from 'mousetrap'
-import {Grid,Row,Col}    from 'react-flexbox-grid/lib/index';
+import {Grid, Row, Col}    from 'react-flexbox-grid/lib/index';
 import Toggle              from 'material-ui/Toggle';
 //css  referancing
 require("!style!css!../../assets/css/animate.css");
@@ -19,38 +19,38 @@ const log = log2("SkillTest");
 
 //React component
 export default class SkillTest extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            enterKeyPassing:true
+            enterKeyPassing: true
         };
-        util.bindFunctions.call(this,['nextQuestion','handleHotkey','onToggle']);
+        util.bindFunctions.call(this, ['nextQuestion', 'handleHotkey', 'onToggle']);
     }
 
-    nextQuestion = function (){
+    nextQuestion = function () {
         this.context.nextQuestion();
         //this.props.answerAndNextQuestion();
     };
-    handleHotkey = function (e,combo){
-        log("combo",combo,"testOver",this.props.testOver);
+    handleHotkey = function (e, combo) {
+        log("combo", combo, "testOver", this.props.testOver);
 
-        if(combo == "enter" && !this.props.testOver && this.state.enterKeyPassing) {
+        if (combo == "enter" && !this.props.testOver && this.state.enterKeyPassing) {
             this.nextQuestion();
         }
     };
-    componentDidMount = ()=>{
-        Mousetrap.bind([`enter`],this.handleHotkey);
+    componentDidMount = ()=> {
+        Mousetrap.bind([`enter`], this.handleHotkey);
     };
-    componentWillUnmount = function (){
-        Mousetrap.unbind([`enter`],this.handleHotkey);
+    componentWillUnmount = function () {
+        Mousetrap.unbind([`enter`], this.handleHotkey);
     };
-    onToggle = function (){
+    onToggle = function () {
         this.setState({
-            enterKeyPassing:!this.state.enterKeyPassing
+            enterKeyPassing: !this.state.enterKeyPassing
         })
     };
-    render = function (){
-        log("rendered",this.props)
+    render = function () {
+        log("rendered", this.props)
         var question = this.props.question;
         var testOver = this.props.testOver;
         return (
@@ -67,7 +67,7 @@ export default class SkillTest extends React.Component {
                                       currentQuestionNumber={this.props.currentQuestionNumber}/>
                         </Col>
                     </Row>
-                    <Row style={{marginTop:"12%"}}>
+                    <Row style={{marginTop: "12%"}}>
                         <Col xs={6} md={6} lg={6}>
                             <Toggle
                                 label="Enter ile bir sonraki soruya geç"
@@ -76,9 +76,9 @@ export default class SkillTest extends React.Component {
                                 onToggle={this.onToggle}
                             />
                         </Col>
-                        <Col xs={6} md={6} lg={6} style={{textAlign:"right"}}>
+                        <Col xs={6} md={6} lg={6} style={{textAlign: "right"}}>
                             <RaisedButton label="Next >" primary={true} onClick={()=>this.nextQuestion()}
-                                          style={{marginLeft:"3px"}} disabled={testOver}/>
+                                          style={{marginLeft: "3px"}} disabled={testOver}/>
 
                         </Col>
                     </Row>
@@ -93,11 +93,11 @@ export default class SkillTest extends React.Component {
 }
 
 SkillTest.propTypes = {
-    question:React.PropTypes.object.isRequired,
-    testOver:React.PropTypes.bool.isRequired,
-    currentQuestionNumber:React.PropTypes.number.isRequired
+    question: React.PropTypes.object.isRequired,
+    testOver: React.PropTypes.bool.isRequired,
+    currentQuestionNumber: React.PropTypes.number.isRequired
 };
 
 SkillTest.contextTypes = {
-    nextQuestion:React.PropTypes.func
+    nextQuestion: React.PropTypes.func
 }

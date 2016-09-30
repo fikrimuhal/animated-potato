@@ -1,44 +1,44 @@
 import React                          from 'react'
-import {RadioButton,RadioButtonGroup} from 'material-ui/RadioButton';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import log2                           from '../../utils/log2'
-import {Grid,Row,Col}                   from 'react-flexbox-grid/lib/index';
+import {Grid, Row, Col}                   from 'react-flexbox-grid/lib/index';
 import * as util                       from '../../utils/utils'
 import * as s              from '../../layouts/style'
 const log = log2("AnswerTypes: ")
 const styles = {
-    flexContainer:{
-        display:"flex",
-        justifyContent:"flexStart",
-        flexFlow:"row wrap"
+    flexContainer: {
+        display: "flex",
+        justifyContent: "flexStart",
+        flexFlow: "row wrap"
     },
-    container:{
-        backgroundColor:"#f1f1f1",
-        padding:"5px 5px 5px 5px",
-        marginTop:"5px",
-        border:"dotted 1px teal"
+    container: {
+        backgroundColor: "#f1f1f1",
+        padding: "5px 5px 5px 5px",
+        marginTop: "5px",
+        border: "dotted 1px teal"
     },
-    child:{
-        width:"140px",
-        marginLeft:"5px"
+    child: {
+        width: "140px",
+        marginLeft: "5px"
     }
 };
 export default class AnswerTypes extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        util.bindFunctions.call(this,['handleRadiButtonChange']);
+        util.bindFunctions.call(this, ['handleRadiButtonChange']);
     }
 
-    handleRadiButtonChange = function (event,value){
+    handleRadiButtonChange = function (event, value) {
         this.props.onChangeAnswerType(value);
     }
-    shouldComponentUpdate = function (nextProps,nextState){
+    shouldComponentUpdate = function (nextProps, nextState) {
         return true;
     }
 
-    render(){
+    render() {
         //log("rendered")
         return (
-            <div  style={styles.container}>
+            <div style={styles.container}>
                 <label style={s.questionAddPage.sectionTitle}>Answer Type:</label>
                 <br/>
                 <div>
@@ -65,5 +65,5 @@ export default class AnswerTypes extends React.Component {
     }
 }
 AnswerTypes.propTypes = {
-    onChangeAnswerType:React.PropTypes.func.isRequired
+    onChangeAnswerType: React.PropTypes.func.isRequired
 }

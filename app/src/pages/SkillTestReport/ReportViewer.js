@@ -49,8 +49,9 @@ export default  class ReportViewer extends React.Component {
         });
         tables = [<Col lg={3} md={4}>
             <ScoreTable data={this.props.scoreTable} dataLoaded={this.props.scoreTableLoaded}
-                        selectedCategory={"Overall"} showCategorChangeBar={false} key={"table-Overall"}/></Col>].concat(tables);
-          
+                        selectedCategory={"Overall"} showCategorChangeBar={false}
+                        key={"table-Overall"}/></Col>].concat(tables);
+
         return tables;
     };
     render = ()=> {
@@ -102,8 +103,8 @@ export default  class ReportViewer extends React.Component {
                 <hr/>
 
                 <Row>
-                    <Col lg={9} md={9} style={{position:"relative"}}>
-                        <div style={{position:"absolute",bottom:"0px"}}>
+                    <Col lg={9} md={9} style={{position: "relative"}}>
+                        <div style={{position: "absolute", bottom: "0px"}}>
                             {this.state.url} {"Bu sayfa " + Date.now().toLocaleString() + " tarihinde oluşturulmuştur"}
                         </div>
                     </Col>
