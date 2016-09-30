@@ -11,16 +11,37 @@ const styles = {
     userLabel: {
         fontSize: "9px",
         fill: "#767676",
-        direction: "rtl",
+        direction: "ltr",
         unicodeBidi: "plaintext"
         //textAnchor:"middle"
     },
     categoryLabel: {
-        fontSize: "9px",
+        fontSize: "10px",
+        fontWeight:"bolder",
         fill: "#767676",
         transform: "rotate(90deg)",
         unicodeBidi: "plaintext",
-        //textTransform: "uppercase",
+        direction: "rtl"
+    },
+    personLabel: {
+        fontSize: "9px",
+        fill: colors.red.x400,
+        transform: "rotate(90deg)",
+        unicodeBidi: "plaintext",
+        direction: "rtl"
+    },
+    staffLabel: {
+        fontSize: "9px",
+        fill: colors.green.x400,
+        transform: "rotate(90deg)",
+        unicodeBidi: "plaintext",
+        direction: "rtl"
+    },
+    globalLabel: {
+        fontSize: "9px",
+        fill: colors.blue.x400,
+        transform: "rotate(90deg)",
+        unicodeBidi: "plaintext",
         direction: "rtl"
     }
 }
@@ -34,13 +55,28 @@ export default  class AnswersWidget extends React.Component {
     createXaxis = function () {
         var data = this.props.data;
         var users = data.map(user=> {
-            return user.name + " " + user.lastName;
+            var fullName = user.name + " " + user.lastName;
+            var labelStyle;
+            if (user.interviewId == -2) {
+                fullName = "Staffs Avg";
+                labelStyle = styles.staffLabel;
+            }
+            else if (user.interviewId == -4) {
+                fullName = "Global Avg";
+                labelStyle = styles.globalLabel;
+            } else {
+                labelStyle = styles.personLabel;
+            }
+            return {
+                fullName: fullName,
+                labelStyle: labelStyle
+            }
         });
         var i = 0;
         var content = users.map(user=> {
             var y = -1 * (i * 13 + 3);
             i++;
-            return <text x="-3" y={y} style={styles.categoryLabel} key={"textUser-" + i}>{user}</text>
+            return <text x="-3" y={y} style={user.labelStyle} key={"textUser-" + i}>{user.fullName}</text>
         });
         return content;
     };
@@ -52,15 +88,11 @@ export default  class AnswersWidget extends React.Component {
             return answer.question
         });
         questions = _.orderBy(questions, ['id'], ['asc']);
-        //questions.sort();
-        //log("questions",questions)
+
         var content = questions.map(question=> {
             if (i == 0) dy = 9; else dy += 13;
             i++;
-            //var fullName = item.name + " " + item.lastName;
-            //if (item.interviewId == -4)fullName = "Global Avg";
-            //if (item.interviewId == -2)fullName = "Staffs Avg";
-            return <text dx="-5" dy={dy} style={styles.userLabel} key={"questionLabel-" + i}>{question.title}</text>
+            return <text dx="40" dy={dy} style={styles.userLabel} key={"questionLabel-" + i}>{question.title}</text>
         });
         return content;
     };
@@ -112,13 +144,17 @@ export default  class AnswersWidget extends React.Component {
     };
     getColor = function (value) {
 
-        var color = colors.grey.x500;
+        var color = colors.grey.x400;
         if (value == -1)
             color = colors.grey.x500;
-        else if (value == 0)
-            color = colors.red.x500;
-        else if (value == 1)
-            color = colors.green.x500;
+        else if (value < 0.3)
+            color = colors.red.x400;
+        else if (value < 0.5)
+            color = colors.red.x200;
+        else if (value == 7)
+            color = colors.green.x200;
+        else
+            color = colors.green.x400;
         return color;
     };
     render = ()=> {
@@ -136,7 +172,7 @@ export default  class AnswersWidget extends React.Component {
                             var width = 400 + answersData.length * 40;
                             //var viewBox = "0 -20 " + Math.floor(width / 2) + " " + Math.floor(height / 2);
                             return <svg width={width} height={height} className="">
-                                <g transform="translate(400, 60)">
+                                <g transform="translate(10, 60)">
                                     {this.createMatrix()}
                                     {this.createXaxis()}
                                     {this.createYaxis()}

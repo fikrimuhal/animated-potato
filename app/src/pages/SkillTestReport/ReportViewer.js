@@ -92,16 +92,19 @@ export default  class ReportViewer extends React.Component {
                 </Row><br/>
                 <hr/>
                 <Row>
-                    <Col lg={8} style={{width: "100%"}}>
+                    <Col lg={12} style={{width: "100%"}}>
                         <ColorMatrix data={this.props.scoreData}/>
                     </Col>
-                    <Col lg={4} style={{width: "100%"}}>
+
+                </Row>
+                <hr/>
+                <Row>
+                    <Col lg={12} style={{width: "100%"}}>
 
                         <AnswersWidget data={this.props.answers} dataLoaded={this.props.answersLoaded}/>
                     </Col>
                 </Row>
                 <hr/>
-
                 <Row>
                     <Col lg={9} md={9} style={{position: "relative"}}>
                         <div style={{position: "absolute", bottom: "0px"}}>
@@ -114,6 +117,7 @@ export default  class ReportViewer extends React.Component {
                         </div>
                     </Col>
                 </Row>
+
             </div>
         )
     }
