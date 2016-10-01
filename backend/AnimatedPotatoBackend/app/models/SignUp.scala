@@ -1,6 +1,7 @@
 package models
 
 import animatedPotato.protocol.protocol.IdType
+import dao.UserDAO
 case object UserNameExists
 case object EmailExists
 case object ValidUserInfo
@@ -28,6 +29,8 @@ case class SignUp(id: Option[IdType],
 
 object SignUp{
 
+  final val UserDAO = new UserDAO
+
 
   def checkUser(userName: String, email : String) ={
 
@@ -43,13 +46,13 @@ object SignUp{
   }
 
   def checkUserName(userName : String) : Boolean = {
-    Users.get(userName) match {
+    UserDAO.get(userName) match {
       case Some(x) => false
       case None => true
     }
   }
     def checkEmail(email : String) : Boolean = {
-    Users.get(email) match {
+      UserDAO.get(email) match {
       case Some(x) => false
       case None => true
     }

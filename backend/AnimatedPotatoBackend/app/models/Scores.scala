@@ -1,6 +1,5 @@
 package models
 
-import java.io.Serializable
 import java.sql.Timestamp
 
 import animatedPotato.protocol.protocol._
@@ -85,7 +84,7 @@ object ScoresDAO {
 
       // sonuçta sadece gelen interviewID ve personel interviewleri olacak
       val filteredInterviews = interviews.filter(i => (i.id.get == interviewId) || personnelInterviewIds.contains(i.id.get))
-      val participants = Participants.getByEmailList(filteredInterviews.map(_.email))
+      val participants = ParticipantDAO.getByEmailList(filteredInterviews.map(_.email))
 
       filteredInterviews.map { itw =>
 
@@ -126,7 +125,7 @@ object ScoresDAO {
     val categories = (new CategoryDAO).getAll
     val personnelInterviewIds = InterviewDAO.getPersonnelInterviewIds
     val personnelInterviews = interviews.filter(i => personnelInterviewIds.contains(i.id.get))
-    val participants = Participants.getByEmailList(interviews.map(_.email))
+    val participants = ParticipantDAO.getByEmailList(interviews.map(_.email))
 
     val numberOfInterviews = interviews.length
     val numberOfPersonnels = personnelInterviews.length

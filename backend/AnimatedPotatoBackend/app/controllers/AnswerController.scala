@@ -1,18 +1,19 @@
 package controllers
 
 import animatedPotato.protocol.protocol.{IdType, QuestionId}
+import core.{AdminAction, Jwt}
 import dao.AnswerDAO
 import models.InterviewDAO.InterviewId
 import models._
 import play.api.mvc.{Action, Controller}
 import utils.Formatter._
 import play.api.libs.json.Json
-import utils.Constants
+import utils._
 
 case class GetAnswer(interviewId: InterviewId, questionId: QuestionId)
 case class QuestionAndAnswer(question : Option[QuestionTable], answer: Option[Answer])
 
-class AnswerController extends Controller with Secured {
+class AnswerController extends Controller with Jwt {
 
   lazy val AnswerDAO = new AnswerDAO
 

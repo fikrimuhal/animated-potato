@@ -1,13 +1,15 @@
 package controllers
 
-import models.{ClaimData, Participant, Participants, ResponseMessage}
+import core.Jwt
+import models.{ClaimData, Participant, ParticipantDAO$}
 import play.api.libs.json.Json
 import play.api.mvc._
 import utils.Formatter._
 import pdi.jwt._
-import utils.Constants
+import utils.{Constants, ResponseMessage}
 
-class ParticipantController extends Controller with Secured {
+
+class ParticipantController extends Controller with Jwt {
 
 
   def index = Action{
@@ -18,7 +20,7 @@ class ParticipantController extends Controller with Secured {
   def insert = Action { implicit request =>
     try {
       val participant: Participant = request.body.asJson.get.as[Participant]
-      if (Participants.insert(participant)) Ok("1") else BadRequest("-1")
+      if (ParticipantDAO.insert(participant)) Ok("1") else BadRequest("-1")
     }
     catch {
       case e: Exception => BadRequest("-1")
@@ -33,7 +35,7 @@ class ParticipantController extends Controller with Secured {
 
       case Some(participant) =>
         if(claimData.email == participant.email){
-          Participants.update(participant)
+          ParticipantDAO.update(participant)
           Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
         }
         else Unauthorized(Json.toJson(ResponseMessage(Constants.UNAUTHORIZED,Constants.UNAUTHORIZED_ACCESS)))
@@ -45,7 +47,7 @@ class ParticipantController extends Controller with Secured {
     def delete = Admin { implicit request =>
       try {
         val participant = request.body.asJson.get.as[Participant]
-        if (Participants.delete(participant)) Ok("1") else BadRequest("-1")
+        if (ParticipantDAO.delete(participant)) Ok("1") else BadRequest("-1")
       }
       catch {
         case e: Exception => BadRequest("-1")
@@ -54,12 +56,12 @@ class ParticipantController extends Controller with Secured {
 
 
     def getAll = Action {
-      Ok(Json.toJson(Participants.getAll))
+      Ok(Json.toJson(ParticipantDAO.getAll))
     }
 
     def getApplicants = Action {
 
-      Ok(Json.toJson(Participants.getApplicants))
+      Ok(Json.toJson(ParticipantDAO.getApplicants))
 
     }
 

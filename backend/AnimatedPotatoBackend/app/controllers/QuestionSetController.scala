@@ -1,12 +1,10 @@
 package controllers
 
-import models.{QuestionSet, QuestionSetDAO, ResponseMessage}
-import play.api.libs.json.{Json, Writes}
+import models.{QuestionSet, QuestionSetDAO}
+import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 import utils.Formatter._
-import utils.Constants
-
-import scala.reflect.ClassTag
+import utils.{Constants, ResponseMessage}
 
 /**
   * Created by who on 09.08.2016.

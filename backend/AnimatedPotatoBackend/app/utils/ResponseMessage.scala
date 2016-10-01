@@ -1,4 +1,4 @@
-package models
+package utils
 
 import animatedPotato.protocol.protocol.IdType
 import play.api.libs.json.Json

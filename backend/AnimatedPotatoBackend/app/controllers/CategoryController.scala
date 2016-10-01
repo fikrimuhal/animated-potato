@@ -2,27 +2,27 @@ package controllers
 
 import animatedPotato.protocol.protocol._
 import dao.CategoryDAO
-import models.{Category, ResponseMessage}
+import models.Category
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
-import utils.Constants
+import utils.{Constants, ResponseMessage}
 import utils.Formatter._
 
 class CategoryController extends Controller {
-  val categoryDAO = new CategoryDAO
+  val CategoryDAO = new CategoryDAO
 
-  def insert = evalOperation(categoryDAO.insert)
+  def insert = evalOperation(CategoryDAO.insert)
 
-  def update = evalOperation(categoryDAO.update)
+  def update = evalOperation(CategoryDAO.update)
 
-  def delete = evalOperation(categoryDAO.delete)
+  def delete = evalOperation(CategoryDAO.delete)
 
   def get(id: Long) = Action {
-    Ok(Json.toJson(categoryDAO.getById(id)))
+    Ok(Json.toJson(CategoryDAO.getById(id)))
   }
 
   def getAll = Action {
-    Ok(Json.toJson(categoryDAO.getAll))
+    Ok(Json.toJson(CategoryDAO.getAll))
   }
 
   def evalOperation(function: Category => IdType) = Action { implicit request =>

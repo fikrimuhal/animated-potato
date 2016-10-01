@@ -9,7 +9,7 @@ import controllers._
 import models.{CategoryResults, _}
 import play.api.libs.json._
 import controllers.Email
-import dao.{InterviewAnswers, QuestionAnswer}
+import dao.{CollectionResponse, InterviewAnswers, QuestionAnswer, UserDetails}
 
 import slick.driver.PostgresDriver.simple._
 
@@ -57,7 +57,6 @@ object Formatter {
   implicit val userCategoryResultsFormatter = Json.format[UserCategoryScores]
   implicit val getAnswerFormatter = Json.format[GetAnswer]
   implicit val questionTableFormatter = Json.format[QuestionTable]
-
   implicit val questionAnswerFormatter = Json.format[QuestionAnswer]
   implicit val questionAndAnswerFormatter = Json.format[QuestionAndAnswer]
   implicit val interviewAnswersFormatter = Json.format[InterviewAnswers]

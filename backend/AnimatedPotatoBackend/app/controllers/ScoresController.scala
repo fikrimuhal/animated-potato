@@ -2,11 +2,10 @@ package controllers
 
 //import com.paulgoldbaum.influxdbclient._
 import scala.concurrent.ExecutionContext.Implicits.global
-
-import models.{ID, ResponseMessage, Scores, ScoresDAO}
+import models.{Scores, ScoresDAO}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
-import utils.Constants
+import utils.{Constants, ID, ResponseMessage}
 import utils.Formatter._
 
 class ScoresController extends Controller {

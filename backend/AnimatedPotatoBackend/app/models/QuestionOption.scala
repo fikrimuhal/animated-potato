@@ -5,9 +5,8 @@ import animatedPotato.protocol.protocol.{IdType, QuestionId}
 import slick.driver.PostgresDriver.simple._
 import utils.{Constants, DB}
 
-/**
-  * Created by who on 07.08.2016.
-  */
+
+
   case class QuestionOption(questionId: Option[IdType],
                           id: Option[IdType],
                           title: String,

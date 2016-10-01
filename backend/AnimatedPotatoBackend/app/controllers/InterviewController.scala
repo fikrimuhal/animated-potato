@@ -7,7 +7,7 @@ import akka.actor.ActorRef
 import akka.util.Timeout
 import animatedPotato.protocol.protocol.{Question => _, _}
 import com.google.inject.Singleton
-import dao.AnswerDAO
+import dao.{AnswerDAO, UserDAO}
 import play.api.libs.json.Json
 import models._
 import models.Category
@@ -16,7 +16,7 @@ import models.Answer
 
 import scala.concurrent.duration._
 import scala.concurrent.Future
-import utils.Constants
+import utils.{Constants, ID, ResponseMessage}
 import utils.Formatter._
 
 /**
@@ -62,7 +62,7 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
               response.remainingQuestions,
               Questions.getQuestionById(response.questionId),
               TEST_IS_NOT_OVER,
-              Users.get(testRequest.email).isDefined)))
+              (new UserDAO).get(testRequest.email).isDefined)))
 
           }
       case _ =>
@@ -89,11 +89,11 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
                 remainingQuestions,
                 Questions.getQuestionById(questionId),
                 TEST_IS_NOT_OVER,
-                Users.get(data.email.get).isDefined)))
+                (new UserDAO).get(data.email.get).isDefined)))
 
             case testFinish: TestFinish =>
               InterviewDAO.finishTest(Right(testFinish.interviewId))
-              Ok(Json.toJson(NextQuestionResponse(Constants.OK, testFinish.interviewId, 0, None, TEST_IS_OVER, Users.get(data.email.get).isDefined)))
+              Ok(Json.toJson(NextQuestionResponse(Constants.OK, testFinish.interviewId, 0, None, TEST_IS_OVER, (new UserDAO).get(data.email.get).isDefined)))
           }
 
       case _ => Future.successful(BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
@@ -131,7 +131,5 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
       case _ => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
   }
-
-
 
 }

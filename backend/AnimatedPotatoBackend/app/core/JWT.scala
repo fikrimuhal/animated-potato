@@ -1,22 +1,21 @@
-package controllers
+package core
+
+import dao.UserDAO
+import models.ClaimData
+import pdi.jwt._
+import play.api.libs.concurrent.Execution.Implicits._
+import play.api.libs.json._
+import play.api.mvc.Results._
+import play.api.mvc._
+import utils.Formatter._
+import utils.{Constants, ResponseMessage}
 
 import scala.concurrent.Future
-import play.api.libs.concurrent.Execution.Implicits._
-import play.api.mvc._
-import play.api.mvc.Results._
-import utils.Formatter._
-import pdi.jwt._
-import models.{ClaimData, Participant, ResponseMessage, Users}
-import play.api.libs.json._
-import utils.Constants
-
-import scala.concurrent.duration._
-import scala.util.Try
 
 class AuthenticatedRequest[A](val user: ClaimData, request: Request[A]) extends WrappedRequest[A](request)
 
 
-trait Secured {
+trait Jwt {
   def UserAction = AuthenticatedAction
 
   def Admin = AdminAction
@@ -45,7 +44,7 @@ object AdminAction extends ActionBuilder[AuthenticatedRequest] {
   def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]) =
     request.jwtSession.getAs[ClaimData](Constants.CLAIM_DATA_KEY) match {
 
-      case Some(claimData) if Users.isAdmin(claimData.email) =>
+      case Some(claimData) if (new UserDAO).isAdmin(claimData.email) =>
           block(new AuthenticatedRequest(claimData, request)).map(_.refreshJwtSession(request))
 
       case Some(_) => Future.successful(Forbidden(Json.toJson(ResponseMessage(Constants.FORBIDDEN, Constants.FORBIDDEN_MESSAGE))).refreshJwtSession(request))
