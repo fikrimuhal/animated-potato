@@ -208,22 +208,25 @@ object ScoresDAO {
     val categories = (new CategoryDAO).getAll
 
     userInterviews.map { interview =>
-      val interviewScores = registeredScores.filter(_.interviewId == interview.id.get)
+      val userInterviewScores = registeredScores.filter(_.interviewId == interview.id.get)
 
       val scores = categories.map { category =>
 
-        val categoryScores = interviewScores.filter(_.categoryId == category.id.get)
-        val (score, confidence) = interviewScores.find(_.categoryId == category.id.get).map(x => (x.score, x.confidence)).get
-        val order = registeredScores.zipWithIndex.find(x => x._1.interviewId == interview.id.get && x._1.categoryId == category.id.get).map(_._2).get + 1
-        val numberOfParticipant = registeredScores.count(_.categoryId == category.id.get)
-        val percentage = if (categoryScores.isEmpty) -1 else order.toDouble / numberOfParticipant
+        val categoryScores = userInterviewScores.filter(_.categoryId == category.id.get)
+        if (categoryScores.isEmpty)  CategoryScore(category,-1,Some(-1),Some(-1),Some(-1))
+        else {
+          val (score, confidence) = userInterviewScores.find(_.categoryId == category.id.get).map(x => (x.score, x.confidence)).get
+          val order = registeredScores.zipWithIndex.find(x => x._1.interviewId == interview.id.get && x._1.categoryId == category.id.get).map(_._2).get + 1
+          val numberOfParticipant = registeredScores.count(_.categoryId == category.id.get)
+          val percentage = if (categoryScores.isEmpty) -1 else (order.toDouble / numberOfParticipant) * 100
 
-        CategoryScore(category, score, Some(percentage), Some(confidence), Some(order))
+          CategoryScore(category, score, Some(percentage), Some(confidence), Some(order))
+        }
       }
       val order = registeredInterviews.sortBy(1 - _.averageScore.get).zipWithIndex.find(_._1.id.get == interview.id.get).get._2 + 1
-      val percentage = order.toDouble / registeredInterviews.length
+      val percentage = (order.toDouble / registeredInterviews.length) * 100
       InterviewResult(scores, interview.startDate.get, interview.averageScore.get, order, percentage)
-    }
+    }.sortBy(_.date.getTime)
 
   }
 

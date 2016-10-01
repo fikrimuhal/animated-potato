@@ -27,7 +27,7 @@ class ParticipantController extends Controller with Secured {
 
   def update = UserAction(parse.json) { implicit request =>
 
-    val claimData = request.jwtSession.getAs[ClaimData]("user").get
+    val claimData = request.jwtSession.getAs[ClaimData](Constants.CLAIM_DATA_KEY).get
 
     request.body.validate[Participant].asOpt match {
 
@@ -36,7 +36,7 @@ class ParticipantController extends Controller with Secured {
           Participants.update(participant)
           Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
         }
-        else Unauthorized("Unauthorized Access")
+        else Unauthorized(Json.toJson(ResponseMessage(Constants.UNAUTHORIZED,Constants.UNAUTHORIZED_ACCESS)))
       case _ => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
 
     }
