@@ -1,7 +1,7 @@
 package controllers
 
 import core.Jwt
-import models.{ClaimData, Participant, ParticipantDAO$}
+import models.{ClaimData, Participant, ParticipantDAO}
 import play.api.libs.json.Json
 import play.api.mvc._
 import utils.Formatter._

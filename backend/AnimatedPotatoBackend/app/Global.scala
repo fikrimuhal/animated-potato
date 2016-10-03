@@ -1,4 +1,4 @@
-import models.{Participant, ParticipantDAO$, User}
+import models.{Participant, ParticipantDAO, User}
 import play.api.{Application, GlobalSettings}
 import dao.UserDAO
 
