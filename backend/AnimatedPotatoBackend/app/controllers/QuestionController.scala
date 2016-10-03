@@ -8,9 +8,11 @@ import models._
 import play.api.libs.json.Json
 import play.api.mvc.Controller
 import play.api.mvc._
+
+import core._
 import utils.{Constants, ID, ResponseMessage}
 
-class QuestionController @Inject() extends Controller {
+class QuestionController @Inject() extends Controller with Jwt {
 
   def insert() = evalOperation(Questions.insert)
 
@@ -43,7 +45,7 @@ class QuestionController @Inject() extends Controller {
     }
   }
 
-  def getAll = Action {
+  def getAll = Admin {
     Ok(Json.toJson(Questions.getAll))
   }
 

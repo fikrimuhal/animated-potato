@@ -51,7 +51,7 @@ object AdminAction extends ActionBuilder[AuthenticatedRequest] {
 
       case _ =>
         val tokenOption = request.headers.get("Authorization")
-
+        println("tokenOption", tokenOption.get)
         if (tokenOption.isDefined && Jwt.decode(tokenOption.get, JwtOptions(expiration = true, signature = false)).toString.contains("JwtExpirationException"))
           Future.successful(Ok(Json.toJson(ResponseMessage(Constants.SESSION_TIME_OUT, Constants.SESSION_TIME_OUT_MESSAGE))))
         else

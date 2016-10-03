@@ -6,13 +6,12 @@ import {browserHistory}       from 'react-router'
 import Subheader    from 'material-ui/Subheader'
 import * as s       from '../../layouts/style'
 import LinearProgress from 'material-ui/LinearProgress';
-//my imports
 import log2 from '../../utils/log2'
 import * as util from '../../utils/utils'
 import * as api from '../../utils/api'
 import * as db from '../../utils/data.js'
 import {Toast}          from '../../components/MyComponents'
-
+require("../../utils/extentions")
 //variables and consts
 var toastHelper = null;
 const log = log2("SignIn.js");
@@ -75,17 +74,23 @@ export default class UserSignIn extends React.Component {
     };
     signIn = function () {
         this.displayProgress("");
-        var username = this.refs.username.input.value;
+        var email =  String(this.refs.email.input.value);
         var password = this.refs.password.input.value;
         //validation
-        if (username == "" || password == "") {
-            toastHelper("Kullanıcı adı ve şifre alanlarını boş geçilemez!.", 2000);
+        if (email == "" || password == "") {
+            toastHelper("Eposta ve şifre alanlarını boş geçilemez!.", 2000);
+            this.displayProgress("none");
+            return;
+        }
+        else if(!email.validateForEmail())
+        {
+            toastHelper("Eposta formatı yanlış", 2000);
             this.displayProgress("none");
             return;
         }
 
         var loginRequest = {
-            "username": username,
+            "email": email,
             "password": password
         };
 
@@ -96,7 +101,8 @@ export default class UserSignIn extends React.Component {
                     toastHelper(json.message, 2000);
                 }
                 else if (json.status == "OK") {
-                    toastHelper("Kullanıcı adı şifre doğru.", 2000);
+                    //toastHelper("Eposta adı şifre doğru.", 2000);
+                    log("authorization header", response.headers.get("Authorization"));
                     util.setToken(response.headers.get("Authorization"));
                     json.userInfo.admin = json.isAdmin;
                     db.setUserInfo(json.userInfo);
@@ -147,8 +153,8 @@ export default class UserSignIn extends React.Component {
             <div style={s.userLayoutStyles.signInContainer}>
                 <Subheader style={styles.header}><b> Fikrimuhal Hızlı Mülakat - Giriş</b></Subheader>
 
-                <TextField ref={"username"} hintText="Kullanıcı Adı/ Eposta"
-                           floatingLabelText="Kullanıcı Adı/ Eposta"/><br/>
+                <TextField ref={"email"} hintText="Eposta"
+                           floatingLabelText="Eposta"/><br/>
                 <TextField ref={"password"}
                            hintText="Şifre"
                            floatingLabelText="Şifre"
@@ -163,8 +169,6 @@ export default class UserSignIn extends React.Component {
                 </div>
                 <br/>
                 <LinearProgress mode="indeterminate" color="red" style={{display: this.state.progressDisplay}}/>
-
-
                 <Toast settings={this.state.toastSettings}/>
             </div>
         )

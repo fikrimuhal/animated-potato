@@ -89,9 +89,9 @@ object ParticipantDAO {
 
   def getClaimData(username: String): Option[ClaimData] = DB { implicit session =>
 
-    participantDAO.filter(p => p.userName === username).list.headOption match {
+    participantDAO.filter(p => p.email === username).list.headOption match {
 
-      case Some(p) => UserDAO.get(p.username).map(u => ClaimData(u.email, u.isadmin.get, u.ispersonnel.get))
+      case Some(p) => UserDAO.get(p.email).map(u => ClaimData(u.email, u.isadmin.get, u.ispersonnel.get))
 
       case None => None
 

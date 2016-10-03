@@ -41,6 +41,7 @@ export default class SignUpForm extends React.Component {
 
         log(data);
         var userInfo = data.formData;
+        delete userInfo.github;
         //formData = userInfo;
         this.displayProgress(true);
         api.signUp(userInfo).then((response)=> {
@@ -70,7 +71,7 @@ export default class SignUpForm extends React.Component {
     handleSubmit = function () {
         //log(this.refs);
         var data = {};
-        ["name", "lastname", "email", "phone", "github", "website", "username", "password", "notes"].forEach(field=> {
+        ["name", "lastname", "email", "phone", "github", "website",  "password", "notes"].forEach(field=> {
             //log(field,this.refs[field].input.value);
             data[field] = this.refs[field].input.value;
         })
@@ -78,7 +79,7 @@ export default class SignUpForm extends React.Component {
         log(data);
         log(this.refs.notes);
 
-        var requiredFields = ["name", "lastname", "email", "phone", "username", "password"];
+        var requiredFields = ["name", "lastname", "email", "phone", "password"];
         var valid = true;
         requiredFields.forEach(field=> {
             if (data[field] == undefined || data[field] == "") {
@@ -90,6 +91,7 @@ export default class SignUpForm extends React.Component {
             return;
         }
         var userInfo = data;
+        delete userInfo.github;
         //formData = userInfo;
         this.displayProgress(true);
         api.signUp(userInfo).then((response)=> {
@@ -148,11 +150,13 @@ export default class SignUpForm extends React.Component {
                                        style={{width: "100%"}} name={"lastname"}/>
                         </Col>
                         <Col lg={6}>
-                            <TextField ref={"phone"}
-                                       hintText="Telefon(*)"
-                                       floatingLabelText="Telefon(*)"
-                                       style={{width: "100%"}} name={"phone"}/>
+                            <TextField ref={"password"}
+                                       hintText="Şifreniz(*)"
+                                       floatingLabelText="Şifreniz(*)"
+                                       style={{width: "100%"}}
+                                       type="password"/>
                         </Col>
+
                     </Row>
                     <Row>
                         <Col lg={6}>
@@ -170,28 +174,21 @@ export default class SignUpForm extends React.Component {
                     </Row>
                     <Row>
                         <Col lg={6}>
-                            <TextField ref={"username"}
-                                       hintText="Kullanıcı Adınız(*)"
-                                       floatingLabelText="Kullanıcı Adınız(*)"
-                                       style={{width: "100%"}} name={"username"}/>
+                            <TextField ref={"phone"}
+                                       hintText="Telefon(*)"
+                                       floatingLabelText="Telefon(*)"
+                                       style={{width: "100%"}} name={"phone"}/>
                         </Col>
                         <Col lg={6}>
-                            <TextField ref={"password"}
-                                       hintText="Şifreniz(*)"
-                                       floatingLabelText="Şifreniz(*)"
-                                       style={{width: "100%"}}
-                                       type="password"/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col lg={12}>
                             <TextField ref={"notes"}
                                        hintText="Not/Açıklama(*)"
                                        floatingLabelText="Not/Açıklama(*)"
                                        style={{width: "100%"}}
                                        multiLine={true}/>
                         </Col>
+
                     </Row>
+
                     <Row>
                         <Col lg={12}>
                             <FlatButton label={"Kaydet"} primary={true} labelStyle={{textTransform: "none"}}

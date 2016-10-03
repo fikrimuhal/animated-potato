@@ -27,7 +27,7 @@ class LoginSignUpController extends Controller {
   final val UserDAO = new UserDAO
 
   def login = Action { implicit request =>
-
+    println(request.body.asJson.flatMap(_.validate[LoginForm].asOpt))
     request.body.asJson.flatMap(_.validate[LoginForm].asOpt) match {
 
       case Some(loginForm) if (new UserDAO).isValid(loginForm.username, loginForm.password) =>
@@ -58,10 +58,10 @@ class LoginSignUpController extends Controller {
           ParticipantDAO.insert(participant)
           Ok(Json.toJson(
             SignSuccessMessage(Constants.OK,
-              ParticipantDAO.get(user.username).get,
-              UserDAO.get(user.username).get.isadmin.get))
+              ParticipantDAO.get(user.email).get,
+              UserDAO.get(user.email).get.isadmin.get))
           )
-            .addingToJwtSession(Constants.CLAIM_DATA_KEY, ParticipantDAO.getClaimData(user.username))
+            .addingToJwtSession(Constants.CLAIM_DATA_KEY, ParticipantDAO.getClaimData(user.email))
 
         case UserNameExists =>
           Ok(Json.toJson(SignFailMessage(Constants.FAIL, USERNAME_EXISTS_CODE,Constants.USERNAME_EXISTS)))
@@ -72,8 +72,11 @@ class LoginSignUpController extends Controller {
       }
     }
     catch {
-      case e: Exception =>
+      case e: Exception =>{
+        println(e.getMessage())
         BadRequest(Json.toJson(ResponseMessage(Constants.FAIL,Constants.UNEXPECTED_ERROR_MESSAGE)))
+      }
+
     }
   }
 }
