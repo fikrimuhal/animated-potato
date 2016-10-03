@@ -1,33 +1,20 @@
 package models
 
 import java.sql.Timestamp
-
 import animatedPotato.protocol.protocol.{Email, IdType, Score, UserIdType}
 import dao.UserDAO
 import models.InterviewDAO.InterviewId
-import utils.{Constants, DB}
-
+import utils.DB
 import slick.driver.PostgresDriver.simple._
 
-
 case class Participant(id: Option[UserIdType] = None,
-                       username: String,
                        name: String,
                        lastname: String,
                        email: String,
                        phone: String,
                        photo: Option[String] = Some(""),
                        website: Option[String] = Some(""),
-                       notes: Option[String] = Some("")) {
-  require(name.length <= 255
-    && lastname.length <= 255
-    && email.length <= 255
-    //&& Constants.emailRegex.findFirstMatchIn(email).isDefined
-    && phone.length <= 255
-    && website.toString.length <= 255
-    && notes.toString.length <= 255)
-  //photo için db->tablo fieldı değiştirilecek ve require eklenecek
-}
+                       notes: Option[String] = Some(""))
 
 case class ParticipantResponse(participantList: List[Participant], page: Int, numberOfPages: Int)
 
@@ -46,7 +33,7 @@ object ParticipantDAO {
   }
 
   def exists(participant: Participant): Boolean = DB { implicit session =>
-    participantDAO.filter(p => p.email === participant.email || p.userName === participant.username).list.nonEmpty
+    participantDAO.filter(p => p.email === participant.email).list.nonEmpty
   }
 
   def update(participant: Participant): Boolean = DB { implicit session =>
@@ -72,8 +59,8 @@ object ParticipantDAO {
   }
 
 
-  def get(userNameOrEmail: String): Option[Participant] = DB { implicit session =>
-    participantDAO.filter(p => (p.email === userNameOrEmail) || (p.userName === userNameOrEmail))
+  def get(email: String): Option[Participant] = DB { implicit session =>
+    participantDAO.filter(p => p.email === email)
       .firstOption
 
   }
@@ -87,11 +74,11 @@ object ParticipantDAO {
     participantDAO.list
   }
 
-  def getClaimData(username: String): Option[ClaimData] = DB { implicit session =>
+  def getClaimData(email: String): Option[ClaimData] = DB { implicit session =>
 
-    participantDAO.filter(p => p.email === username).list.headOption match {
+    participantDAO.filter(p => p.email === email).list.headOption match {
 
-      case Some(p) => UserDAO.get(p.email).map(u => ClaimData(u.email, u.isadmin.get, u.ispersonnel.get))
+      case Some(p) => UserDAO.getByEmail(p.email).map(u => ClaimData(u.email, u.isadmin.get, u.ispersonnel.get))
 
       case None => None
 
@@ -110,8 +97,6 @@ object ParticipantDAO {
 class ParticipantDAO(tag: Tag) extends Table[Participant](tag, "participant") {
   def id = column[UserIdType]("id", O.PrimaryKey, O.AutoInc)
 
-  def userName = column[String]("username")
-
   def name = column[String]("name")
 
   def lastName = column[String]("lastname")
@@ -126,5 +111,5 @@ class ParticipantDAO(tag: Tag) extends Table[Participant](tag, "participant") {
 
   def notes = column[Option[String]]("notes")
 
-  def * = (id.?, userName, name, lastName, email, phone, photo, website, notes) <> (Participant.tupled, Participant.unapply)
+  def * = (id.?, name, lastName, email, phone, photo, website, notes) <> (Participant.tupled, Participant.unapply)
 }

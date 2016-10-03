@@ -7,7 +7,7 @@ import org.mindrot.jbcrypt.BCrypt
 import table.UserTable
 
 import slick.driver.PostgresDriver.simple._
-import utils.DB
+import utils.{Constants, DB}
 
 import scala.slick.lifted.TableQuery
 
@@ -18,9 +18,9 @@ class UserDAO extends BaseDAO[UserTable, User](TableQuery[UserTable]) {
   lazy val userDAO = TableQuery[UserTable]
   lazy val participantDAO = TableQuery[ParticipantDAO]
 
-  override def insert(user: User): IdType = DB{implicit  session =>
+  override def insert(user: User): IdType = DB { implicit session =>
 
-    (userDAO returning userDAO.map(_.id)) += user.copy(password = BCrypt.hashpw(user.password,BCrypt.gensalt()))
+    (userDAO returning userDAO.map(_.id)) += user.copy(password = BCrypt.hashpw(user.password, BCrypt.gensalt()))
 
   }
 
@@ -36,7 +36,7 @@ class UserDAO extends BaseDAO[UserTable, User](TableQuery[UserTable]) {
 
   }
 
-  def get(email: String): Option[User] = DB { implicit session =>
+  def getByEmail(email: String): Option[User] = DB { implicit session =>
     userDAO.filter(u => u.email === email && !u.isDeleted).firstOption
   }
 
@@ -48,8 +48,17 @@ class UserDAO extends BaseDAO[UserTable, User](TableQuery[UserTable]) {
     userDAO.filter(u => u.email === email && !u.isDeleted).map(_.isPersonnel).firstOption.getOrElse(false)
   }
 
-  def makePersonnel(id: UserIdType) = DB { implicit session =>
-    userDAO.filter(u => u.id === id &&  !u.isDeleted).map(_.isPersonnel).update(true) == 1
+  def makePersonnel(id: UserIdType): Boolean = DB { implicit session =>
+    try {
+      val a = userDAO.filter(u => u.id === id && !u.isDeleted).map(_.isPersonnel).update(true)
+      println(a)
+      a == 1
+    }
+    catch {
+      case x =>
+        println(x)
+        false
+    }
   }
 
   def makeAdmin(id: UserIdType): Boolean = DB { implicit session =>
@@ -57,7 +66,7 @@ class UserDAO extends BaseDAO[UserTable, User](TableQuery[UserTable]) {
   }
 
   def makeUnPersonnel(id: IdType): Boolean = DB { implicit session =>
-    userDAO.filter(u => u.id === id &&  !u.isDeleted).map(u => (u.isPersonnel, u.isPersonnel)).update(false, false) == 1
+    userDAO.filter(u => u.id === id && !u.isDeleted).map(u => (u.isPersonnel, u.isPersonnel)).update(false, false) == 1
   }
 
   def makeUnadmin(id: UserIdType): Boolean = DB { implicit session =>
@@ -79,7 +88,7 @@ class UserDAO extends BaseDAO[UserTable, User](TableQuery[UserTable]) {
 
   def getUsersDetailed: List[UserDetails] = DB { implicit session =>
 
-    userDAO.filter(u => !u.isAdmin && !u.isPersonnel && !u.isDeleted).list.
+    userDAO.filter(u => !u.isAdmin && !u.isPersonnel /*&& !u.isDeleted*/).list.
       flatMap(usr => participantDAO.filter(u => u.email === usr.email).list
         .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
 
@@ -93,6 +102,11 @@ class UserDAO extends BaseDAO[UserTable, User](TableQuery[UserTable]) {
   def getAdminsDetailed: List[UserDetails] = DB { implicit session =>
     userDAO.filter(u => u.isAdmin && !u.isDeleted).list.flatMap(usr => participantDAO.filter(_.email === usr.email).list
       .map(p => UserDetails(usr.id.get, p.name, p.lastname, p.email, p.phone, p.photo)))
+  }
+
+  def isEmailProper(email: String): Boolean = DB { implicit session =>
+    userDAO.filter(_.email === email).firstOption.isEmpty
+
   }
 
 }

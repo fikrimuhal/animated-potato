@@ -62,7 +62,7 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
               response.remainingQuestions,
               Questions.getQuestionById(response.questionId),
               TEST_IS_NOT_OVER,
-              (new UserDAO).get(testRequest.email).isDefined)))
+              (new UserDAO).getByEmail(testRequest.email).isDefined)))
 
           }
       case _ =>
@@ -89,11 +89,11 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
                 remainingQuestions,
                 Questions.getQuestionById(questionId),
                 TEST_IS_NOT_OVER,
-                (new UserDAO).get(data.email.get).isDefined)))
+                (new UserDAO).getByEmail(data.email.get).isDefined)))
 
             case testFinish: TestFinish =>
               InterviewDAO.finishTest(Right(testFinish.interviewId))
-              Ok(Json.toJson(NextQuestionResponse(Constants.OK, testFinish.interviewId, 0, None, TEST_IS_OVER, (new UserDAO).get(data.email.get).isDefined)))
+              Ok(Json.toJson(NextQuestionResponse(Constants.OK, testFinish.interviewId, 0, None, TEST_IS_OVER, (new UserDAO).getByEmail(data.email.get).isDefined)))
           }
 
       case _ => Future.successful(BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE))))
