@@ -1,5 +1,6 @@
 package controllers
 
+import animatedPotato.protocol.protocol._
 import dao.UserDAO
 import models._
 import play.api.mvc.{Action, Controller}
@@ -8,20 +9,34 @@ import play.api.libs.json._
 import pdi.jwt._
 import utils.{Constants, ResponseMessage}
 
-
 case class SignSuccessMessage(status: String, userInfo: Participant, isAdmin: Boolean)
 
-case class LoginForm(username: String, password: String)
+case class LoginForm(email: String, password: String)
 
 case class SignFailMessage(status: String, faultCode: String, message: String)
 
+case class SignUpForm(id: Option[IdType],
+                      name: String,
+                      lastname: String,
+                      email: String,
+                      phone: String,
+                      photo: Option[String] = Some(""),
+                      website: Option[String] = Some(""),
+                      notes: Option[String] = Some(""),
+                      password: String
+                     ) {
+  require(name.length <= 255
+    && email.matches(Constants.emailRegex)
+    && lastname.length <= 255
+    && email.length <= 255
+    && phone.length <= 255
+    && website.toString.length <= 255
+    && notes.toString.length <= 255)
+}
+
 class LoginSignUpController extends Controller {
 
-  implicit val SignUpFailFormat = Json.format[SignFailMessage]
-  implicit val SignUpSuccessFormat = Json.format[SignSuccessMessage]
-  implicit val loginFormFormat = Json.format[LoginForm]
   final val SIGN_UP_FAIL_CODE = "-1"
-  final val USERNAME_EXISTS_CODE = "-1"
   final val EMAIL_EXISTS_CODE = "-2"
 
   final val UserDAO = new UserDAO
@@ -30,50 +45,54 @@ class LoginSignUpController extends Controller {
 
     request.body.asJson.flatMap(_.validate[LoginForm].asOpt) match {
 
-      case Some(loginForm) if (new UserDAO).isValid(loginForm.username, loginForm.password) =>
-        Ok(Json.toJson(SignSuccessMessage(Constants.OK
-          , ParticipantDAO.get(loginForm.username).get
-          , (new UserDAO).get(loginForm.username).get.isadmin.get))
-        ).addingToJwtSession(Constants.CLAIM_DATA_KEY, ParticipantDAO.getClaimData(loginForm.username))
-
       case Some(loginForm) =>
-        Ok(Json.toJson(SignFailMessage(Constants.FAIL, SIGN_UP_FAIL_CODE, Constants.WRONG_PASSWORD)))
+
+        if ((new UserDAO).isValid(loginForm.email, loginForm.password)) {
+          Ok(Json.toJson(SignSuccessMessage(Constants.OK
+            , ParticipantDAO.get(loginForm.email).get
+            , (new UserDAO).getByEmail(loginForm.email).get.isadmin.get))
+          ).addingToJwtSession(Constants.CLAIM_DATA_KEY, ParticipantDAO.getClaimData(loginForm.email))
+        }
+        else {
+          Ok(Json.toJson(SignFailMessage(Constants.FAIL, SIGN_UP_FAIL_CODE, Constants.WRONG_PASSWORD)))
+        }
 
       case _ =>
-        BadRequest(Json.toJson(ResponseMessage(Constants.FAIL,Constants.UNEXPECTED_ERROR_MESSAGE)))
+        BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
     }
 
   }
 
   def signUp = Action { implicit request =>
-    try {
-      val form: SignUp = request.body.asJson.get.as[SignUp]
-      val user: User = User(form.id, form.username,form.password, form.email)
-      val participant: Participant = Participant(form.id, form.username, form.name, form.lastname, form.email, form.phone, form.photo, form.website, form.notes)
 
-      SignUp.checkUser(form.username, form.email) match {
 
-        case ValidUserInfo =>
+    request.body.asJson.flatMap(_.validate[SignUpForm].asOpt) match {
+
+      case Some(signUpForm) =>
+
+        if (UserDAO.isEmailProper(signUpForm.email)) {
+
+          val user: User = User(signUpForm.id, signUpForm.password, signUpForm.email)
+          val participant: Participant = Participant(signUpForm.id, signUpForm.name, signUpForm.lastname, signUpForm.email, signUpForm.phone, signUpForm.photo, signUpForm.website, signUpForm.notes)
+
           UserDAO.insert(user)
           ParticipantDAO.insert(participant)
+
           Ok(Json.toJson(
             SignSuccessMessage(Constants.OK,
-              ParticipantDAO.get(user.username).get,
-              UserDAO.get(user.username).get.isadmin.get))
-          )
-            .addingToJwtSession(Constants.CLAIM_DATA_KEY, ParticipantDAO.getClaimData(user.username))
+              ParticipantDAO.get(user.email).get,
+              UserDAO.isAdmin(user.email)))
+          ).addingToJwtSession(Constants.CLAIM_DATA_KEY, ParticipantDAO.getClaimData(user.email))
 
-        case UserNameExists =>
-          Ok(Json.toJson(SignFailMessage(Constants.FAIL, USERNAME_EXISTS_CODE,Constants.USERNAME_EXISTS)))
+        }
 
-        case EmailExists =>
-          Ok(Json.toJson(SignFailMessage(Constants.FAIL,EMAIL_EXISTS_CODE,Constants.EMAIL_EXISTS)))
+        else {
+          Ok(Json.toJson(SignFailMessage(Constants.FAIL, EMAIL_EXISTS_CODE, Constants.EMAIL_EXISTS)))
+        }
 
-      }
+      case Some(signUpForm) => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.BAD_REQUEST)))
+
     }
-    catch {
-      case e: Exception =>
-        BadRequest(Json.toJson(ResponseMessage(Constants.FAIL,Constants.UNEXPECTED_ERROR_MESSAGE)))
-    }
+
   }
 }

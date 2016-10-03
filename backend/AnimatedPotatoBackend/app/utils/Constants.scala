@@ -7,7 +7,7 @@ import scala.concurrent.duration._
   */
 object Constants {
   final val PAGE_SIZE: Int = 20
-  final val emailRegex = """^[a-zA-Z0-9\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$""".r
+  final val emailRegex = """^[a-zA-Z0-9\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"""
   final val OK = "OK"
   final val FAIL = "FAIL"
   final val UNEXPECTED_ERROR_MESSAGE = "Beklenilmeyen bir hata oluştu "
@@ -25,6 +25,6 @@ object Constants {
   final val SESSION_MAX_AGE: FiniteDuration = 3 days
   final val CLAIM_DATA_KEY = "claimData"
   final val WRONG_PASSWORD = "Kullanıcı adı veya şifre hatalı"
-  final val USERNAME_EXISTS =  "Kullanıcı adı daha önceden alınmış"
-  final val EMAIL_EXISTS =  "Email daha önceden alınmış"
+  final val EMAIL_EXISTS =  "Girdiğiniz email adresi ile kayıtlı bir hesap bulunmaktadır"
+  final val BAD_REQUEST = "BAD_REQUEST"
 }

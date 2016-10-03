@@ -5,10 +5,7 @@
 # Home page
 GET         /                                  controllers.ParticipantController.index
 
-POST        /insertParticipant                 controllers.ParticipantController.insert
 POST        /updateParticipant                 controllers.ParticipantController.update
-POST        /admin/deleteParticipant           controllers.ParticipantController.delete
-GET         /admin/getParticipants             controllers.ParticipantController.getAll
 GET         /admin/getApplicants               controllers.ParticipantController.getApplicants
 
 POST        /admin/insertUser                  controllers.UserController.insert
@@ -28,11 +25,6 @@ POST        /admin/updateQuestion              controllers.QuestionController.up
 POST        /admin/deleteQuestion              controllers.QuestionController.delete
 GET         /admin/getQuestion/:n              controllers.QuestionController.getById(n)
 GET         /admin/getQuestions                controllers.QuestionController.getAll
-
-POST        /admin/insertQuestionOption        controllers.QuestionOptionController.insertQuestionOption
-POST        /admin/updateQuestionOption        controllers.QuestionOptionController.updateQuestionOption
-POST        /admin/deleteQuestionOption        controllers.QuestionOptionController.deleteQuestionOption
-GET         /admin/getQuestionOptions          controllers.QuestionOptionController.getQuestionOptions
 
 GET         /getQuestionSets                   controllers.QuestionSetController.get
 
@@ -56,7 +48,6 @@ GET         /admin/scores                      controllers.ScoresController.getA
 
 POST        /signUp                            controllers.LoginSignUpController.signUp
 POST        /login                             controllers.LoginSignUpController.login
-
 POST        /answer                            controllers.AnswerController.insert
 
 GET         /getAnswers                        controllers.AnswerController.getAnswers

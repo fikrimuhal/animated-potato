@@ -29,7 +29,7 @@ object Formatter {
   implicit val questionFormat = Json.format[Question]
   implicit val categoryFormat = Json.format[Category]
   implicit val userFormat = Json.format[User]
-  implicit val signUpFormat = Json.format[SignUp]
+  implicit val signUpFormat = Json.format[SignUpForm]
   implicit val answerFormat = Json.format[Answer]
   implicit val responseMessageFormat = Json.format[ResponseMessage]
   implicit val questionSetFormatter = Json.format[QuestionSet]
@@ -61,10 +61,9 @@ object Formatter {
   implicit val questionAndAnswerFormatter = Json.format[QuestionAndAnswer]
   implicit val interviewAnswersFormatter = Json.format[InterviewAnswers]
   implicit val interviewResultFormatter = Json.format[InterviewResult]
-
-
-
-
+  implicit val SignUpFailFormat = Json.format[SignFailMessage]
+  implicit val SignUpSuccessFormat = Json.format[SignSuccessMessage]
+  implicit val loginFormFormat = Json.format[LoginForm]
 
   implicit def longListToString = MappedColumnType.base[List[IdType], String](
     list => list mkString ",",

@@ -16,17 +16,6 @@ class ParticipantController extends Controller with Jwt {
     Ok("READY!")
   }
 
-
-  def insert = Action { implicit request =>
-    try {
-      val participant: Participant = request.body.asJson.get.as[Participant]
-      if (ParticipantDAO.insert(participant)) Ok("1") else BadRequest("-1")
-    }
-    catch {
-      case e: Exception => BadRequest("-1")
-    }
-  }
-
   def update = UserAction(parse.json) { implicit request =>
 
     val claimData = request.jwtSession.getAs[ClaimData](Constants.CLAIM_DATA_KEY).get
@@ -44,20 +33,6 @@ class ParticipantController extends Controller with Jwt {
     }
   }
 
-    def delete = Admin { implicit request =>
-      try {
-        val participant = request.body.asJson.get.as[Participant]
-        if (ParticipantDAO.delete(participant)) Ok("1") else BadRequest("-1")
-      }
-      catch {
-        case e: Exception => BadRequest("-1")
-      }
-    }
-
-
-    def getAll = Action {
-      Ok(Json.toJson(ParticipantDAO.getAll))
-    }
 
     def getApplicants = Action {
 

@@ -6,8 +6,6 @@ import models.User
 
 class UserTable(tag: Tag) extends BaseTable[User](tag, "users") {
 
-  def username = column[String]("username")
-
   def password = column[String]("password")
 
   def email = column[String]("email")
@@ -16,5 +14,5 @@ class UserTable(tag: Tag) extends BaseTable[User](tag, "users") {
 
   def isPersonnel = column[Boolean]("ispersonnel")
 
-  def * = (id.?, username, password, email, isAdmin.?, isPersonnel.?) <> (User.tupled, User.unapply)
+  def * = (id.?, password, email, isAdmin.?, isPersonnel.?) <> (User.tupled, User.unapply)
 }

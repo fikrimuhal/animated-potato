@@ -4,7 +4,6 @@ DROP TABLE IF EXISTS participant;
 CREATE TABLE participant
 (
   id bigserial NOT NULL,
-  username character varying(255) NOT NULL,
   name character varying(255) NOT NULL,
   lastname character varying(255) NOT NULL,
   email character varying(255) NOT NULL,
