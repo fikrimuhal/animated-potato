@@ -18,6 +18,12 @@ class UserDAO extends BaseDAO[UserTable, User](TableQuery[UserTable]) {
   lazy val userDAO = TableQuery[UserTable]
   lazy val participantDAO = TableQuery[ParticipantDAO]
 
+  override def insert(user: User): IdType = DB{implicit  session =>
+
+    (userDAO returning userDAO.map(_.id)) += user.copy(password = BCrypt.hashpw(user.password,BCrypt.gensalt()))
+
+  }
+
 
   def isValid(email: String, password: String): Boolean = DB { implicit session =>
 
