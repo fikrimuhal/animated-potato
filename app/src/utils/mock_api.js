@@ -4,43 +4,54 @@
 import * as db  from './data'
 import * as mockDataFactory from './mock_data'
 import * as Cache from './cache'
-export const getUserSkillTestReport = userId =>{
-    var promise = new Promise((resolve,reject)=>{
-        setTimeout(()=>{
+export const getUserSkillTestReport = userId => {
+    var promise = new Promise((resolve, reject)=> {
+        setTimeout(()=> {
             var response = {
-                isValidUser:true,
-                userInfo:{
-                    name:"Mesut",
-                    lastname:"Yiğit",
-                    id:userId
+                isValidUser: true,
+                userInfo: {
+                    name: "Mesut",
+                    lastname: "Yiğit",
+                    id: userId
                 },
-                reportHtml:'<div>Server side rendering html content of skill test report....</div>'
+                reportHtml: '<div>Server side rendering html content of skill test report....</div>'
             };
-            if(response.isValidUser) {
-                Cache.cacheTestResultReport(response.userInfo,response.reportHtml);
+            if (response.isValidUser) {
+                Cache.cacheTestResultReport(response.userInfo, response.reportHtml);
             }
             resolve(JSON.stringify(response));
-        },Math.floor(Math.random() * 300))
+        }, Math.floor(Math.random() * 300))
     });
     return promise;
 };
 
-export const getQuestionSets = () =>{
-    var promise = new Promise((resolve,reject)=>{
-        setTimeout(()=>{
+export const getQuestionSets = () => {
+    var promise = new Promise((resolve, reject)=> {
+        setTimeout(()=> {
             var response = mockDataFactory.questionSets(5);
             resolve(JSON.stringify(response));
-        },Math.floor(Math.random() * 2000));
+        }, Math.floor(Math.random() * 2000));
     });
     return promise;
 };
 
-export const getRadarData = ()=>{
-    var promise = new Promise((resolve,reject)=>{
-        setTimeout(()=>{
+export const getRadarData = ()=> {
+    var promise = new Promise((resolve, reject)=> {
+        setTimeout(()=> {
             var response = mockDataFactory.TestResultMockDataCreator.getRadarData();
             resolve(response);
-        },Math.floor(Math.random() * 1500))
+        }, Math.floor(Math.random() * 1500))
     })
     return promise;
 }
+
+
+export const getUserOnlyResult = () => {
+    var promise = new Promise((resolve, reject)=> {
+        setTimeout(()=> {
+            var response = mockDataFactory.getUserResult();
+            resolve(response);
+        }, Math.floor(Math.random() * 2000))
+    });
+    return promise;
+};

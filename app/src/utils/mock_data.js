@@ -132,3 +132,32 @@ export const mock_users = [
         password: "123321"
     }
 ];
+
+
+export const getUserResult = ()=> {
+    var data = [];
+    for (var i = 0; i < Math.ceil(Math.random() * 3); i++) {
+        var item = {
+            interviewId: i,
+            applyDate: Date.now() - 1000*60*60*24* (Math.floor(Math.random()*100*(i+1))) + Math.floor(Math.random()*985875*i),
+            score: Math.floor(Math.random() * 100),
+            percentage: Math.floor(Math.random() * 100),
+            order: Math.floor(Math.random() * 37),
+            categoryResult: createCategoryResult()
+        };
+        data.push(item);
+    }
+
+    function createCategoryResult() {
+        return ["Java", "C#", "Scala", "React", "Javascript", "Backend", "Frontedn"].map(category => {
+            var item = {
+                category: category,
+                score: Math.floor(Math.random() * 100),
+                percentage: Math.floor(Math.random() * 100)
+            };
+            return item;
+        })
+    }
+
+    return data;
+}
