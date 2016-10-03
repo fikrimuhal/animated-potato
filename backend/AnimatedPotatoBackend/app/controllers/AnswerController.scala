@@ -1,19 +1,20 @@
 package controllers
 
 import animatedPotato.protocol.protocol.{IdType, QuestionId}
+import core.{AdminAction, Jwt}
 import dao.AnswerDAO
 import models.InterviewDAO.InterviewId
 import models._
 import play.api.mvc.{Action, Controller}
 import utils.Formatter._
 import play.api.libs.json.Json
-import utils.Constants
+import utils._
 
 case class GetAnswer(interviewId: InterviewId, questionId: QuestionId)
 
 case class QuestionAndAnswer(question: Option[QuestionTable], answer: Option[Answer])
 
-class AnswerController extends Controller with Secured {
+class AnswerController extends Controller with Jwt {
 
   lazy val AnswerDAO = new AnswerDAO
 
@@ -53,7 +54,7 @@ class AnswerController extends Controller with Secured {
     *         not_found: message that explains
     *         onFailure : BadRequest Response Message that explains error
     */
-  def getAnswer = Admin { implicit request =>
+  def getAnswer = AdminAction { implicit request =>
 
     request.body.asJson.flatMap(_.validate[GetAnswer].asOpt) match {
 

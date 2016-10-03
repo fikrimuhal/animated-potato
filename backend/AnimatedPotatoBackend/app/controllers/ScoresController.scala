@@ -2,11 +2,10 @@ package controllers
 
 //import com.paulgoldbaum.influxdbclient._
 import scala.concurrent.ExecutionContext.Implicits.global
-
-import models.{ID, ResponseMessage, Scores, ScoresDAO}
+import models.{Scores, ScoresDAO}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
-import utils.Constants
+import utils.{Constants, ID, ResponseMessage}
 import utils.Formatter._
 
 class ScoresController extends Controller {
@@ -61,5 +60,14 @@ class ScoresController extends Controller {
     }
   }
 
+  def getUserReport = Action { implicit request =>
 
+    request.body.asJson.flatMap(_.validate[ID].asOpt) match {
+
+      case Some(id) => Ok(Json.toJson(ScoresDAO.getUserReport(id.id)))
+
+      case _ => BadRequest(Json.toJson(ResponseMessage(Constants.FAIL, Constants.UNEXPECTED_ERROR_MESSAGE)))
+
+    }
+  }
 }

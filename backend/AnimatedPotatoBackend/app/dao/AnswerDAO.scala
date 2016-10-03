@@ -38,7 +38,7 @@ class AnswerDAO extends BaseDAO[AnswerTable, Answer](TableQuery[AnswerTable]) {
     val PERSONNEL_INTERVIEW_ID = -2
     val ALL_INTERVIEW_ID = -4
 
-    val participant = Participants.getByInterviewID(interviewId)
+    val participant = ParticipantDAO.getByInterviewID(interviewId)
     if (participant.isEmpty) Nil
     else {
       lazy val questionDAO = TableQuery[Questions]

@@ -3,8 +3,7 @@ package models
 import java.sql.Timestamp
 
 import animatedPotato.protocol.protocol._
-import dao.AnswerDAO
-import table.AnswerTable
+import table.{AnswerTable, UserTable}
 import utils.DB
 
 import slick.driver.PostgresDriver.simple._
@@ -12,10 +11,12 @@ import slick.driver.PostgresDriver.simple._
 case class Interview(id: Option[IdType], email: String, hasFinished: Boolean = false, startDate: Option[Timestamp] = None, endDate: Option[Timestamp] = None, averageScore: Option[Score] = None)
 
 object InterviewDAO {
-
   implicit def date2timestamp(date: java.util.Date): Timestamp = new java.sql.Timestamp(date.getTime)
 
   lazy val interviewDAO = TableQuery[InterviewDAO]
+  lazy val userDAO = TableQuery[UserTable]
+  lazy val answerDAO = TableQuery[AnswerTable]
+
   type InterviewId = Long
 
   /**
@@ -77,17 +78,17 @@ object InterviewDAO {
 
 
   def getPersonnelInterviewIds: List[InterviewId] = DB { implicit session =>
-    val personnelEmailList = Users.users.filter(_.isPersonnel).map(_.email).list
+
+    val personnelEmailList = userDAO.filter(u => u.isPersonnel && !u.isDeleted).map(_.email).list
     interviewDAO.filter(_.email inSet personnelEmailList).map(_.id).list
   }
 
   def getUserandPersonnelInterviews(interviewId: InterviewId): List[Interview] = DB { implicit session =>
-    val personnelEmailList = Users.users.filter(_.isPersonnel).map(_.email).list
+    val personnelEmailList = userDAO.filter(u => u.isPersonnel && !u.isDeleted).map(_.email).list
     interviewDAO.filter(i => (i.email inSet personnelEmailList) || (i.id === interviewId)).list
   }
 
   def delete(interviewId: InterviewId): Boolean = DB { implicit session =>
-    lazy val answerDAO = TableQuery[AnswerTable]
 
     val deletedInterviewCount = interviewDAO.filter(_.id === interviewId).delete
     val deletedAnswerCount = answerDAO.filter(_.interviewId === interviewId).delete
@@ -103,8 +104,36 @@ object InterviewDAO {
 
   def getRegisteredInterviews: List[Interview] = DB { implicit session =>
 
-    val registeredEmails = Participants.participants.map(_.email).list
+    val registeredEmails = ParticipantDAO.participantDAO.map(_.email).list
     interviewDAO.filter(i => i.hasFinished && i.email.inSet(registeredEmails)).list
+  }
+
+  def getLastRegisteredInterviews: List[Interview] = DB { implicit session =>
+
+    val registeredEmails = ParticipantDAO.participantDAO.map(_.email).list
+    val registeredInterviews = interviewDAO.filter(i => i.hasFinished && i.email.inSet(registeredEmails)).list
+    val lastInterviewIDs: List[IdType] = registeredInterviews.groupBy(_.email).values.toList.
+      map(i => i.sortBy(_.startDate.get.getTime).last.id.get)
+
+    registeredInterviews.filter(i => lastInterviewIDs.contains(i.id.get))
+  }
+
+  def getUserInterviews(userID: IdType) = DB { implicit session =>
+
+    userDAO.filter(_.id === userID).firstOption match {
+
+      case Some(user) => interviewDAO.filter(_.email === user.email).list
+
+      case _ => Nil
+    }
+
+  }
+
+  def getRegisteredInterviewIDs: List[IdType] = DB { implicit session =>
+
+    val registeredEmails = ParticipantDAO.participantDAO.map(_.email).list
+    interviewDAO.filter(i => i.hasFinished && i.email.inSet(registeredEmails)).map(_.id).list
+
   }
 
 }

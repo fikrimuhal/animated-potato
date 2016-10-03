@@ -4,19 +4,19 @@ import animatedPotato.protocol.protocol.IdType
 import dao.CollectionDAO
 import models._
 import play.api.libs.json.Json
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{Action, Controller, Result}
 import utils.Formatter._
-import utils.Constants
+import utils.{Constants, ID, ResponseMessage}
 
 class CollectionController extends Controller {
 
-  val collectionDAO = new CollectionDAO
+  val CollectionDAO = new CollectionDAO
 
-  def insert() = evalOperation(collectionDAO.insert)
+  def insert = evalOperation(CollectionDAO.insert)
 
-  def update() = evalOperation(collectionDAO.update)
+  def update = evalOperation(CollectionDAO.update)
 
-  def delete() = evalOperation(collectionDAO.delete)
+  def delete = evalOperation(CollectionDAO.delete)
 
   def evalOperation(function: Collection => IdType) = Action { implicit request =>
 
@@ -35,8 +35,8 @@ class CollectionController extends Controller {
     }
   }
 
-  def getAll() = Action {
-    Ok(Json.toJson(collectionDAO.getAllDetailed))
+  def getAll = Action {
+    Ok(Json.toJson(CollectionDAO.getAllDetailed))
   }
 
   def setDefaultQuestionSet = Action { implicit request =>
@@ -44,8 +44,8 @@ class CollectionController extends Controller {
     request.body.asJson.flatMap(_.validate[ID].asOpt) match {
 
       case Some(id) =>
-        if (collectionDAO.setDefaultCollection(id.id))
-          Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
+        if (CollectionDAO.setDefaultCollection(id.id))
+        Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
         else {
           InternalServerError(Json.toJson(ResponseMessage(Constants.FAIL, Constants.SERVER_ERROR_MESSAGE)))
         }

@@ -3,6 +3,7 @@ package models
 import java.sql.Timestamp
 
 import animatedPotato.protocol.protocol.{Email, IdType, Score, UserIdType}
+import dao.UserDAO
 import models.InterviewDAO.InterviewId
 import utils.{Constants, DB}
 
@@ -34,26 +35,26 @@ case class Applicant(info: Participant, applyDate: Timestamp, averageScore: Scor
 
 case class ClaimData(email: Email, isAdmin: Boolean, isPersonnel: Boolean)
 
-object Participants {
+object ParticipantDAO {
 
-
-  lazy val participants = TableQuery[Participants]
+  lazy val participantDAO = TableQuery[ParticipantDAO]
+  final val UserDAO = new UserDAO
 
   def insert(participant: Participant): Boolean = DB { implicit session =>
     if (exists(participant)) false
-    else (participants += participant) == 1
+    else (participantDAO += participant) == 1
   }
 
   def exists(participant: Participant): Boolean = DB { implicit session =>
-    participants.filter(p => p.email === participant.email || p.userName === participant.username).list.nonEmpty
+    participantDAO.filter(p => p.email === participant.email || p.userName === participant.username).list.nonEmpty
   }
 
   def update(participant: Participant): Boolean = DB { implicit session =>
-    participants.filter(_.email === participant.email).update(participant) > 0
+    participantDAO.filter(_.email === participant.email).update(participant) > 0
   }
 
   def delete(participant: Participant): Boolean = DB { implicit session =>
-    participants.filter(_.email === participant.email).delete > 0
+    participantDAO.filter(_.email === participant.email).delete > 0
   }
 
   def getApplicants: List[Applicant] = DB { implicit session =>
@@ -63,7 +64,7 @@ object Participants {
     val lastInterviewIDs: List[IdType] = interviews.groupBy(_.email).values.toList.
       map(i => i.sortBy(_.startDate.get.getTime).last.id.get)
     val filteredInterviews = interviews.filter(i => lastInterviewIDs.contains(i.id.get))
-    val participantList = participants.filter(_.email inSet filteredInterviews.map(_.email)).list
+    val participantList = participantDAO.filter(_.email inSet filteredInterviews.map(_.email)).list
 
     //yalnızca üye olanların bilgileri getirilecek şekilde filtrelendi
     filteredInterviews.filter(i => participantList.exists(_.email == i.email)).map(itw =>
@@ -72,25 +73,25 @@ object Participants {
 
 
   def get(userNameOrEmail: String): Option[Participant] = DB { implicit session =>
-    participants.filter(p => (p.email === userNameOrEmail) || (p.userName === userNameOrEmail))
+    participantDAO.filter(p => (p.email === userNameOrEmail) || (p.userName === userNameOrEmail))
       .firstOption
 
   }
 
   def getByEmailList(emails: List[Email]) = DB { implicit session =>
-    participants.filter(_.email inSet emails).list
+    participantDAO.filter(_.email inSet emails).list
 
   }
 
   def getAll = DB { implicit session =>
-    participants.list
+    participantDAO.list
   }
 
   def getClaimData(username: String): Option[ClaimData] = DB { implicit session =>
 
-    participants.filter(p => p.userName === username).list.headOption match {
+    participantDAO.filter(p => p.userName === username).list.headOption match {
 
-      case Some(p) => Users.get(p.username).map(u => ClaimData(u.email.get, u.isadmin.get, u.ispersonnel.get))
+      case Some(p) => UserDAO.get(p.username).map(u => ClaimData(u.email, u.isadmin.get, u.ispersonnel.get))
 
       case None => None
 
@@ -100,13 +101,13 @@ object Participants {
   def getByInterviewID(interviewId: InterviewId): Option[Participant] = DB { implicit session =>
 
     val interviewOpt = InterviewDAO.interviewDAO.filter(_.id === interviewId).firstOption
-    if (interviewOpt.isDefined) participants.filter(_.email === interviewOpt.get.email).firstOption
+    if(interviewOpt.isDefined) participantDAO.filter(_.email === interviewOpt.get.email).firstOption
     else None
   }
 
 }
 
-class Participants(tag: Tag) extends Table[Participant](tag, "participant") {
+class ParticipantDAO(tag: Tag) extends Table[Participant](tag, "participant") {
   def id = column[UserIdType]("id", O.PrimaryKey, O.AutoInc)
 
   def userName = column[String]("username")

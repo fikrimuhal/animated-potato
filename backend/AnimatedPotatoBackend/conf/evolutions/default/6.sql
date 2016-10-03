@@ -10,14 +10,16 @@ CREATE TABLE users
   email       CHARACTER VARYING(255) NOT NULL,
   isadmin     BOOLEAN                NOT NULL,
   ispersonnel BOOLEAN                NOT NULL,
+  isdeleted   BOOLEAN                NOT NULL DEFAULT FALSE,
   CONSTRAINT users_pkey PRIMARY KEY (id)
 )
 WITH (
-  OIDS=FALSE
+OIDS = FALSE
 );
 
 ALTER TABLE users
   OWNER TO postgres;
 
-CREATE INDEX users_index ON users (id, email)
+CREATE INDEX users_index
+  ON users (id, email)
 

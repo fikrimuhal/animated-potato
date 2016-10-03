@@ -1,6 +1,6 @@
 package models
 
-import java.io.Serializable
+import java.sql.Timestamp
 
 import animatedPotato.protocol.protocol._
 import controllers.{CategoryScore, ComparativeReport}
@@ -16,6 +16,8 @@ case class UserCategoryScores(participantId: IdType, interviewId: InterviewId, n
 case class CategoryResults(participantId: IdType, interviewId: InterviewId, name: String, lastname: String, isPersonnel: Boolean, order: Int, score: Score)
 
 case class CategoryResultsResponse(category: Category, results: List[CategoryResults], numberOfParticipant: Int)
+
+case class InterviewResult(categoryScores: List[CategoryScore], date: Timestamp, overallScore: Score, order: Int, percentage: Double)
 
 object ScoresDAO {
 
@@ -71,7 +73,7 @@ object ScoresDAO {
           val numberOfParticipants = scoreOfCategory.length
           val score: Double = if (scoreOfCategory.isEmpty) -1 else scoreOfCategory.map(_.score).sum / numberOfParticipants
           val order = (score :: scoreOfCategory.map(_.score)).sortBy(x => 1 - x).indexOf(score) + 1
-          val percentage: Double = order / (numberOfParticipants + 1)
+          val percentage: Double = order / numberOfParticipants
           val confidence: Double = if (scoreOfCategory.isEmpty) -1 else scoreOfCategory.map(_.confidence).sum / numberOfParticipants
           CategoryScore(category, score, Some(percentage), Some(confidence), Some(order))
         }.filter(_.score != -1)
@@ -82,7 +84,7 @@ object ScoresDAO {
 
       // sonuçta sadece gelen interviewID ve personel interviewleri olacak
       val filteredInterviews = interviews.filter(i => (i.id.get == interviewId) || personnelInterviewIds.contains(i.id.get))
-      val participants = Participants.getByEmailList(filteredInterviews.map(_.email))
+      val participants = ParticipantDAO.getByEmailList(filteredInterviews.map(_.email))
 
       filteredInterviews.map { itw =>
 
@@ -103,10 +105,10 @@ object ScoresDAO {
           }
         }
 
-        val isPersonnel =  personnelInterviewIds contains itw.id.get
+        val isPersonnel = personnelInterviewIds contains itw.id.get
         val order = interviews.sortBy(1 - _.averageScore.get).zipWithIndex.find(_._1.id == itw.id).map(_._2).get + 1
         val overAllPercentage = (order.toDouble / numberOfParticipant) * 100
-        UserCategoryScores(p.id.get, itw.id.get, p.name, p.lastname, p.email, p.phone,isPersonnel, categoryScore, overAllPercentage , itw.averageScore.get, categoryScore.filter(_.score >= 0).map(_.confidence.get).sum / categoryScore.count(_.score >= 0),order )
+        UserCategoryScores(p.id.get, itw.id.get, p.name, p.lastname, p.email, p.phone, isPersonnel, categoryScore, overAllPercentage, itw.averageScore.get, categoryScore.filter(_.score >= 0).map(_.confidence.get).sum / categoryScore.count(_.score >= 0), order)
       }.::(UserCategoryScores(-2, -2, "PERSONNEL", "PERSONNEL", "PERSONNEL", "", isPersonnel = true, personnelCategoricalScores, -1, -1, -1, -1))
         .::(UserCategoryScores(-4, -4, "ALL", "ALL", "ALL", "", isPersonnel = false, allCategoricalScores, -1, -1, -1, -1))
     }
@@ -117,54 +119,51 @@ object ScoresDAO {
     val PERSONNEL_INTERVIEW_ID = -2
     val ALL_INTERVIEW_ID = -4
 
-    val registeredInterviews = InterviewDAO.getRegisteredInterviews
-    val lastInterviewIDs: List[IdType] = registeredInterviews.groupBy(_.email).values.toList.
-      map(i => i.sortBy(_.startDate.get.getTime).last.id.get)
+    val interviews = InterviewDAO.getLastRegisteredInterviews
 
-    val interviews: List[Interview] = registeredInterviews.filter(i => lastInterviewIDs.contains(i.id.get))
     val scores = ScoresDAO.getAll.filter(s => interviews.map(_.id.get).contains(s.interviewId))
     val categories = (new CategoryDAO).getAll
     val personnelInterviewIds = InterviewDAO.getPersonnelInterviewIds
     val personnelInterviews = interviews.filter(i => personnelInterviewIds.contains(i.id.get))
-    val participants = Participants.getByEmailList(interviews.map(_.email))
+    val participants = ParticipantDAO.getByEmailList(interviews.map(_.email))
 
     val numberOfInterviews = interviews.length
-    val numberOfPersonnels  = personnelInterviews.length
+    val numberOfPersonnels = personnelInterviews.length
     val overallAllAverage = interviews.map(_.averageScore.get).sum / numberOfInterviews
     val overallPersonnelAverage = personnelInterviews.map(_.averageScore.get).sum / numberOfPersonnels
 
-    val overallCategory = models.Category(Some(-1),"Overall")
+    val overallCategory = models.Category(Some(-1), "Overall")
 
-    val allFakeInterview = Interview(Some(ALL_INTERVIEW_ID),"",true, None,None,Some(overallAllAverage))
-    val personnelFakeInterview = Interview(Some(PERSONNEL_INTERVIEW_ID),"",true, None,None,Some(overallPersonnelAverage))
+    val allFakeInterview = Interview(Some(ALL_INTERVIEW_ID), "", true, None, None, Some(overallAllAverage))
+    val personnelFakeInterview = Interview(Some(PERSONNEL_INTERVIEW_ID), "", true, None, None, Some(overallPersonnelAverage))
 
     val overallResults = (allFakeInterview :: personnelFakeInterview :: interviews).sortBy(1 - _.averageScore.get).zipWithIndex.map { case (interview, order) =>
 
-        if (interview.id.get == PERSONNEL_INTERVIEW_ID)
-          CategoryResults(PERSONNEL_INTERVIEW_ID, PERSONNEL_INTERVIEW_ID, "Personnel", "Personnel", isPersonnel = true, order + 1, overallPersonnelAverage)
+      if (interview.id.get == PERSONNEL_INTERVIEW_ID)
+        CategoryResults(PERSONNEL_INTERVIEW_ID, PERSONNEL_INTERVIEW_ID, "Personnel", "Personnel", isPersonnel = true, order + 1, overallPersonnelAverage)
 
-        else if (interview.id.get == ALL_INTERVIEW_ID)
-          CategoryResults(ALL_INTERVIEW_ID, ALL_INTERVIEW_ID, "All", "All", isPersonnel = false, order + 1, overallAllAverage)
+      else if (interview.id.get == ALL_INTERVIEW_ID)
+        CategoryResults(ALL_INTERVIEW_ID, ALL_INTERVIEW_ID, "All", "All", isPersonnel = false, order + 1, overallAllAverage)
 
-        else {
-          val email = interviews.filter(_.id.get == interview.id.get).map(_.email).head
-          val p = participants.filter(_.email == email).head
-          val isPersonnel = personnelInterviewIds contains interview.id.get
-          CategoryResults(p.id.get, interview.id.get, p.name, p.lastname, isPersonnel, order + 1, interview.averageScore.get)
-        }
+      else {
+        val email = interviews.filter(_.id.get == interview.id.get).map(_.email).head
+        val p = participants.filter(_.email == email).head
+        val isPersonnel = personnelInterviewIds contains interview.id.get
+        CategoryResults(p.id.get, interview.id.get, p.name, p.lastname, isPersonnel, order + 1, interview.averageScore.get)
+      }
     }
     val order = overallResults.zipWithIndex.find(_._1.interviewId == interviewId).map(_._2).getOrElse(-1) + 1
 
     val filteredResults = overallResults.filter(x => List(1, order - 1, order, order + 1).contains(x.order) ||
       List(ALL_INTERVIEW_ID, PERSONNEL_INTERVIEW_ID).contains(x.interviewId))
 
-    val overallFakeCategory = CategoryResultsResponse(overallCategory,filteredResults,numberOfInterviews)
+    val overallFakeCategory = CategoryResultsResponse(overallCategory, filteredResults, numberOfInterviews)
 
-   categories.map { category =>
+    categories.map { category =>
 
       val scoresOfCategory = scores.filter(_.categoryId == category.id.get)
       val personnelsSOC = scoresOfCategory.filter(s => personnelInterviewIds.contains(s.interviewId)) // personnelScoreOfCategory
-      val personnelsCategoryAverage: Double = if (personnelsSOC.isEmpty) 0 else personnelsSOC.map(_.score).sum / personnelsSOC.length
+    val personnelsCategoryAverage: Double = if (personnelsSOC.isEmpty) 0 else personnelsSOC.map(_.score).sum / personnelsSOC.length
       val allAverage: Double = if (scoresOfCategory.isEmpty) 0 else scoresOfCategory.map(_.score).sum / scoresOfCategory.length
 
       val ALL_SCORE = Scores(ALL_INTERVIEW_ID, category.id.get, allAverage, -1)
@@ -198,9 +197,38 @@ object ScoresDAO {
 
       CategoryResultsResponse(category, filteredResults, numberOfParticipants)
     }.::(overallFakeCategory)
+  }
 
+  def getUserReport(userID: IdType) = DB { implicit session =>
+
+    val userInterviews = InterviewDAO.getUserInterviews(userID)
+    val registeredInterviews = InterviewDAO.getRegisteredInterviews
+    val registeredScores = scoresDAO.filter(s => s.interviewId inSet registeredInterviews.map(_.id.get)).list.sortBy(1 - _.score)
+    val categories = (new CategoryDAO).getAll
+
+    userInterviews.map { interview =>
+      val userInterviewScores = registeredScores.filter(_.interviewId == interview.id.get)
+
+      val scores = categories.map { category =>
+
+        val categoryScores = userInterviewScores.filter(_.categoryId == category.id.get)
+        if (categoryScores.isEmpty)  CategoryScore(category,-1,Some(-1),Some(-1),Some(-1))
+        else {
+          val (score, confidence) = userInterviewScores.find(_.categoryId == category.id.get).map(x => (x.score, x.confidence)).get
+          val order = registeredScores.zipWithIndex.find(x => x._1.interviewId == interview.id.get && x._1.categoryId == category.id.get).map(_._2).get + 1
+          val numberOfParticipant = registeredScores.count(_.categoryId == category.id.get)
+          val percentage = if (categoryScores.isEmpty) -1 else (order.toDouble / numberOfParticipant) * 100
+
+          CategoryScore(category, score, Some(percentage), Some(confidence), Some(order))
+        }
+      }
+      val order = registeredInterviews.sortBy(1 - _.averageScore.get).zipWithIndex.find(_._1.id.get == interview.id.get).get._2 + 1
+      val percentage = (order.toDouble / registeredInterviews.length) * 100
+      InterviewResult(scores, interview.startDate.get, interview.averageScore.get, order, percentage)
+    }.sortBy(_.date.getTime)
 
   }
+
 }
 
 class ScoresDAO(tag: Tag) extends Table[Scores](tag, "score") {
