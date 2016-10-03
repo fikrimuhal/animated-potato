@@ -203,7 +203,7 @@ object ScoresDAO {
 
     val userInterviews = InterviewDAO.getUserInterviews(userID)
     val registeredInterviews = InterviewDAO.getRegisteredInterviews
-    val registeredScores = scoresDAO.filter(s => s.interviewId inSet registeredInterviews.map(_.id.get)).list.sortBy(1 - _.score)
+    val registeredScores = scoresDAO.filter(s => s.interviewId inSet registeredInterviews.map(_.id.get)).list
     val categories = (new CategoryDAO).getAll
 
     userInterviews.map { interview =>
@@ -211,13 +211,13 @@ object ScoresDAO {
 
       val scores = categories.map { category =>
 
-        val categoryScores = userInterviewScores.filter(_.categoryId == category.id.get)
-        if (categoryScores.isEmpty)  CategoryScore(category,-1,Some(-1),Some(-1),Some(-1))
+        val categoryScore = userInterviewScores.find(_.categoryId == category.id.get)
+        if (categoryScore.isEmpty)  CategoryScore(category,-1,Some(-1),Some(-1),Some(-1))
         else {
-          val (score, confidence) = userInterviewScores.find(_.categoryId == category.id.get).map(x => (x.score, x.confidence)).get
-          val order = registeredScores.zipWithIndex.find(x => x._1.interviewId == interview.id.get && x._1.categoryId == category.id.get).map(_._2).get + 1
+          val (score, confidence) = categoryScore.map(x => (x.score, x.confidence)).get
+          val order = registeredScores.filter(x => x.interviewId == interview.id.get && x.categoryId == category.id.get).zipWithIndex.find(_._1.interviewId == interview.id.get).map(_._2).get + 1
           val numberOfParticipant = registeredScores.count(_.categoryId == category.id.get)
-          val percentage = if (categoryScores.isEmpty) -1 else (order.toDouble / numberOfParticipant) * 100
+          val percentage = if (categoryScore.isEmpty) -1 else (order.toDouble / numberOfParticipant) * 100
 
           CategoryScore(category, score, Some(percentage), Some(confidence), Some(order))
         }

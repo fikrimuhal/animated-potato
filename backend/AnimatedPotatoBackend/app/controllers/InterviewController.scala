@@ -7,6 +7,7 @@ import akka.actor.ActorRef
 import akka.util.Timeout
 import animatedPotato.protocol.protocol.{Question => _, _}
 import com.google.inject.Singleton
+import core.Jwt
 import dao.{AnswerDAO, UserDAO}
 import play.api.libs.json.Json
 import models._
@@ -39,7 +40,7 @@ case class ComparativeReport(userScore: List[CategoryScore], personnelAverage: L
 case object RandomInterviewImpl
 
 
-class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends Controller {
+class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends Controller with Jwt {
   final val INTERVIEW_IMPL = RandomInterviewImpl
   final val TEST_IS_NOT_OVER = false
   final val TEST_IS_OVER = true
@@ -117,7 +118,7 @@ class InterviewController @Inject()(@Named("root") rootActor: ActorRef) extends 
     Ok(Json.toJson(InterviewDAO.getAll))
   }
 
-  def deleteInterview = Action { implicit request =>
+  def deleteInterview = Admin { implicit request =>
 
     request.body.asJson.flatMap(_.validate[ID].asOpt) match {
 

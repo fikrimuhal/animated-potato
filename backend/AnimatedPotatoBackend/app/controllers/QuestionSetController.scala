@@ -6,19 +6,15 @@ import play.api.mvc.{Action, Controller}
 import utils.Formatter._
 import utils.{Constants, ResponseMessage}
 
-/**
-  * Created by who on 09.08.2016.
-  */
 class QuestionSetController extends Controller {
-
 
   def insert(questionSet: QuestionSet) = Action { implicit request =>
 
     request.body.asJson.flatMap(_.validate[QuestionSet].asOpt) match {
 
-      case Some(obj) =>
+      case Some(questionSet) =>
 
-        if (QuestionSetDAO.insert(obj)) {
+        if (QuestionSetDAO.insert(questionSet)) {
           Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
         }
         else {
@@ -30,9 +26,9 @@ class QuestionSetController extends Controller {
     }
   }
 
-  def get() = Action {
+  def get = Action {
 
-    Ok(Json.toJson(QuestionSetDAO.getAll))
+    Ok(Json.toJson(QuestionSetDAO.getAll()))
 
   }
 }

@@ -53,7 +53,7 @@ class AnswerController extends Controller with Jwt {
     *             not_found: message that explains
     *           onFailure : BadRequest Response Message that explains error
     */
-  def getAnswer = AdminAction { implicit request =>
+  def getAnswer = Admin { implicit request =>
 
     request.body.asJson.flatMap(_.validate[GetAnswer].asOpt) match {
 
@@ -74,7 +74,7 @@ class AnswerController extends Controller with Jwt {
     *
     * @return : Returns interview answers of (each personnels and interviewId from request body)
     */
-  def getInterviewAnswers = Action { implicit request =>
+  def getInterviewAnswers = Admin { implicit request =>
 
 
     request.body.asJson.flatMap(_.validate[ID].asOpt) match {
