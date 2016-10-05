@@ -1,6 +1,7 @@
 package controllers
 
 import animatedPotato.protocol.protocol._
+import core.Jwt
 import dao.CategoryDAO
 import models.Category
 import play.api.libs.json.Json
@@ -8,7 +9,7 @@ import play.api.mvc.{Action, Controller}
 import utils.{Constants, ResponseMessage}
 import utils.Formatter._
 
-class CategoryController extends Controller {
+class CategoryController extends Controller with Jwt {
   val CategoryDAO = new CategoryDAO
 
   def insert = evalOperation(CategoryDAO.insert)
@@ -17,11 +18,11 @@ class CategoryController extends Controller {
 
   def delete = evalOperation(CategoryDAO.delete)
 
-  def get(id: Long) = Action {
+  def get(id: Long) = Admin {
     Ok(Json.toJson(CategoryDAO.getById(id)))
   }
 
-  def getAll = Action {
+  def getAll = Admin {
     Ok(Json.toJson(CategoryDAO.getAll))
   }
 

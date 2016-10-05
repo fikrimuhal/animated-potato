@@ -1,24 +1,21 @@
 package controllers
 
 import utils.Formatter._
-import javax.inject.Inject
-
 import animatedPotato.protocol.protocol.{Question => _, _}
+import core.Jwt
 import models._
 import play.api.libs.json.Json
 import play.api.mvc.Controller
 import play.api.mvc._
-
-import core._
 import utils.{Constants, ID, ResponseMessage}
 
-class QuestionController @Inject() extends Controller with Jwt {
+class QuestionController extends Controller with Jwt {
 
-  def insert() = evalOperation(Questions.insert)
+  def insert = evalOperation(Questions.insert)
 
-  def update() = evalOperation(Questions.update)
+  def update = evalOperation(Questions.update)
 
-  def delete() = Action { implicit request =>
+  def delete = Action { implicit request =>
 
     request.body.asJson.flatMap(_.validate[ID].asOpt) match {
 
@@ -34,13 +31,13 @@ class QuestionController @Inject() extends Controller with Jwt {
     }
   }
 
-  def getById(id: String) = Action {
+  def getById(id: String) = Admin {
 
     Questions.getQuestionById(id.toLong) match {
 
       case Some(question) => Ok(Json.toJson(question))
 
-      case None => Ok(Json.toJson(ResponseMessage(Constants.FAIL, "Bu ID ile kayıtlı soru bulunmamaktadır")))
+      case None => Ok(Json.toJson(ResponseMessage(Constants.FAIL,Constants.NOT_EXISTS)))
 
     }
   }
@@ -66,4 +63,3 @@ class QuestionController @Inject() extends Controller with Jwt {
     }
   }
 }
-
