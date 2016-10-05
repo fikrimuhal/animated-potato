@@ -1,4 +1,1 @@
-2016-10-04 10:49:50,597 [ERROR] from play.core.server.NettyServer in pool-8-thread-1 - Failed to listen for HTTP on /0.0.0.0:9000!
-2016-10-04 10:51:48,263 [INFO] from play.core.server.NettyServer in pool-10-thread-5 - Listening for HTTP on /0:0:0:0:0:0:0:0:9001
-2016-10-04 10:52:41,087 [INFO] from play.core.server.NettyServer in pool-10-thread-5 - Stopping server...
-2016-10-04 10:52:49,537 [INFO] from play.core.server.NettyServer in pool-12-thread-5 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+2016-10-05 14:56:59,659 [INFO] from play.core.server.NettyServer in pool-8-thread-4 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
