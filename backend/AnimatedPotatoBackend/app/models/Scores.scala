@@ -17,7 +17,7 @@ case class CategoryResults(participantId: IdType, interviewId: InterviewId, name
 
 case class CategoryResultsResponse(category: Category, results: List[CategoryResults], numberOfParticipant: Int)
 
-case class InterviewResult(categoryScores: List[CategoryScore], date: Timestamp, overallScore: Score, order: Int, percentage: Double)
+case class InterviewResult(interviewId: InterviewId,categoryScores: List[CategoryScore], date: Timestamp, overallScore: Score, order: Int, percentage: Double)
 
 object ScoresDAO {
 
@@ -224,7 +224,7 @@ object ScoresDAO {
       }
       val order = registeredInterviews.sortBy(1 - _.averageScore.get).zipWithIndex.find(_._1.id.get == interview.id.get).get._2 + 1
       val percentage = (order.toDouble / registeredInterviews.length) * 100
-      InterviewResult(scores, interview.startDate.get, interview.averageScore.get, order, percentage)
+      InterviewResult(itw.id.get,scores, interview.startDate.get, interview.averageScore.get, order, percentage)
     }.sortBy(_.date.getTime)
 
   }

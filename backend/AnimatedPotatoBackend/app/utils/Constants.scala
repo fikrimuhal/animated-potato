@@ -22,9 +22,10 @@ object Constants {
   final val FORBIDDEN_MESSAGE = "Forbidden Access"
   final val SESSION_TIME_OUT = "SESSION_TIME_OUT"
   final val SESSION_TIME_OUT_MESSAGE = "Oturumunuz zaman aşımına uğradı, lütfen tekrar giriş yapınız."
-  final val SESSION_MAX_AGE: FiniteDuration = 3 days
   final val CLAIM_DATA_KEY = "claimData"
   final val WRONG_PASSWORD = "Kullanıcı adı veya şifre hatalı"
   final val EMAIL_EXISTS =  "Girdiğiniz email adresi ile kayıtlı bir hesap bulunmaktadır"
   final val BAD_REQUEST = "BAD_REQUEST"
+  final val LOGIN_REQUIRED = "LOGIN_REQUIRED"
+  final val PLEASE_LOG_IN = "Girdiğiniz email adresi ile üyelik bulunmaktadır. Lütfen giriş yapınız"
 }
