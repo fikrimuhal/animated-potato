@@ -224,7 +224,7 @@ object ScoresDAO {
       }
       val order = registeredInterviews.sortBy(1 - _.averageScore.get).zipWithIndex.find(_._1.id.get == interview.id.get).get._2 + 1
       val percentage = (order.toDouble / registeredInterviews.length) * 100
-      InterviewResult(itw.id.get,scores, interview.startDate.get, interview.averageScore.get, order, percentage)
+      InterviewResult(interview.id.get,scores, interview.startDate.get, interview.averageScore.get, order, percentage)
     }.sortBy(_.date.getTime)
 
   }
