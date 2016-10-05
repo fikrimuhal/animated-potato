@@ -122,7 +122,7 @@ object InterviewDAO {
 
     userDAO.filter(_.id === userID).firstOption match {
 
-      case Some(user) => interviewDAO.filter(_.email === user.email).list
+      case Some(user) => interviewDAO.filter(i => i.email === user.email && i.hasFinished).list
 
       case _ => Nil
     }
