@@ -55,3 +55,15 @@ export const getUserOnlyResult = () => {
     });
     return promise;
 };
+
+export const verifyEmail = ()=> {
+    return  new Promise((resolve, reject)=> {
+        setTimeout(()=> {
+            var response = {
+                status: Math.floor(Math.random() * 100) % 2 == 0 ? "OK" : "FAIL"
+            };
+            resolve(response);
+        }, Math.floor(Math.random() * 5000))
+    });
+
+}

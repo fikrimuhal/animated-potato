@@ -26,9 +26,9 @@ export const QuestionAPI = {
 };
 
 export const InterviewAPI = {
-    startTest: db.getApiPromise("startTest", "POST", SecureLevel.ANONYM),
-    startTestWithoutAuthentication: (email)=> db.getApiPromise("startTest", "POST", SecureLevel.ANONYM),
-    nextQuestion: db.getApiPromise("nextQuestion", "POST", SecureLevel.ANONYM),
+    startTest: db.getApiPromise("startTest", "POST", SecureLevel.SECURED),
+    startTestWithoutAuthentication: (email)=> db.getApiPromise("startTest", "POST", SecureLevel.SECURED),
+    nextQuestion: db.getApiPromise("nextQuestion", "POST", SecureLevel.SECURED),
     deleteInterview: db.getApiPromise("admin/deleteInterview", "POST", SecureLevel.SECURED)
 };
 
@@ -46,7 +46,9 @@ export const ReportAPI = {
     getAllResult: db.getApiPromise("admin/getUsersResults", "POST", SecureLevel.SECURED),
     getComparativeResult: db.getApiPromise("getComparativeReport", "POST", SecureLevel.SECURED),
     getScoreTable: db.getApiPromise("admin/getCategoryResults", "POST", SecureLevel.SECURED),
-    getAnswersByInterviewId: db.getApiPromise("admin/getInterviewAnswers", "POST", SecureLevel.SECURED)
+    getAnswersByInterviewId: db.getApiPromise("admin/getInterviewAnswers", "POST", SecureLevel.SECURED),
+    getUserOnlyResult: db.getApiPromise("admin/getUserReport", "POST", SecureLevel.SECURED)
+
 }
 
 export const CategoryAPI = {

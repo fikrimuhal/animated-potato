@@ -28,7 +28,7 @@ export default class SignUpForm extends React.Component {
         this.state = {
             progressDisplay: "none"
         };
-        util.bindFunctions.call(this, ['onSubmit', 'handleSubmit'])
+        util.bindFunctions.call(this, ['handleSubmit'])
 
     }
 
@@ -37,37 +37,7 @@ export default class SignUpForm extends React.Component {
             progressDisplay: show ? "" : "none"
         });
     };
-    onSubmit = function (data) {
 
-        log(data);
-        var userInfo = data.formData;
-        delete userInfo.github;
-        //formData = userInfo;
-        this.displayProgress(true);
-        api.signUp(userInfo).then((response)=> {
-            response.json().then(json=> {
-                if (json.status == "ok") {
-                    this.context.showMessage("Bilgileriniz kaydedildi.", 2000);
-                    util.setToken(response.headers.get("Authorization"));
-                    json.userInfo.admin = json.isAdmin;
-                    db.setUserInfo(json.userInfo);
-                    if (json.isAdmin) browserHistory.push("/adminpanel");
-                    else browserHistory.push("/home");
-                }
-                else if (json.status == "fail") {
-                    this.context.showMessage(json.message, 1000);
-                }
-                else {
-                    this.context.showMessage("Sunucuda hata oluştu.", 1000);
-                }
-                this.displayProgress(false);
-            });
-        }).catch((err)=> {
-            this.context.showMessage("Hata oluştu.", 1000);
-            log(err);
-            this.displayProgress(false);
-        });
-    };
     handleSubmit = function () {
         //log(this.refs);
         var data = {};
@@ -98,6 +68,7 @@ export default class SignUpForm extends React.Component {
             response.json().then(json=> {
                 if (json.status == "OK") {
                     this.context.showMessage("Bilgileriniz kaydedildi.", 2000);
+                    log("gelen token: " , response.headers.get("Authorization"));
                     util.setToken(response.headers.get("Authorization"));
                     json.userInfo.admin = json.isAdmin;
                     db.setUserInfo(json.userInfo);

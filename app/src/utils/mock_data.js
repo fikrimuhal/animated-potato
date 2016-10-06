@@ -136,7 +136,7 @@ export const mock_users = [
 
 export const getUserResult = ()=> {
     var data = [];
-    for (var i = 0; i < Math.ceil(Math.random() * 3); i++) {
+    for (var i = 0; i < Math.ceil(Math.random() * 5); i++) {
         var item = {
             interviewId: i,
             date: Date.now() - 1000 * 60 * 60 * 24 * (Math.floor(Math.random() * 100 * (i + 1))) + Math.floor(Math.random() * 985875 * i),

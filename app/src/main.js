@@ -39,6 +39,7 @@ ReactDOM.render((
             <Route path="Skilltest" component={pages.SkillTest}/>
             <Route path="Signin" component={pages.UserSignIn}/>
             <Route path="Signup" component={pages.UserSignUp}/>
+            <Route path="EmailVerify" component={pages.EmailVerify}/>
             <Route path="Deneme" component={pages.Deneme}/>
         </Route>
         <Route path="/" component={AdminLayout}>

@@ -1,31 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Fikrimuhal Teknoloji</title>
 
     <link rel="stylesheet" href="http://bootswatch.com/paper/bootstrap.min.css">
-    <!-- <link rel="stylesheet" href="react-data-grid/themes/react-data-grid.css"> -->
+     <!--<link rel="stylesheet" href="react-data-grid/themes/react-data-grid.css">-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+          rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Hammersmith+One' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=PT+Sans+Caption' rel='stylesheet' type='text/css'>
     <style>
-       input,textarea,textarea.form-control, input.form-control, [type=text].form-control, [type=password].form-control, [type=email].form-control, [type=tel].form-control, [contenteditable].form-control {
-        webkit-box-shadow: none !important;
-        box-shadow: none !important;
-      }
-       input,textarea,textarea.form-control:focus, input.form-control:focus,  [type=email].form-control:focus, [type=tel].form-control:focus, [contenteditable].form-control:focus {
-        webkit-box-shadow: none !important;
-        box-shadow: none !important;
-      }
+        input, textarea, textarea.form-control, input.form-control, [type=text].form-control, [type=password].form-control, [type=email].form-control, [type=tel].form-control, [contenteditable].form-control {
+            webkit-box-shadow: none !important;
+            box-shadow: none !important;
+        }
+
+        input, textarea, textarea.form-control:focus, input.form-control:focus, [type=email].form-control:focus, [type=tel].form-control:focus, [contenteditable].form-control:focus {
+            webkit-box-shadow: none !important;
+            box-shadow: none !important;
+        }
 
 
     </style>
-  </head>
-  <body>
-    <div class="app" style="height:100%" id="app" ></div>
-    <script type="text/javascript" src="https://fikrimuhal.atlassian.net/s/6278e28d2b4fedff74e6f5371ea27320-T/-bft404/100011/c/1000.0.7/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=53a51dfb"></script>
-  </body>
+</head>
+<body>
+<div class="app" style="height:100%" id="app"></div>
+<script>
+    window.onload = ()=> {
+        atlassianScriptYukle();
+        function atlassianScriptYukle() {
+            setTimeout(()=> {
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'https://fikrimuhal.atlassian.net/s/6278e28d2b4fedff74e6f5371ea27320-T/-bft404/100011/c/1000.0.7/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=53a51dfb';
+                head.appendChild(script);
+            }, 1000 * 10)
+        }
+
+
+    }
+</script>
+
+</body>
 </html>
