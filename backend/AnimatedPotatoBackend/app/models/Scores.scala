@@ -73,7 +73,7 @@ object ScoresDAO {
           val numberOfParticipants = scoreOfCategory.length
           val score: Double = if (scoreOfCategory.isEmpty) -1 else scoreOfCategory.map(_.score).sum / numberOfParticipants
           val order = (score :: scoreOfCategory.map(_.score)).sortBy(x => 1 - x).indexOf(score) + 1
-          val percentage: Double = order / numberOfParticipants
+          val percentage: Double = if(numberOfParticipants <1) -1 else order / numberOfParticipants
           val confidence: Double = if (scoreOfCategory.isEmpty) -1 else scoreOfCategory.map(_.confidence).sum / numberOfParticipants
           CategoryScore(category, score, Some(percentage), Some(confidence), Some(order))
         }.filter(_.score != -1)
@@ -107,7 +107,7 @@ object ScoresDAO {
 
         val isPersonnel = personnelInterviewIds contains itw.id.get
         val order = interviews.sortBy(1 - _.averageScore.get).zipWithIndex.find(_._1.id == itw.id).map(_._2).get + 1
-        val overAllPercentage = (order.toDouble / numberOfParticipant) * 100
+        val overAllPercentage = if(numberOfParticipant < 1 ) -1 else (order.toDouble / numberOfParticipant) * 100
         UserCategoryScores(p.id.get, itw.id.get, p.name, p.lastname, p.email, p.phone, isPersonnel, categoryScore, overAllPercentage, itw.averageScore.get, categoryScore.filter(_.score >= 0).map(_.confidence.get).sum / categoryScore.count(_.score >= 0), order)
       }.::(UserCategoryScores(-2, -2, "PERSONNEL", "PERSONNEL", "PERSONNEL", "", isPersonnel = true, personnelCategoricalScores, -1, -1, -1, -1))
         .::(UserCategoryScores(-4, -4, "ALL", "ALL", "ALL", "", isPersonnel = false, allCategoricalScores, -1, -1, -1, -1))
