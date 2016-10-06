@@ -23,7 +23,7 @@ export default  class ResultViewer extends React.Component {
                         Skor: {data.overallScore.toFixed(4)*100}
                     </Col>
                     <Col lg={6} md={8} style={{textAlign: "right"}}>
-                        Mülakat tarihi : <span>{moment(data.date).format("LLLL")}</span>
+                        Mülakat tarihi : <span>{moment(data.date,'DD-MM-YYYY').format("LLLL")}</span>
                     </Col>
                 </Row><hr/>
                 <Row>

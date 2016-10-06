@@ -32,7 +32,7 @@ export default class SkillTest extends React.Component {
         //this.props.answerAndNextQuestion();
     };
     handleHotkey = function (e, combo) {
-        log("combo", combo, "testOver", this.props.testOver);
+        //log("combo", combo, "testOver", this.props.testOver);
 
         if (combo == "enter" && !this.props.testOver && this.state.enterKeyPassing) {
             this.nextQuestion();
@@ -50,7 +50,7 @@ export default class SkillTest extends React.Component {
         })
     };
     render = function () {
-        log("rendered", this.props)
+        //log("rendered", this.props)
         var question = this.props.question;
         var testOver = this.props.testOver;
         return (

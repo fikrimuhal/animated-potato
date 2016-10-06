@@ -1,12 +1,14 @@
-import React        from 'react'
-import {Tabs, Tab} from 'material-ui/Tabs';
-import UserProfile from './userProfile'
-import FormIntro    from './formIntro'
-import * as db      from  '../../utils/data'
-import * as util    from '../../utils/utils'
-import * as s  from '../../layouts/style'
-import Paper from 'material-ui/Paper'
-import  ExamResult from './ExamResult'
+import React            from 'react'
+import {Tabs, Tab}      from 'material-ui/Tabs';
+import UserProfile      from './userProfile'
+import FormIntro        from './formIntro'
+import * as db          from  '../../utils/data'
+import * as util        from '../../utils/utils'
+import * as s           from '../../layouts/style'
+import Paper            from 'material-ui/Paper'
+import  ExamResult      from './ExamResult'
+import log2             from '../../utils/log2'
+const log = log2("UserHome");
 //Styles
 const styles = {
     paperStyle: {
@@ -22,21 +24,35 @@ const styles = {
 
 }
 var user = null;
+var currentTab = "profile"
 export default class UserHome extends React.Component {
     constructor(props) {
         super(props);
         user = db.getUserInfo();
         this.state = {
-            value: 'profile',
+            value: currentTab,
             user: user
         };
         util.bindFunctions.call(this, ['handleChange']);
 
     }
 
+    componentWillMount = function () {
+        log("cwm", this.props);
+        var hash = this.props.location.hash;
+
+        if (hash.startsWith("#result")) {
+            currentTab = "report"
+        }
+        else{
+            currentTab = "profile"
+        }
+
+
+    };
     handleChange = (value) => {
+        currentTab =value;
         this.setState({
-            value: value,
             user: user
         });
     }
@@ -44,11 +60,12 @@ export default class UserHome extends React.Component {
 
     }
     render = function () {
+        log("tab->",currentTab)
         return (
 
             <Paper style={s.userLayoutStyles.paperStyle}>
                 <Tabs
-                    value={this.state.value}
+                    value={currentTab}
                     onChange={this.handleChange}
                 >
                     <Tab label="Profil" value="profile" style={styles.tabPage}>

@@ -75,14 +75,14 @@ export default class SkillTestContainer extends React.Component {
 
         var propEquality = im_currentProp.equals(im_nextProp);
         var stateEquality = im_currentState.equals(im_nextState);
-        log("shouldComponentUpdate", propEquality, stateEquality, (!propEquality || !stateEquality));
+        //log("shouldComponentUpdate", propEquality, stateEquality, (!propEquality || !stateEquality));
         return (!propEquality || !stateEquality);
         return true;
     }
     componentWillMount = function () {
 
         var reqQuery = this.props.location.query;
-        log("reqQuery", reqQuery)
+        //log("reqQuery", reqQuery)
         if (!db.isLoggedIn() && (!reqQuery.companyToken || !reqQuery.trackNo || !reqQuery.email)) {
             if (reqQuery.trackNo == "new") {
 
@@ -169,6 +169,7 @@ export default class SkillTestContainer extends React.Component {
 
     nextQuestion = function () {
         //log("nextQuestion",this.state);
+        //log("this.context",this.context);
         if (this.state.answer == "") {
             this.context.showMessage("Bu soruyu cevaplamadan bir sonraki soruya geçemezseniz", 2200)
             return;
@@ -189,10 +190,10 @@ export default class SkillTestContainer extends React.Component {
         api.InterviewAPI.nextQuestion(request).then(response=> {
             return response.json()
         }).then(json=> {
-            log("json_nextquestion", json);
+            //log("json_nextquestion", json);
             if (json.status == "OK") {
                 if (!json.testOver) {
-                    log("json_nextquestion if", json);
+                    //log("json_nextquestion if", json);
                     this.setState({
                         currentQuestion: json.question,
                         questionReady: true,
@@ -202,7 +203,7 @@ export default class SkillTestContainer extends React.Component {
                     });
                 }
                 else {
-                    log("json_nextquestion else", json);
+                    //log("json_nextquestion else", json);
                     this.setState({
                         questionReady: true,
                         testOver: true,
@@ -223,7 +224,7 @@ export default class SkillTestContainer extends React.Component {
         return progressValue;
     };
     render = function () {
-        log("rendered", this.state);
+        //log("rendered", this.state);
         var linearProgressDisplay = (this.state.status == "ok" && !this.state.testOver) ? "" : "none";
         return (
             <Paper style={this.state.paperStyle}>

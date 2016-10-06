@@ -56,7 +56,7 @@ export default class Question extends React.Component {
         return true;
     }
     render = function () {
-        log("rendered");
+        //log("rendered");
         return (
             <div style={s.userLayoutStyles.questionContainer}>
                 {this.getQuestionComponent()}

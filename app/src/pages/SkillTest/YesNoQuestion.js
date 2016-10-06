@@ -23,7 +23,7 @@ export default  class YesNoQuestion extends React.Component {
     }
 
     radioChange = function (value) {
-        log("radioChange value", value);
+        //log("radioChange value", value);
         this.setState({
             valueSelected: value
         });
@@ -44,7 +44,7 @@ export default  class YesNoQuestion extends React.Component {
         Mousetrap.unbind([`e`, `h`], this.handleHotkey);
     };
     handleHotkey = function (e, combo) {
-        log("combo", combo);
+        //log("combo", combo);
         if (combo == "e")
             this.radioChange("yes");
         else if (combo == "h")

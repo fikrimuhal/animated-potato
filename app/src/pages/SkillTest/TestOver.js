@@ -8,7 +8,7 @@ import {browserHistory, RoutingContext} from "react-router"
 import * as db          from '../../utils/data'
 import * as util        from '../../utils/utils'
 import log2             from '../../utils/log2';
-
+import * as Cache       from '../../utils/cache'
 const log = log2("TestOverPanel");
 //React component
 export default  class TestOverPanel extends React.Component {
@@ -28,12 +28,13 @@ export default  class TestOverPanel extends React.Component {
         var content;
         log(this.props.validUser, db.isLoggedIn(), reqQuery)
         if (this.props.validUser && db.isLoggedIn()) {
+            Cache.UserResultsCaching.clear();
             content = <div>
                 <p>Yeterlililik testine katıldığınız için teşekkür ederiz.<br/>
                     Sonuçlarınızı anasayfada görebilirsiniz.
                 </p>
                 <FlatButton label={"Anasayfama git"} backgroundColor={"teal"}
-                            onClick={this.navigateTo("/")}></FlatButton>
+                            onClick={this.navigateTo("/home#result")}></FlatButton>
             </div>;
         }
         else if (!reqQuery.companyToken && !reqQuery.trackNo && !this.props.validUser) {

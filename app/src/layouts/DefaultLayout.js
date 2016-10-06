@@ -12,52 +12,53 @@ var showToast = null;
 var context = {};
 //Styles
 const styles = {
-    paperStyle:{
-        margin:"0 auto",
-        border:"1px teal solid",
-        borderRadius:"10px",
-        minHeight:"300px",
-        height:"auto !important",
-        width:"500px",
+    paperStyle: {
+        margin: "0 auto",
+        border: "1px teal solid",
+        borderRadius: "10px",
+        minHeight: "300px",
+        height: "auto !important",
+        width: "500px",
         //width: "300px",
-        padding:"15px",
-        marginTop:"10px"
+        padding: "15px",
+        marginTop: "10px"
     }
 };
 export default class DefaultLayout extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            toastSettings:{
-                open:false,
-                message:"",
-                duration:0
+            toastSettings: {
+                open: false,
+                message: "",
+                duration: 0
             }
         };
-        showToast = util.myToast("toastSettings",this);
+        showToast = util.myToast("toastSettings", this);
     }
 
-    getChildContext(){
+    getChildContext() {
         context.showMessage = this.showMessage;
         return context;
     };
 
-    showMessage = function (message,duration){
-        showToast(message,duration);
+    showMessage = function (message, duration) {
+        showToast(message, duration);
     };
-    getAppBar = function (){
-        if(db.isLoggedIn()) {
+    getAppBar = function () {
+        if (db.isLoggedIn()) {
             return <UserAppBar userInfo={db.getUserInfo()}/>
         }
         else {
             return (<header>
                 <AppBar title="Fikrimuhal Teknoloji - Hızlı Mülakat" showMenuIconButton={false} iconElementRight={
-                    <img src="http://fikrimuhal.com/wp-content/uploads/2014/11/logo_sag-02-01-300x113.png" height={"55px"}/>
+                    <img src="http://fikrimuhal.com/wp-content/uploads/2014/11/logo_sag-02-01-300x113.png"
+                         height={"55px"}/>
                 }/>
             </header>)
         }
     }
-    render = function (){
+    render = function () {
         log("rendered")
         return (
             <MuiThemeProvider>
@@ -70,6 +71,7 @@ export default class DefaultLayout extends React.Component {
         )
     }
 }
+
 DefaultLayout.childContextTypes = {
-    showMessage:React.PropTypes.func
+    showMessage: React.PropTypes.func
 };

@@ -8,6 +8,7 @@ import SelectField          from 'material-ui/SelectField';
 import MenuItem             from 'material-ui/MenuItem';
 import CircularProgress     from 'material-ui/CircularProgress'
 import  moment              from 'moment'
+import momentLocale         from '../../../../../node_modules/moment/locale/tr'
 import log2                 from '../../../utils/log2'
 import * as _               from 'lodash'
 import  ResultView          from './resultViewer'
@@ -91,15 +92,16 @@ export default  class ExamResult extends React.Component {
                     browserHistory.push("/")
                 }
                 else {
+                    var normalizedData = this.normalizeData(json);
                     UserResultsCaching.clear();
-                    UserResultsCaching.cache(json);
+                    UserResultsCaching.cache(normalizedData);
                     util.setToken(response.headers.get("Authorization"));
                     this.setState({
-                        data: this.normalizeData(json),
+                        data: normalizedData,
                         dataLoaded: true
                     })
                 }
-            }).then(err=> {
+            }).catch(err=> {
                 log("error", err);
                 this.context.showMessage("Error", 2000);
             })
@@ -157,7 +159,7 @@ export default  class ExamResult extends React.Component {
         if (this.state.dataLoaded) {
             selectContent = this.state.data.map(result => {
                 return <MenuItem value={result.interviewId}
-                                 primaryText={moment(result.date).format("LLL") + " tarihli mülakat"}/>
+                                 primaryText={moment(result.date, 'DD-MM-YYYY hh:mm:ss').format("LLL") + " tarihli mülakat"}/>
             });
         }
         var selectField = <SelectField value={this.state.selectedInterviewId}
@@ -203,6 +205,7 @@ export default  class ExamResult extends React.Component {
 
     }
     render = ()=> {
+
         return (
             <div style={styles.pageContainer}>
                 <Row center="lg">
