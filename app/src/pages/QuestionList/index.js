@@ -16,7 +16,8 @@ import * as _                               from 'lodash'
 import  Immutable                           from 'immutable'
 import CircularProgress                     from 'material-ui/CircularProgress';
 import  CategoryFilterToolbar               from './CategoryFilterToolbar'
-import {Row, Col}                            from 'react-flexbox-grid'
+import {Row, Col}                           from 'react-flexbox-grid'
+import ResponseMessages                     from '../../utils/static-messages'
 require("!style!css!react-data-grid/themes/react-data-grid.css")
 
 const Selectors = Data.Selectors;
@@ -115,11 +116,29 @@ export default class QuestionList extends React.Component {
     };
     initializeFromAPI = function () {
         log("**********From API************");
-        QuestionAPI.getAll().then(response=>response.json()).then(json=> {
-            var rows = json;
-            Cache.QuestionCaching.cacheAll(rows);
-            this.initData(rows, [-1],[-1]);
-        });
+        QuestionAPI.getAll().then(response=> {
+            response.json().then(
+                json=> {
+                    if (json.status == ResponseMessages.SESSION_EXPIRED || json.status == ResponseMessages.UNAUTHORIZED) {
+                        util.clearToken();
+                        this.context.showMessage(json.message, 2000);
+                        setTimeout(()=> {
+                            browserHistory.push("/signin")
+                        }, 2000);
+                        return;
+                    }
+                    else if (json.status == ResponseMessages.FORBIDDEN) {
+                        browserHistory.push("/")
+                    }
+                    else {
+                        var rows = json;
+                        Cache.QuestionCaching.cacheAll(rows);
+                        this.initData(rows, [-1], [-1]);
+                    }
+
+                }
+            )
+        })
     };
     initData = (rows, selectedCategories, selectedCollections)=> {
         var tableRows = this.convertTableRawData(rows);
@@ -156,13 +175,13 @@ export default class QuestionList extends React.Component {
 
                 selectedCollections.forEach(setId=> {
                     if (_.findIndex(o.setList, (item) => {
-                           return  item.id == setId
-                        }) != -1  || selectedCollections.includes(-1)) {
+                            return item.id == setId
+                        }) != -1 || selectedCollections.includes(-1)) {
                         isIncludeCollection = true;
                     }
                 });
                 //log("isIncludeCollection,isIncludeCategories",isIncludeCollection,isIncludeCategories)
-                result = (selectedCollections.length==0 || isIncludeCollection) && (selectedCategories.length==0 || isIncludeCategories);
+                result = (selectedCollections.length == 0 || isIncludeCollection) && (selectedCategories.length == 0 || isIncludeCategories);
             }
             return result;
         })

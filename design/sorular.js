@@ -1,5 +1,50 @@
 const sorular =  [
   {
+    "t": "Bir bozuk para 1000 kez atıldı ve 560 kere yazı geldi. Sizce bozuk para taraflı mı?",
+    "id": 546,
+    "ty": "yesno",
+    "cw": [
+      {
+        "c": "1",
+        "w": 1
+      }
+    ],
+    "sl": [
+      1,
+      3
+    ]
+  },
+  {
+    "t": "2 farklı sbt projesini aynı anda nasıl çalıştıracağını biliyormusun?",
+    "id": 546,
+    "ty": "yesno",
+    "cw": [
+      {
+        "c": "7",
+        "w": 1
+      }
+    ],
+    "sl": [
+      1,
+      3
+    ]
+  },
+  {
+    "t": "o	True Random Number Generator ile Pseudo RNG arasındaki farkları biliyormusun?",
+    "id": 546,
+    "ty": "yesno",
+    "cw": [
+      {
+        "c": "11",
+        "w": 1
+      }
+    ],
+    "sl": [
+      1,
+      3
+    ]
+  },
+  {
     "t": "Css biliyor musunuz?",
     "id": 546,
     "ty": "yesno",

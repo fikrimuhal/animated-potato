@@ -150,13 +150,21 @@ export default class StaffList extends React.Component {
             }
             else if (json.status == "FAIL") {
                 _this.context.showMessage("Deleting fail.", 2000);
+
             }
             else {
                 _this.context.showMessage("An error occured.", 2000);
             }
+            _this.setState({
+                showWaitingPanel: false
+            });
 
         }).catch(err=> {
             _this.context.showMessage("An error occured.", 2000);
+            log("error -> " , err);
+            _this.setState({
+                showWaitingPanel: false
+            });
         });
     };
     makeAdmin = id => ()=> {
@@ -185,8 +193,15 @@ export default class StaffList extends React.Component {
             else {
                 _this.context.showMessage("An error occured.", 2000);
             }
+            _this.setState({
+                showWaitingPanel: false
+            });
         }).catch(err=> {
             _this.context.showMessage("An error occured.", 2000);
+            log("error -> " , err);
+            _this.setState({
+                showWaitingPanel: false
+            });
         });
     };
 
@@ -212,12 +227,21 @@ export default class StaffList extends React.Component {
             }
             else if (json.status == "FAIL") {
                 _this.context.showMessage("Operation failed.", 2000);
+
             }
             else {
                 _this.context.showMessage("An error occured.", 2000);
             }
+
+            _this.setState({
+                showWaitingPanel: false
+            });
         }).catch(err=> {
             _this.context.showMessage("An error occured.", 2000);
+            log("error -> " , err);
+            _this.setState({
+                showWaitingPanel: false
+            });
         });
     };
     unmakeStaff = id => ()=> {
@@ -249,8 +273,15 @@ export default class StaffList extends React.Component {
             else {
                 _this.context.showMessage("An error occured.", 2000);
             }
+            _this.setState({
+                showWaitingPanel: false
+            });
         }).catch(err=> {
             _this.context.showMessage("An error occured.", 2000);
+            log("error -> " , err);
+            _this.setState({
+                showWaitingPanel: false
+            });
         });
     };
     getRows = function () {

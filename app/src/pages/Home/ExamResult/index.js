@@ -9,7 +9,8 @@ import MenuItem from 'material-ui/MenuItem';
 import       CircularProgress      from 'material-ui/CircularProgress'
 import  moment from 'moment'
 import log2 from '../../../utils/log2'
-
+import * as _ from 'lodash'
+import  ResultView from './resultViewer'
 const log = log2("ExamResult");
 
 //TODO user için rapor üretilecek
@@ -17,7 +18,9 @@ export default  class ExamResult extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            dataLoaded: false
+            dataLoaded: false,
+            selectedInterviewId: -1
+
         }
         this.init();
     }
@@ -46,21 +49,40 @@ export default  class ExamResult extends React.Component {
         </Row>
     };
     getSelectMulakat = ()=> {
-        var content = this.state.data.map(result => {
-            return <MenuItem value={result.interviewId} primaryText={moment(result.applyDate).format("LLL")}/>
+        var interviewSelectListContent = this.state.data.map(result => {
+            return <MenuItem value={result.interviewId} primaryText={moment(result.date).format("LLL")}/>
         })
 
-        return <SelectField value={this.state.value} onChange={(event,value)=> this.handleChange(value)}>
-            {content}
+
+        var interviewSelectList = <SelectField value={this.state.selectedInterviewId}
+                                               onChange={(event, value)=> this.handleChange(value)}>
+            {interviewSelectListContent}
         </SelectField>
+
+        if (this.state.selectedInterviewId != -1) {
+
+            return <div> {interviewSelectList} <ResultView data={this.state.selectedInterview}/></div>
+        }
+        else {
+           return <div> {interviewSelectList}</div>
+        }
+
     };
     handleChange = (interviewId)=> {
-        log("handleChange", interviewId)
+        log("handleChange", interviewId);
+        var interviews = this.state.data;
+        var selectedInterview = _.filter(interviews, q => {
+            return q.id == interviewId
+        })[0];
+        this.setState({
+            selectedInterviewId: interviewId,
+            selectedInterview: selectedInterview
+        })
     }
     render = ()=> {
         return (
             <div>
-                <h5>Exam Result</h5>
+                <h5>Mülakat Sınav Sonuçlarım</h5>
                 {this.getContent()}
             </div>
         )

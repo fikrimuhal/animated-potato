@@ -14,7 +14,7 @@ import {Row, Col}        from 'react-flexbox-grid'
 import * as _           from 'lodash'
 import * as util        from '../../utils/utils'
 import log2             from '../../utils/log2'
-import {ResponseStatus} from '../../utils/static-messages'
+import ResponseStatus from '../../utils/static-messages'
 require("!style!css!react-data-grid/themes/react-data-grid.css");
 
 const Selectors = Data.Selectors;
