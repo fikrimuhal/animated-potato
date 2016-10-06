@@ -48,10 +48,10 @@ class UserController extends Controller {
 
   def delete = Action { implicit request =>
 
-    request.body.asJson.flatMap(_.validate[User].asOpt) match {
+    request.body.asJson.flatMap(_.validate[ID].asOpt) match {
 
-      case Some(user) =>
-        if (UserDAO.delete(user) == 1) {
+      case Some(id) =>
+        if (UserDAO.deleteById(id.id)) {
           Ok(Json.toJson(ResponseMessage(Constants.OK, Constants.OK_MESSAGE)))
         }
         else InternalServerError(Json.toJson(ResponseMessage(Constants.FAIL, Constants.SERVER_ERROR_MESSAGE)))

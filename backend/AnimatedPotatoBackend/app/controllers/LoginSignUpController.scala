@@ -82,8 +82,7 @@ class LoginSignUpController extends Controller {
             SignSuccessMessage(Constants.OK,
               ParticipantDAO.get(user.email).get,
               UserDAO.isAdmin(user.email)))
-          ).addingToJwtSession(Constants.CLAIM_DATA_KEY, ParticipantDAO.getClaimData(user.email))
-
+          )
         }
 
         else {

@@ -5,10 +5,8 @@ import core.BaseDAO
 import models.{Participant, ParticipantDAO, User}
 import org.mindrot.jbcrypt.BCrypt
 import table.UserTable
-
 import slick.driver.PostgresDriver.simple._
-import utils.{Constants, DB}
-
+import utils.DB
 import scala.slick.lifted.TableQuery
 
 case class UserDetails(id: UserIdType, name: String, lastName: String, email: String, phone: String, photo: Option[String], isAdmin: Option[Boolean] = None)
@@ -49,16 +47,7 @@ class UserDAO extends BaseDAO[UserTable, User](TableQuery[UserTable]) {
   }
 
   def makePersonnel(id: UserIdType): Boolean = DB { implicit session =>
-    try {
-      val a = userDAO.filter(u => u.id === id && !u.isDeleted).map(_.isPersonnel).update(true)
-      println(a)
-      a == 1
-    }
-    catch {
-      case x =>
-        println(x)
-        false
-    }
+    userDAO.filter(u => u.id === id && !u.isDeleted).map(_.isPersonnel).update(true) == 1
   }
 
   def makeAdmin(id: UserIdType): Boolean = DB { implicit session =>
@@ -66,7 +55,7 @@ class UserDAO extends BaseDAO[UserTable, User](TableQuery[UserTable]) {
   }
 
   def makeUnPersonnel(id: IdType): Boolean = DB { implicit session =>
-    userDAO.filter(u => u.id === id && !u.isDeleted).map(u => (u.isPersonnel, u.isPersonnel)).update(false, false) == 1
+    userDAO.filter(u => u.id === id && !u.isDeleted).map(u => (u.isPersonnel, u.isAdmin)).update(false, false) == 1
   }
 
   def makeUnadmin(id: UserIdType): Boolean = DB { implicit session =>
